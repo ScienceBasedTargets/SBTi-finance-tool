@@ -8,6 +8,14 @@ api = Api(app)
 
 class temp_score(Resource):
 
+    # parameters
+    # parser = reqparse.RequestParser()
+    # parser.add_argument('price',
+    #     type=float,
+    #     required=True,
+    #     help="This field cannot be left blank!"
+    # )
+
     def get(self):
         return {'GET Request':'Hello World'}
 
