@@ -10,5 +10,10 @@ setup(
     author_email='sbti@ortec-finance.com',
     packages=['SBTi'],
     install_requires=[],
+    extras_require={
+        'dev': [
+            'nose2',
+        ]
+    },
     test_suite='nose2.collector.collector',
 )

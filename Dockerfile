@@ -1,6 +1,6 @@
 FROM python:3.6
 
-COPY requirements.txt config.yaml setup.py /project/
+COPY requirements.txt config/config.yaml setup.py /project/
 
 RUN apt-get update \
  && apt-get install -y --no-install-recommends \
@@ -26,17 +26,17 @@ RUN rm /etc/nginx/sites-enabled/default /etc/nginx/sites-available/default \
 
 COPY app /project/app
 COPY SBTi /project/SBTi
-COPY nginx.conf /etc/nginx/nginx.conf
-COPY flask-site-nginx.conf /etc/nginx/sites-available/flask-site-nginx.conf
-COPY uwsgi.ini /etc/uwsgi/uwsgi.ini
-COPY supervisord.conf /etc/supervisord.conf
+COPY config/nginx.conf /etc/nginx/nginx.conf
+COPY config/flask-site-nginx.conf /etc/nginx/sites-available/flask-site-nginx.conf
+COPY config/uwsgi.ini /etc/uwsgi/uwsgi.ini
+COPY config/supervisord.conf /etc/supervisord.conf
 
 
 RUN ln -s /etc/nginx/sites-available/flask-site-nginx.conf /etc/nginx/sites-enabled/flask-site-nginx.conf \
  && chown -R dock_sbtiapi:dock_sbtiapi /project /vol
 
 WORKDIR /project
-RUN python /project/setup.py develop
+RUN python /project/setup.py install
 
 USER dock_sbtiapi
 
