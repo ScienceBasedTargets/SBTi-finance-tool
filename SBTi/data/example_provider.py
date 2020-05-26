@@ -1,4 +1,4 @@
-from typing import Optional, Tuple
+from typing import Tuple
 
 from .data_provider import DataProvider, CompanyNotFoundException
 
