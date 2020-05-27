@@ -6,14 +6,12 @@ from .data.data_provider import DataProvider, CompanyNotFoundException
 class Reporting:
     """
     This class provides a report on a portfolio.
+
+    :param fallback_emissions: The emission if a company is not found
+    :param fallback_score: The temp score if a company is not found
     """
 
     def __init__(self, fallback_emissions: float = -1.0, fallback_score: float = 3.2):
-        """
-        Initialize the class.
-        :param fallback_emissions: The emission if a company is not found
-        :param fallback_score: The temp score if a company is not found
-        """
         self.fallback_score = fallback_score
         self.fallback_emissions = fallback_emissions
 
@@ -34,9 +32,20 @@ class Reporting:
     def get_report(self, data_provider: DataProvider, portfolio: List[dict]) -> Tuple[List[dict], float, float, float]:
         """
         Get the report on a portfolio.
+
         :param data_provider: The data provider to retrieve the data from
         :param portfolio: The portfolio (a list of dicts containing the id and proportion).
-        :return:
+
+        Returns
+        -------
+        portfolio: list
+            The portfolio amended with the emissions and temp scores
+        coverage : float
+            The percentage of companies that could be found (unweighted)
+        weighted_emissions : float
+            The weighted emissions
+        weighted_temp_score : float
+            The weighted temp score
         """
         coverage = 0
         for i_company, company in enumerate(portfolio):

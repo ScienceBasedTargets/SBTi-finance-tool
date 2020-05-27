@@ -14,7 +14,8 @@ class ExampleProvider(DataProvider):
     def get_report(self, company) -> Tuple[float, float]:
         """
         Get the emissions and the temperature score given a company. Throws a CompanyNotFoundException if the company
-        is not found. For the testing purposes "Ortec Finance Data Analytics B.V." won't be found.
+        is not found. For testing purposes "Ortec Finance Data Analytics B.V." won't be found.
+
         :param company: str: The identifier of the company to get the emissions for
         :return: float, float: The emissions and the temperature score
         """

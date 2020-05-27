@@ -4,7 +4,7 @@ from typing import Tuple
 
 class DataProvider(ABC):
     """
-    General data provider
+    General data provider super class.
     """
 
     def __init__(self):
@@ -15,6 +15,7 @@ class DataProvider(ABC):
         """
         Get the emissions and the temperature score given a company. Throws a CompanyNotFoundException if the company
         is not found.
+
         :param company: str: The identifier of the company to get the emissions for
         :return: float, float: The emissions and the temperature score
         """
