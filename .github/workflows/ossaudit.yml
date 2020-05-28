@@ -27,8 +27,12 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install ossaudit
-    - name: Check vulnerabilities with OSS Audit
+    - name: Run OSS Audit
       run: |
-        if:  startsWith(ossaudit -f requirements.txt, 'Found 0 vulnerabilities'); then exit 0; fi
-        
+        ossaudit -f requirements.txt
+      id: run_oss_audit
+    - name: Check vulnerabilities
+      run: |
+        if: ${{!startsWith(steps.run_oss_audit.output, 'Found 0 vulnerabilities')}}; then exit 0; fi
+
         
