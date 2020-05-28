@@ -5,10 +5,10 @@ name: OSS Audit
 
 on:
   push:
-    branches: [ master, staging ]
+    branches: [ master ]
   pull_request:
-    branches: [ master, staging ]
-# echo ##[set-output name=audit;]$(ossaudit -f requirements.txt)
+    branches: [ master ]
+
 jobs:
   build:
 
@@ -30,12 +30,10 @@ jobs:
       id: run_oss_audit
       run: |
         echo ::set-output name=audit::$(ossaudit -f requirements.txt)
-    - name: Print vulnerabilities
+    - name: Check vulnerabilities
+      if: ${{!startsWith(steps.run_oss_audit.outputs.audit, 'Found 0 vulnerabilities')}}
       run: |
         echo ${{steps.run_oss_audit.outputs.audit}}
-    - name: Check vulnerabilities
-      if: ${{startsWith(steps.run_oss_audit.outputs.audit, 'Found 0 vulnerabilities')}}
-      run: |
         echo "::warning::Vulnerabilities found in the dependencies"
         exit 1
 
