@@ -29,10 +29,11 @@ jobs:
         pip install ossaudit
     - name: Run OSS Audit
       run: |
-        ossaudit -f requirements.txt
+        echo "##[set-output name=audit;]$(ossaudit -f requirements.txt)"
       id: run_oss_audit
     - name: Check vulnerabilities
+      if: ${{!startsWith(steps.run_oss_audit.output.audit, 'Found 0 vulnerabilities')}}
       run: |
-        if: ${{!startsWith(steps.run_oss_audit.output, 'Found 0 vulnerabilities')}}; then exit 0; fi
+        exit 0
 
         
