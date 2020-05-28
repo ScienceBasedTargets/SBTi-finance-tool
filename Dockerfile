@@ -39,5 +39,5 @@ WORKDIR /project
 RUN python /project/setup.py install
 
 USER dock_sbtiapi
-
+EXPOSE 80
 CMD ["/usr/bin/supervisord"]
