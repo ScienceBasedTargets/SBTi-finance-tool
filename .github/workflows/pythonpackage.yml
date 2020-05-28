@@ -4,10 +4,11 @@
 name: Python package
 
 on:
+  push:
+    branches: [ master ]
   pull_request:
-    #TODO: Readd master here
-    branches: [ staging ]
-
+    branches: [ master ]
+    
 jobs:
   build:
 
@@ -36,7 +37,4 @@ jobs:
     - name: Test with Nose2
       run: |
         nose2 -v
-    - name: Check vulnerabilities with OSS Audit
-      run: |
-        ossaudit -f requirements.txt
         
