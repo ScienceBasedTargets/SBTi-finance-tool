@@ -6,9 +6,8 @@ name: OSS Audit
 on:
   push:
     branches: [ master, staging ]
-# TODO: Readd these
-#   pull_request:
-#     branches: [ master, staging ]
+  pull_request:
+    branches: [ master, staging ]
 # echo ##[set-output name=audit;]$(ossaudit -f requirements.txt)
 jobs:
   build:
