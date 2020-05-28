@@ -6,9 +6,10 @@ name: OSS Audit
 on:
   push:
     branches: [ master, staging ]
-  pull_request:
-    branches: [ master, staging ]
-
+# TODO: Readd these
+#   pull_request:
+#     branches: [ master, staging ]
+# echo ##[set-output name=audit;]$(ossaudit -f requirements.txt)
 jobs:
   build:
 
@@ -27,14 +28,14 @@ jobs:
       run: |
         pip install ossaudit
     - name: Run OSS Audit
-      run: |
-        echo "##[set-output name=audit;]$(ossaudit -f requirements.txt)"
       id: run_oss_audit
+      run: |
+        echo ::set-output name=audit::$(ossaudit -f requirements.txt)
     - name: Print vulnerabilities
       run: |
-        echo ${{steps.run_oss_audit.output.audit}}
+        echo ${{steps.run_oss_audit.outputs.audit}}
     - name: Check vulnerabilities
-      if: ${{startsWith(steps.run_oss_audit.output.audit, 'Found 0 vulnerabilities')}}
+      if: ${{startsWith(steps.run_oss_audit.outputs.audit, 'Found 0 vulnerabilities')}}
       run: |
         exit 0
 
