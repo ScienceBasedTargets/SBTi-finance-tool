@@ -4,10 +4,9 @@
 name: Python package
 
 on:
-  push:
-    branches: [ master, staging ]
   pull_request:
-    branches: [ master, staging ]
+    #TODO: Readd master here
+    branches: [ staging ]
 
 jobs:
   build:
