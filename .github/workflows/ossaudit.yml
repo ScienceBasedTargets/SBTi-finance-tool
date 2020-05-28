@@ -32,7 +32,7 @@ jobs:
         echo "##[set-output name=audit;]$(ossaudit -f requirements.txt)"
       id: run_oss_audit
     - name: Check vulnerabilities
-      if: ${{!startsWith(steps.run_oss_audit.output.audit, 'Found 0 vulnerabilities')}}
+      if: ${{startsWith(steps.run_oss_audit.output.audit, 'Found 0 vulnerabilities')}}
       run: |
         exit 0
 
