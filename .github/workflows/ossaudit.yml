@@ -37,5 +37,6 @@ jobs:
       if: ${{startsWith(steps.run_oss_audit.outputs.audit, 'Found 0 vulnerabilities')}}
       run: |
         echo "::warning::Vulnerabilities found in the dependencies"
+        exit 1
 
         
