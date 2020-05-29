@@ -62,7 +62,7 @@
         },
         "produces": [
           "application/json"
-        ],
+        ]
       }
     },
     "/portfolio_coverage": {
@@ -121,7 +121,7 @@
             "description": "Failed. Bad post data."
           }
         }
-      },
+      }
     },
     "/report": {
       "parameters": [
@@ -179,7 +179,7 @@
             "description": "Failed. Bad post data."
           }
         }
-      },
+      }
     }
   },
   "components": {
