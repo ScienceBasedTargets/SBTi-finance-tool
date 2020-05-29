@@ -10,7 +10,7 @@
 | PyYAML                        | 5.3.1               | MIT                                                          |
 | Pygments                      | 2.6.1               | BSD License                                                  |
 | Sphinx                        | 3.0.3               | BSD                                                          |
-| Unidecode                     | 1.1.1               | GPL                                                          |
+| text-unidecode                | 1.3                 | Artistic License                                             |
 | Werkzeug                      | 1.0.1               | BSD-3-Clause                                                 |
 | alabaster                     | 0.7.12              | BSD                                                      |
 | aniso8601                     | 8.0.0               | BSD                                                      |
