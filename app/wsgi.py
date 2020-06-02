@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 """
 Run server.
-
-@author: SAV-Quartz
 """
 from app.app_server import app
 
