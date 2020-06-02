@@ -39,7 +39,7 @@ class documentation_endpoint(Resource):
         return send_from_directory('static', path)
 
 
-SWAGGER_URL = '/swagger'
+SWAGGER_URL = '/docs'
 API_URL = '/static/swagger.json'
 swaggerui_blueprint = get_swaggerui_blueprint(
     SWAGGER_URL,
