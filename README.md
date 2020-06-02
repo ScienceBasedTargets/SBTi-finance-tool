@@ -70,6 +70,10 @@ aws ecr create-repository --repository-name sbti-ecs
 }
 ```
 
+2. Create your own AWS docker compose launch file
+```bash
+cp docker-compose_aws_example.yml docker-compose_aws.yml
+```
 2. Update the docker-compose_aws.yml file with the repository URI.
 3. Build the docker image
 ```bash
