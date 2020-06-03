@@ -1,0 +1,7 @@
+version: '3'
+services:
+  app:
+    build: .
+    ports:
+     - "5000:8080"
+
