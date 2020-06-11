@@ -1,8 +1,18 @@
 import pandas as pd
 
-class target_valuation_protocol:
+# x = TargetValuationProtocol()
+# x.test_target_type()
+# x.test_boundary_coverage()
+# x.test_target_process()
+# x.group_valid_target() # Doesn't work
 
-    def input_data():
+
+class TargetValuationProtocol:
+
+    def __init__(self):
+        self.data = self.input_data()
+
+    def input_data(self):
         """
         Reads in an excel file as input data
 
@@ -14,7 +24,7 @@ class target_valuation_protocol:
                            sheet_name ='Data Inputs',skiprows = 1)
 
 
-    def test_target_type(data):
+    def test_target_type(self):
         """
         Test on target type and only allow only GHG emission reduction targets (absolute or intensity based).
 
@@ -25,10 +35,10 @@ class target_valuation_protocol:
         :return: excel file as input data
         """
 
-        return data[(data['Target reference number']==' Int 1') | (data['Target reference number']==' Abs 1')]
+        self.data = self.data[(self.data['Target reference number']==' Int 1') | (self.data['Target reference number']==' Abs 1')]
 
 
-    def test_boundary_coverage(data):
+    def test_boundary_coverage(self):
         '''
         Test on boundary coverage:
 
@@ -54,7 +64,7 @@ class target_valuation_protocol:
         # Option 1
         index = []
         #data.reset_index(inplace=True, drop=True)
-        for record in data.iterrows():
+        for record in self.data.iterrows():
             if not pd.isna(record[1]['Scope']):
                 if 'Scope 1 +2' in record[1]['Scope']:
                     if record[1]['% emissions in Scope']>95:
@@ -65,10 +75,10 @@ class target_valuation_protocol:
                 elif 'Scope 3' in record[1]['Scope']:
                     if record[1]['% emissions in Scope']>67:
                         index.append(record[0])
-        return data.loc[index]
+        self.data = self.data.loc[index]
 
 
-    def test_target_process(data):
+    def test_target_process(self):
         '''
         Test on target process
         If target process is 100%, the target is invalid (only forward looking targets allowed)
@@ -85,14 +95,14 @@ class target_valuation_protocol:
         '''
 
         index = []
-        for record in data.iterrows():
+        for record in self.data.iterrows():
             if not pd.isna(record[1]['% achieved (emissions)']):
                 if record[1]['% achieved (emissions)']!=100:
                     index.append(record[0])
-        return data.loc[index]
+        self.data = self.data.loc[index]
 
 
-    def time_frame(data):
+    def time_frame(self):
         '''
         Time frame is forward looking: target year - current year. Less than 5y = short, between 5 and 15 is mid, 15 to 30 is long
 
@@ -104,7 +114,7 @@ class target_valuation_protocol:
         '''
 
         current_year = 2020; time_frame_list = [];
-        for record in data.iterrows():
+        for record in self.data.iterrows():
             if not pd.isna(record[1]['Target year']):
                 time_frame = record[1]['Target year'] - current_year
                 if (time_frame<15) & (time_frame>5):
@@ -117,11 +127,10 @@ class target_valuation_protocol:
                     time_frame_list.append(None)
             else:
                 time_frame_list.append(None)
-         data['Time frame'] = time_frame_list
-        return data
+        self.data = self.data['Time frame'] = time_frame_list
 
 
-    def group_valid_target(data):
+    def group_valid_target(self):
         '''
         Group valid targets by category & filter multiple targets#
         Input: a list of valid targets for each company:
@@ -146,10 +155,10 @@ class target_valuation_protocol:
         '''
 
         # Creates time frame
-        data = time_frame(data)
+        time_frame()
 
         index_s1s2 = []; index_s3 = [];
-        for record in data.iterrows():
+        for record in self.data.iterrows():
             if not pd.isna(record[1]['Scope']):
                 if 'Scope 1 +2' in record[1]['Scope']:
                     index_s1s2.append(record[0])
@@ -157,8 +166,8 @@ class target_valuation_protocol:
                     index_s1s2.append(record[0])
                 elif 'Scope 3' in record[1]['Scope']:
                     index_s3.append(record[0])
-        data_s1s2 = data.loc[index_s1s2]
-        data_s3 = data.loc[index_s3]
+        data_s1s2 = self.data.loc[index_s1s2]
+        data_s3 = self.data.loc[index_s3]
 
         # Creates 6 categories and filters each category if more then 1 target per company.
         data_s1s2_short = multiple_target_filter(data_s1s2[data_s1s2['Time frame']=='short'])
@@ -168,42 +177,39 @@ class target_valuation_protocol:
         data_s3_mid = multiple_target_filter(data_s3[data_s3['Time frame'] == 'mid'])
         data_s3_long = multiple_target_filter(data_s3[data_s3['Time frame'] == 'long'])
 
-        data_s1s2_short_final = add_company_placeholder(data, data_s1s2_short)
-        data_s1s2_mid_final = add_company_placeholder(data,data_s1s2_mid)
-        data_s1s2_long_final = add_company_placeholder(data,data_s1s2_long)
-        data_s3_short_final = add_company_placeholder(data, data_s3_short)
-        data_s3_mid_final = add_company_placeholder(data, data_s3_mid)
-        data_s3_long_final = add_company_placeholder(data, data_s3_long)
+        data_s1s2_short_final = add_company_placeholder(data_s1s2_short)
+        data_s1s2_mid_final = add_company_placeholder(data_s1s2_mid)
+        data_s1s2_long_final = add_company_placeholder(data_s1s2_long)
+        data_s3_short_final = add_company_placeholder(data_s3_short)
+        data_s3_mid_final = add_company_placeholder(data_s3_mid)
+        data_s3_long_final = add_company_placeholder(data_s3_long)
 
         return [data_s1s2_short_final,data_s1s2_mid_final,data_s1s2_long_final,
-                data_s3_short_final,data_s3_mid_final,data_s3_long_final]
+               data_s3_short_final,data_s3_mid_final,data_s3_long_final]
 
 
-    def add_company_placeholder(data_entire,data_category):
+    def add_company_placeholder(self, data_category):
         '''
 
         :return:
         '''
 
         # Need to fill in empty company names
-        empty_company_name = data_entire.drop(data_category.index)['company_name'].values
+        empty_company_name = self.data.drop(data_category.index)['company_name'].values
 
         dictionary = {k:{
             'company_name':empty_company_name[k]
         } for k in range(0,len(empty_company_name))}
 
         for key in dictionary.keys():
-            for column in data_entire.columns.drop('company_name'):
+            for column in self.data.columns.drop('company_name'):
                 dictionary[key][column] = None
         data_company_placeholder = pd.DataFrame.from_dict(dictionary,orient='index')
         frames = [data_category, data_company_placeholder]
         return pd.concat(frames)
 
 
-
-
-
-    def multiple_target_filter(data):
+    def multiple_target_filter(self):
         '''
         For each category: if more than 1 target is available, filter based on the following criteria
         -- Highest boundary coverage
@@ -218,35 +224,16 @@ class target_valuation_protocol:
         :return: excel file as input data
         '''
 
-        if len(data)==0:
-            return data
-        else:
-            data = data.sort_values(by=['company_name', '% emissions in Scope','Base year','Target reference number'], ascending=False)
-            if max(data.groupby(['company_name', '% emissions in Scope', 'Base year', 'Target reference number']).size().values) == 1:
-                return data
-            else:
-                groupby_value = data.groupby(['company_name', '% emissions in Scope','Base year','Target reference number']).size().values
+        if not len(self.data)==0:
+            self.data = self.data.sort_values(by=['company_name', '% emissions in Scope','Base year','Target reference number'], ascending=False)
+            if not max(self.data.groupby(['company_name', '% emissions in Scope', 'Base year', 'Target reference number']).size().values) == 1:
+                groupby_value = self.data.groupby(['company_name', '% emissions in Scope','Base year','Target reference number']).size().values
                 index_all_category_equal = [i for i, x in enumerate(groupby_value) if x != 1]
-                company_all_category_equal = data.iloc[index_all_category_equal]['company_name'].values
-
+                company_all_category_equal = self.data.iloc[index_all_category_equal]['company_name'].values
                 for company in company_all_category_equal:
-                    data_company_all_category = data[data['company_name'] == company]
+                    data_company_all_category = self.data[self.data['company_name'] == company]
                     average_ambition_of_target = round(data_company_all_category['% reduction from base year'].mean(), 2)
-                    index_to_change = data[data['company_name'] == company].index
+                    index_to_change = self.data[self.data['company_name'] == company].index
                     for index in index_to_change:
-                        data.at[index - 1, '% reduction from base year'] = average_ambition_of_target
-                return data
-
-
-    def main():
-        input_data = input_data()
-
-        data = test_target_type(input_data)
-
-        data = test_boundary_coverage(data)
-
-        data = test_target_process(data)
-
-        data = group_valid_target(data)
-
+                        self.data.at[index - 1, '% reduction from base year'] = average_ambition_of_target
 
