@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
+<<<<<<< Updated upstream
     <list default="true" id="fdd298f6-aa7d-45c6-926b-d121178e9a4c" name="Default" comment="">
 <<<<<<< Updated upstream
       <change afterPath="$PROJECT_DIR$/static/swagger.json" afterDir="false" />
@@ -11,6 +12,9 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
 >>>>>>> Stashed changes
     </list>
+=======
+    <list default="true" id="6f79eb19-2b4f-4aeb-918e-6858090ddc1d" name="Default" comment="" />
+>>>>>>> Stashed changes
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -18,6 +22,7 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+<<<<<<< Updated upstream
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
 <<<<<<< Updated upstream
@@ -110,6 +115,14 @@
   <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="-8" />
     <option name="y" value="-8" />
+=======
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="57" />
+    <option name="y" value="138" />
+>>>>>>> Stashed changes
     <option name="width" value="1632" />
     <option name="height" value="702" />
   </component>
@@ -126,6 +139,7 @@
               <item name="SBTi" type="b2602c69:ProjectViewProjectNode" />
               <item name="SBTi" type="462c0819:PsiDirectoryNode" />
             </path>
+<<<<<<< Updated upstream
             <path>
               <item name="SBTi" type="b2602c69:ProjectViewProjectNode" />
               <item name="SBTi" type="462c0819:PsiDirectoryNode" />
@@ -135,6 +149,8 @@
               <item name="protocol" type="462c0819:PsiDirectoryNode" />
 >>>>>>> Stashed changes
             </path>
+=======
+>>>>>>> Stashed changes
           </expand>
           <select />
         </subPane>
@@ -143,11 +159,15 @@
   </component>
   <component name="PropertiesComponent">
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../WiG" />
 =======
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../Klachten" />
 >>>>>>> Stashed changes
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+=======
+    <property name="settings.editor.selected.configurable" value="configurable.group.build" />
+>>>>>>> Stashed changes
   </component>
   <component name="PyConsoleOptionsProvider">
     <option name="myPythonConsoleState">
@@ -156,11 +176,14 @@
       </console-settings>
     </option>
   </component>
+<<<<<<< Updated upstream
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Projects\SBTi" />
     </key>
   </component>
+=======
+>>>>>>> Stashed changes
   <component name="RunDashboard">
     <option name="ruleStates">
       <list>
@@ -178,16 +201,25 @@
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
+<<<<<<< Updated upstream
       <changelist id="fdd298f6-aa7d-45c6-926b-d121178e9a4c" name="Default" comment="" />
       <created>1590414072761</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1590414072761</updated>
+=======
+      <changelist id="6f79eb19-2b4f-4aeb-918e-6858090ddc1d" name="Default" comment="" />
+      <created>1591803170580</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1591803170580</updated>
+>>>>>>> Stashed changes
     </task>
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+<<<<<<< Updated upstream
     <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24973656" />
@@ -212,11 +244,32 @@
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Find" order="1" />
+=======
+    <layout>
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24973656" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Event Log" side_tool="true" />
+      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="Version Control" />
+      <window_info anchor="bottom" id="Python Console" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info anchor="bottom" id="Terminal" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info id="Favorites" side_tool="true" />
+      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+>>>>>>> Stashed changes
     </layout>
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
   </component>
+<<<<<<< Updated upstream
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <option name="time" value="4" />
@@ -320,4 +373,6 @@
       </provider>
     </entry>
   </component>
+=======
+>>>>>>> Stashed changes
 </project>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.6 (SBTi)" project-jdk-type="Python SDK" />
 =======
   <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.6 virtualenv at C:\Projects\SBTi\venv" project-jdk-type="Python SDK" />
@@ -8,4 +9,7 @@
   <component name="PyCharmProfessionalAdvertiser">
     <option name="shown" value="true" />
   </component>
+=======
+  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.6 virtualenv at C:\Projects\SBTi\venv (1)" project-jdk-type="Python SDK" />
+>>>>>>> Stashed changes
 </project>
