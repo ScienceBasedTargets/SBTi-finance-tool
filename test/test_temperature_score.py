@@ -48,11 +48,34 @@ class TestTemperatureScore(unittest.TestCase):
 
     def test_portfolio_aggregations(self):
         scores = self.temperature_score.calculate(self.data)
-        aggregations_wats = self.temperature_score.aggregate_scores(scores, PortfolioAggregationMethod.WATS)
-        assert round(aggregations_wats["short"], 4) == 3.0994, "Short WATS aggregation failed"
-        assert round(aggregations_wats["mid"], 4) == 2.9981, "Mid WATS aggregation failed"
-        assert round(aggregations_wats["long"], 4) == 3.2000, "Long WATS aggregation failed"
-        aggregations_tets = self.temperature_score.aggregate_scores(scores, PortfolioAggregationMethod.TETS)
-        assert round(aggregations_tets["short"], 4) == 3.0289, "Short TETS aggregation failed"
-        assert round(aggregations_tets["mid"], 4) == 3.0241, "Mid TETS aggregation failed"
-        assert round(aggregations_tets["long"], 4) == 3.2000, "Long TETS aggregation failed"
+        aggregations = self.temperature_score.aggregate_scores(scores, PortfolioAggregationMethod.WATS)
+        assert round(aggregations["short"], 4) == 3.0994, "Short WATS aggregation failed"
+        assert round(aggregations["mid"], 4) == 2.9981, "Mid WATS aggregation failed"
+        assert round(aggregations["long"], 4) == 3.2000, "Long WATS aggregation failed"
+        aggregations = self.temperature_score.aggregate_scores(scores, PortfolioAggregationMethod.TETS)
+        assert round(aggregations["short"], 4) == 3.0289, "Short TETS aggregation failed"
+        assert round(aggregations["mid"], 4) == 3.0241, "Mid TETS aggregation failed"
+        assert round(aggregations["long"], 4) == 3.2000, "Long TETS aggregation failed"
+        aggregations = self.temperature_score.aggregate_scores(scores, PortfolioAggregationMethod.MOTS)
+        assert round(aggregations["short"], 4) == 3.0363, "Short MOTS aggregation failed"
+        assert round(aggregations["mid"], 4) == 3.0293, "Mid MOTS aggregation failed"
+        assert round(aggregations["long"], 4) == 3.2000, "Long MOTS aggregation failed"
+        aggregations = self.temperature_score.aggregate_scores(scores, PortfolioAggregationMethod.EOTS)
+        assert round(aggregations["short"], 4) == 3.0641, "Short EOTS aggregation failed"
+        assert round(aggregations["mid"], 4) == 3.0359, "Mid EOTS aggregation failed"
+        assert round(aggregations["long"], 4) == 3.2000, "Long EOTS aggregation failed"
+        aggregations = self.temperature_score.aggregate_scores(scores, PortfolioAggregationMethod.ECOTS)
+        assert round(aggregations["short"], 4) == 3.0363, "Short ECOTS aggregation failed"
+        assert round(aggregations["mid"], 4) == 3.0293, "Mid ECOTS aggregation failed"
+        assert round(aggregations["long"], 4) == 3.2000, "Long ECOTS aggregation failed"
+        aggregations = self.temperature_score.aggregate_scores(scores, PortfolioAggregationMethod.AOTS)
+        assert round(aggregations["short"], 4) == 3.0363, "Short AOTS aggregation failed"
+        assert round(aggregations["mid"], 4) == 3.0293, "Mid AOTS aggregation failed"
+        assert round(aggregations["long"], 4) == 3.2000, "Long AOTS aggregation failed"
+
+
+if __name__ == "__main__":
+    test = TestTemperatureScore()
+    test.setUp()
+    test.test_temp_score()
+    test.test_portfolio_aggregations()

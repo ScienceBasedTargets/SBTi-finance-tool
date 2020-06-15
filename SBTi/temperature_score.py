@@ -54,7 +54,8 @@ class TemperatureScore:
 
         # This defines which column contain company specific, instead of target specific data
         self.company_columns = ["industry", "regression_param", "regression_intercept", "s1s2_emissions",
-                                "s3_emissions", "market_cap", "investment_value", "portfolio_weight"]
+                                "s3_emissions", "market_cap", "investment_value", "portfolio_weight",
+                                "company_enterprise_value", "company_ev_plus_cash", "company_total_assets"]
         self.slope_map = {
             "short": "slope5",
             "mid": "slope15",
@@ -230,40 +231,58 @@ class TemperatureScore:
         portfolio_scores = {}
         for time_frame in ["short", "mid", "long"]:
             # Weighted average temperature score (WATS)
+            filtered_data = data[(data["time_frame"] == time_frame) & (data["scope_category"] == "s1s2s3")].copy()
             if portfolio_aggregation_method == PortfolioAggregationMethod.WATS:
-                filtered_data = data[(data["time_frame"] == time_frame) & (data["scope_category"] == "s1s2s3")].copy()
-                filtered_data["WATS"] = filtered_data.apply(
+                filtered_data["weighted_temperature_score"] = filtered_data.apply(
                     lambda row: row["portfolio_weight"] * row["temperature_score"],
                     axis=1
                 )
 
                 # We're dividing by the portfolio weight. This is not done in the methodology, but we need it to account
                 # for rounding errors.
-                portfolio_scores[time_frame] = filtered_data["WATS"].sum() / filtered_data["portfolio_weight"].sum()
+                portfolio_scores[time_frame] = filtered_data["weighted_temperature_score"].sum() / \
+                                               filtered_data["portfolio_weight"].sum()
             # Total emissions weighted temperature score (TETS)
             elif portfolio_aggregation_method == PortfolioAggregationMethod.TETS:
-                filtered_data = data[(data["time_frame"] == time_frame) & (data["scope_category"] == "s1s2s3")].copy()
                 # Calculate the total emissions of all companies
                 emissions = filtered_data["s1s2_emissions"].sum() + filtered_data["s3_emissions"].sum()
-                filtered_data["TETS"] = filtered_data.apply(
+                filtered_data["weighted_temperature_score"] = filtered_data.apply(
                     lambda row: (row["s1s2_emissions"] + row["s3_emissions"]) / emissions * row["temperature_score"],
                     axis=1
                 )
-                portfolio_scores[time_frame] = filtered_data["TETS"].sum()
+                portfolio_scores[time_frame] = filtered_data["weighted_temperature_score"].sum()
             # Market Owned emissions weighted temperature score (MOTS)
-            elif portfolio_aggregation_method == PortfolioAggregationMethod.MOTS:
-                # TODO
-                raise NotImplementedError()
             # Enterprise Owned emissions weighted temperature score (EOTS)
-            elif portfolio_aggregation_method == PortfolioAggregationMethod.EOTS:
-                # TODO
-                raise NotImplementedError()
             # Enterprise Value + Cash emissions weighted temperature score (ECOTS)
-            elif portfolio_aggregation_method == PortfolioAggregationMethod.ECOTS:
-                # TODO
-                raise NotImplementedError()
             # Total Assets emissions weighted temperature score (AOTS)
-            elif portfolio_aggregation_method == PortfolioAggregationMethod.AOTS:
-                # TODO
-                raise NotImplementedError()
+            elif portfolio_aggregation_method == PortfolioAggregationMethod.MOTS or \
+                    portfolio_aggregation_method == PortfolioAggregationMethod.EOTS or \
+                    portfolio_aggregation_method == PortfolioAggregationMethod.ECOTS or \
+                    portfolio_aggregation_method == PortfolioAggregationMethod.AOTS:
+                # These four methods only differ in the way the company is valued.
+                value_column = "market_cap"
+                if portfolio_aggregation_method == PortfolioAggregationMethod.EOTS:
+                    value_column = "company_enterprise_value"
+                elif portfolio_aggregation_method == PortfolioAggregationMethod.ECOTS:
+                    value_column = "company_ev_plus_cash"
+                elif portfolio_aggregation_method == PortfolioAggregationMethod.AOTS:
+                    value_column = "company_total_assets"
+
+                # Calculate the total owned emissions of all companies
+                filtered_data["owned_emissions"] = filtered_data.apply(
+                    lambda row: ((row["investment_value"] / row[value_column]) * (
+                            row["s1s2_emissions"] + row["s3_emissions"])),
+                    axis=1
+                )
+                owned_emissions = filtered_data["owned_emissions"].sum()
+
+                # Calculate the MOTS value per company
+                filtered_data["weighted_temperature_score"] = filtered_data.apply(
+                    lambda row: (row["owned_emissions"] / owned_emissions) * row["temperature_score"],
+                    axis=1
+                )
+
+                portfolio_scores[time_frame] = filtered_data["weighted_temperature_score"].sum()
+            else:
+                raise ValueError("The specified portfolio aggregation method is invalid")
         return portfolio_scores
