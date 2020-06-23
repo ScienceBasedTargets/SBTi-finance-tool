@@ -58,6 +58,9 @@ class import_portfolio(Resource):
 
     def post(self):
         files.save(request.files['file'])
+
+        # Return information regarding file
+
         return{'POST Request': 'File Save'}
 
     def put(self):
