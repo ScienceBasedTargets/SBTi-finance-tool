@@ -1,24 +1,12 @@
-from abc import ABC, abstractmethod
 import pandas as pd
+from SBTi.data.data_provider import DataProvider
 
 
-class DataProvider(ABC):
+class Urgentum(DataProvider):
     """
-    General data provider super class.
+    Data provider skeleton for Urgentum.
     """
 
-    def __init__(self, companies: list, config: dict):
-        """
-        Create a new data provider instance.
-
-        :param companies: A list of companies. Each company should be a dict with a "company_name" and "company_id"
-                            field.
-        :param config: A dictionary containing the configuration parameters for this data provider.
-        """
-        self.companies = companies
-        self.config = config
-
-    @abstractmethod
     def get_targets(self) -> pd.DataFrame:
         """
         Get all the targets for the whole portfolio of companies. This should return a dataframe, containing at least
@@ -38,9 +26,11 @@ class DataProvider(ABC):
 
         :return: A dataframe containing the targets
         """
+        # TODO: Make an API request
+        # TODO: Transform the result into a dataframe
+        # TODO: Make sure the columns align with those defined in the docstring
         raise NotImplementedError
 
-    @abstractmethod
     def get_company_data(self) -> pd.DataFrame:
         """
         Get all relevant data for a certain company. Should return a dataframe, containing at least the following
@@ -67,6 +57,9 @@ class DataProvider(ABC):
         :param company: str: The identifier of the company to get the emissions for
         :return: A dataframe containing the company data
         """
+        # TODO: Make an API request
+        # TODO: Transform the result into a dataframe
+        # TODO: Make sure the columns align with those defined in the docstring
         raise NotImplementedError
 
 
