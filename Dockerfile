@@ -1,6 +1,6 @@
 FROM python:3.6
 
-COPY requirements.txt config.yaml setup.py /project/
+COPY requirements.txt config/config.yaml setup.py /project/
 
 RUN apt-get update \
  && apt-get install -y --no-install-recommends \
@@ -13,10 +13,10 @@ RUN apt-get update \
 ARG uid=210
 ARG gid=210
 
-RUN groupadd -g ${gid} dock_wigapi \
- && useradd -u ${uid} -g ${gid} dock_wigapi \
- && mkdir /home/dock_wigapi \
- && chown -R dock_wigapi:dock_wigapi /home/dock_wigapi
+RUN groupadd -g ${gid} dock_sbtiapi \
+ && useradd -u ${uid} -g ${gid} dock_sbtiapi \
+ && mkdir /home/dock_sbtiapi \
+ && chown -R dock_sbtiapi:dock_sbtiapi /home/dock_sbtiapi
 
 RUN rm /etc/nginx/sites-enabled/default /etc/nginx/sites-available/default \
  && mkdir -p /vol/log/nginx /vol/tmp/nginx /vol/tmp/uwsgi \
@@ -24,20 +24,20 @@ RUN rm /etc/nginx/sites-enabled/default /etc/nginx/sites-available/default \
  && rm -rf /var/log/nginx \
  && ln -s /vol/log/nginx /var/log/nginx
 
-COPY nginx.conf /etc/nginx/nginx.conf
-COPY flask-site-nginx.conf /etc/nginx/sites-available/flask-site-nginx.conf
-COPY uwsgi.ini /etc/uwsgi/uwsgi.ini
-COPY supervisord.conf /etc/supervisord.conf
 COPY app /project/app
-COPY wig /project/wig
+COPY SBTi /project/SBTi
+COPY config/nginx.conf /etc/nginx/nginx.conf
+COPY config/flask-site-nginx.conf /etc/nginx/sites-available/flask-site-nginx.conf
+COPY config/uwsgi.ini /etc/uwsgi/uwsgi.ini
+COPY config/supervisord.conf /etc/supervisord.conf
 
-RUN python /project/setup.py develop
 
 RUN ln -s /etc/nginx/sites-available/flask-site-nginx.conf /etc/nginx/sites-enabled/flask-site-nginx.conf \
- && chown -R dock_wigapi:dock_wigapi /project /vol
-
-USER dock_wigapi
+ && chown -R dock_sbtiapi:dock_sbtiapi /project /vol
 
 WORKDIR /project
+RUN python /project/setup.py install
 
+USER dock_sbtiapi
+EXPOSE 80
 CMD ["/usr/bin/supervisord"]
