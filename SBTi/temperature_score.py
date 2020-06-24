@@ -60,7 +60,7 @@ class TemperatureScore:
         Map the target onto an SR15 target (None if not available).
 
         :param target: The target as a row of a dataframe
-        :return:
+        :return: The mapped SR15 target
         """
 
         # Check if the industry exists, if not use a default
@@ -92,7 +92,7 @@ class TemperatureScore:
         Get the annual reduction rate (or None if not available).
 
         :param target: The target as a row of a dataframe
-        :return:
+        :return: The annual reduction
         """
         if np.isnan(target[self.c.COLS.REDUCTION_FROM_BASE_YEAR]):
             return None
@@ -109,7 +109,7 @@ class TemperatureScore:
         Get the regression parameter and intercept from the model's output.
 
         :param target: The target as a row of a dataframe
-        :return:
+        :return:The regression parameter and intercept
         """
         if target[self.c.COLS.SR15] is None:
             return None, None
@@ -131,7 +131,7 @@ class TemperatureScore:
         Get the temperature score for a certain target based on the annual reduction rate and the regression parameters.
 
         :param target: The target as a row of a dataframe
-        :return:
+        :return: The temperature score
         """
         if np.isnan(target[self.c.COLS.REGRESSION_PARAM]) or np.isnan(target[self.c.COLS.REGRESSION_INTERCEPT]) \
                 or np.isnan(target[self.c.COLS.ANNUAL_REDUCTION_RATE]):
@@ -144,7 +144,7 @@ class TemperatureScore:
         Process the temperature score, such that it's relative to the emissions in the scope.
 
         :param target: The target as a row of a dataframe
-        :return:
+        :return: The relative temperature score
         """
         if self.boundary_coverage_option == BoundaryCoverageOption.DEFAULT:
             if np.isnan(target[self.c.COLS.EMISSIONS_IN_SCOPE]) or np.isnan(target[self.c.COLS.TEMPERATURE_SCORE]):
@@ -166,7 +166,7 @@ class TemperatureScore:
         :param data:
         :param company: The company name
         :param time_frame: The time_frame (short, mid, long)
-        :return:
+        :return: The aggregated temperature score for a company
         """
         filtered_data = data[(data[self.c.COLS.COMPANY_NAME] == company) & (data[self.c.COLS.TIME_FRAME] == time_frame)]
         s1s2 = filtered_data[filtered_data[self.c.COLS.SCOPE_CATEGORY] == self.c.VALUE_SCOPE_CATEGORY_S1S2]
@@ -209,7 +209,7 @@ class TemperatureScore:
         * company_total_assets: The total assets of the company. Only required to use the AOTS portfolio aggregation.
 
         :param data:
-        :return:
+        :return: A data frame containing all relevant information for the targets and companies
         """
         data[self.c.COLS.SR15] = data.apply(lambda row: self.get_target_mapping(row), axis=1)
         data[self.c.COLS.ANNUAL_REDUCTION_RATE] = data.apply(lambda row: self.get_annual_reduction_rate(row), axis=1)
@@ -240,8 +240,8 @@ class TemperatureScore:
         Aggregate scores to create a portfolio score per time_frame (short, mid, long).
 
         :param data: The results of the calculate method
-        :type portfolio_aggregation_method: PortfolioAggregationMethod: The aggregation method to use
-        :return:
+        :param portfolio_aggregation_method: PortfolioAggregationMethod: The aggregation method to use
+        :return: A weighted temperature score for the portfolio
         """
         portfolio_scores = {}
         for time_frame in self.c.VALUE_TIME_FRAMES:
