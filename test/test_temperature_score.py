@@ -49,29 +49,29 @@ class TestTemperatureScore(unittest.TestCase):
     def test_portfolio_aggregations(self):
         scores = self.temperature_score.calculate(self.data)
         aggregations = self.temperature_score.aggregate_scores(scores, PortfolioAggregationMethod.WATS)
-        assert round(aggregations["short"], 4) == 3.0994, "Short WATS aggregation failed"
-        assert round(aggregations["mid"], 4) == 2.9981, "Mid WATS aggregation failed"
-        assert round(aggregations["long"], 4) == 3.2000, "Long WATS aggregation failed"
+        self.assertAlmostEqual(aggregations["short"], 3.0994, places=4, msg="Short WATS aggregation failed")
+        self.assertAlmostEqual(aggregations["mid"], 2.9981, places=4, msg="Mid WATS aggregation failed")
+        self.assertAlmostEqual(aggregations["long"], 3.2000, places=4, msg="Long WATS aggregation failed")
         aggregations = self.temperature_score.aggregate_scores(scores, PortfolioAggregationMethod.TETS)
-        assert round(aggregations["short"], 4) == 3.0289, "Short TETS aggregation failed"
-        assert round(aggregations["mid"], 4) == 3.0241, "Mid TETS aggregation failed"
-        assert round(aggregations["long"], 4) == 3.2000, "Long TETS aggregation failed"
+        self.assertAlmostEqual(aggregations["short"], 3.0289, places=4, msg="Short TETS aggregation failed")
+        self.assertAlmostEqual(aggregations["mid"], 3.0241, places=4, msg="Mid TETS aggregation failed")
+        self.assertAlmostEqual(aggregations["long"], 3.2000, places=4, msg="Long TETS aggregation failed")
         aggregations = self.temperature_score.aggregate_scores(scores, PortfolioAggregationMethod.MOTS)
-        assert round(aggregations["short"], 4) == 3.0363, "Short MOTS aggregation failed"
-        assert round(aggregations["mid"], 4) == 3.0293, "Mid MOTS aggregation failed"
-        assert round(aggregations["long"], 4) == 3.2000, "Long MOTS aggregation failed"
+        self.assertAlmostEqual(aggregations["short"], 3.0363, places=4, msg="Short MOTS aggregation failed")
+        self.assertAlmostEqual(aggregations["mid"], 3.0293, places=4, msg="Mid MOTS aggregation failed")
+        self.assertAlmostEqual(aggregations["long"], 3.2000, places=4, msg="Long MOTS aggregation failed")
         aggregations = self.temperature_score.aggregate_scores(scores, PortfolioAggregationMethod.EOTS)
-        assert round(aggregations["short"], 4) == 3.0641, "Short EOTS aggregation failed"
-        assert round(aggregations["mid"], 4) == 3.0359, "Mid EOTS aggregation failed"
-        assert round(aggregations["long"], 4) == 3.2000, "Long EOTS aggregation failed"
+        self.assertAlmostEqual(aggregations["short"], 3.0641, places=4, msg="Short EOTS aggregation failed")
+        self.assertAlmostEqual(aggregations["mid"], 3.0359, places=4, msg="Mid EOTS aggregation failed")
+        self.assertAlmostEqual(aggregations["long"], 3.2000, places=4, msg="Long EOTS aggregation failed")
         aggregations = self.temperature_score.aggregate_scores(scores, PortfolioAggregationMethod.ECOTS)
-        assert round(aggregations["short"], 4) == 3.0363, "Short ECOTS aggregation failed"
-        assert round(aggregations["mid"], 4) == 3.0293, "Mid ECOTS aggregation failed"
-        assert round(aggregations["long"], 4) == 3.2000, "Long ECOTS aggregation failed"
+        self.assertAlmostEqual(aggregations["short"], 3.0363, places=4, msg="Short ECOTS aggregation failed")
+        self.assertAlmostEqual(aggregations["mid"], 3.0293, places=4, msg="Mid ECOTS aggregation failed")
+        self.assertAlmostEqual(aggregations["long"], 3.2000, places=4, msg="Long ECOTS aggregation failed")
         aggregations = self.temperature_score.aggregate_scores(scores, PortfolioAggregationMethod.AOTS)
-        assert round(aggregations["short"], 4) == 3.0363, "Short AOTS aggregation failed"
-        assert round(aggregations["mid"], 4) == 3.0293, "Mid AOTS aggregation failed"
-        assert round(aggregations["long"], 4) == 3.2000, "Long AOTS aggregation failed"
+        self.assertAlmostEqual(aggregations["short"], 3.0363, places=4, msg="Short AOTS aggregation failed")
+        self.assertAlmostEqual(aggregations["mid"], 3.0293, places=4, msg="Mid AOTS aggregation failed")
+        self.assertAlmostEqual(aggregations["long"], 3.2000, places=4, msg="Long AOTS aggregation failed")
 
 
 if __name__ == "__main__":
