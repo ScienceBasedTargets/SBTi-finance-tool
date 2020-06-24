@@ -85,6 +85,17 @@ class Bloomberg(DataProvider):
         # TODO: Make sure the columns align with those defined in the docstring
         raise NotImplementedError
 
+    def get_sbti_targets(self) -> list:
+        """
+        For each of the companies, get the status of their target (Target set, Committed or No target) as it's known to
+        the SBTi.
+
+        :return: The original list, enriched with a field called "sbti_target_status"
+        """
+        # TODO: Make an API request
+        # TODO: Extract the SBTi target status from the response
+        # TODO: Enrich the original list with this data
+        raise NotImplementedError
 
 class CompanyNotFoundException(Exception):
     """
