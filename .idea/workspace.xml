@@ -4,7 +4,7 @@
     <list default="true" id="fdd298f6-aa7d-45c6-926b-d121178e9a4c" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/connector/excel.py" beforeDir="false" afterPath="$PROJECT_DIR$/connector/excel.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/documents/files/SBTi_FI_tool_data_sample_v2.xlsx" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -15,23 +15,23 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="app.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app.py">
+      <file leaf-file-name="excel.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/connector/excel.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="210">
-              <caret line="61" column="43" selection-start-line="61" selection-start-column="43" selection-end-line="61" selection-end-column="43" />
+            <state relative-caret-position="609">
+              <caret line="89" column="66" selection-start-line="89" selection-start-column="21" selection-end-line="89" selection-end-column="66" />
               <folding>
-                <element signature="e#0#53#0" expanded="true" />
+                <element signature="e#0#19#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="excel.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/connector/excel.py">
+      <file leaf-file-name="data_provider_input.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/data_provider/data_provider_input.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="470">
-              <caret line="89" selection-start-line="89" selection-start-column="2" selection-end-line="90" selection-end-column="21" />
+            <state relative-caret-position="1887">
+              <caret line="172" lean-forward="true" selection-start-line="172" selection-end-line="172" />
               <folding>
                 <element signature="e#0#19#0" expanded="true" />
               </folding>
@@ -71,8 +71,10 @@
       <list>
         <option value="$PROJECT_DIR$/api/swagger/swagger.yaml" />
         <option value="$PROJECT_DIR$/static/swagger.json" />
-        <option value="$PROJECT_DIR$/app.py" />
         <option value="$PROJECT_DIR$/connector/excel.py" />
+        <option value="$PROJECT_DIR$/app.py" />
+        <option value="$PROJECT_DIR$/data_provider/company_data.py" />
+        <option value="$PROJECT_DIR$/data_provider/data_provider_input.py" />
       </list>
     </option>
   </component>
@@ -92,6 +94,11 @@
             <path>
               <item name="SBTi" type="b2602c69:ProjectViewProjectNode" />
               <item name="SBTi" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="SBTi" type="b2602c69:ProjectViewProjectNode" />
+              <item name="SBTi" type="462c0819:PsiDirectoryNode" />
+              <item name="data_provider" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -145,11 +152,11 @@
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.0" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.13540569" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
       <window_info anchor="bottom" id="Version Control" order="7" />
-      <window_info active="true" anchor="bottom" id="Python Console" order="7" visible="true" weight="0.2527233" />
+      <window_info active="true" anchor="bottom" id="Python Console" order="7" visible="true" weight="0.31808278" />
       <window_info anchor="bottom" id="Run" order="2" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Terminal" order="7" />
@@ -198,7 +205,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="4" />
+      <option name="time" value="5" />
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
@@ -331,18 +338,35 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="61" column="43" selection-start-line="61" selection-start-column="43" selection-end-line="61" selection-end-column="43" />
+        <state relative-caret-position="231">
+          <caret line="68" column="39" selection-start-line="68" selection-start-column="39" selection-end-line="68" selection-end-column="39" />
           <folding>
             <element signature="e#0#53#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/data_provider/company_data.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="10" column="59" lean-forward="true" selection-start-line="10" selection-start-column="59" selection-end-line="10" selection-end-column="59" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/connector/excel.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="470">
-          <caret line="89" selection-start-line="89" selection-start-column="2" selection-end-line="90" selection-end-column="21" />
+        <state relative-caret-position="609">
+          <caret line="89" column="66" selection-start-line="89" selection-start-column="21" selection-end-line="89" selection-end-column="66" />
+          <folding>
+            <element signature="e#0#19#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data_provider/data_provider_input.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1887">
+          <caret line="172" lean-forward="true" selection-start-line="172" selection-end-line="172" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
           </folding>

@@ -4,6 +4,7 @@ from flask_swagger_ui import get_swaggerui_blueprint
 import os
 from flask_uploads import UploadSet, configure_uploads, ALL
 
+from pathlib import Path
 
 PATH = 'C:/Projects/SBTi/documents'
 app = Flask(__name__)
@@ -58,19 +59,21 @@ class import_portfolio(Resource):
 
     def post(self):
         files.save(request.files['file'])
+        path = str(sorted(Path(PATH + '/files/').iterdir(), key=os.path.getmtime,reverse=True)[0])
+        file_name = path.split("""\\""")[-1]
 
-        # Return information regarding file
-
-        return{'POST Request': 'File Save'}
+        return{'POST Request': {'Response':{'Status Code':200,'Message':'File Saved','File':file_name,'Path':path}}}
 
     def put(self):
-        files.save(request.files['file'])
         remove_doc = request.args.get('document_replace')
         for root, dirs, file in os.walk(PATH):
             for f in file:
                 if remove_doc == f.split('.')[0]:
                     os.remove(os.path.join(root, f))
-        return{'PUT Request':'Document Replaced'}
+                    files.save(request.files['file'])
+                    return {'PUT Request': {'Response': {'Status Code': 200, 'Message': 'File Replaced', 'Replaced File': remove_doc}}}
+        return {'PUT Request': {'Response':{'Status Code':404,'Error Message': 'File Not Found','File':remove_doc}}}
+
 
 SWAGGER_URL = '/swagger'
 API_URL = '/static/swagger.json'
