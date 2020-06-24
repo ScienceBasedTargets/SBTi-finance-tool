@@ -27,24 +27,24 @@ class TestTemperatureScore(unittest.TestCase):
         :return:
         """
         scores = self.temperature_score.calculate(self.data)
-        assert round(scores[
+        self.assertAlmostEqual(scores[
                    (scores["company_name"] == "Company T") &
                    (scores["scope_category"] == "s1s2")
-               ]["temperature_score"].iloc[0], 4) == 1.7699, "The temp score was incorrect"
-        assert round(scores[
+               ]["temperature_score"].iloc[0], 1.7699, places=4, msg="The temp score was incorrect")
+        self.assertAlmostEqual(scores[
                    (scores["company_name"] == "Company E") &
                    (scores["scope_category"] == "s1s2")
-               ]["temperature_score"].iloc[0], 1) == 3.2, "The fallback temp score was incorrect"
-        assert round(scores[
+               ]["temperature_score"].iloc[0], 3.2, places=4, msg="The fallback temp score was incorrect")
+        self.assertAlmostEqual(scores[
                    (scores["company_name"] == "Company AA") &
                    (scores["time_frame"] == "mid") &
                    (scores["scope_category"] == "s1s2s3")
-               ]["temperature_score"].iloc[0], 4) == 1.9075, "The aggregated temp score was incorrect"
-        assert round(scores[
+               ]["temperature_score"].iloc[0], 1.9075, places=4, msg="The aggregated temp score was incorrect")
+        self.assertAlmostEqual(scores[
                    (scores["company_name"] == "Company AA") &
                    (scores["time_frame"] == "long") &
                    (scores["scope_category"] == "s1s2s3")
-               ]["temperature_score"].iloc[0], 1) == 3.2, "The aggregated fallback temp score was incorrect"
+               ]["temperature_score"].iloc[0], 3.2, places=5, msg="The aggregated fallback temp score was incorrect")
 
     def test_portfolio_aggregations(self):
         scores = self.temperature_score.calculate(self.data)
