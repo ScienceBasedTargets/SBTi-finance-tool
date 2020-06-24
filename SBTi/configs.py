@@ -80,3 +80,18 @@ class TemperatureScoreConfig:
         "mid": "slope15",
         "long": "slope30",
     }
+
+
+class PortfolioCoverageTVPConfig:
+    FILE_TARGETS = os.path.join(os.path.dirname(os.path.realpath(__file__)), "inputs",
+                                "current-Companies-Taking-Action-191.xlsx")
+
+    INPUT_COMPANY_NAME = "company_name"
+    INPUT_COMPANY_ID = "company_id"
+    OUTPUT_TARGET = "sbti_target_status"
+    VALUE_NO_TARGET = "No target"
+    # SBTi targets overview (TVP coverage)
+    COL_COMPANY_NAME = "Company Name"
+    COL_COMPANY_ID = "ISIN"
+    COL_TARGET_STATUS = "Status"
+
