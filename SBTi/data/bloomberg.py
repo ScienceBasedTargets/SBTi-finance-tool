@@ -1,24 +1,35 @@
-from abc import ABC, abstractmethod
+from typing import Optional
+
 import pandas as pd
+import requests
+
+from SBTi.data.data_provider import DataProvider
 
 
-class DataProvider(ABC):
+class Bloomberg(DataProvider):
     """
-    General data provider super class.
+    Data provider skeleton for Bloomberg.
     """
 
-    def __init__(self, companies: list, config: dict):
+    def _request(self, endpoint: str, data: dict) -> Optional[object]:
         """
-        Create a new data provider instance.
+        Request data from the server.
+        Note: This request does in no way reflect the actual implementation, this is only a stub to show what a
+        potential API request COULD look like.
 
-        :param companies: A list of companies. Each company should be a dict with a "company_name" and "company_id"
-                            field.
-        :param config: A dictionary containing the configuration parameters for this data provider.
+        :param endpoint: The endpoint of the API
+        :param data: The data to send as a body
+        :return: The returned data, None in case of an error.
         """
-        self.companies = companies
-        self.config = config
+        try:
+            headers = {'Authorization': 'Basic: {}:{}'.format(self.config["username"], self.config["password"])}
+            r = requests.post("{}{}".format(self.config["host"], endpoint), json=data, headers=headers)
+            if r.status_code == 200:
+                return r.json()
+        except Exception as e:
+            return None
+        return None
 
-    @abstractmethod
     def get_targets(self) -> pd.DataFrame:
         """
         Get all the targets for the whole portfolio of companies. This should return a dataframe, containing at least
@@ -38,9 +49,11 @@ class DataProvider(ABC):
 
         :return: A dataframe containing the targets
         """
+        # TODO: Make an API request
+        # TODO: Transform the result into a dataframe
+        # TODO: Make sure the columns align with those defined in the docstring
         raise NotImplementedError
 
-    @abstractmethod
     def get_company_data(self) -> pd.DataFrame:
         """
         Get all relevant data for a certain company. Should return a dataframe, containing at least the following
@@ -67,6 +80,9 @@ class DataProvider(ABC):
         :param company: str: The identifier of the company to get the emissions for
         :return: A dataframe containing the company data
         """
+        # TODO: Make an API request
+        # TODO: Transform the result into a dataframe
+        # TODO: Make sure the columns align with those defined in the docstring
         raise NotImplementedError
 
 
