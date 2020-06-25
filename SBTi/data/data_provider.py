@@ -7,19 +7,16 @@ class DataProvider(ABC):
     General data provider super class.
     """
 
-    def __init__(self, companies: list, config: dict):
+    def __init__(self, config: dict):
         """
         Create a new data provider instance.
 
-        :param companies: A list of companies. Each company should be a dict with a "company_name" and "company_id"
-                            field.
         :param config: A dictionary containing the configuration parameters for this data provider.
         """
-        self.companies = companies
         self.config = config
 
     @abstractmethod
-    def get_targets(self) -> pd.DataFrame:
+    def get_targets(self, companies: list) -> pd.DataFrame:
         """
         Get all the targets for the whole portfolio of companies. This should return a dataframe, containing at least
         the following columns:
@@ -36,12 +33,14 @@ class DataProvider(ABC):
         * emissions_in_scope: Company emissions in the target's scope at start of the base year
         * achieved_reduction: The emission reduction that has already been achieved
 
+        :param companies: A list of companies. Each company should be a dict with a "company_name" and "company_id"
+                            field.
         :return: A dataframe containing the targets
         """
         raise NotImplementedError
 
     @abstractmethod
-    def get_company_data(self) -> pd.DataFrame:
+    def get_company_data(self, companies: list) -> pd.DataFrame:
         """
         Get all relevant data for a certain company. Should return a dataframe, containing at least the following
         columns:
@@ -64,17 +63,20 @@ class DataProvider(ABC):
         * company_total_assets: The total assets of the company. Only required to use the AOTS portfolio aggregation.
 
 
-        :param company: str: The identifier of the company to get the emissions for
+        :param companies: A list of companies. Each company should be a dict with a "company_name" and "company_id"
+                            field.
         :return: A dataframe containing the company data
         """
         raise NotImplementedError
 
     @abstractmethod
-    def get_sbti_targets(self) -> list:
+    def get_sbti_targets(self, companies: list) -> list:
         """
         For each of the companies, get the status of their target (Target set, Committed or No target) as it's known to
         the SBTi.
 
+        :param companies: A list of companies. Each company should be a dict with a "company_name" and "company_id"
+                            field.
         :return: The original list, enriched with a field called "sbti_target_status"
         """
         raise NotImplementedError

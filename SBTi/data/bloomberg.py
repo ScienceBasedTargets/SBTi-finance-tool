@@ -30,7 +30,7 @@ class Bloomberg(DataProvider):
             return None
         return None
 
-    def get_targets(self) -> pd.DataFrame:
+    def get_targets(self, companies: list) -> pd.DataFrame:
         """
         Get all the targets for the whole portfolio of companies. This should return a dataframe, containing at least
         the following columns:
@@ -47,6 +47,8 @@ class Bloomberg(DataProvider):
         * emissions_in_scope: Company emissions in the target's scope at start of the base year
         * achieved_reduction: The emission reduction that has already been achieved
 
+        :param companies: A list of companies. Each company should be a dict with a "company_name" and "company_id"
+                            field.
         :return: A dataframe containing the targets
         """
         # TODO: Make an API request
@@ -54,7 +56,7 @@ class Bloomberg(DataProvider):
         # TODO: Make sure the columns align with those defined in the docstring
         raise NotImplementedError
 
-    def get_company_data(self) -> pd.DataFrame:
+    def get_company_data(self, companies: list) -> pd.DataFrame:
         """
         Get all relevant data for a certain company. Should return a dataframe, containing at least the following
         columns:
@@ -77,7 +79,8 @@ class Bloomberg(DataProvider):
         * company_total_assets: The total assets of the company. Only required to use the AOTS portfolio aggregation.
 
 
-        :param company: str: The identifier of the company to get the emissions for
+        :param companies: A list of companies. Each company should be a dict with a "company_name" and "company_id"
+                            field.
         :return: A dataframe containing the company data
         """
         # TODO: Make an API request
@@ -85,20 +88,16 @@ class Bloomberg(DataProvider):
         # TODO: Make sure the columns align with those defined in the docstring
         raise NotImplementedError
 
-    def get_sbti_targets(self) -> list:
+    def get_sbti_targets(self, companies: list) -> list:
         """
         For each of the companies, get the status of their target (Target set, Committed or No target) as it's known to
         the SBTi.
 
+        :param companies: A list of companies. Each company should be a dict with a "company_name" and "company_id"
+                            field.
         :return: The original list, enriched with a field called "sbti_target_status"
         """
         # TODO: Make an API request
         # TODO: Extract the SBTi target status from the response
         # TODO: Enrich the original list with this data
         raise NotImplementedError
-
-class CompanyNotFoundException(Exception):
-    """
-    This exception occurs when a company is not found.
-    """
-    pass

@@ -2,10 +2,16 @@ import pandas as pd
 from SBTi.data.data_provider import DataProvider
 
 
-class Urgentum(DataProvider):
+class CSVProvider(DataProvider):
     """
-    Data provider skeleton for Urgentum.
+    Data provider skeleton for CSV files. This class serves primarily for testing purposes only!
+
+    :param config: A dictionary containing a "path" field that leads to the path of the CSV file
     """
+
+    def __init__(self, config: dict):
+        super().__init__(config)
+        self.data = pd.read_csv(config["path"])
 
     def get_targets(self, companies: list) -> pd.DataFrame:
         """
@@ -24,12 +30,16 @@ class Urgentum(DataProvider):
         * emissions_in_scope: Company emissions in the target's scope at start of the base year
         * achieved_reduction: The emission reduction that has already been achieved
 
+        :param companies: A list of companies. Each company should be a dict with a "company_name" and "company_id"
+                            field.
         :return: A dataframe containing the targets
         """
-        # TODO: Make an API request
-        # TODO: Transform the result into a dataframe
-        # TODO: Make sure the columns align with those defined in the docstring
-        raise NotImplementedError
+        return self.data[
+            (self.data["company_id"].isin([company["company_id"] for company in companies]) &
+             self.data["company_id"].notnull()) |
+            (self.data["company_name"].isin([company["company_name"] for company in companies]) &
+             self.data["company_name"].notnull())
+        ].copy()
 
     def get_company_data(self, companies: list) -> pd.DataFrame:
         """
@@ -53,23 +63,29 @@ class Urgentum(DataProvider):
             aggregation.
         * company_total_assets: The total assets of the company. Only required to use the AOTS portfolio aggregation.
 
-
-        :param company: str: The identifier of the company to get the emissions for
+        :param companies: A list of companies. Each company should be a dict with a "company_name" and "company_id"
+                            field.
         :return: A dataframe containing the company data
         """
-        # TODO: Make an API request
-        # TODO: Transform the result into a dataframe
-        # TODO: Make sure the columns align with those defined in the docstring
-        raise NotImplementedError
+        return self.data[
+            (self.data["company_id"].isin([company["company_id"] for company in companies]) &
+             self.data["company_id"].notnull()) |
+            (self.data["company_name"].isin([company["company_name"] for company in companies]) &
+             self.data["company_name"].notnull())
+        ].copy()
 
     def get_sbti_targets(self, companies: list) -> list:
         """
         For each of the companies, get the status of their target (Target set, Committed or No target) as it's known to
         the SBTi.
 
+        :param companies: A list of companies. Each company should be a dict with a "company_name" and "company_id"
+                            field.
         :return: The original list, enriched with a field called "sbti_target_status"
         """
-        # TODO: Make an API request
-        # TODO: Extract the SBTi target status from the response
-        # TODO: Enrich the original list with this data
-        raise NotImplementedError
+        return self.data[
+            (self.data["company_id"].isin([company["company_id"] for company in companies]) &
+             self.data["company_id"].notnull()) |
+            (self.data["company_name"].isin([company["company_name"] for company in companies]) &
+             self.data["company_name"].notnull())
+        ].copy()
