@@ -1,11 +1,10 @@
-import copy
-
 import pandas as pd
 
 from SBTi.configs import PortfolioCoverageTVPConfig
+from SBTi.portfolio_aggregation import PortfolioAggregation, PortfolioAggregationMethod
 
 
-class PortfolioCoverageTVP:
+class PortfolioCoverageTVP(PortfolioAggregation):
     """
     Lookup the companies in the given portfolio and determine whether they have a SBTi approved target.
 
@@ -15,36 +14,51 @@ class PortfolioCoverageTVP:
     """
 
     def __init__(self, config: PortfolioCoverageTVPConfig = PortfolioCoverageTVPConfig):
+        super().__init__(config)
         self.c = config
         self.targets = pd.read_excel(self.c.FILE_TARGETS)
 
-    def get_coverage(self, companies: list, inplace=True) -> list:
+    def _get_target_status(self, company: pd.Series) -> str:
+        """
+        Get the target status (Target set, Committed or No target) as it's known to the SBTi for a certain row out of
+        the company data dataframe.
+
+        :param company: The company data
+        :return: The SBTi status of the target
+        """
+        if company[self.c.COLS.COMPANY_ID] is not None:
+            targets = self.targets[self.targets[self.c.COL_COMPANY_ID] == company[self.c.COLS.COMPANY_ID]]
+        else:
+            targets = []
+
+        if len(targets) == 0:
+            targets = self.targets[self.targets[self.c.COL_COMPANY_NAME] == company[self.c.COLS.COMPANY_NAME]]
+        if len(targets) > 1:
+            raise ValueError("There is more than one target classification available for company: {}".format(
+                company[self.c.COLS.COMPANY_NAME]))
+        elif len(targets) == 0:
+            return self.c.VALUE_TARGET_NO
+        else:
+            return targets.iloc[0][self.c.COL_TARGET_STATUS]
+
+    def get_portfolio_coverage(self, company_data: pd.DataFrame,
+                               portfolio_aggregation_method: PortfolioAggregationMethod) -> float:
         """
         For each of the companies, get the status of their target (Target set, Committed or No target) as it's known to
         the SBTi. Matching will be done primarily on the company ID (ASIN) and secondary on the company name.
 
-        :param companies: A list of companies defined by a dictionary, which has at least the following fields:
-                            company_name, company_id.
-        :param inplace: If true, the given list is updated in place, if false a copy of the list is made and returned
-        :return: The original list, enriched with a field called "sbti_target_status"
+        :param company_data: The company as it is returned from the data provider's get_company_data call.
+        :param portfolio_aggregation_method: PortfolioAggregationMethod: The aggregation method to use
+        :return: The aggregated score
         """
-        if not inplace:
-            companies = copy.deepcopy(companies)
+        # If the target status is not included in the data provider data, we'll look for the target in our Excel file
+        if self.c.OUTPUT_TARGET_STATUS not in company_data.columns:
+            company_data[self.c.OUTPUT_TARGET_STATUS] = company_data.apply(lambda row: self._get_target_status(row),
+                                                                           axis=1)
 
-        for i, company in enumerate(companies):
-            if company.get(self.c.INPUT_COMPANY_ID) is not None:
-                targets = self.targets[self.targets[self.c.COL_COMPANY_ID] == company[self.c.INPUT_COMPANY_ID]]
-            else:
-                targets = []
+        company_data[self.c.OUTPUT_TARGET_STATUS] = company_data.apply(
+            lambda row: self.c.TARGET_SCORE_MAP[row[self.c.OUTPUT_TARGET_STATUS]], axis=1
+        )
 
-            if len(targets) == 0:
-                targets = self.targets[self.targets[self.c.COL_COMPANY_NAME] == company[self.c.INPUT_COMPANY_NAME]]
-            if len(targets) > 1:
-                raise ValueError("There is more than one target classification available for company: {}".format(
-                    company[self.c.INPUT_COMPANY_NAME]))
-            elif len(targets) == 0:
-                companies[i][self.c.OUTPUT_TARGET] = self.c.VALUE_NO_TARGET
-            else:
-                companies[i][self.c.OUTPUT_TARGET] = targets.iloc[0][self.c.COL_TARGET_STATUS]
-
-        return companies
+        return self._calculate_aggregate_score(company_data, self.c.OUTPUT_TARGET_STATUS,
+                                               self.c.OUTPUT_WEIGHTED_TARGET_STATUS, portfolio_aggregation_method)

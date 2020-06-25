@@ -2,7 +2,8 @@ import os
 import unittest
 
 import pandas as pd
-from SBTi.temperature_score import TemperatureScore, PortfolioAggregationMethod
+from SBTi.temperature_score import TemperatureScore
+from SBTi.portfolio_aggregation import PortfolioAggregationMethod
 
 
 class TestTemperatureScore(unittest.TestCase):

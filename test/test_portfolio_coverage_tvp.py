@@ -1,5 +1,9 @@
+import os
 import unittest
 
+import pandas as pd
+
+from SBTi.portfolio_aggregation import PortfolioAggregationMethod
 from SBTi.portfolio_coverage_tvp import PortfolioCoverageTVP
 
 
@@ -14,6 +18,8 @@ class TestPortfolioCoverageTVP(unittest.TestCase):
         :return:
         """
         self.portfolio_coverage_tvp = PortfolioCoverageTVP()
+        self.data = pd.read_csv(os.path.join(os.path.dirname(os.path.realpath(__file__)), "inputs",
+                                             "data_test_portfolio_coverage.csv"))
 
     def test_coverage(self) -> None:
         """
@@ -21,18 +27,8 @@ class TestPortfolioCoverageTVP(unittest.TestCase):
 
         :return:
         """
-        companies = [
-            {"company_id": "US0079031078", "company_name": "Advanced Micro Devices, Inc"},
-            {"company_name": "Capitas Finance Limited"},
-            {"company_id": "TST123456789", "company_name": "Non existant test company"},
-        ]
-        self.portfolio_coverage_tvp.get_coverage(companies, inplace=True)
-        result_map = {"Advanced Micro Devices, Inc": "Targets Set",
-                      "Capitas Finance Limited": "Committed",
-                      "Non existant test company": "No target"}
-
-        for company in companies:
-            assert company["sbti_target_status"] == result_map[company["company_name"]], "The target was not correct"
+        coverage = self.portfolio_coverage_tvp.get_portfolio_coverage(self.data, PortfolioAggregationMethod.WATS)
+        assert coverage == 21, "The portfolio coverage was not 21%"
 
 
 if __name__ == "__main__":
