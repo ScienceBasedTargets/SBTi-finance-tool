@@ -2,7 +2,6 @@ import pandas as pd
 from pandas.api.types import is_string_dtype
 from SBTi.configs import ColumnsConfig
 
-ColumnsConfig.COMPANY_NAME
 
 class DataProvider:
 
@@ -40,19 +39,16 @@ class DataProvider:
         data = self.data_provider()
         data = data['Company data']
 
-        # required_columns = ['company_name', 'company_ID', 'CDP_ACS_industry', 'country', 'industry', 'sector','GHG_scope12',
-        #                     'GHG_scope3', 'Revenu', 'market_cap', 'enterprise_value', 'total_assets', 'cash_equivalents']
 
         required_columns = [self.c.COMPANY_NAME, self.c.COMPANY_ID, self.c.CDP_ACS_INDUSTRY, self.c.COUNTRY,
                             self.c.INDUSTRY, self.c.SECTOR, self.c.GHG_SCOPE12, self.c.GHG_SCOPE3, self.c.REVENU,
                             self.c.MARKET_CAP, self.c.ENTERPRISE_VALUE, self.c.TOTAL_ASSETS, self.c.CASH_EQUIVALENTS]
 
-
         data_frame = pd.DataFrame(columns=required_columns)
 
         for record in input_data.iterrows():
-            data_frame = data_frame.append(data[(data[self.c.COMPANY_NAME] == record[1][self.c.COMPANY_NAME]) &
-                                                (data[self.c.COMPANY_ID] == record[1][self.c.COMPANY_ID])][required_columns],
+            data_frame = data_frame.append(data[(data[self.c.COMPANY_NAME] == record[1]['Company_name']) &
+                                                (data[self.c.COMPANY_ID] == record[1]['Company_ID'])][required_columns],
                                            ignore_index=True)
 
         return data_frame
@@ -81,13 +77,11 @@ class DataProvider:
         data_frame = pd.DataFrame(columns=required_columns)
 
         for record in input_data.iterrows():
-            data_frame = data_frame.append(data[(data[self.c.COMPANY_NAME] == record[1][self.c.COMPANY_NAME]) &
-                                                (data[self.c.COMPANY_ID] == record[1][self.c.COMPANY_ID])][required_columns],
+            data_frame = data_frame.append(data[(data[self.c.COMPANY_NAME] == record[1]['Company_name']) &
+                                                (data[self.c.COMPANY_ID] == record[1]['Company_ID'])][required_columns],
                                            ignore_index=True)
+
         return data_frame
-
-
-
 
 
     def excel_connector(self):
@@ -145,17 +139,15 @@ class DataProvider:
         for sheet in sheets:
             if sheet =='Company data':
                 # True: string, False: integer
-
-                required_columns = {self.c.COMPANY_NAME: True, self.c.COMPANY_ID: True, CDP_ACS_INDUSTRY: True,
-                                    COUNTRY: True, INDUSTRY: True, SECTOR: True, GHG_SCOPE12: False, GHG_SCOPE3: False,
-                                    REVENU: False, MARKET_CAP: False, ENTERPRISE_VALUE: False, TOTAL_ASSETS: False,
-                                    CASH_EQUIVALENTS: False}
+                required_columns = {self.c.COMPANY_NAME: True, self.c.COMPANY_ID: True, self.c.CDP_ACS_INDUSTRY: True,
+                                    self.c.COUNTRY: True, self.c.INDUSTRY: True, self.c.SECTOR: True, self.c.GHG_SCOPE12: False, self.c.GHG_SCOPE3: False,
+                                    self.c.REVENU: False, self.c.MARKET_CAP: False, self.c.ENTERPRISE_VALUE: False, self.c.TOTAL_ASSETS: False,
+                                    self.c.CASH_EQUIVALENTS: False}
             else:
                 # True: string, False: integer
-                required_columns = {self.c.COMPANY_NAME: True, self.c.COMPANY_ID: True, TARGET_CLASSIFICATION : True,
-                                    SCOPE : True, COVERAGE : False, REDUCTION_AMBITION : False, BASE_YEAR: False,
-                                    END_YEAR : False, START_YEAR: False, SBTI_STATUS: False}
-
+                required_columns = {self.c.COMPANY_NAME: True, self.c.COMPANY_ID: True, self.c.TARGET_CLASSIFICATION : True,
+                                    self.c.SCOPE : True, self.c.COVERAGE : False, self.c.REDUCTION_AMBITION : False, self.c.BASE_YEAR: False,
+                                    self.c.END_YEAR : False, self.c.START_YEAR: False, self.c.SBTI_STATUS: False}
             for column in required_columns.keys():
                 if column not in data[sheet].columns:
                     print("Error: \n Column: {} \t Error Message: Missing".format(column))
@@ -170,13 +162,16 @@ class DataProvider:
 
 
 
-# Testing
-input_data = pd.read_excel("C:/Projects/SBTi/connector/InputFormat.xlsx", sheet_name='User input')[['Company_name','Company_ID']]
-x = DataProvider(input_data)
-x.company_data()
-x.target_data()
+# # Testing
+# input_data = pd.read_excel("C:/Projects/SBTi/connector/InputFormat.xlsx", sheet_name='User input')[['Company_name','Company_ID']]
+# x = DataProvider(input_data)
+# x.company_data()
+# x.target_data()
+#
+# # Testing Excel Connector
+# x = DataProvider(path = "C:/Projects/SBTi/connector/InputFormat.xlsx")
+# x.excel_connector()
 
-# Testing Excel Connector
-x = DataProvider(path = "C:/Projects/SBTi/connector/InputFormat.xlsx")
-x.excel_connector()
+
+
 
