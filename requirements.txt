@@ -7,3 +7,5 @@ git+https://github.com/OFBDABV/sphinx-autoapi.git
 sphinx-rtd-theme==0.4.3
 flask-swagger-ui==3.25.0
 flask-restful==0.3.8
+pandas==1.0.3
+xlrd==1.2.0
