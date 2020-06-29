@@ -17,9 +17,6 @@ api = Api(app)
 
 class temp_score(Resource):
 
-    # parser = reqparse.RequestParser()
-    # parser.add_argument('price', type=float, required=True, help="This field cannot be left blank!")
-
     def get(self):
         return {'GET Request':'Hello World'}
 
@@ -28,11 +25,17 @@ class temp_score(Resource):
 
 
 class portfolio_coverage(Resource):
+    parser = reqparse.RequestParser()
+    parser.add_argument('aggregation_method', type=float, required=True, help="This field cannot be left blank!")
+
 
     def get(self):
         return {'GET Request':'Hello World'}
 
     def post(self):
+        data = existing_topic_model.parser.parse_args()
+        aggregation_method = data['aggregation_method']
+        temperature_default = data['temperature_default']
         return{'POST Request': 'File Save'}
 
 
@@ -62,7 +65,7 @@ class import_portfolio(Resource):
         path = str(sorted(Path(PATH + '/files/').iterdir(), key=os.path.getmtime,reverse=True)[0])
         file_name = path.split("""\\""")[-1]
 
-        return{'POST Request': {'Response':{'Status Code':200,'Message':'File Saved','File':file_name,'Path':path}}}
+        return{'POST Request': {'Response':{'Status Code':200,'Message':'File Saved','File':file_name}}}
 
     def put(self):
         remove_doc = request.args.get('document_replace')

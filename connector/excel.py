@@ -30,12 +30,8 @@ class ExcelConnector:
         :rtype: dataframe, dataframe
         :return: excel file as input data
         """
-        if not self.validate_sheets(data):
-            return False
-        elif not self.validate_columns(data):
-            return False
-        else:
-            return True
+        return self.validate_sheets(data) and self.validate_columns(data)
+
 
 
     def validate_sheets(self, data):

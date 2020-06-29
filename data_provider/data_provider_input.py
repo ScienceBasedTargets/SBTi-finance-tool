@@ -11,7 +11,6 @@ class DataProvider:
         self.c = config
 
 
-
     def data_provider(self):
         '''
         Excel file will act as a temporary "data provider".
@@ -105,12 +104,10 @@ class DataProvider:
         :rtype: dataframe, dataframe
         :return: excel file as input data
         """
-        if not self.validate_sheets(data):
-            return False
-        elif not self.validate_columns(data):
-            return False
-        else:
-            return True
+
+        return self.validate_sheets(data) and self.validate_columns(data)
+
+
 
 
     def validate_sheets(self, data):
@@ -133,9 +130,7 @@ class DataProvider:
         :rtype: bolean value, <TRUE | FALSE>
         :return: excel file as input data
         """
-
         sheets = ['Company data','Target data']
-
         for sheet in sheets:
             if sheet =='Company data':
                 # True: string, False: integer
@@ -157,9 +152,6 @@ class DataProvider:
                         print("Error: \n Column: {} \t Error Message: Incorrect Data Type".format(column))
                         return False
         return True
-
-
-
 
 
 # # Testing
