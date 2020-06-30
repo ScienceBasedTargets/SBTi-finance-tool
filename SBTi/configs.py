@@ -36,7 +36,7 @@ class ColumnsConfig:
     TEMPERATURE_SCORE = "temperature_score"
     COMPANY_NAME = "company_name"
     OWNED_EMISSIONS = "owned_emissions"
-    COMPANY_ID = 'company_ID'
+    COMPANY_ID = 'company_id'
     CDP_ACS_INDUSTRY = 'CDP_ACS_industry'
     COUNTRY = 'country'
     SECTOR = 'sector'
