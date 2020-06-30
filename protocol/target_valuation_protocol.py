@@ -273,15 +273,15 @@ class TargetValuationProtocol:
                                 data = data.append(df.loc[index_to_keep])  # Adds target with Absolute
 
                             else:
-                            '''
-                                Rare Exception to enter here:
-                                Example: Company A(Abs), Company A(Abs), Company A(Int)
-                                All Criteria Same: False
-                                Boundary Condition: True
-                                Base Year: True
-                                Target Reference: False ( Abs, Abs, Int)
-                                Can only happen if targets have multiple "Abs" with a "Int"
-                            '''
+                                '''
+                                    Rare Exception to enter here:
+                                    Example: Company A(Abs), Company A(Abs), Company A(Int)
+                                    All Criteria Same: False
+                                    Boundary Condition: True
+                                    Base Year: True
+                                    Target Reference: False ( Abs, Abs, Int)
+                                    Can only happen if targets have multiple "Abs" with a "Int"
+                                '''
 
                                 # One record is chosen and "average the ambition of targets" is applied and remaining duplicate targets are dropped
                                 targets_rare_exception = df[df.index.isin(index_to_keep)]
