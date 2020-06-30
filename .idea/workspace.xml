@@ -3,8 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="fdd298f6-aa7d-45c6-926b-d121178e9a4c" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/connector/excel.py" beforeDir="false" afterPath="$PROJECT_DIR$/connector/excel.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data_provider/data_provider_input.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_provider/data_provider_input.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -27,13 +25,25 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="excel.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="excel.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/connector/excel.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="112">
               <caret line="33" lean-forward="true" selection-start-line="33" selection-end-line="33" />
               <folding>
                 <element signature="e#0#19#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="app.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="69">
+              <caret line="50" lean-forward="true" selection-start-line="50" selection-end-line="50" />
+              <folding>
+                <element signature="e#0#53#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -51,7 +61,7 @@
   <component name="FindInProjectRecents">
     <findStrings>
       <find>MAPP</find>
-      <find />
+      <find>Company data</find>
       <find>id</find>
       <find>sector</find>
       <find>country</find>
@@ -92,17 +102,17 @@
         <option value="$PROJECT_DIR$/static/swagger.json" />
         <option value="$PROJECT_DIR$/data_provider/company_data.py" />
         <option value="$PROJECT_DIR$/SBTi/configs.py" />
-        <option value="$PROJECT_DIR$/app.py" />
         <option value="$PROJECT_DIR$/data_provider/data_provider_input.py" />
         <option value="$PROJECT_DIR$/connector/excel.py" />
+        <option value="$PROJECT_DIR$/app.py" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
-    <option name="x" value="-8" />
-    <option name="y" value="-8" />
-    <option name="width" value="1936" />
-    <option name="height" value="1056" />
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="644" />
+    <option name="y" value="70" />
+    <option name="width" value="976" />
+    <option name="height" value="1047" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -115,11 +125,6 @@
             <path>
               <item name="SBTi" type="b2602c69:ProjectViewProjectNode" />
               <item name="SBTi" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="SBTi" type="b2602c69:ProjectViewProjectNode" />
-              <item name="SBTi" type="462c0819:PsiDirectoryNode" />
-              <item name="connector" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="SBTi" type="b2602c69:ProjectViewProjectNode" />
@@ -558,16 +563,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1045">
-          <caret line="24" lean-forward="true" selection-start-line="24" selection-end-line="24" />
-          <folding>
-            <element signature="e#0#53#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/SBTi/configs.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="137">
@@ -591,6 +586,16 @@
           <caret line="33" lean-forward="true" selection-start-line="33" selection-end-line="33" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="69">
+          <caret line="50" lean-forward="true" selection-start-line="50" selection-end-line="50" />
+          <folding>
+            <element signature="e#0#53#0" expanded="true" />
           </folding>
         </state>
       </provider>

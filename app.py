@@ -33,7 +33,7 @@ class portfolio_coverage(Resource):
         return {'GET Request':'Hello World'}
 
     def post(self):
-        data = existing_topic_model.parser.parse_args()
+        data = portfolio_coverage.parser.parse_args()
         aggregation_method = data['aggregation_method']
         temperature_default = data['temperature_default']
         return{'POST Request': 'File Save'}
