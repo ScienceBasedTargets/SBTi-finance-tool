@@ -1,21 +1,12 @@
-from abc import ABC, abstractmethod
 import pandas as pd
+from SBTi.data.data_provider import DataProvider
 
 
-class DataProvider(ABC):
+class Trucost(DataProvider):
     """
-    General data provider super class.
+    Data provider skeleton for Trucost.
     """
 
-    def __init__(self, config: dict):
-        """
-        Create a new data provider instance.
-
-        :param config: A dictionary containing the configuration parameters for this data provider.
-        """
-        self.config = config
-
-    @abstractmethod
     def get_targets(self, companies: list) -> pd.DataFrame:
         """
         Get all the targets for the whole portfolio of companies. This should return a dataframe, containing at least
@@ -37,9 +28,11 @@ class DataProvider(ABC):
                             field.
         :return: A dataframe containing the targets
         """
+        # TODO: Make an API request
+        # TODO: Transform the result into a dataframe
+        # TODO: Make sure the columns align with those defined in the docstring
         raise NotImplementedError
 
-    @abstractmethod
     def get_company_data(self, companies: list) -> pd.DataFrame:
         """
         Get all relevant data for a certain company. Should return a dataframe, containing at least the following
@@ -67,9 +60,11 @@ class DataProvider(ABC):
                             field.
         :return: A dataframe containing the company data
         """
+        # TODO: Make an API request
+        # TODO: Transform the result into a dataframe
+        # TODO: Make sure the columns align with those defined in the docstring
         raise NotImplementedError
 
-    @abstractmethod
     def get_sbti_targets(self, companies: list) -> list:
         """
         For each of the companies, get the status of their target (Target set, Committed or No target) as it's known to
@@ -79,11 +74,7 @@ class DataProvider(ABC):
                             field.
         :return: The original list, enriched with a field called "sbti_target_status"
         """
+        # TODO: Make an API request
+        # TODO: Extract the SBTi target status from the response
+        # TODO: Enrich the original list with this data
         raise NotImplementedError
-
-
-class CompanyNotFoundException(Exception):
-    """
-    This exception occurs when a company is not found.
-    """
-    pass

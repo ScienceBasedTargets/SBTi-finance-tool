@@ -1,21 +1,35 @@
-from abc import ABC, abstractmethod
+from typing import Optional
+
 import pandas as pd
+import requests
+
+from SBTi.data.data_provider import DataProvider
 
 
-class DataProvider(ABC):
+class Bloomberg(DataProvider):
     """
-    General data provider super class.
+    Data provider skeleton for Bloomberg.
     """
 
-    def __init__(self, config: dict):
+    def _request(self, endpoint: str, data: dict) -> Optional[object]:
         """
-        Create a new data provider instance.
+        Request data from the server.
+        Note: This request does in no way reflect the actual implementation, this is only a stub to show what a
+        potential API request COULD look like.
 
-        :param config: A dictionary containing the configuration parameters for this data provider.
+        :param endpoint: The endpoint of the API
+        :param data: The data to send as a body
+        :return: The returned data, None in case of an error.
         """
-        self.config = config
+        try:
+            headers = {'Authorization': 'Basic: {}:{}'.format(self.config["username"], self.config["password"])}
+            r = requests.post("{}{}".format(self.config["host"], endpoint), json=data, headers=headers)
+            if r.status_code == 200:
+                return r.json()
+        except Exception as e:
+            return None
+        return None
 
-    @abstractmethod
     def get_targets(self, companies: list) -> pd.DataFrame:
         """
         Get all the targets for the whole portfolio of companies. This should return a dataframe, containing at least
@@ -37,9 +51,11 @@ class DataProvider(ABC):
                             field.
         :return: A dataframe containing the targets
         """
+        # TODO: Make an API request
+        # TODO: Transform the result into a dataframe
+        # TODO: Make sure the columns align with those defined in the docstring
         raise NotImplementedError
 
-    @abstractmethod
     def get_company_data(self, companies: list) -> pd.DataFrame:
         """
         Get all relevant data for a certain company. Should return a dataframe, containing at least the following
@@ -67,9 +83,11 @@ class DataProvider(ABC):
                             field.
         :return: A dataframe containing the company data
         """
+        # TODO: Make an API request
+        # TODO: Transform the result into a dataframe
+        # TODO: Make sure the columns align with those defined in the docstring
         raise NotImplementedError
 
-    @abstractmethod
     def get_sbti_targets(self, companies: list) -> list:
         """
         For each of the companies, get the status of their target (Target set, Committed or No target) as it's known to
@@ -79,11 +97,7 @@ class DataProvider(ABC):
                             field.
         :return: The original list, enriched with a field called "sbti_target_status"
         """
+        # TODO: Make an API request
+        # TODO: Extract the SBTi target status from the response
+        # TODO: Enrich the original list with this data
         raise NotImplementedError
-
-
-class CompanyNotFoundException(Exception):
-    """
-    This exception occurs when a company is not found.
-    """
-    pass

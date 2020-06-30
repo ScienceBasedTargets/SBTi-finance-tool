@@ -1,8 +1,5 @@
 import unittest
 
-from SBTi.data.data_provider import CompanyNotFoundException
-from SBTi.data.example_provider import ExampleProvider
-
 
 class TestDataProviderExample(unittest.TestCase):
     """
@@ -14,24 +11,20 @@ class TestDataProviderExample(unittest.TestCase):
         Create the provider which we'll use later on.
         :return:
         """
-        self.provider = ExampleProvider()
+        pass
 
-    def test_report(self) -> None:
+    def test_targets(self) -> None:
         """
         Test the report, this should return 0.0 for both the emissions and the temp score.
         :return:
         """
-        emissions, temp_score = self.provider.get_report("Ortec Finance B.V.")
-        self.assertEqual(emissions, 0.0)
-        self.assertEqual(temp_score, 0.0)
+        # TODO: Test the targets returned from the Excel connector
+        pass
 
-    def test_unknown_company(self) -> None:
+    def test_company_data(self) -> None:
         """
         Test an unknown company. This should return a CompanyNotFoundException.
         :return:
         """
-        try:
-            _, _ = self.provider.get_report("Ortec Finance Data Analytics B.V.")
-            self.assertTrue(False)
-        except CompanyNotFoundException:
-            self.assertTrue(True)
+        # TODO: Test the company data from the Excel connector
+        pass

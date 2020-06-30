@@ -1,21 +1,18 @@
-from abc import ABC, abstractmethod
 import pandas as pd
+from SBTi.data.data_provider import DataProvider
 
 
-class DataProvider(ABC):
+class CSVProvider(DataProvider):
     """
-    General data provider super class.
+    Data provider skeleton for CSV files. This class serves primarily for testing purposes only!
+
+    :param config: A dictionary containing a "path" field that leads to the path of the CSV file
     """
 
     def __init__(self, config: dict):
-        """
-        Create a new data provider instance.
+        super().__init__(config)
+        self.data = pd.read_csv(config["path"])
 
-        :param config: A dictionary containing the configuration parameters for this data provider.
-        """
-        self.config = config
-
-    @abstractmethod
     def get_targets(self, companies: list) -> pd.DataFrame:
         """
         Get all the targets for the whole portfolio of companies. This should return a dataframe, containing at least
@@ -37,9 +34,13 @@ class DataProvider(ABC):
                             field.
         :return: A dataframe containing the targets
         """
-        raise NotImplementedError
+        return self.data[
+            (self.data["company_id"].isin([company["company_id"] for company in companies]) &
+             self.data["company_id"].notnull()) |
+            (self.data["company_name"].isin([company["company_name"] for company in companies]) &
+             self.data["company_name"].notnull())
+        ].copy()
 
-    @abstractmethod
     def get_company_data(self, companies: list) -> pd.DataFrame:
         """
         Get all relevant data for a certain company. Should return a dataframe, containing at least the following
@@ -62,14 +63,17 @@ class DataProvider(ABC):
             aggregation.
         * company_total_assets: The total assets of the company. Only required to use the AOTS portfolio aggregation.
 
-
         :param companies: A list of companies. Each company should be a dict with a "company_name" and "company_id"
                             field.
         :return: A dataframe containing the company data
         """
-        raise NotImplementedError
+        return self.data[
+            (self.data["company_id"].isin([company["company_id"] for company in companies]) &
+             self.data["company_id"].notnull()) |
+            (self.data["company_name"].isin([company["company_name"] for company in companies]) &
+             self.data["company_name"].notnull())
+        ].copy()
 
-    @abstractmethod
     def get_sbti_targets(self, companies: list) -> list:
         """
         For each of the companies, get the status of their target (Target set, Committed or No target) as it's known to
@@ -79,11 +83,9 @@ class DataProvider(ABC):
                             field.
         :return: The original list, enriched with a field called "sbti_target_status"
         """
-        raise NotImplementedError
-
-
-class CompanyNotFoundException(Exception):
-    """
-    This exception occurs when a company is not found.
-    """
-    pass
+        return self.data[
+            (self.data["company_id"].isin([company["company_id"] for company in companies]) &
+             self.data["company_id"].notnull()) |
+            (self.data["company_name"].isin([company["company_name"] for company in companies]) &
+             self.data["company_name"].notnull())
+        ].copy()

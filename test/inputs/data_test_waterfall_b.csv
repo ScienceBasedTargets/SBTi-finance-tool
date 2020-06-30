@@ -1,0 +1,5 @@
+company_name,company_id,industry,s1s2_emissions,s3_emissions,market_cap,investment_value,portfolio_weight,company_enterprise_value,company_ev_plus_cash,company_total_assets
+Company I,,test,2955000,2955000,76629,7870,0.023571343,63602.07,72031.26,69732.39
+Company K,,test,6651,6651,65143,29551,0.088507847,56674.41,61234.42,59280.13
+Company N,,test,9180000,9180000,83484,8192,0.024535761,98511.12,78474.96,75970.44
+Company F,,test,123,123,132,132,0.123,123,123,132
