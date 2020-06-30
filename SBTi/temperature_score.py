@@ -2,6 +2,8 @@ from typing import Optional, Tuple
 from enum import Enum
 import pandas as pd
 import numpy as np
+
+from SBTi.portfolio_aggregation import PortfolioAggregation, PortfolioAggregationMethod
 from .configs import TemperatureScoreConfig
 
 
@@ -18,20 +20,7 @@ class BoundaryCoverageOption(Enum):
     WEIGHTED = 2
 
 
-class PortfolioAggregationMethod(Enum):
-    """
-    The portfolio aggregation method determines how the temperature scores for the individual companies are aggregated
-    into a single portfolio score.
-    """
-    WATS = 1
-    TETS = 2
-    MOTS = 3
-    EOTS = 4
-    ECOTS = 5
-    AOTS = 6
-
-
-class TemperatureScore:
+class TemperatureScore(PortfolioAggregation):
     """
     This class is provides a temperature score based on the climate goals.
 
@@ -46,6 +35,7 @@ class TemperatureScore:
     def __init__(self, fallback_score: float = 3.2, model: int = 4,
                  boundary_coverage_option: BoundaryCoverageOption = BoundaryCoverageOption.DEFAULT,
                  config: TemperatureScoreConfig = TemperatureScoreConfig):
+        super().__init__(config)
         self.fallback_score = fallback_score
         self.model = model
         self.boundary_coverage_option = boundary_coverage_option
@@ -249,74 +239,9 @@ class TemperatureScore:
             # Weighted average temperature score (WATS)
             filtered_data = data[(data[self.c.COLS.TIME_FRAME] == time_frame) & (
                     data[self.c.COLS.SCOPE_CATEGORY] == self.c.VALUE_SCOPE_CATEGORY_S1S2S3)].copy()
-            if portfolio_aggregation_method == PortfolioAggregationMethod.WATS:
-                filtered_data[self.c.COLS.WEIGHTED_TEMPERATURE_SCORE] = filtered_data.apply(
-                    lambda row: row[self.c.COLS.PORTFOLIO_WEIGHT] * row[self.c.COLS.TEMPERATURE_SCORE],
-                    axis=1
-                )
 
-                # We're dividing by the portfolio weight. This is not done in the methodology, but we need it to account
-                # for rounding errors.
-                try:
-                    portfolio_scores[time_frame] = filtered_data[self.c.COLS.WEIGHTED_TEMPERATURE_SCORE].sum() / \
-                                                   filtered_data[self.c.COLS.PORTFOLIO_WEIGHT].sum()
-                except ZeroDivisionError:
-                    raise ValueError("The portfolio weight is not allowed to be zero")
+            portfolio_scores[time_frame] = self._calculate_aggregate_score(filtered_data, self.c.COLS.TEMPERATURE_SCORE,
+                                                                           self.c.COLS.WEIGHTED_TEMPERATURE_SCORE,
+                                                                           portfolio_aggregation_method)
 
-            # Total emissions weighted temperature score (TETS)
-            elif portfolio_aggregation_method == PortfolioAggregationMethod.TETS:
-                # Calculate the total emissions of all companies
-                emissions = filtered_data[self.c.COLS.S1S2_EMISSIONS].sum() + filtered_data[
-                    self.c.COLS.S3_EMISSIONS].sum()
-                try:
-                    filtered_data[self.c.COLS.WEIGHTED_TEMPERATURE_SCORE] = filtered_data.apply(
-                        lambda row: (row[self.c.COLS.S1S2_EMISSIONS] + row[self.c.COLS.S3_EMISSIONS]) / emissions * row[
-                            self.c.COLS.TEMPERATURE_SCORE],
-                        axis=1
-                    )
-                except ZeroDivisionError:
-                    raise ValueError("The total emissions should be higher than zero")
-
-                portfolio_scores[time_frame] = filtered_data[self.c.COLS.WEIGHTED_TEMPERATURE_SCORE].sum()
-            # Market Owned emissions weighted temperature score (MOTS)
-            # Enterprise Owned emissions weighted temperature score (EOTS)
-            # Enterprise Value + Cash emissions weighted temperature score (ECOTS)
-            # Total Assets emissions weighted temperature score (AOTS)
-            elif portfolio_aggregation_method == PortfolioAggregationMethod.MOTS or \
-                    portfolio_aggregation_method == PortfolioAggregationMethod.EOTS or \
-                    portfolio_aggregation_method == PortfolioAggregationMethod.ECOTS or \
-                    portfolio_aggregation_method == PortfolioAggregationMethod.AOTS:
-                # These four methods only differ in the way the company is valued.
-                value_column = self.c.COLS.MARKET_CAP
-                if portfolio_aggregation_method == PortfolioAggregationMethod.EOTS:
-                    value_column = self.c.COLS.COMPANY_ENTERPRISE_VALUE
-                elif portfolio_aggregation_method == PortfolioAggregationMethod.ECOTS:
-                    value_column = self.c.COLS.COMPANY_EV_PLUS_CASH
-                elif portfolio_aggregation_method == PortfolioAggregationMethod.AOTS:
-                    value_column = self.c.COLS.COMPANY_TOTAL_ASSETS
-
-                # Calculate the total owned emissions of all companies
-                try:
-                    filtered_data[self.c.COLS.OWNED_EMISSIONS] = filtered_data.apply(
-                        lambda row: ((row[self.c.COLS.INVESTMENT_VALUE] / row[value_column]) * (
-                                row[self.c.COLS.S1S2_EMISSIONS] + row[self.c.COLS.S3_EMISSIONS])),
-                        axis=1
-                    )
-                except ZeroDivisionError:
-                    raise ValueError("To calculate the aggregation, the {} column may not be zero".format(value_column))
-                owned_emissions = filtered_data[self.c.COLS.OWNED_EMISSIONS].sum()
-
-                try:
-                    # Calculate the MOTS value per company
-                    filtered_data[self.c.COLS.WEIGHTED_TEMPERATURE_SCORE] = filtered_data.apply(
-                        lambda row: (row[self.c.COLS.OWNED_EMISSIONS] / owned_emissions) * row[
-                            self.c.COLS.TEMPERATURE_SCORE],
-                        axis=1
-                    )
-                except ZeroDivisionError:
-                    raise ValueError("The total owned emissions can not be zero")
-
-                portfolio_scores[time_frame] = filtered_data[self.c.COLS.WEIGHTED_TEMPERATURE_SCORE].sum()
-            else:
-                raise ValueError("The specified portfolio aggregation method is invalid")
         return portfolio_scores

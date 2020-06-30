@@ -7,6 +7,7 @@ import os
 
 class ColumnsConfig:
     # Define a constant for each column used in the
+    COMPANY_ID = "company_id"
     INDUSTRY = "industry"
     REGRESSION_PARAM = "regression_param"
     REGRESSION_INTERCEPT = "regression_intercept"
@@ -67,22 +68,9 @@ class ColumnsConfig:
                        COMPANY_TOTAL_ASSETS]
 
 
-class TemperatureScoreConfig:
-    FILE_SR15_MAPPING = os.path.join(os.path.dirname(os.path.realpath(__file__)), "inputs",
-                                     "sr15_mapping.xlsx")
-    FILE_REGRESSION_MODEL_SUMMARY = os.path.join(os.path.dirname(os.path.realpath(__file__)), "inputs",
-                                                 "regression_model_summary.xlsx")
-
+class PortfolioAggregationConfig:
     COLS = ColumnsConfig
-
-    DEFAULT_INDUSTRY = "Others"
-
-    VALUE_TARGET_REFERENCE_ABSOLUTE = "Absolute"
-    VALUE_TARGET_REFERENCE_INTENSITY = "Intensity"
-    VALUE_TARGET_REFERENCE_INTENSITY_BASE = "Int"
-
     VALUE_TIME_FRAMES = ["short", "mid", "long"]
-
     VALUE_SCOPE_S1S2 = "scope 1+2"
     VALUE_SCOPE_S3 = "scope 3"
     VALUE_SCOPE_S1S2S3 = "scope 1+2+3"
@@ -91,8 +79,44 @@ class TemperatureScoreConfig:
     VALUE_SCOPE_CATEGORY_S3 = "s3"
     VALUE_SCOPE_CATEGORY_S1S2S3 = "s1s2s3"
 
+
+class TemperatureScoreConfig(PortfolioAggregationConfig):
+    FILE_SR15_MAPPING = os.path.join(os.path.dirname(os.path.realpath(__file__)), "inputs",
+                                     "sr15_mapping.xlsx")
+    FILE_REGRESSION_MODEL_SUMMARY = os.path.join(os.path.dirname(os.path.realpath(__file__)), "inputs",
+                                                 "regression_model_summary.xlsx")
+
+    DEFAULT_INDUSTRY = "Others"
+
+    VALUE_TARGET_REFERENCE_ABSOLUTE = "Absolute"
+    VALUE_TARGET_REFERENCE_INTENSITY = "Intensity"
+    VALUE_TARGET_REFERENCE_INTENSITY_BASE = "Int"
+
     SLOPE_MAP = {
         "short": "slope5",
         "mid": "slope15",
         "long": "slope30",
     }
+
+
+class PortfolioCoverageTVPConfig(PortfolioAggregationConfig):
+    FILE_TARGETS = os.path.join(os.path.dirname(os.path.realpath(__file__)), "inputs",
+                                "current-Companies-Taking-Action-191.xlsx")
+
+    OUTPUT_TARGET_STATUS = "sbti_target_status"
+    OUTPUT_WEIGHTED_TARGET_STATUS = "weighted_sbti_target_status"
+    VALUE_TARGET_NO = "No target"
+    VALUE_TARGET_COMMITTED = "Committed"
+    VALUE_TARGET_SET = "Targets Set"
+
+    TARGET_SCORE_MAP = {
+        VALUE_TARGET_NO: 0,
+        VALUE_TARGET_COMMITTED: 0,
+        VALUE_TARGET_SET: 100,
+    }
+
+    # SBTi targets overview (TVP coverage)
+    COL_COMPANY_NAME = "Company Name"
+    COL_COMPANY_ID = "ISIN"
+    COL_TARGET_STATUS = "Status"
+
