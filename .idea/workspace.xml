@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="fdd298f6-aa7d-45c6-926b-d121178e9a4c" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data_provider/data_provider_input.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_provider/data_provider_input.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -13,11 +13,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="data_provider_input.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="data_provider_input.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/data_provider/data_provider_input.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="257">
-              <caret line="107" column="73" lean-forward="true" selection-start-line="107" selection-end-line="108" />
+            <state relative-caret-position="3486">
+              <caret line="166" lean-forward="true" selection-start-line="166" selection-end-line="166" />
               <folding>
                 <element signature="e#0#19#0" expanded="true" />
               </folding>
@@ -29,7 +29,7 @@
         <entry file="file://$PROJECT_DIR$/connector/excel.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="112">
-              <caret line="33" lean-forward="true" selection-start-line="33" selection-end-line="33" />
+              <caret line="33" selection-start-line="33" selection-end-line="33" />
               <folding>
                 <element signature="e#0#19#0" expanded="true" />
               </folding>
@@ -37,11 +37,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="app.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="app.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="69">
-              <caret line="50" lean-forward="true" selection-start-line="50" selection-end-line="50" />
+              <caret line="50" selection-start-line="50" selection-end-line="50" />
               <folding>
                 <element signature="e#0#53#0" expanded="true" />
               </folding>
@@ -60,9 +60,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>MAPP</find>
-      <find>Company data</find>
-      <find>id</find>
       <find>sector</find>
       <find>country</find>
       <find>company</find>
@@ -90,6 +87,9 @@
       <find>scope</find>
       <find>SCOPE</find>
       <find>CDP_ACS_INDUSTRY</find>
+      <find>for record in input_data</find>
+      <find>input</find>
+      <find>input_data</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -102,17 +102,17 @@
         <option value="$PROJECT_DIR$/static/swagger.json" />
         <option value="$PROJECT_DIR$/data_provider/company_data.py" />
         <option value="$PROJECT_DIR$/SBTi/configs.py" />
-        <option value="$PROJECT_DIR$/data_provider/data_provider_input.py" />
         <option value="$PROJECT_DIR$/connector/excel.py" />
         <option value="$PROJECT_DIR$/app.py" />
+        <option value="$PROJECT_DIR$/data_provider/data_provider_input.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="644" />
-    <option name="y" value="70" />
-    <option name="width" value="976" />
-    <option name="height" value="1047" />
+    <option name="x" value="-8" />
+    <option name="y" value="-8" />
+    <option name="width" value="1936" />
+    <option name="height" value="1056" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -183,11 +183,11 @@
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.14278187" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.14278187" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
       <window_info anchor="bottom" id="Version Control" order="7" />
-      <window_info anchor="bottom" id="Python Console" order="7" visible="true" weight="0.21023965" />
+      <window_info active="true" anchor="bottom" id="Python Console" order="7" visible="true" weight="0.34204793" />
       <window_info anchor="bottom" id="Run" order="2" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Terminal" order="7" />
@@ -570,20 +570,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/data_provider/data_provider_input.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="257">
-          <caret line="107" column="73" lean-forward="true" selection-start-line="107" selection-end-line="108" />
-          <folding>
-            <element signature="e#0#19#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/connector/excel.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="112">
-          <caret line="33" lean-forward="true" selection-start-line="33" selection-end-line="33" />
+          <caret line="33" selection-start-line="33" selection-end-line="33" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
           </folding>
@@ -593,9 +583,19 @@
     <entry file="file://$PROJECT_DIR$/app.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="69">
-          <caret line="50" lean-forward="true" selection-start-line="50" selection-end-line="50" />
+          <caret line="50" selection-start-line="50" selection-end-line="50" />
           <folding>
             <element signature="e#0#53#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data_provider/data_provider_input.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3486">
+          <caret line="166" lean-forward="true" selection-start-line="166" selection-end-line="166" />
+          <folding>
+            <element signature="e#0#19#0" expanded="true" />
           </folding>
         </state>
       </provider>

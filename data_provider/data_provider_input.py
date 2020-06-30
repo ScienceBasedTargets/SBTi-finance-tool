@@ -6,7 +6,7 @@ from SBTi.configs import ColumnsConfig
 class DataProvider:
 
     def __init__(self, input=None, path=None, config: ColumnsConfig = ColumnsConfig):
-        self.input = input
+        self.input_data = input
         self.path = path
         self.c = config
 
