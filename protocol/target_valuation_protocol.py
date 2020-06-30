@@ -1,11 +1,12 @@
 import pandas as pd
+from typing import List
 
 class TargetValuationProtocol:
 
     def __init__(self):
         self.data = self.input_data()
 
-    def input_data(self):
+    def input_data(self) -> pd.DataFrame:
         """
         Reads in an excel file as input data
 
@@ -35,7 +36,6 @@ class TargetValuationProtocol:
                 elif 'abs' in record[1]['Target reference number'].lower():
                     index.append(record[0])
         self.data = self.data.loc[index]
-
 
 
     def test_boundary_coverage(self):
@@ -130,8 +130,7 @@ class TargetValuationProtocol:
         self.data['Time frame'] = time_frame_list
 
 
-
-    def group_valid_target(self):
+    def group_valid_target(self) -> List[pd.DataFrame]:
         '''
         Group valid targets by category & filter multiple targets#
         Input: a list of valid targets for each company:
@@ -189,29 +188,31 @@ class TargetValuationProtocol:
                data_s3_short_final,data_s3_mid_final,data_s3_long_final]
 
 
-    def add_company_placeholder(self, data_category):
+    def add_company_placeholder(self, data_category: pd.DataFrame) -> pd.DataFrame:
         '''
 
         :return:
         '''
 
-        # Need to fill in empty company names
-        empty_company_name = self.data.drop(data_category.index)['company_name'].values
+        if data_category is not None:
+            # Need to fill in empty company names
+            empty_company_name = self.data.drop(data_category.index)['company_name'].values
+            dictionary = {k:{
+                'company_name':empty_company_name[k]
+            } for k in range(0,len(empty_company_name))}
 
-        dictionary = {k:{
-            'company_name':empty_company_name[k]
-        } for k in range(0,len(empty_company_name))}
-
-        for key in dictionary.keys():
-            for column in self.data.columns.drop('company_name'):
-                dictionary[key][column] = None
-        data_company_placeholder = pd.DataFrame.from_dict(dictionary,orient='index')
-        frames = [data_category, data_company_placeholder]
-        return pd.concat(frames)
+            for key in dictionary.keys():
+                for column in self.data.columns.drop('company_name'):
+                    dictionary[key][column] = None
+            data_company_placeholder = pd.DataFrame.from_dict(dictionary,orient='index')
+            frames = [data_category, data_company_placeholder]
+            return pd.concat(frames)
+        else:
+            return data_category
 
 
 
-    def multiple_target_filter(self, data):
+    def multiple_target_filter(self, data: pd.DataFrame) -> pd.DataFrame:
         '''
         For each category: if more than 1 target is available, filter based on the following criteria
         -- Highest boundary coverage
@@ -294,7 +295,7 @@ class TargetValuationProtocol:
 
             return data
 
-# Testing
+# # Testing
 # x = TargetValuationProtocol()
 # x.test_target_type()
 # x.test_boundary_coverage()

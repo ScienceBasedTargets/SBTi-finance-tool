@@ -16,6 +16,10 @@ api = Api(app)
 
 
 class temp_score(Resource):
+    """
+    This class acts as a resource for the API to handle Temperature Score. Multiple HTTP Protocols are available for
+    this resource.
+    """
 
     def get(self):
         return {'GET Request':'Hello World'}
@@ -25,6 +29,11 @@ class temp_score(Resource):
 
 
 class portfolio_coverage(Resource):
+    """
+    This class acts as a resource for the API to handle Portfolio Coverage. Multiple HTTP Protocols are available for
+    this resource.
+    """
+
     parser = reqparse.RequestParser()
     parser.add_argument('aggregation_method', type=float, required=True, help="This field cannot be left blank!")
 
@@ -42,6 +51,10 @@ class portfolio_coverage(Resource):
 
 
 class report(Resource):
+    """
+    This class acts as a resource for the API to handle Reporting functionality. Multiple HTTP Protocols are available for
+    this resource.
+    """
 
     def get(self):
         return {'GET Request':'Hello World'}
@@ -51,11 +64,19 @@ class report(Resource):
 
 
 class documentation_endpoint(Resource):
+    """
+    This class acts creates a documentation endpoint using Swagger.
+    """
+
     def get(path):
         return send_from_directory('static', path)
 
 
 class import_portfolio(Resource):
+    """
+    This class allows the client to import and replace portfolios. Multiple HTTP Protocols are available for
+    this resource.
+    """
 
     def get(self):
         return {'GET Request':'Hello World'}
