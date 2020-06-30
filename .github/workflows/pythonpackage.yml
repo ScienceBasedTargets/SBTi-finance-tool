@@ -39,5 +39,5 @@ jobs:
         nose2 -v
     - name: Check type hints with MyPy
       run: |
-        nose2 -v
+        mypy .
 
