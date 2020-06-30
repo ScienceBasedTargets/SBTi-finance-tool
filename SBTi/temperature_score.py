@@ -1,4 +1,4 @@
-from typing import Optional, Tuple
+from typing import Optional, Tuple, Type
 from enum import Enum
 import pandas as pd
 import numpy as np
@@ -34,12 +34,12 @@ class TemperatureScore(PortfolioAggregation):
 
     def __init__(self, fallback_score: float = 3.2, model: int = 4,
                  boundary_coverage_option: BoundaryCoverageOption = BoundaryCoverageOption.DEFAULT,
-                 config: TemperatureScoreConfig = TemperatureScoreConfig):
+                 config: Type[TemperatureScoreConfig] = TemperatureScoreConfig):
         super().__init__(config)
         self.fallback_score = fallback_score
         self.model = model
         self.boundary_coverage_option = boundary_coverage_option
-        self.c = config
+        self.c: Type[TemperatureScoreConfig] = config
 
         # Load the mappings from industry to SR15 goal
         self.mapping = pd.read_excel(self.c.FILE_SR15_MAPPING, header=0)
@@ -225,7 +225,7 @@ class TemperatureScore(PortfolioAggregation):
 
         return pd.concat([data, pd.DataFrame(combined_data)])
 
-    def aggregate_scores(self, data: pd.DataFrame, portfolio_aggregation_method: PortfolioAggregationMethod):
+    def aggregate_scores(self, data: pd.DataFrame, portfolio_aggregation_method: Type[PortfolioAggregationMethod]):
         """
         Aggregate scores to create a portfolio score per time_frame (short, mid, long).
 

@@ -1,12 +1,14 @@
 """
 This module contains classes that create connections to data providers.
 """
+from typing import Type
+
 import pandas as pd
 
 from SBTi.configs import ColumnsConfig
 
 
-def get_company_data(data_providers: list, companies: list, config: ColumnsConfig = ColumnsConfig) -> pd.DataFrame:
+def get_company_data(data_providers: list, companies: list, config: Type[ColumnsConfig] = ColumnsConfig) -> pd.DataFrame:
     """
     Get the company data in a waterfall method, given a list of companies and a list of data providers. This will go
     through the list of data providers and retrieve the required info until either there are no companies left or there
@@ -29,7 +31,7 @@ def get_company_data(data_providers: list, companies: list, config: ColumnsConfi
     return company_data
 
 
-def get_targets(data_providers: list, companies: list, config: ColumnsConfig = ColumnsConfig) -> pd.DataFrame:
+def get_targets(data_providers: list, companies: list, config: Type[ColumnsConfig] = ColumnsConfig) -> pd.DataFrame:
     """
     Get the targets in a waterfall method, given a list of companies and a list of data providers. This will go through
     the list of data providers and retrieve the required info until either there are no companies left or there are no
