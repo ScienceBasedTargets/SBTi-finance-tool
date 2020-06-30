@@ -4,14 +4,22 @@ from SBTi.configs import ColumnsConfig
 
 
 class DataProvider:
+    """
+    This class allows the client to be able to use an excel connector as the data provider but also
+    extract target and company data.
 
-    def __init__(self, input=None, path=None, config: ColumnsConfig = ColumnsConfig):
+    :param input: data provided by the client
+    :param path: location to connect to an excel file
+    :param config: variables imported from the config.py file
+    """
+
+    def __init__(self, input: pd.DataFrame = None, path: str = None, config: ColumnsConfig = ColumnsConfig):
         self.input_data = input
         self.path = path
         self.c = config
 
 
-    def data_provider(self):
+    def data_provider(self) -> pd.DataFrame:
         '''
         Excel file will act as a temporary "data provider".
 
@@ -21,7 +29,7 @@ class DataProvider:
         return pd.read_excel("C:/Projects/SBTi/connector/InputFormat.xlsx", sheet_name=None, skiprows=1)
 
 
-    def company_data(self):
+    def company_data(self) -> pd.DataFrame:
         '''
         Records for the companies the client provided will be extracted from the data provider and returned
 
@@ -53,7 +61,7 @@ class DataProvider:
         return data_frame
 
 
-    def target_data(self):
+    def target_data(self) -> pd.DataFrame:
         '''
         Input: portfolio (list of companies + company_ID)
 
@@ -64,6 +72,8 @@ class DataProvider:
         Required: Target classification, Scope, Coverage, Ambition, Base_year, end_year, Optional: start_year
 
         The format in which the data should be returned is clear in the documentation (examples).
+
+        :return: Data Frame
         '''
 
         data = self.data_provider()
@@ -83,7 +93,7 @@ class DataProvider:
         return data_frame
 
 
-    def excel_connector(self):
+    def excel_connector(self) -> pd.DataFrame:
         """
         Reads in an excel file as input data
 
@@ -97,9 +107,13 @@ class DataProvider:
         else:
             print('Error: Incorrect Format')
 
-    def validate_excel_file(self, data):
+
+    def validate_excel_file(self, data: pd.DataFrame) -> bool:
         """
         Validates the excel file is in the correct format
+
+        :param data: input data
+
 
         :rtype: dataframe, dataframe
         :return: excel file as input data
@@ -108,11 +122,11 @@ class DataProvider:
         return self.validate_sheets(data) and self.validate_columns(data)
 
 
-
-
-    def validate_sheets(self, data):
+    def validate_sheets(self, data: pd.DataFrame) -> bool:
         """
         Validates the excel file sheets contains the Company and Target data
+
+        :param data: input data
 
         :rtype: bolean value, <TRUE | FALSE>
         :return: excel file as input data
@@ -123,9 +137,11 @@ class DataProvider:
             return False
 
 
-    def validate_columns(self, data):
+    def validate_columns(self, data: pd.DataFrame) -> bool:
         """
         Validates the excel file columns and data type
+
+        :param data: input data
 
         :rtype: bolean value, <TRUE | FALSE>
         :return: excel file as input data
@@ -163,6 +179,7 @@ class DataProvider:
 # # Testing Excel Connector
 # x = DataProvider(path = "C:/Projects/SBTi/connector/InputFormat.xlsx")
 # x.excel_connector()
+
 
 
 
