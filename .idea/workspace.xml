@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="fdd298f6-aa7d-45c6-926b-d121178e9a4c" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/protocol/target_valuation_protocol.py" beforeDir="false" afterPath="$PROJECT_DIR$/protocol/target_valuation_protocol.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SBTi/configs.py" beforeDir="false" afterPath="$PROJECT_DIR$/SBTi/configs.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/connector/InputFormat.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/connector/InputFormat.xlsx" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -25,11 +26,20 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="target_valuation_protocol.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="target_valuation_protocol.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/protocol/target_valuation_protocol.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="483">
               <caret line="284" lean-forward="true" selection-start-line="284" selection-end-line="284" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="configs.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/SBTi/configs.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="176">
+              <caret line="22" column="19" lean-forward="true" selection-start-line="22" selection-start-column="19" selection-end-line="22" selection-end-column="19" />
             </state>
           </provider>
         </entry>
@@ -110,11 +120,11 @@
         <option value="$PROJECT_DIR$/api/swagger/swagger.yaml" />
         <option value="$PROJECT_DIR$/static/swagger.json" />
         <option value="$PROJECT_DIR$/data_provider/company_data.py" />
-        <option value="$PROJECT_DIR$/SBTi/configs.py" />
         <option value="$PROJECT_DIR$/connector/excel.py" />
         <option value="$PROJECT_DIR$/app.py" />
         <option value="$PROJECT_DIR$/data_provider/data_provider_input.py" />
         <option value="$PROJECT_DIR$/protocol/target_valuation_protocol.py" />
+        <option value="$PROJECT_DIR$/SBTi/configs.py" />
       </list>
     </option>
   </component>
@@ -139,7 +149,7 @@
             <path>
               <item name="SBTi" type="b2602c69:ProjectViewProjectNode" />
               <item name="SBTi" type="462c0819:PsiDirectoryNode" />
-              <item name="protocol" type="462c0819:PsiDirectoryNode" />
+              <item name="SBTi" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -193,7 +203,7 @@
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.22655427" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2987355" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
       <window_info anchor="bottom" id="Version Control" order="7" />
@@ -566,13 +576,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/SBTi/configs.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="137">
-          <caret line="22" column="14" selection-start-line="22" selection-start-column="14" selection-end-line="22" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/connector/excel.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="112">
@@ -607,6 +610,13 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="483">
           <caret line="284" lean-forward="true" selection-start-line="284" selection-end-line="284" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/SBTi/configs.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="176">
+          <caret line="22" column="19" lean-forward="true" selection-start-line="22" selection-start-column="19" selection-end-line="22" selection-end-column="19" />
         </state>
       </provider>
     </entry>

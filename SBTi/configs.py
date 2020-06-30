@@ -20,7 +20,7 @@ class ColumnsConfig:
     COMPANY_TOTAL_ASSETS = "company_total_assets"
     TARGET_REFERENCE_NUMBER = "target_reference_number"
     TARGET_TYPE = "target_type"
-    SCOPE = "Scope"
+    SCOPE = "scope"
     SCOPE_CATEGORY = "scope_category"
     SR15 = "SR15"
     REDUCTION_FROM_BASE_YEAR = "reduction_from_base_year"
