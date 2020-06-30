@@ -45,7 +45,7 @@ class DataProvider:
 
         data_frame = pd.DataFrame(columns=required_columns)
 
-        for record in input_data.iterrows():
+        for record in self.input_data.iterrows():
             data_frame = data_frame.append(data[(data[self.c.COMPANY_NAME] == record[1]['Company_name']) &
                                                 (data[self.c.COMPANY_ID] == record[1]['Company_ID'])][required_columns],
                                            ignore_index=True)
@@ -75,7 +75,7 @@ class DataProvider:
 
         data_frame = pd.DataFrame(columns=required_columns)
 
-        for record in input_data.iterrows():
+        for record in self.input_data.iterrows():
             data_frame = data_frame.append(data[(data[self.c.COMPANY_NAME] == record[1]['Company_name']) &
                                                 (data[self.c.COMPANY_ID] == record[1]['Company_ID'])][required_columns],
                                            ignore_index=True)
