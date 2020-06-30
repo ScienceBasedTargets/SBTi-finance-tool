@@ -126,7 +126,8 @@ class TemperatureScore:
         else:
             return regression.iloc[0][self.c.COLS.PARAM], regression.iloc[0][self.c.COLS.INTERCEPT]
 
-    def get_score(self, target) -> float:
+
+    def get_score(self, target: pd.Series) -> float:
         """
         Get the temperature score for a certain target based on the annual reduction rate and the regression parameters.
 

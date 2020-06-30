@@ -52,8 +52,6 @@ class ColumnsConfig:
     END_YEAR = 'end_year'
     SBTI_STATUS = 'SBTi_status'
 
-
-
     # SR15 mapping columns
     PARAM = "param"
     INTERCEPT = "intercept"
