@@ -28,7 +28,7 @@ class PortfolioCoverageTVP(PortfolioAggregation):
         :param company: The company data
         :return: The SBTi status of the target
         """
-        if company[self.c.COLS.COMPANY_ID] is not None:
+        if self.c.COLS.COMPANY_ID in company and company[self.c.COLS.COMPANY_ID] is not None:
             targets = self.targets[self.targets[self.c.COL_COMPANY_ID] == company[self.c.COLS.COMPANY_ID]]
         else:
             targets = []

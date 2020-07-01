@@ -12,6 +12,7 @@ class CSVProvider(DataProvider):
     def __init__(self, config: dict):
         super().__init__(config)
         self.data = pd.read_csv(config["path"])
+        self.data_targets = pd.read_csv(config["path_targets"])
 
     def get_targets(self, companies: list) -> pd.DataFrame:
         """
@@ -34,11 +35,13 @@ class CSVProvider(DataProvider):
                             field.
         :return: A dataframe containing the targets
         """
-        return self.data[
-            (self.data["company_id"].isin([company["company_id"] for company in companies]) &
-             self.data["company_id"].notnull()) |
-            (self.data["company_name"].isin([company["company_name"] for company in companies]) &
-             self.data["company_name"].notnull())
+        if "company_id" not in self.data_targets:
+            self.data_targets["company_id"] = None
+        return self.data_targets[
+            (self.data_targets["company_id"].isin([company["company_id"] for company in companies]) &
+             self.data_targets["company_id"].notnull()) |
+            (self.data_targets["company_name"].isin([company["company_name"] for company in companies]) &
+             self.data_targets["company_name"].notnull())
         ].copy()
 
     def get_company_data(self, companies: list) -> pd.DataFrame:
