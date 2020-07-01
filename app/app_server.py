@@ -125,6 +125,52 @@ class portfolio_coverage(Resource):
         }
 
 
+class data(Resource):
+    def __init__(self):
+        self.portfolio_coverage_tvp = PortfolioCoverageTVP()
+        self.data_providers = [
+            CSVProvider({
+                "path": os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "test", "inputs",
+                                     "data_test_waterfall_a.csv"),
+                "path_targets": os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "test", "inputs",
+                                             "data_test_temperature_score_targets.csv")
+            }),
+            CSVProvider({
+                "path": os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "test", "inputs",
+                                     "data_test_waterfall_b.csv"),
+                "path_targets": os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "test", "inputs",
+                                             "data_test_temperature_score_targets.csv")
+            }),
+            CSVProvider({
+                "path": os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "test", "inputs",
+                                     "data_test_waterfall_c.csv"),
+                "path_targets": os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "test", "inputs",
+                                             "data_test_temperature_score_targets.csv")
+            }),
+        ]
+        self.aggregation_map = {
+            "WATS": PortfolioAggregationMethod.WATS,
+            "TETS": PortfolioAggregationMethod.TETS,
+            "MOTS": PortfolioAggregationMethod.MOTS,
+            "EOTS": PortfolioAggregationMethod.EOTS,
+            "ECOTS": PortfolioAggregationMethod.ECOTS,
+            "AOTS": PortfolioAggregationMethod.AOTS
+        }
+
+    def get(self):
+        return {'GET Request': 'Hello World'}
+
+    def post(self):
+        json_data = request.get_json(force=True)
+        company_data = SBTi.data.get_company_data(self.data_providers, json_data["companies"])
+        targets = SBTi.data.get_targets(self.data_providers, json_data["companies"])
+        data = pd.merge(left=company_data, right=targets, left_on='company_name', right_on='company_name')
+
+        return {
+            "data": data.to_dict(orient="records"),
+        }
+
+
 class report(Resource):
 
     def get(self):
@@ -153,6 +199,7 @@ app.register_blueprint(swaggerui_blueprint, url_prefix=SWAGGER_URL)
 
 api.add_resource(temp_score, '/temperature_score/')
 api.add_resource(portfolio_coverage, '/portfolio_coverage/')
+api.add_resource(data, '/data/')
 api.add_resource(report, '/report/')
 api.add_resource(documentation_endpoint, '/static/<path:path>')
 
