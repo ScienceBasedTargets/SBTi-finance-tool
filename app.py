@@ -2,9 +2,13 @@ from flask import Flask, request, send_from_directory
 from flask_restful import Resource, Api, reqparse
 from flask_swagger_ui import get_swaggerui_blueprint
 import os
+import pandas as pd
 from flask_uploads import UploadSet, configure_uploads, ALL
-
 from pathlib import Path
+from SBTi.temperature_score import TemperatureScore
+from protocol.target_valuation_protocol import TargetValuationProtocol
+from data_provider.data_provider_input import DataProvider
+
 
 PATH = 'C:/Projects/SBTi/documents'
 app = Flask(__name__)
@@ -21,11 +25,24 @@ class temp_score(Resource):
     this resource.
     """
 
+
     def get(self):
         return {'GET Request':'Hello World'}
 
     def post(self):
-        return {'POST Request':'Hello World'}
+        data = request.get_json()
+
+        # 0: data_provider_input
+        data_provider = DataProvider(pd.DataFrame.from_dict(data, orient='index'))
+        combined_data = pd.merge(data_provider.company_data(),data_provider.target_data(),how='inner',on='company_name')
+
+        # 1: TargetValuationProtocol
+        target_valuation_protocol = TargetValuationProtocol(combined_data)
+        target_valuation_protocol.target_valuation_protocol()
+
+        # 2: TemperatureScore
+
+        return {'POST Request':str(target_valuation_protocol.data)}
 
 
 class portfolio_coverage(Resource):
@@ -119,3 +136,27 @@ api.add_resource(import_portfolio, '/import_portfolio')
 if __name__ == '__main__':
     app.run(debug=True)  # important to mention debug=True
 
+
+
+# TESTING
+# x  = {
+# 	"0":{
+# 		"company_name":"A",
+# 		"company_id":1123
+# 	},
+# 	"1":{
+# 		"company_name":"B",
+# 		"company_id":4231
+# 	},
+# 	"2":{
+# 		"company_name":"C",
+# 		"company_id":"15AB43"
+# 	},
+# 	"3":{
+# 		"company_name":"D",
+# 		"company_id":"da51"
+# 	}
+# }
+#
+# input_data = pd.DataFrame.from_dict(x, orient='index')
+#

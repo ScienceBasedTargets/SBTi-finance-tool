@@ -54,11 +54,12 @@ class DataProvider:
         data_frame = pd.DataFrame(columns=required_columns)
 
         for record in self.input_data.iterrows():
-            data_frame = data_frame.append(data[(data[self.c.COMPANY_NAME] == record[1]['Company_name']) &
-                                                (data[self.c.COMPANY_ID] == record[1]['Company_ID'])][required_columns],
+            data_frame = data_frame.append(data[(data[self.c.COMPANY_NAME] == record[1][self.c.COMPANY_NAME]) &
+                                                (data[self.c.COMPANY_ID] == record[1][self.c.COMPANY_ID])][required_columns],
                                            ignore_index=True)
 
         return data_frame
+
 
 
     def target_data(self) -> pd.DataFrame:
@@ -81,16 +82,18 @@ class DataProvider:
 
         required_columns = [self.c.COMPANY_NAME, self.c.COMPANY_ID, self.c.TARGET_CLASSIFICATION, self.c.SCOPE,
                             self.c.COVERAGE, self.c.REDUCTION_AMBITION, self.c.BASE_YEAR, self.c.END_YEAR,
-                            self.c.START_YEAR]
+                            self.c.START_YEAR,self.c.TARGET_REFERENCE_NUMBER, self.c.PERCENTAGE_REDUCTION_FROM_BASE_YEAR,
+                            self.c.PERCENTAGE_EMISSION_IN_SCOPE, self.c.PERCENTAGE_ACHIEVED_EMISSIONS, self.c.TARGET_YEAR]
 
         data_frame = pd.DataFrame(columns=required_columns)
 
         for record in self.input_data.iterrows():
-            data_frame = data_frame.append(data[(data[self.c.COMPANY_NAME] == record[1]['Company_name']) &
-                                                (data[self.c.COMPANY_ID] == record[1]['Company_ID'])][required_columns],
+            data_frame = data_frame.append(data[(data[self.c.COMPANY_NAME] == record[1][self.c.COMPANY_NAME]) &
+                                                (data[self.c.COMPANY_ID] == record[1][self.c.COMPANY_ID])][required_columns],
                                            ignore_index=True)
 
         return data_frame
+
 
 
     def excel_connector(self) -> pd.DataFrame:
@@ -171,16 +174,16 @@ class DataProvider:
 
 
 # # Testing
-# input_data = pd.read_excel("C:/Projects/SBTi/connector/InputFormat.xlsx", sheet_name='User input')[['Company_name','Company_ID']]
+# input_data = pd.read_excel("C:/Projects/SBTi/connector/InputFormat.xlsx", sheet_name='User input')[['company_name','company_id']]
 # x = DataProvider(input_data)
 # x.company_data()
 # x.target_data()
-#
+
 # # Testing Excel Connector
 # x = DataProvider(path = "C:/Projects/SBTi/connector/InputFormat.xlsx")
 # x.excel_connector()
-
-
-
+#
+#
+#
 
 
