@@ -1,15 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="90a51afa-49ac-4313-8235-8b2eaaf1cd6d" name="Default Changelist" comment="">
+    <list default="true" id="90a51afa-49ac-4313-8235-8b2eaaf1cd6d" name="Default Changelist" comment="Add portfolio coverage and temperature score for the demo">
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/SBTi.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/SBTi.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SBTi/data/csv.py" beforeDir="false" afterPath="$PROJECT_DIR$/SBTi/data/csv.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SBTi/portfolio_coverage_tvp.py" beforeDir="false" afterPath="$PROJECT_DIR$/SBTi/portfolio_coverage_tvp.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/app_server.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/app_server.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/inputs/data_test_waterfall_a.csv" beforeDir="false" afterPath="$PROJECT_DIR$/test/inputs/data_test_waterfall_a.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/swagger.json" beforeDir="false" afterPath="$PROJECT_DIR$/app/static/swagger.json" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -23,40 +18,6 @@
         <option value="Python Script" />
       </list>
     </option>
-  </component>
-  <component name="FindInProjectRecents">
-    <findStrings>
-      <find>sector</find>
-      <find>country</find>
-      <find>company</find>
-      <find>CDP_ACS_industry</find>
-      <find>industry</find>
-      <find>secot</find>
-      <find>GHG_scope12</find>
-      <find>GHG_scope3</find>
-      <find>Revenu</find>
-      <find>market_cap</find>
-      <find>enterprise_value</find>
-      <find>total_assets</find>
-      <find>cash_equivalents</find>
-      <find>Target_classification</find>
-      <find>coverage</find>
-      <find>reduction_ambition</find>
-      <find>base_year</find>
-      <find>name</find>
-      <find>end_year</find>
-      <find>start_year</find>
-      <find>company_name</find>
-      <find>SBTi_status</find>
-      <find>C</find>
-      <find>COVERAGE</find>
-      <find>SCOPE</find>
-      <find>CDP_ACS_INDUSTRY</find>
-      <find>for record in input_data</find>
-      <find>input</find>
-      <find>input_data</find>
-      <find>scope</find>
-    </findStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -143,6 +104,18 @@
       <option name="presentableId" value="Default" />
       <updated>1590414072761</updated>
     </task>
+    <task id="LOCAL-00001" summary="Add portfolio coverage and temperature score for the demo">
+      <created>1593597985136</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1593597985136</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Add portfolio coverage and temperature score for the demo" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add portfolio coverage and temperature score for the demo" />
   </component>
 </project>

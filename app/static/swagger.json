@@ -21,41 +21,20 @@
     }
   ],
   "paths": {
-    "/temperature_score": {
-            "parameters": [
-        {
-          "name": "<parameter>",
-          "required": true,
-          "description": "<value>",
-          "type": "string"
-        }
-      ],
-      "get": {
-        "tags": [
-          "SBTi Request"
-        ],
-        "summary": "TBD",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/components/schemas/Report"
-            }
-          }
-        }
-      },
+    "/temperature_score/": {
+      "parameters": [],
       "post": {
         "tags": [
           "SBTi Request"
         ],
-        "summary": "TBD",
+        "summary": "Retrieve the temperature score for your portfolio of companies",
         "requestBody": {
           "description": "Temperature Score Evaluation",
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Temp_Score"
+                "$ref": "#/components/schemas/portfolio"
               }
             }
           }
@@ -65,102 +44,20 @@
         ]
       }
     },
-    "/portfolio_coverage": {
-      "parameters": [
-        {
-          "name": "<parameter>",
-          "required": true,
-          "description": "<value>",
-          "type": "string"
-        }
-      ],
-      "get": {
-        "tags": [
-          "SBTi Request"
-        ],
-        "summary": "TBD",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/components/schemas/Port_Coverage"
-            }
-          },
-          "400": {
-            "description": "Failed. Misunderstood Request."
-          }
-        }
-      },
+    "/portfolio_coverage/": {
+      "parameters": [],
       "post": {
-        "summary": "TBD",
+        "summary": "Retrieve the portfolio coverage score for your portfolio of companies",
         "tags": [
           "SBTi Request"
         ],
         "requestBody": {
-          "description": "Portfolio payload",
+          "description": "Portfolio coverage",
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Port_Coverage"
-              }
-            }
-          }
-        },
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/components/schemas/Port_Coverage"
-            }
-          },
-          "400": {
-            "description": "Failed. Bad post data."
-          }
-        }
-      }
-    },
-    "/report": {
-      "parameters": [
-        {
-          "name": "<parameter>",
-          "required": true,
-          "description": "<value>",
-          "type": "string"
-        }
-      ],
-      "get": {
-        "tags": [
-          "SBTi Request"
-        ],
-        "summary": "TBD",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/components/schemas/Port_Coverage"
-            }
-          },
-          "400": {
-            "description": "Failed. Misunderstood Request."
-          }
-        }
-      },
-      "post": {
-        "summary": "TBD",
-        "tags": [
-          "SBTi Request"
-        ],
-        "requestBody": {
-          "description": "Portfolio payload",
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Port_Coverage"
+                "$ref": "#/components/schemas/portfolio"
               }
             }
           }
@@ -184,44 +81,39 @@
   },
   "components": {
     "schemas": {
-      "Temp_Score": {
+      "portfolio": {
         "type": "object",
         "properties": {
-          "<example 1>": {
-            "type": "string",
-            "format": "string"
-          },
-          "<example 2>": {
-            "type": "string",
-            "format": "string"
-          }
-        }
-      },
-      "Port_Coverage": {
-        "type": "object",
-        "properties": {
-          "<example 1>": {
-            "type": "string",
-            "format": "string"
-          },
-          "<example 2>": {
-            "type": "string",
-            "format": "string"
-          },
-          "<example 3>": {
-            "type": "string",
-            "format": "number"
-          }
-        }
-      },
-      "Report": {
-        "type": "object",
-        "properties": {
-          "Port_Coverage": {
-            "type": "object",
-            "additionalProperties": {
-              "$ref": "#/components/schemas/Port_Coverage"
+          "companies": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/company"
             }
+          },
+          "aggregation_method": {
+            "type": "string",
+            "format": "string"
+          }
+        }
+      },
+      "company": {
+        "type": "object",
+        "properties": {
+          "company_name": {
+            "type": "string",
+            "format": "string"
+          },
+          "company_id": {
+            "type": "string",
+            "format": "string"
+          },
+          "portfolio_weight": {
+            "type": "number",
+            "format": "number"
+          },
+          "investment_value": {
+            "type": "number",
+            "format": "number"
           }
         }
       }
