@@ -1,3 +1,5 @@
+from typing import Type
+
 import pandas as pd
 
 from SBTi.configs import PortfolioCoverageTVPConfig
@@ -13,9 +15,9 @@ class PortfolioCoverageTVP(PortfolioAggregation):
                     class and overwriting one of the parameters.
     """
 
-    def __init__(self, config: PortfolioCoverageTVPConfig = PortfolioCoverageTVPConfig):
+    def __init__(self, config: Type[PortfolioCoverageTVPConfig] = PortfolioCoverageTVPConfig):
         super().__init__(config)
-        self.c = config
+        self.c: Type[PortfolioCoverageTVPConfig] = config
         self.targets = pd.read_excel(self.c.FILE_TARGETS)
 
     def _get_target_status(self, company: pd.Series) -> str:
@@ -42,7 +44,7 @@ class PortfolioCoverageTVP(PortfolioAggregation):
             return targets.iloc[0][self.c.COL_TARGET_STATUS]
 
     def get_portfolio_coverage(self, company_data: pd.DataFrame,
-                               portfolio_aggregation_method: PortfolioAggregationMethod) -> float:
+                               portfolio_aggregation_method: Type[PortfolioAggregationMethod]) -> float:
         """
         For each of the companies, get the status of their target (Target set, Committed or No target) as it's known to
         the SBTi. Matching will be done primarily on the company ID (ASIN) and secondary on the company name.

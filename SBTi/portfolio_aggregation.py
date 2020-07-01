@@ -1,5 +1,7 @@
 from abc import ABC
 from enum import Enum
+from typing import Type
+
 import pandas as pd
 from .configs import PortfolioAggregationConfig
 
@@ -26,11 +28,11 @@ class PortfolioAggregation(ABC):
                     class and overwriting one of the parameters.
     """
 
-    def __init__(self, config: PortfolioAggregationConfig = PortfolioAggregationConfig):
+    def __init__(self, config: Type[PortfolioAggregationConfig] = PortfolioAggregationConfig):
         self.c = config
 
     def _calculate_aggregate_score(self, data: pd.DataFrame, input_column: str, output_column: str,
-                                   portfolio_aggregation_method: PortfolioAggregationMethod) -> float:
+                                   portfolio_aggregation_method: Type[PortfolioAggregationMethod]) -> float:
         """
         Aggregate the scores in a given column based on a certain portfolio aggregation method.
 
