@@ -36,6 +36,22 @@ class ColumnsConfig:
     TEMPERATURE_SCORE = "temperature_score"
     COMPANY_NAME = "company_name"
     OWNED_EMISSIONS = "owned_emissions"
+    COMPANY_ID = 'company_id'
+    CDP_ACS_INDUSTRY = 'CDP_ACS_industry'
+    COUNTRY = 'country'
+    SECTOR = 'sector'
+    GHG_SCOPE12 = 'GHG_scope12'
+    GHG_SCOPE3 = 'GHG_scope3'
+    REVENU = 'Revenu'
+    ENTERPRISE_VALUE = 'enterprise_value'
+    TOTAL_ASSETS = 'total_assets'
+    CASH_EQUIVALENTS = 'cash_equivalents'
+    TARGET_CLASSIFICATION = 'Target_classification'
+    COVERAGE = 'coverage'
+    REDUCTION_AMBITION = 'reduction_ambition'
+    BASE_YEAR = 'base_year'
+    END_YEAR = 'end_year'
+    SBTI_STATUS = 'SBTi_status'
 
     # SR15 mapping columns
     PARAM = "param"
