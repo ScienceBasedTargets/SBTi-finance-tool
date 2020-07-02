@@ -62,13 +62,6 @@ class BaseEndpoint(Resource):
             data_providers = [data_provider["class"] for data_provider in self.data_providers]
         return data_providers
 
-
-class temp_score(BaseEndpoint):
-
-    def __init__(self):
-        super().__init__()
-
-    def post(self):
         json_data = request.get_json(force=True)
         data_providers = self._get_data_providers(json_data)
 
@@ -211,6 +204,46 @@ class import_portfolio(Resource):
         return {
             'PUT Request': {'Response': {'Status Code': 404, 'Error Message': 'File Not Found', 'File': remove_doc}}}
 
+class data_provider(Resource):
+    """
+    This class allows the client to receive information from the data provider. Multiple HTTP Protocols are available for
+    this resource.
+    """
+
+    def __init__(self):
+        with open('config.json') as f_config:
+            self.config = json.load(f_config)
+
+    def get(self):
+        return {'GET Request':'Hello World'}
+
+    def post(self):
+        data = request.get_json()
+        data_formatted = pd.DataFrame.from_dict(data, orient='index')
+
+        if len(data_formatted)==0:
+            return {
+                'POST Request':{
+                    'Status':404,'Response':{
+                        'Message':'Incorrect body format'
+                    }
+                }
+            }
+        else:
+            data_provider = ExcelProvider(self.config['data_providers'][1]['parameters']['path'])
+            company_data = data_provider.get_company_data(data_formatted)
+            target_data = data_provider.get_targets(data_formatted)
+
+            return {
+                'POST Request':{
+                    'Status':200,'Response':{
+                        'Data':{
+                            'Company_data' : company_data, 'target_data' : target_data
+                        }
+                    }
+                }
+            }
+
 
 SWAGGER_URL = '/docs'
 API_URL = '/static/swagger.json'
@@ -231,6 +264,7 @@ api.add_resource(data, '/data/')
 api.add_resource(report, '/report/')
 api.add_resource(documentation_endpoint, '/static/<path:path>')
 api.add_resource(import_portfolio, '/import_portfolio')
+api.add_resource(data_provider, '/data_provider')
 
 if __name__ == '__main__':
     app.run(debug=True)  # important to mention debug=True
