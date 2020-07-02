@@ -132,3 +132,4 @@ dmypy.json
 
 # The actual launch configuration for AWS
 docker-compose_aws.yml
+.idea/workspace.xml
