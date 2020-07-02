@@ -1,6 +1,7 @@
 import json
 import os
 
+from typing import List, Set, Dict, Tuple, Optional
 import pandas as pd
 from pathlib import Path
 from flask import Flask, request, send_from_directory
@@ -14,6 +15,7 @@ from SBTi.data.excel import ExcelProvider
 from SBTi.portfolio_aggregation import PortfolioAggregationMethod
 from SBTi.portfolio_coverage_tvp import PortfolioCoverageTVP
 from SBTi.temperature_score import TemperatureScore
+from protocol.target_valuation_protocol import TargetValuationProtocol
 
 PATH = os.path.join(os.path.dirname(os.path.realpath(__file__)), "uploads")
 app = Flask(__name__)
@@ -28,6 +30,10 @@ DATA_PROVIDER_MAP = {
 
 
 class BaseEndpoint(Resource):
+    """
+    This class instantiates the data provider class and loads in the config file. Further classes with inherit this classes
+    attributes.
+    """
     def __init__(self):
         with open('config.json') as f_config:
             self.config = json.load(f_config)
@@ -46,8 +52,14 @@ class BaseEndpoint(Resource):
             "AOTS": PortfolioAggregationMethod.AOTS
         }
 
-    def _get_data_providers(self, json_data):
-        # Check which data providers, in which order, should be used
+    def _get_data_providers(self, json_data: Dict):
+        '''
+        Determines which data provider and in which order should be used.
+        :param json_data:
+
+        :rtype: List
+        :return: a list of data providers in order.
+        '''
         data_providers = []
         if "data_providers" in json_data:
             for data_provider_name in json_data["data_providers"]:
@@ -64,6 +76,12 @@ class BaseEndpoint(Resource):
 
 
 class temp_score(BaseEndpoint):
+    '''
+    Generates the temperature aggregation scoring for the companies provided.
+
+    :rtype: Dictionary
+    :return: aggregation scoring per companies.
+    '''
 
     def __init__(self):
         super().__init__()
@@ -117,6 +135,11 @@ class temp_score(BaseEndpoint):
 class DataProviders(BaseEndpoint):
     """
     This class provides the user with a list of the available data providers.
+
+    :param BaseEndpoint: inherites from a different class
+
+    :rtype: List
+    :return: a list of data providers.
     """
 
     def __init__(self):
@@ -128,6 +151,14 @@ class DataProviders(BaseEndpoint):
 
 
 class portfolio_coverage(BaseEndpoint):
+    """
+    This class provides the user with the portfolio coverage of the specified companies.
+
+    :param BaseEndpoint: inherites from a different class
+
+    :rtype: Dictionary
+    :return: Coverage scoring.
+    """
     def __init__(self):
         super().__init__()
         self.portfolio_coverage_tvp = PortfolioCoverageTVP()
@@ -153,7 +184,45 @@ class portfolio_coverage(BaseEndpoint):
         }
 
 
+class target_valuation_protocol(BaseEndpoint):
+    """
+    Performs the target_valuation protocol to company and target data.
+
+    :param BaseEndpoint: inherites from a different class
+
+    :rtype: Dictionary
+    :return: target valuation protocol.
+    """
+
+    def __init__(self):
+        super().__init__()
+
+    def post(self):
+        json_data = request.get_json(force=True)
+        data_providers = self._get_data_providers(json_data)
+        company_data = SBTi.data.get_company_data(data_providers, json_data["companies"])
+        targets = SBTi.data.get_targets(data_providers, json_data["companies"])
+        data = pd.merge(left=company_data, right=targets, left_on='company_name', right_on='company_name')
+
+        tv_protocol = TargetValuationProtocol(data)
+        tv_protocol.target_valuation_protocol()
+
+        # TODO: Change str output
+        return {
+            "data": str(tv_protocol),
+        }
+
+
 class data(BaseEndpoint):
+    """
+    Acquires company and target data per specified company.
+
+    :param BaseEndpoint: inherites from a different class
+
+    :rtype: Dictionary
+    :return: Company and target data.
+    """
+
     def __init__(self):
         super().__init__()
         self.portfolio_coverage_tvp = PortfolioCoverageTVP()
@@ -171,6 +240,9 @@ class data(BaseEndpoint):
 
 
 class report(Resource):
+    '''
+    To be determined...
+    '''
 
     def get(self):
         return {'GET Request': 'Hello World'}
@@ -180,6 +252,9 @@ class report(Resource):
 
 
 class documentation_endpoint(Resource):
+    '''
+    Supports documentation endpoint
+    '''
     def get(path):
         return send_from_directory('static', path)
 
@@ -188,6 +263,11 @@ class import_portfolio(Resource):
     """
     This class allows the client to import and replace portfolios. Multiple HTTP Protocols are available for
     this resource.
+
+    :param BaseEndpoint: inherites from a different class
+
+    :rtype: Dictionary
+    :return: HTTP Request Information.
     """
 
     def get(self):
@@ -214,8 +294,13 @@ class import_portfolio(Resource):
 
 class data_provider(BaseEndpoint):
     """
-    This class allows the client to receive information from the data provider. Multiple HTTP Protocols are available for
-    this resource.
+    This class allows the client to receive information from the data provider.
+
+    :param BaseEndpoint: inherites from a different class
+
+    :rtype: Dictionary
+    :return: HTTP Request.
+
     """
 
     def __init__(self):
@@ -225,13 +310,13 @@ class data_provider(BaseEndpoint):
         return {'GET Request':'Hello World'}
 
     def post(self):
-
         json_data = request.get_json(force=True)
         data_providers = self._get_data_providers(json_data)
         company_data = SBTi.data.get_company_data(data_providers, json_data["companies"])
         targets = SBTi.data.get_targets(data_providers, json_data["companies"])
         portfolio_data = pd.merge(left=company_data, right=targets, left_on='company_name', right_on='company_name')
 
+        # TODO: Change str output
         return {'POST Request':str(portfolio_data)}
 
 
