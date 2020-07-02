@@ -67,23 +67,29 @@ class temp_score(BaseEndpoint):
 
     def __init__(self):
         super().__init__()
-        self.temperature_score = TemperatureScore()
 
     def post(self):
         json_data = request.get_json(force=True)
         data_providers = self._get_data_providers(json_data)
 
+        default_score = self.config["default_score"]
+        if "default_score" in json_data:
+            default_score = json_data["default_score"]
+        temperature_score = TemperatureScore(fallback_score=default_score)
+
         company_data = SBTi.data.get_company_data(data_providers, json_data["companies"])
         targets = SBTi.data.get_targets(data_providers, json_data["companies"])
-        data = pd.merge(left=company_data, right=targets, left_on='company_name', right_on='company_name')
+        portfolio_data = pd.merge(left=company_data, right=targets, left_on='company_name', right_on='company_name')
 
         for company in json_data["companies"]:
-            data.loc[data['company_name'] == company["company_name"], "portfolio_weight"] = company["portfolio_weight"]
-            data.loc[data['company_name'] == company["company_name"], "investment_value"] = company["investment_value"]
+            portfolio_data.loc[data['company_name'] == company["company_name"], "portfolio_weight"] = company[
+                "portfolio_weight"]
+            portfolio_data.loc[data['company_name'] == company["company_name"], "investment_value"] = company[
+                "investment_value"]
 
-        scores = self.temperature_score.calculate(data)
-        aggregations = self.temperature_score.aggregate_scores(scores,
-                                                               self.aggregation_map[json_data["aggregation_method"]])
+        scores = temperature_score.calculate(portfolio_data)
+        aggregations = temperature_score.aggregate_scores(scores,
+                                                          self.aggregation_map[json_data["aggregation_method"]])
         return {
             "aggregated_scores": aggregations,
             "companies": scores[["company_name", "scope_category", "time_frame", "temperature_score"]].to_dict(
@@ -114,13 +120,15 @@ class portfolio_coverage(BaseEndpoint):
         data_providers = self._get_data_providers(json_data)
         company_data = SBTi.data.get_company_data(data_providers, json_data["companies"])
         targets = SBTi.data.get_targets(data_providers, json_data["companies"])
-        data = pd.merge(left=company_data, right=targets, left_on='company_name', right_on='company_name')
+        portfolio_data = pd.merge(left=company_data, right=targets, left_on='company_name', right_on='company_name')
 
         for company in json_data["companies"]:
-            data.loc[data['company_name'] == company["company_name"], "portfolio_weight"] = company["portfolio_weight"]
-            data.loc[data['company_name'] == company["company_name"], "investment_value"] = company["investment_value"]
+            portfolio_data.loc[data['company_name'] == company["company_name"], "portfolio_weight"] = company[
+                "portfolio_weight"]
+            portfolio_data.loc[data['company_name'] == company["company_name"], "investment_value"] = company[
+                "investment_value"]
 
-        coverage = self.portfolio_coverage_tvp.get_portfolio_coverage(data,
+        coverage = self.portfolio_coverage_tvp.get_portfolio_coverage(portfolio_data,
                                                                       self.aggregation_map[
                                                                           json_data["aggregation_method"]])
         return {

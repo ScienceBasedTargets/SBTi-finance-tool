@@ -1,4 +1,5 @@
 {
+  "default_score": 3.2,
   "data_providers": [
     {
       "type": "csv",
