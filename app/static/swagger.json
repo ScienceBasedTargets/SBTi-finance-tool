@@ -96,7 +96,23 @@
             "description": "The aggregation method that should be used.",
             "type": "string",
             "format": "string",
-            "items": ["WATS", "TETS", "MOTS", "EOTS", "ECOTS", "AOTS"]
+            "items": [
+              "WATS",
+              "TETS",
+              "MOTS",
+              "EOTS",
+              "ECOTS",
+              "AOTS"
+            ]
+          },
+          "data_providers": {
+            "required": false,
+            "description": "The names of the data providers that should be used. To get a list of data providers, use the /data_providers endpoint.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "string"
+            }
           },
           "default_score": {
             "required": false,
@@ -176,7 +192,23 @@
             "type": "string",
             "format": "string",
             "description": "The aggregation method that should be used.",
-            "items": ["WATS", "TETS", "MOTS", "EOTS", "ECOTS", "AOTS"]
+            "items": [
+              "WATS",
+              "TETS",
+              "MOTS",
+              "EOTS",
+              "ECOTS",
+              "AOTS"
+            ]
+          },
+          "data_providers": {
+            "required": false,
+            "description": "The names of the data providers that should be used. To get a list of data providers, use the /data_providers endpoint.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "string"
+            }
           }
         }
       },
