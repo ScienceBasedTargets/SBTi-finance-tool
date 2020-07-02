@@ -62,13 +62,6 @@ class BaseEndpoint(Resource):
             data_providers = [data_provider["class"] for data_provider in self.data_providers]
         return data_providers
 
-
-class temp_score(BaseEndpoint):
-
-    def __init__(self):
-        super().__init__()
-
-    def post(self):
         json_data = request.get_json(force=True)
         data_providers = self._get_data_providers(json_data)
 
@@ -209,6 +202,25 @@ class import_portfolio(Resource):
         return {
             'PUT Request': {'Response': {'Status Code': 404, 'Error Message': 'File Not Found', 'File': remove_doc}}}
 
+class data_provider(Resource):
+    """
+    This class allows the client to receive information from the data provider. Multiple HTTP Protocols are available for
+    this resource.
+    """
+
+    def get(self):
+        return {'GET Request':'Hello World'}
+
+    def post(self):
+        data = request.get_json()
+
+        # 0: data_provider_input
+        data_provider = DataProvider(pd.DataFrame.from_dict(data, orient='index'))
+        combined_data = pd.merge(data_provider.company_data(),data_provider.target_data(),how='inner',on='company_name')
+
+        return {'POST Request':str(combined_data)}
+
+
 
 SWAGGER_URL = '/docs'
 API_URL = '/static/swagger.json'
@@ -229,6 +241,7 @@ api.add_resource(data, '/data/')
 api.add_resource(report, '/report/')
 api.add_resource(documentation_endpoint, '/static/<path:path>')
 api.add_resource(import_portfolio, '/import_portfolio')
+api.add_resource(data_provider, '/data_provider')
 
 if __name__ == '__main__':
     app.run(debug=True)  # important to mention debug=True
