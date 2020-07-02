@@ -62,6 +62,14 @@ class BaseEndpoint(Resource):
             data_providers = [data_provider["class"] for data_provider in self.data_providers]
         return data_providers
 
+
+class temp_score(BaseEndpoint):
+
+    def __init__(self):
+        super().__init__()
+
+    def post(self):
+
         json_data = request.get_json(force=True)
         data_providers = self._get_data_providers(json_data)
 
