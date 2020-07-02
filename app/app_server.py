@@ -37,16 +37,6 @@ class BaseEndpoint(Resource):
             data_provider["class"] = DATA_PROVIDER_MAP[data_provider["type"]](**data_provider["parameters"])
             self.data_providers.append(data_provider)
 
-        print(self.data_providers)
-        """
-        //    {
-        //      "type": "excel",
-        //      "name": "excel-test-123",
-        //      "parameters": {
-        //        "path": "data/InputFormat.xlsx"
-        //      }
-        //    },
-        """
         self.aggregation_map = {
             "WATS": PortfolioAggregationMethod.WATS,
             "TETS": PortfolioAggregationMethod.TETS,

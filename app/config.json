@@ -7,6 +7,13 @@
         "path": "data/data_test_temperature_score.csv",
         "path_targets": "data/data_test_temperature_score_targets.csv"
       }
+    },
+    {
+      "type": "excel",
+      "name": "excel-test-123",
+      "parameters": {
+        "path": "data/InputFormat.xlsx"
+      }
     }
   ]
 }
