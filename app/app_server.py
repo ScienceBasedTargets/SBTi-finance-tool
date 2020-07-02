@@ -208,18 +208,39 @@ class data_provider(Resource):
     this resource.
     """
 
+    def __init__(self):
+        with open('config.json') as f_config:
+            self.config = json.load(f_config)
+
     def get(self):
         return {'GET Request':'Hello World'}
 
     def post(self):
         data = request.get_json()
+        data_formatted = pd.DataFrame.from_dict(data, orient='index')
 
-        # 0: data_provider_input
-        data_provider = DataProvider(pd.DataFrame.from_dict(data, orient='index'))
-        combined_data = pd.merge(data_provider.company_data(),data_provider.target_data(),how='inner',on='company_name')
+        if len(data_formatted)==0:
+            return {
+                'POST Request':{
+                    'Status':404,'Response':{
+                        'Message':'Incorrect body format'
+                    }
+                }
+            }
+        else:
+            data_provider = ExcelProvider(self.config['data_providers'][1]['parameters']['path'])
+            company_data = data_provider.get_company_data(data_formatted)
+            target_data = data_provider.get_targets(data_formatted)
 
-        return {'POST Request':str(combined_data)}
-
+            return {
+                'POST Request':{
+                    'Status':200,'Response':{
+                        'Data':{
+                            'Company_data' : company_data, 'target_data' : target_data
+                        }
+                    }
+                }
+            }
 
 
 SWAGGER_URL = '/docs'
