@@ -240,8 +240,11 @@ class TemperatureScore(PortfolioAggregation):
             filtered_data = data[(data[self.c.COLS.TIME_FRAME] == time_frame) & (
                     data[self.c.COLS.SCOPE_CATEGORY] == self.c.VALUE_SCOPE_CATEGORY_S1S2S3)].copy()
 
-            portfolio_scores[time_frame] = self._calculate_aggregate_score(filtered_data, self.c.COLS.TEMPERATURE_SCORE,
-                                                                           self.c.COLS.WEIGHTED_TEMPERATURE_SCORE,
-                                                                           portfolio_aggregation_method)
+            if not filtered_data.empty:
+                portfolio_scores[time_frame] = self._calculate_aggregate_score(filtered_data, self.c.COLS.TEMPERATURE_SCORE,
+                                                                               self.c.COLS.WEIGHTED_TEMPERATURE_SCORE,
+                                                                               portfolio_aggregation_method)
+            else:
+                portfolio_scores[time_frame] = None
 
         return portfolio_scores

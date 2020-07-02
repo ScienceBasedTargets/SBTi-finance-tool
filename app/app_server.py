@@ -82,17 +82,31 @@ class temp_score(BaseEndpoint):
         portfolio_data = pd.merge(left=company_data, right=targets, left_on='company_name', right_on='company_name')
 
         for company in json_data["companies"]:
-            portfolio_data.loc[data['company_name'] == company["company_name"], "portfolio_weight"] = company[
-                "portfolio_weight"]
-            portfolio_data.loc[data['company_name'] == company["company_name"], "investment_value"] = company[
-                "investment_value"]
+            portfolio_data.loc[portfolio_data['company_name'] == company["company_name"], "portfolio_weight"] = company["portfolio_weight"]
+            portfolio_data.loc[portfolio_data['company_name'] == company["company_name"], "investment_value"] = company["investment_value"]
 
         scores = temperature_score.calculate(portfolio_data)
+
+        # Filter scope (s1s2, s3 or s1s2s3)
+        if "filter_scope_category" in json_data:
+            scores = scores[scores["scope_category"].isin(json_data["filter_scope_category"])]
+
+        # Filter timeframe (short, mid, long)
+        if "filter_time_frame" in json_data:
+            scores = scores[scores["time_frame"].isin(json_data["filter_time_frame"])]
+
+        scores = scores.copy()
         aggregations = temperature_score.aggregate_scores(scores,
                                                           self.aggregation_map[json_data["aggregation_method"]])
+
+        # Include columns
+        include_columns = ["company_name", "scope_category", "time_frame", "temperature_score"]
+        if "include_columns" in json_data:
+            include_columns += [column for column in json_data["include_columns"] if column in scores.columns]
+
         return {
             "aggregated_scores": aggregations,
-            "companies": scores[["company_name", "scope_category", "time_frame", "temperature_score"]].to_dict(
+            "companies": scores[include_columns].to_dict(
                 orient="records")
         }
 
@@ -123,9 +137,9 @@ class portfolio_coverage(BaseEndpoint):
         portfolio_data = pd.merge(left=company_data, right=targets, left_on='company_name', right_on='company_name')
 
         for company in json_data["companies"]:
-            portfolio_data.loc[data['company_name'] == company["company_name"], "portfolio_weight"] = company[
+            portfolio_data.loc[portfolio_data['company_name'] == company["company_name"], "portfolio_weight"] = company[
                 "portfolio_weight"]
-            portfolio_data.loc[data['company_name'] == company["company_name"], "investment_value"] = company[
+            portfolio_data.loc[portfolio_data['company_name'] == company["company_name"], "investment_value"] = company[
                 "investment_value"]
 
         coverage = self.portfolio_coverage_tvp.get_portfolio_coverage(portfolio_data,
