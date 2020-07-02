@@ -2,11 +2,12 @@ import json
 import os
 
 import pandas as pd
+import numpy as np
 from pathlib import Path
 from flask import Flask, request, send_from_directory
 from flask_restful import Resource, Api
 from flask_swagger_ui import get_swaggerui_blueprint
-from flask_uploads import UploadSet, ALL
+from flask_uploads import UploadSet, ALL, configure_uploads
 
 import SBTi
 from SBTi.data.csv import CSVProvider
@@ -15,10 +16,11 @@ from SBTi.portfolio_aggregation import PortfolioAggregationMethod
 from SBTi.portfolio_coverage_tvp import PortfolioCoverageTVP
 from SBTi.temperature_score import TemperatureScore
 
-PATH = os.path.join(os.path.dirname(os.path.realpath(__file__)), "uploads")
+PATH = "uploads"
 app = Flask(__name__)
 files = UploadSet('files', ALL)
 app.config['UPLOADS_DEFAULT_DEST'] = PATH
+configure_uploads(app, files)
 api = Api(app)
 
 DATA_PROVIDER_MAP = {
@@ -91,25 +93,26 @@ class temp_score(BaseEndpoint):
         scores = temperature_score.calculate(portfolio_data)
 
         # Filter scope (s1s2, s3 or s1s2s3)
-        if "filter_scope_category" in json_data:
+        if "filter_scope_category" in json_data and len(json_data["filter_scope_category"]) > 0:
             scores = scores[scores["scope_category"].isin(json_data["filter_scope_category"])]
 
         # Filter timeframe (short, mid, long)
-        if "filter_time_frame" in json_data:
+        if "filter_time_frame" in json_data and len(json_data["filter_time_frame"]) > 0:
             scores = scores[scores["time_frame"].isin(json_data["filter_time_frame"])]
 
-        scores = scores.copy()
-        aggregations = temperature_score.aggregate_scores(scores,
-                                                          self.aggregation_map[json_data["aggregation_method"]])
+        aggregation_method = self.aggregation_map[self.config["aggregation_method"]]
+        if "aggregation_method" in json_data and json_data["aggregation_method"] in self.aggregation_map:
+            aggregation_method = self.aggregation_map[json_data["aggregation_method"]]
+        aggregations = temperature_score.aggregate_scores(scores, aggregation_method)
 
         # Include columns
         include_columns = ["company_name", "scope_category", "time_frame", "temperature_score"]
-        if "include_columns" in json_data:
+        if "include_columns" in json_data and len(json_data["include_columns"]) > 0:
             include_columns += [column for column in json_data["include_columns"] if column in scores.columns]
 
         return {
             "aggregated_scores": aggregations,
-            "companies": scores[include_columns].to_dict(
+            "companies": scores[include_columns].replace({np.nan: None}).to_dict(
                 orient="records")
         }
 
@@ -184,6 +187,22 @@ class documentation_endpoint(Resource):
         return send_from_directory('static', path)
 
 
+class ParsePortfolio(Resource):
+    """
+    This class allows the client to user to parse his Excel portfolio and transform it into a JSON object.
+    Note: This endpoint is only meant to be used by the UI!
+    """
+
+    def post(self):
+        skiprows = request.form.get("skiprows")
+        if skiprows is None:
+            skiprows = 0
+
+        df = pd.read_excel(request.files.get('file'), skiprows=int(skiprows))
+
+        return {'portfolio': df.replace({np.nan: None}).to_dict(orient="records")}
+
+
 class import_portfolio(Resource):
     """
     This class allows the client to import and replace portfolios. Multiple HTTP Protocols are available for
@@ -194,11 +213,8 @@ class import_portfolio(Resource):
         return {'GET Request': 'Hello World'}
 
     def post(self):
-        files.save(request.files['file'])
-        path = str(sorted(Path(PATH + '/files/').iterdir(), key=os.path.getmtime, reverse=True)[0])
-        file_name = path.split("""\\""")[-1]
-
-        return {'POST Request': {'Response': {'Status Code': 200, 'Message': 'File Saved', 'File': file_name}}}
+        filename = files.save(request.files['file'])
+        return {'POST Request': {'Response': {'Status Code': 200, 'Message': 'File Saved', 'File': filename}}}
 
     def put(self):
         remove_doc = request.args.get('document_replace')
@@ -211,6 +227,7 @@ class import_portfolio(Resource):
                         'Response': {'Status Code': 200, 'Message': 'File Replaced', 'Replaced File': remove_doc}}}
         return {
             'PUT Request': {'Response': {'Status Code': 404, 'Error Message': 'File Not Found', 'File': remove_doc}}}
+
 
 class data_provider(Resource):
     """
@@ -271,7 +288,8 @@ api.add_resource(DataProviders, '/data_providers/')
 api.add_resource(data, '/data/')
 api.add_resource(report, '/report/')
 api.add_resource(documentation_endpoint, '/static/<path:path>')
-api.add_resource(import_portfolio, '/import_portfolio')
+api.add_resource(import_portfolio, '/import_portfolio/')
+api.add_resource(ParsePortfolio, '/parse_portfolio/')
 api.add_resource(data_provider, '/data_provider')
 
 if __name__ == '__main__':

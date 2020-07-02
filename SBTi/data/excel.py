@@ -114,7 +114,7 @@ class ExcelProvider(DataProvider):
 
 
 # Testing
-input_data = pd.read_excel("C:/Projects/SBTi/connector/InputFormat.xlsx", sheet_name='User input')[['company_name','company_id']]
-x = ExcelProvider()
-x.get_company_data(input_data)
+# input_data = pd.read_excel("C:/Projects/SBTi/connector/InputFormat.xlsx", sheet_name='User input')[['company_name','company_id']]
+# x = ExcelProvider()
+# x.get_company_data(input_data)
 # x.get_targets(input_data)

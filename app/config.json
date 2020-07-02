@@ -1,5 +1,6 @@
 {
   "default_score": 3.2,
+  "aggregation_method": "WATS",
   "data_providers": [
     {
       "type": "csv",
