@@ -22,7 +22,6 @@ class CSVProvider(DataProvider):
         * company_name: The name of the company
         * company_id: The ID of the company
         * target_reference_number: Int *x* of Abs *x*
-        * target_reference_number: Int *x* of Abs *x*
         * scope: The scope of the target. This should be a valid scope in the SR15 mapping
         * base_year: The base year of the target
         * start_year: The start year of the target
