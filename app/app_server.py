@@ -3,10 +3,9 @@ import os
 import pandas as pd
 from pathlib import Path
 from flask import Flask, request, send_from_directory
-from flask_restful import Resource, Api, reqparse
+from flask_restful import Resource, Api
 from flask_swagger_ui import get_swaggerui_blueprint
-from flask_uploads import UploadSet, configure_uploads, ALL
-
+from flask_uploads import UploadSet, ALL
 
 import SBTi
 from SBTi.data.csv import CSVProvider
@@ -14,9 +13,9 @@ from SBTi.portfolio_aggregation import PortfolioAggregationMethod
 from SBTi.portfolio_coverage_tvp import PortfolioCoverageTVP
 from SBTi.temperature_score import TemperatureScore
 
-PATH = 'C:/Projects/SBTi/documents'
+PATH = os.path.join(os.path.dirname(os.path.realpath(__file__)), "uploads")
 app = Flask(__name__)
-files = UploadSet('files',ALL)
+files = UploadSet('files', ALL)
 app.config['UPLOADS_DEFAULT_DEST'] = PATH
 api = Api(app)
 
@@ -87,34 +86,6 @@ class temp_score(Resource):
 class portfolio_coverage(Resource):
     def __init__(self):
         self.portfolio_coverage_tvp = PortfolioCoverageTVP()
-        self.data_providers = [
-            CSVProvider({
-                "path": os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "test", "inputs",
-                                     "data_test_waterfall_a.csv"),
-                "path_targets": os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "test", "inputs",
-                                             "data_test_temperature_score_targets.csv")
-            }),
-            CSVProvider({
-                "path": os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "test", "inputs",
-                                     "data_test_waterfall_b.csv"),
-                "path_targets": os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "test", "inputs",
-                                             "data_test_temperature_score_targets.csv")
-            }),
-            CSVProvider({
-                "path": os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "test", "inputs",
-                                     "data_test_waterfall_c.csv"),
-                "path_targets": os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "test", "inputs",
-                                             "data_test_temperature_score_targets.csv")
-            }),
-        ]
-        self.aggregation_map = {
-            "WATS": PortfolioAggregationMethod.WATS,
-            "TETS": PortfolioAggregationMethod.TETS,
-            "MOTS": PortfolioAggregationMethod.MOTS,
-            "EOTS": PortfolioAggregationMethod.EOTS,
-            "ECOTS": PortfolioAggregationMethod.ECOTS,
-            "AOTS": PortfolioAggregationMethod.AOTS
-        }
 
     def get(self):
         return {'GET Request': 'Hello World'}
