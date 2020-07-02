@@ -82,8 +82,10 @@ class temp_score(BaseEndpoint):
         portfolio_data = pd.merge(left=company_data, right=targets, left_on='company_name', right_on='company_name')
 
         for company in json_data["companies"]:
-            portfolio_data.loc[portfolio_data['company_name'] == company["company_name"], "portfolio_weight"] = company["portfolio_weight"]
-            portfolio_data.loc[portfolio_data['company_name'] == company["company_name"], "investment_value"] = company["investment_value"]
+            portfolio_data.loc[portfolio_data['company_name'] == company["company_name"], "portfolio_weight"] = company[
+                "portfolio_weight"]
+            portfolio_data.loc[portfolio_data['company_name'] == company["company_name"], "investment_value"] = company[
+                "investment_value"]
 
         scores = temperature_score.calculate(portfolio_data)
 
@@ -120,8 +122,8 @@ class DataProviders(BaseEndpoint):
         super().__init__()
 
     def get(self):
-        return {'data_providers': [{"name": data_provider["name"], "type": data_provider["type"]}
-                                   for data_provider in self.config["data_providers"]]}
+        return [{"name": data_provider["name"], "type": data_provider["type"]}
+                for data_provider in self.config["data_providers"]]
 
 
 class portfolio_coverage(BaseEndpoint):
