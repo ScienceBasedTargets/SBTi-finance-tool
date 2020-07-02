@@ -1,3 +1,4 @@
+import json
 import os
 
 import pandas as pd
@@ -9,6 +10,7 @@ from flask_uploads import UploadSet, ALL
 
 import SBTi
 from SBTi.data.csv import CSVProvider
+from SBTi.data.excel import ExcelProvider
 from SBTi.portfolio_aggregation import PortfolioAggregationMethod
 from SBTi.portfolio_coverage_tvp import PortfolioCoverageTVP
 from SBTi.temperature_score import TemperatureScore
@@ -19,34 +21,32 @@ files = UploadSet('files', ALL)
 app.config['UPLOADS_DEFAULT_DEST'] = PATH
 api = Api(app)
 
+DATA_PROVIDER_MAP = {
+    "excel": ExcelProvider,
+    "csv": CSVProvider,
+}
 
 
-class temp_score(Resource):
-
+class BaseEndpoint(Resource):
     def __init__(self):
-        self.temperature_score = TemperatureScore()
-        self.data_providers = [
+        with open('config.json') as f_config:
+            self.config = json.load(f_config)
 
-            # One of these replaced with excel connector
-            CSVProvider({
-                "path": os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "test", "inputs",
-                                     "data_test_waterfall_a.csv"),
-                "path_targets": os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "test", "inputs",
-                                             "data_test_temperature_score_targets.csv")
-            }),
-            CSVProvider({
-                "path": os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "test", "inputs",
-                                     "data_test_waterfall_b.csv"),
-                "path_targets": os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "test", "inputs",
-                                             "data_test_temperature_score_targets.csv")
-            }),
-            CSVProvider({
-                "path": os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "test", "inputs",
-                                     "data_test_waterfall_c.csv"),
-                "path_targets": os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "test", "inputs",
-                                             "data_test_temperature_score_targets.csv")
-            }),
-        ]
+        self.data_providers = []
+        for data_provider in self.config["data_providers"]:
+            data_provider["class"] = DATA_PROVIDER_MAP[data_provider["type"]](**data_provider["parameters"])
+            self.data_providers.append(data_provider)
+
+        print(self.data_providers)
+        """
+        //    {
+        //      "type": "excel",
+        //      "name": "excel-test-123",
+        //      "parameters": {
+        //        "path": "data/InputFormat.xlsx"
+        //      }
+        //    },
+        """
         self.aggregation_map = {
             "WATS": PortfolioAggregationMethod.WATS,
             "TETS": PortfolioAggregationMethod.TETS,
@@ -56,17 +56,35 @@ class temp_score(Resource):
             "AOTS": PortfolioAggregationMethod.AOTS
         }
 
-    def get(self):
-        return {'GET Request': 'Hello World'}
+    def _get_data_providers(self, json_data):
+        # Check which data providers, in which order, should be used
+        data_providers = []
+        if "data_providers" in json_data:
+            for data_provider_name in json_data["data_providers"]:
+                for data_provider in self.data_providers:
+                    if data_provider["name"] == data_provider_name:
+                        data_providers.append(data_provider["class"])
+                        break
+
+        # TODO: When the user did give us data providers, but we can't match them this fails silently, maybe we should
+        # fail louder
+        if len(data_providers) == 0:
+            data_providers = [data_provider["class"] for data_provider in self.data_providers]
+        return data_providers
+
+
+class temp_score(BaseEndpoint):
+
+    def __init__(self):
+        super().__init__()
+        self.temperature_score = TemperatureScore()
 
     def post(self):
-
-
-
-
         json_data = request.get_json(force=True)
-        company_data = SBTi.data.get_company_data(self.data_providers, json_data["companies"])
-        targets = SBTi.data.get_targets(self.data_providers, json_data["companies"])
+        data_providers = self._get_data_providers(json_data)
+
+        company_data = SBTi.data.get_company_data(data_providers, json_data["companies"])
+        targets = SBTi.data.get_targets(data_providers, json_data["companies"])
         data = pd.merge(left=company_data, right=targets, left_on='company_name', right_on='company_name')
 
         for company in json_data["companies"]:
@@ -83,17 +101,29 @@ class temp_score(Resource):
         }
 
 
-class portfolio_coverage(Resource):
+class DataProviders(BaseEndpoint):
+    """
+    This class provides the user with a list of the available data providers.
+    """
+
     def __init__(self):
-        self.portfolio_coverage_tvp = PortfolioCoverageTVP()
+        super().__init__()
 
     def get(self):
-        return {'GET Request': 'Hello World'}
+        return {'data_providers': [{"name": data_provider["name"], "type": data_provider["type"]}
+                                   for data_provider in self.config["data_providers"]]}
+
+
+class portfolio_coverage(BaseEndpoint):
+    def __init__(self):
+        super().__init__()
+        self.portfolio_coverage_tvp = PortfolioCoverageTVP()
 
     def post(self):
         json_data = request.get_json(force=True)
-        company_data = SBTi.data.get_company_data(self.data_providers, json_data["companies"])
-        targets = SBTi.data.get_targets(self.data_providers, json_data["companies"])
+        data_providers = self._get_data_providers(json_data)
+        company_data = SBTi.data.get_company_data(data_providers, json_data["companies"])
+        targets = SBTi.data.get_targets(data_providers, json_data["companies"])
         data = pd.merge(left=company_data, right=targets, left_on='company_name', right_on='company_name')
 
         for company in json_data["companies"]:
@@ -108,45 +138,16 @@ class portfolio_coverage(Resource):
         }
 
 
-class data(Resource):
+class data(BaseEndpoint):
     def __init__(self):
+        super().__init__()
         self.portfolio_coverage_tvp = PortfolioCoverageTVP()
-        self.data_providers = [
-            CSVProvider({
-                "path": os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "test", "inputs",
-                                     "data_test_waterfall_a.csv"),
-                "path_targets": os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "test", "inputs",
-                                             "data_test_temperature_score_targets.csv")
-            }),
-            CSVProvider({
-                "path": os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "test", "inputs",
-                                     "data_test_waterfall_b.csv"),
-                "path_targets": os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "test", "inputs",
-                                             "data_test_temperature_score_targets.csv")
-            }),
-            CSVProvider({
-                "path": os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "test", "inputs",
-                                     "data_test_waterfall_c.csv"),
-                "path_targets": os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "test", "inputs",
-                                             "data_test_temperature_score_targets.csv")
-            }),
-        ]
-        self.aggregation_map = {
-            "WATS": PortfolioAggregationMethod.WATS,
-            "TETS": PortfolioAggregationMethod.TETS,
-            "MOTS": PortfolioAggregationMethod.MOTS,
-            "EOTS": PortfolioAggregationMethod.EOTS,
-            "ECOTS": PortfolioAggregationMethod.ECOTS,
-            "AOTS": PortfolioAggregationMethod.AOTS
-        }
-
-    def get(self):
-        return {'GET Request': 'Hello World'}
 
     def post(self):
         json_data = request.get_json(force=True)
-        company_data = SBTi.data.get_company_data(self.data_providers, json_data["companies"])
-        targets = SBTi.data.get_targets(self.data_providers, json_data["companies"])
+        data_providers = self._get_data_providers(json_data)
+        company_data = SBTi.data.get_company_data(data_providers, json_data["companies"])
+        targets = SBTi.data.get_targets(data_providers, json_data["companies"])
         data = pd.merge(left=company_data, right=targets, left_on='company_name', right_on='company_name')
 
         return {
@@ -175,14 +176,14 @@ class import_portfolio(Resource):
     """
 
     def get(self):
-        return {'GET Request':'Hello World'}
+        return {'GET Request': 'Hello World'}
 
     def post(self):
         files.save(request.files['file'])
-        path = str(sorted(Path(PATH + '/files/').iterdir(), key=os.path.getmtime,reverse=True)[0])
+        path = str(sorted(Path(PATH + '/files/').iterdir(), key=os.path.getmtime, reverse=True)[0])
         file_name = path.split("""\\""")[-1]
 
-        return{'POST Request': {'Response':{'Status Code':200,'Message':'File Saved','File':file_name}}}
+        return {'POST Request': {'Response': {'Status Code': 200, 'Message': 'File Saved', 'File': file_name}}}
 
     def put(self):
         remove_doc = request.args.get('document_replace')
@@ -191,9 +192,10 @@ class import_portfolio(Resource):
                 if remove_doc == f.split('.')[0]:
                     os.remove(os.path.join(root, f))
                     files.save(request.files['file'])
-                    return {'PUT Request': {'Response': {'Status Code': 200, 'Message': 'File Replaced', 'Replaced File': remove_doc}}}
-        return {'PUT Request': {'Response':{'Status Code':404,'Error Message': 'File Not Found','File':remove_doc}}}
-
+                    return {'PUT Request': {
+                        'Response': {'Status Code': 200, 'Message': 'File Replaced', 'Replaced File': remove_doc}}}
+        return {
+            'PUT Request': {'Response': {'Status Code': 404, 'Error Message': 'File Not Found', 'File': remove_doc}}}
 
 
 SWAGGER_URL = '/docs'
@@ -210,11 +212,11 @@ app.register_blueprint(swaggerui_blueprint, url_prefix=SWAGGER_URL)
 
 api.add_resource(temp_score, '/temperature_score/')
 api.add_resource(portfolio_coverage, '/portfolio_coverage/')
+api.add_resource(DataProviders, '/data_providers/')
 api.add_resource(data, '/data/')
 api.add_resource(report, '/report/')
 api.add_resource(documentation_endpoint, '/static/<path:path>')
 api.add_resource(import_portfolio, '/import_portfolio')
-
 
 if __name__ == '__main__':
     app.run(debug=True)  # important to mention debug=True

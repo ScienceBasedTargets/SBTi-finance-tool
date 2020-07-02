@@ -9,10 +9,10 @@ class CSVProvider(DataProvider):
     :param config: A dictionary containing a "path" field that leads to the path of the CSV file
     """
 
-    def __init__(self, config: dict):
-        super().__init__(config)
-        self.data = pd.read_csv(config["path"])
-        self.data_targets = pd.read_csv(config["path_targets"])
+    def __init__(self, path: str, path_targets: str):
+        super().__init__()
+        self.data = pd.read_csv(path)
+        self.data_targets = pd.read_csv(path_targets)
 
     def get_targets(self, companies: list) -> pd.DataFrame:
         """
@@ -70,6 +70,9 @@ class CSVProvider(DataProvider):
                             field.
         :return: A dataframe containing the company data
         """
+        if "company_id" not in self.data:
+            self.data["company_id"] = None
+
         return self.data[
             (self.data["company_id"].isin([company["company_id"] for company in companies]) &
              self.data["company_id"].notnull()) |

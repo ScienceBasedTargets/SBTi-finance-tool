@@ -10,24 +10,11 @@ class ExcelProvider(DataProvider):
     :param config: A dictionary containing a "path" field that leads to the path of the CSV file
     """
 
-    def __init__(self, config: ColumnsConfig = ColumnsConfig):
-        super().__init__(config)
+    def __init__(self, path: str, config: ColumnsConfig = ColumnsConfig):
+        super().__init__()
         # self.data = pd.read_excel(config["path"], sheet_name=None, skiprows=1)
-        self.data = self.data_provider()
+        self.data = pd.read_excel(path, sheet_name=None, skiprows=1)
         self.c = config
-
-
-
-    def data_provider(self) -> pd.DataFrame:
-        '''
-        Excel file will act as a temporary "data provider".
-
-        :return: Dataframe
-        '''
-
-        return pd.read_excel("C:/Projects/SBTi/connector/InputFormat.xlsx", sheet_name=None, skiprows=1)
-
-
 
     def get_targets(self, companies: pd.DataFrame) -> pd.DataFrame:
         """

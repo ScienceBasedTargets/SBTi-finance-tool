@@ -7,13 +7,13 @@ class DataProvider(ABC):
     General data provider super class.
     """
 
-    def __init__(self, config: dict):
+    def __init__(self):
         """
         Create a new data provider instance.
 
         :param config: A dictionary containing the configuration parameters for this data provider.
         """
-        self.config = config
+        pass
 
     @abstractmethod
     def get_targets(self, companies: list) -> pd.DataFrame:

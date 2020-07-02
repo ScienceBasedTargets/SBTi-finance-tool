@@ -1,0 +1,12 @@
+{
+  "data_providers": [
+    {
+      "type": "csv",
+      "name": "csv-a",
+      "parameters": {
+        "path": "data/data_test_temperature_score.csv",
+        "path_targets": "data/data_test_temperature_score_targets.csv"
+      }
+    }
+  ]
+}
