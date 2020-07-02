@@ -212,45 +212,27 @@ class import_portfolio(Resource):
         return {
             'PUT Request': {'Response': {'Status Code': 404, 'Error Message': 'File Not Found', 'File': remove_doc}}}
 
-class data_provider(Resource):
+class data_provider(BaseEndpoint):
     """
     This class allows the client to receive information from the data provider. Multiple HTTP Protocols are available for
     this resource.
     """
 
     def __init__(self):
-        with open('config.json') as f_config:
-            self.config = json.load(f_config)
+        super().__init__()
 
     def get(self):
         return {'GET Request':'Hello World'}
 
     def post(self):
-        data = request.get_json()
-        data_formatted = pd.DataFrame.from_dict(data, orient='index')
 
-        if len(data_formatted)==0:
-            return {
-                'POST Request':{
-                    'Status':404,'Response':{
-                        'Message':'Incorrect body format'
-                    }
-                }
-            }
-        else:
-            data_provider = ExcelProvider(self.config['data_providers'][1]['parameters']['path'])
-            company_data = data_provider.get_company_data(data_formatted)
-            target_data = data_provider.get_targets(data_formatted)
+        json_data = request.get_json(force=True)
+        data_providers = self._get_data_providers(json_data)
+        company_data = SBTi.data.get_company_data(data_providers, json_data["companies"])
+        targets = SBTi.data.get_targets(data_providers, json_data["companies"])
+        portfolio_data = pd.merge(left=company_data, right=targets, left_on='company_name', right_on='company_name')
 
-            return {
-                'POST Request':{
-                    'Status':200,'Response':{
-                        'Data':{
-                            'Company_data' : company_data, 'target_data' : target_data
-                        }
-                    }
-                }
-            }
+        return {'POST Request':str(portfolio_data)}
 
 
 SWAGGER_URL = '/docs'

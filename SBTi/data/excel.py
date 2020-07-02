@@ -47,9 +47,9 @@ class ExcelProvider(DataProvider):
 
         data_frame = pd.DataFrame(columns=required_columns)
 
-        for record in companies.iterrows():
-            data_frame = data_frame.append(data_target[(data_target[self.c.COMPANY_NAME] == record[1][self.c.COMPANY_NAME]) &
-                                                (data_target[self.c.COMPANY_ID] == record[1][self.c.COMPANY_ID])][required_columns],
+        for company in companies:
+            data_frame = data_frame.append(data_target[(data_target[self.c.COMPANY_NAME] == company[self.c.COMPANY_NAME]) &
+                                                (data_target[self.c.COMPANY_ID] == company[self.c.COMPANY_ID])][required_columns],
                                            ignore_index=True)
 
         return data_frame
@@ -92,10 +92,11 @@ class ExcelProvider(DataProvider):
 
         data_frame = pd.DataFrame(columns=required_columns)
 
-        for record in companies.iterrows():
-            data_frame = data_frame.append(data_company[(data_company[self.c.COMPANY_NAME] == record[1][self.c.COMPANY_NAME]) &
-                                                (data_company[self.c.COMPANY_ID] == record[1][self.c.COMPANY_ID])][required_columns],
-                                           ignore_index=True)
+        for company in companies:
+            data_frame = data_frame.append(
+                data_company[(data_company[self.c.COMPANY_NAME] == company[self.c.COMPANY_NAME]) &
+                                                    (data_company[self.c.COMPANY_ID] == company[self.c.COMPANY_ID])][required_columns],
+                                               ignore_index=True)
 
         return data_frame
 
@@ -114,7 +115,7 @@ class ExcelProvider(DataProvider):
 
 
 # Testing
-input_data = pd.read_excel("C:/Projects/SBTi/connector/InputFormat.xlsx", sheet_name='User input')[['company_name','company_id']]
-x = ExcelProvider()
-x.get_company_data(input_data)
+# input_data = pd.read_excel("C:/Projects/SBTi/connector/InputFormat.xlsx", sheet_name='User input')[['company_name','company_id']]
+# x = ExcelProvider()
+# x.get_company_data(input_data)
 # x.get_targets(input_data)
