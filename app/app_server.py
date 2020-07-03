@@ -184,35 +184,6 @@ class portfolio_coverage(BaseEndpoint):
         }
 
 
-class target_valuation_protocol(BaseEndpoint):
-    """
-    Performs the target_valuation protocol to company and target data.
-
-    :param BaseEndpoint: inherites from a different class
-
-    :rtype: Dictionary
-    :return: target valuation protocol.
-    """
-
-    def __init__(self):
-        super().__init__()
-
-    def post(self):
-        json_data = request.get_json(force=True)
-        data_providers = self._get_data_providers(json_data)
-        company_data = SBTi.data.get_company_data(data_providers, json_data["companies"])
-        targets = SBTi.data.get_targets(data_providers, json_data["companies"])
-        data = pd.merge(left=company_data, right=targets, left_on='company_name', right_on='company_name')
-
-        tv_protocol = TargetValuationProtocol(data)
-        tv_protocol.target_valuation_protocol()
-
-        # TODO: Change str output
-        return {
-            "data": str(tv_protocol),
-        }
-
-
 class data(BaseEndpoint):
     """
     Acquires company and target data per specified company.
