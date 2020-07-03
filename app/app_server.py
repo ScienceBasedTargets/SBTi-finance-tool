@@ -31,8 +31,11 @@ DATA_PROVIDER_MAP = {
 
 class BaseEndpoint(Resource):
     """
-    This class instantiates the data provider class and loads in the config file. Further classes with inherit this classes
-    attributes.
+    This class instantiates the data provider classes and loads in the config file. Further classes with inherit the
+     methods from this class.
+
+    :rtype:
+    :return:
     """
     def __init__(self):
         with open('config.json') as f_config:
@@ -224,7 +227,7 @@ class report(Resource):
 
 class documentation_endpoint(Resource):
     '''
-    Supports documentation endpoint
+    Supports flask_swagger documentation endpoint
     '''
     def get(path):
         return send_from_directory('static', path)
