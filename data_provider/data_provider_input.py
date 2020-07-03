@@ -173,11 +173,11 @@ class DataProvider:
         return True
 
 
-Testing
-input_data = pd.read_excel("C:/Projects/SBTi/connector/InputFormat.xlsx", sheet_name='User input')[['company_name','company_id']]
-x = DataProvider(input_data)
-x.company_data()
-x.target_data()
+# Testing
+# input_data = pd.read_excel("C:/Projects/SBTi/connector/InputFormat.xlsx", sheet_name='User input')[['company_name','company_id']]
+# x = DataProvider(input_data)
+# x.company_data()
+# x.target_data()
 
 # # Testing Excel Connector
 # x = DataProvider(path = "C:/Projects/SBTi/connector/InputFormat.xlsx")
