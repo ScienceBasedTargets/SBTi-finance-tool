@@ -104,6 +104,11 @@ class temp_score(BaseEndpoint):
         targets = SBTi.data.get_targets(data_providers, json_data["companies"])
         portfolio_data = pd.merge(left=company_data, right=targets, left_on='company_name', right_on='company_name')
 
+        # Target_Valuation_Protocol
+        target_valuation_protocol = TargetValuationProtocol(portfolio_data)
+        portfolio_data = target_valuation_protocol.target_valuation_protocol()
+
+
         for company in json_data["companies"]:
             portfolio_data.loc[portfolio_data['company_name'] == company["company_name"], "portfolio_weight"] = company[
                 "portfolio_weight"]
@@ -291,8 +296,12 @@ class data_provider(BaseEndpoint):
         targets = SBTi.data.get_targets(data_providers, json_data["companies"])
         portfolio_data = pd.merge(left=company_data, right=targets, left_on='company_name', right_on='company_name')
 
-        # TODO: Change str output
-        return {'POST Request':str(portfolio_data)}
+        return {
+            "POST Request": {
+                'Status':200,
+                'Data':portfolio_data.to_json(orient='records')
+            }
+        }
 
 
 SWAGGER_URL = '/docs'

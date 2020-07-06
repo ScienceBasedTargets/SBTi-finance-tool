@@ -310,6 +310,6 @@ class TargetValuationProtocol:
 
 
 # Testing
-# combined_data = pd.read_excel("C:/Projects/SBTi/output.xlsx", sheet_name="Sheet1") # Results from data_provider_input
-# x = TargetValuationProtocol(combined_data)
-# x.target_valuation_protocol()
+# portfolio_data = pd.read_excel("C:/Projects/SBTi/output.xlsx", sheet_name="Sheet1") # Results from data_provider_input
+# x = TargetValuationProtocol(portfolio_data)
+# df = x.target_valuation_protocol()
