@@ -44,18 +44,19 @@ class ExcelProvider(DataProvider):
 
         required_columns = [self.c.COMPANY_NAME, self.c.COMPANY_ID, self.c.TARGET_CLASSIFICATION, self.c.SCOPE,
                             self.c.COVERAGE, self.c.REDUCTION_AMBITION, self.c.BASE_YEAR, self.c.END_YEAR,
-                            self.c.START_YEAR,self.c.TARGET_REFERENCE_NUMBER, self.c.PERCENTAGE_REDUCTION_FROM_BASE_YEAR,
-                            self.c.PERCENTAGE_EMISSION_IN_SCOPE, self.c.PERCENTAGE_ACHIEVED_EMISSIONS, self.c.TARGET_YEAR]
+                            self.c.START_YEAR, self.c.TARGET_REFERENCE_NUMBER,
+                            self.c.PERCENTAGE_REDUCTION_FROM_BASE_YEAR,
+                            self.c.EMISSIONS_IN_SCOPE, self.c.ACHIEVED_EMISSIONS, self.c.TARGET_YEAR]
 
         data_frame = pd.DataFrame(columns=required_columns)
 
         for company in companies:
-            data_frame = data_frame.append(data_target[(data_target[self.c.COMPANY_NAME] == company[self.c.COMPANY_NAME]) &
-                                                (data_target[self.c.COMPANY_ID] == company[self.c.COMPANY_ID])][required_columns],
-                                           ignore_index=True)
+            data_frame = data_frame.append(
+                data_target[(data_target[self.c.COMPANY_NAME] == company[self.c.COMPANY_NAME]) &
+                            (data_target[self.c.COMPANY_ID] == company[self.c.COMPANY_ID])][required_columns],
+                ignore_index=True)
 
         return data_frame
-
 
     def get_company_data(self, companies: pd.DataFrame) -> pd.DataFrame:
         """
@@ -84,9 +85,7 @@ class ExcelProvider(DataProvider):
         :return: A dataframe containing the company data
         """
 
-
         data_company = self.data['Company data']
-
 
         required_columns = [self.c.COMPANY_NAME, self.c.COMPANY_ID, self.c.CDP_ACS_INDUSTRY, self.c.COUNTRY,
                             self.c.INDUSTRY, self.c.SECTOR, self.c.GHG_SCOPE12, self.c.GHG_SCOPE3, self.c.REVENU,
@@ -97,11 +96,10 @@ class ExcelProvider(DataProvider):
         for company in companies:
             data_frame = data_frame.append(
                 data_company[(data_company[self.c.COMPANY_NAME] == company[self.c.COMPANY_NAME]) &
-                                                    (data_company[self.c.COMPANY_ID] == company[self.c.COMPANY_ID])][required_columns],
-                                               ignore_index=True)
+                             (data_company[self.c.COMPANY_ID] == company[self.c.COMPANY_ID])][required_columns],
+                ignore_index=True)
 
         return data_frame
-
 
     def get_sbti_targets(self, companies: list) -> list:
         """
@@ -113,8 +111,6 @@ class ExcelProvider(DataProvider):
         :return: The original list, enriched with a field called "sbti_target_status"
         """
         raise NotImplementedError
-
-
 
 # Testing
 # input_data = pd.read_excel("C:/Projects/SBTi/connector/InputFormat.xlsx", sheet_name='User input')[['company_name','company_id']]

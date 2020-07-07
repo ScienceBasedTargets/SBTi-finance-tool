@@ -1,3 +1,4 @@
+import itertools
 import json
 import os
 
@@ -108,7 +109,6 @@ class temp_score(BaseEndpoint):
         target_valuation_protocol = TargetValuationProtocol(portfolio_data)
         portfolio_data = target_valuation_protocol.target_valuation_protocol()
 
-
         for company in json_data["companies"]:
             portfolio_data.loc[portfolio_data['company_name'] == company["company_name"], "portfolio_weight"] = company[
                 "portfolio_weight"]
@@ -124,6 +124,17 @@ class temp_score(BaseEndpoint):
         # Filter timeframe (short, mid, long)
         if "filter_time_frame" in json_data:
             scores = scores[scores["time_frame"].isin(json_data["filter_time_frame"])]
+
+        # Group by certain column names
+        if len(json_data.get("grouping_column", [])) > 0:
+            groupings = []
+            for column in json_data["grouping_column"]:
+                if column in scores.columns:
+                    groupings.append([(column, value) for value in scores[column].unique()])
+
+            all_groupings = list(itertools.product(*groupings))
+            print(all_groupings)
+            # scores = scores[scores["time_frame"].isin(json_data["filter_time_frame"])]
 
         scores = scores.copy()
         aggregations = temperature_score.aggregate_scores(scores,

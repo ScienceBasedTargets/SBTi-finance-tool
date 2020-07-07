@@ -25,7 +25,6 @@ class ColumnsConfig:
     SCOPE_CATEGORY = "scope_category"
     SR15 = "SR15"
     REDUCTION_FROM_BASE_YEAR = "reduction_from_base_year"
-    PERCENTAGE_REDUCTION_FROM_BASE_YEAR= '% reduction from base year'
     TARGET_YEAR = "target_year"
     START_YEAR = "start_year"
     VARIABLE = "variable"
@@ -34,11 +33,9 @@ class ColumnsConfig:
     MODEL = "model"
     ANNUAL_REDUCTION_RATE = "annual_reduction_rate"
     EMISSIONS_IN_SCOPE = "emissions_in_scope"
-    PERCENTAGE_EMISSION_IN_SCOPE = "% emissions in Scope"
     TEMPERATURE_SCORE = "temperature_score"
     COMPANY_NAME = "company_name"
     OWNED_EMISSIONS = "owned_emissions"
-    COMPANY_ID = 'company_id'
     CDP_ACS_INDUSTRY = 'CDP_ACS_industry'
     COUNTRY = 'country'
     SECTOR = 'sector'
@@ -54,7 +51,7 @@ class ColumnsConfig:
     BASE_YEAR = 'base_year'
     END_YEAR = 'end_year'
     SBTI_STATUS = 'SBTi_status'
-    PERCENTAGE_ACHIEVED_EMISSIONS = "% achieved (emissions)"
+    ACHIEVED_EMISSIONS = "achieved_reduction"
 
     # SR15 mapping columns
     PARAM = "param"
