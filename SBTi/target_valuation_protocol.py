@@ -26,7 +26,7 @@ class TargetValuationProtocol:
         self.time_frame()
         self.data[self.c.COLS.SCOPE_CATEGORY] = self.data.apply(
             lambda row: self.c.SCOPE_MAP[row[self.c.COLS.SCOPE].lower()], axis=1)
-        self.group_valid_target()
+        self.group_targets()
         return self.data
 
     def test_target_type(self):
