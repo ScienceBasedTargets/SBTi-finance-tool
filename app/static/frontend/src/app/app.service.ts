@@ -51,7 +51,7 @@ export class AppService {
         return this.http.post<TemperatureScoreResult>(`${environment.host}/temperature_score/`, data)
             .pipe(
                 tap(_ => console.log('Calculated temperature score')),
-                catchError(this.handleError<TemperatureScoreResult>('getTemperatureScore', {"aggregated_scores": {}, "companies": []}))
+                catchError(this.handleError<TemperatureScoreResult>('getTemperatureScore', {"aggregated_scores": {}, "coverage": 0.00, "companies": []}))
             );
     }
 

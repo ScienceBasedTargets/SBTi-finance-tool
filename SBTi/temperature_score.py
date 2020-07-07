@@ -252,7 +252,7 @@ class TemperatureScore(PortfolioAggregation):
                     portfolio_aggregation_method)
 
                 # If there are grouping column(s) we'll group in pandas and pass the results to the aggregation
-                if grouping is not None:
+                if grouping is not None and len(grouping) > 0:
                     grouped_data = filtered_data.groupby(grouping)
                     for group_name, group in grouped_data:
                         portfolio_scores[time_frame][group_name if type(group_name) == str else "-".join(group_name)] = \

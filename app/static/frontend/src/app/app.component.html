@@ -1,16 +1,4 @@
 <style>
-    .container {
-        margin-top: 75px;
-    }
-
-    .container-results {
-        margin-top: 25px;
-        margin-bottom: 25px;
-    }
-
-    .table-results {
-        margin-top: 10px;
-    }
 </style>
 
 <!-- Toolbar -->
@@ -33,6 +21,8 @@
     </div>
 </nav>
 
+<div class="loading" *ngIf="loading">Loading&#8230;</div>
+
 <div class="container" role="main">
     <h2>SBTi Temperature Scoring</h2>
     <p *ngFor="let alert of alerts">
@@ -51,29 +41,30 @@
                 [(ngModel)]="excelSkiprows">
         </div>
         <button class="btn btn-primary" (click)="parseExcel()">Parse Excel</button>
-        <hr />
-        <h6>Map your columns to input fields</h6>
-        <div class="row" *ngIf="columns.length > 0">
-            <div class="col">
-                <p *ngFor="let column of columns">
-                    <input class="form-control" value="{{column}}" disabled />
-                </p>
+        <span *ngIf="columns.length > 0">
+            <hr />
+            <h6>Map your columns to input fields</h6>
+            <div class="row">
+                <div class="col">
+                    <p *ngFor="let column of columns">
+                        <input class="form-control" value="{{column}}" disabled />
+                    </p>
+                </div>
+                <div class="col">
+                    <p *ngFor="let column of columns">
+                        <select class="form-control" name="select-map_{{column}}" [(ngModel)]="columnMapping[column]"
+                            (change)="updateGroupingColumns()">
+                            <option></option>
+                            <option *ngFor="let targetColumn of availableTargetColumns">{{targetColumn}}</option>
+                        </select>
+                    </p>
+                </div>
             </div>
-            <div class="col">
-                <p *ngFor="let column of columns">
-                    <select class="form-control" name="select-map_{{column}}" [(ngModel)]="columnMapping[column]"
-                        (change)="updateGroupingColumns()">
-                        <option></option>
-                        <option *ngFor="let targetColumn of availableTargetColumns">{{targetColumn}}</option>
-                    </select>
-                </p>
-            </div>
-        </div>
+        </span>
     </form>
-    <form (ngSubmit)="onSubmit(f)" #f="ngForm">
+    <form (ngSubmit)="onSubmit(f)" #f="ngForm" *ngIf="columns.length > 0">
         <hr />
         <h6>API settings (leave empty to use the defaults)</h6>
-        <!-- TODO: Add the default score -->
         <div class="form-group">
             <label for="input-defaultScore">Default temperature score</label>
             <input type="number" class="form-control" id="input-defaultScore" step="0.1" name="input-defaultScore"
@@ -124,8 +115,10 @@
     </form>
 
     <div id="div-results" class="container-results" *ngIf="resultTargets.length > 0">
+        <hr />
+        <h5>Aggregated temperature scores</h5>
         <div *ngFor="let group of resultGroups">
-            <h6>{{group}}</h6>
+            <h6 class="header-scores-aggregated">{{group}}</h6>
             <div class="row" *ngIf="'short' in resultScores">
                 <div class="col">
                     <div class="card text-center">
@@ -141,7 +134,7 @@
                     <div class="card text-center">
                         <div class="card-header">
                             Mid term
-                        </div> 
+                        </div>
                         <div class="card-body">
                             <h5 class="card-title">{{resultScores["mid"][group] | number:'1.2-2'}}&#176;C</h5>
                         </div>
@@ -157,7 +150,25 @@
                         </div>
                     </div>
                 </div>
-            </div> 
+            </div>
+        </div>
+
+        <br />
+
+        <div class="row">
+            <div class="col">
+                <div class="card text-center">
+                    <div class="card-header">
+                        Portfolio coverage
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{coverage | number:'1.2-2'}}&#37;</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col">&nbsp;</div>
+            <div class="col">&nbsp;</div>
+
         </div>
 
         <div class="container-results">

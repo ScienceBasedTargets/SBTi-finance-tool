@@ -4,6 +4,7 @@
 
 export const environment = {
   production: false,
+  levenshteinThreshold: 5,
   host: "http://localhost:5000"
 };
 

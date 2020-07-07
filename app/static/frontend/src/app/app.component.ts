@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { AppService } from './app.service';
 import { DataProvider } from './dataProvider';
 import { Alert } from './alert';
+import levenshtein from 'fast-levenshtein';
+import { environment } from 'src/environments/environment';
 
 const AVAILABLE_GROUPING_COLUMNS: string[] = ["industry"];
 const AVAILABLE_COLUMNS: string[] = ["company_id", "industry", "s1s2_emissions", "s3_emissions", "portfolio_weight",
@@ -18,7 +20,7 @@ export class AppComponent implements OnInit {
     title = 'SBTi Temperature score';
     excelSkiprows: number = 0;
     isNavbarCollapsed: boolean = true;
-    availableTargetColumns: string[] = ["company_id", "company_name", "portfolio_weight", "investment_value", "grouping"];
+    availableTargetColumns: string[] = ["company_id", "company_name", "portfolio_weight", "investment_value"];
     availableTimeFrames: string[] = ["short", "mid", "long"];
     availableScopeCategories: string[] = ["s1s2", "s3", "s1s2s3"];
     availableAggregationMethods: string[] = ["WATS", "TETS", "MOTS", "EOTS", "ECOTS", "AOTS"];
@@ -41,7 +43,8 @@ export class AppComponent implements OnInit {
     resultTargets: Object[] = [];
     resultScores: { [key: string]: number } = {};
     alerts: Alert[] = [];
-
+    loading: boolean = false;
+    coverage: number;
 
     constructor(private appService: AppService) { }
 
@@ -124,13 +127,27 @@ export class AppComponent implements OnInit {
         let formData = new FormData();
         formData.append("file", this.uploadedFiles[0], this.uploadedFiles[0].name);
         formData.append("skiprows", this.excelSkiprows.toString());
+        const that = this;
+        let assigned = [];
+        this.loading = true;
 
         this.appService.doParsePortfolio(formData).subscribe((response) => {
+            this.loading = false;
             this.portfolio = response["portfolio"];
             if (this.portfolio.length > 0) {
                 this.columns = Object.keys(this.portfolio[0]);
                 this.columnMapping = this.columns.reduce(function (map, obj) {
                     map[obj] = null;
+                    // We use the Levenshtein distance to try and map the columns to the targets
+                    let sortedMappings = that.availableTargetColumns.filter(elem => !(elem in assigned)).sort((a, b) => {
+                        return levenshtein.get(a, obj) - levenshtein.get(b, obj);
+                    });
+                    if (sortedMappings.length > 0 && 
+                        levenshtein.get(sortedMappings[0], obj) < environment.levenshteinThreshold){
+                        // If it's smaller than the threshold, we'll assign this column
+                        map[obj] = sortedMappings[0];
+                        assigned.push(sortedMappings[0]);
+                    }
                     return map;
                 }, {});
                 this.updateGroupingColumns();
@@ -145,6 +162,7 @@ export class AppComponent implements OnInit {
     }
 
     onSubmit(f) {
+        this.loading = true;
         let columnsMapped = Object.keys(this.columnMapping).filter((key) => this.columnMapping[key] !== null);
         let columnsUnmapped = Object.keys(this.columnMapping).filter((key) => this.columnMapping[key] === null);
         let portfolioData = this.portfolio.map((obj) => {
@@ -168,9 +186,11 @@ export class AppComponent implements OnInit {
             "companies": portfolioData,
         })
             .subscribe((response) => {
+                this.loading = false;
                 if (response !== undefined) {
                     this.resultScores = response["aggregated_scores"];
                     this.resultTargets = response["companies"];
+                    this.coverage = response["coverage"];
                     this.resultGroups = Object.keys(response["aggregated_scores"]["short"]);
                     if (this.resultTargets.length > 0) {
                         this.resultColumns = Object.keys(this.resultTargets[0]);

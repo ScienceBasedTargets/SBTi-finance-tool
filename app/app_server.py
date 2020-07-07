@@ -45,6 +45,7 @@ class BaseEndpoint(Resource):
     :rtype:
     :return:
     """
+
     def __init__(self):
         self.config = get_config()
 
@@ -153,8 +154,12 @@ class temp_score(BaseEndpoint):
         if "include_columns" in json_data and len(json_data["include_columns"]) > 0:
             include_columns += [column for column in json_data["include_columns"] if column in scores.columns]
 
+        portfolio_coverage_tvp = PortfolioCoverageTVP()
+        coverage = portfolio_coverage_tvp.get_portfolio_coverage(portfolio_data, aggregation_method)
+
         return {
             "aggregated_scores": aggregations,
+            "coverage": coverage,
             "companies": scores[include_columns].replace({np.nan: None}).to_dict(
                 orient="records")
         }
@@ -187,6 +192,7 @@ class portfolio_coverage(BaseEndpoint):
     :rtype: Dictionary
     :return: Coverage scoring.
     """
+
     def __init__(self):
         super().__init__()
         self.portfolio_coverage_tvp = PortfolioCoverageTVP()
@@ -254,6 +260,7 @@ class documentation_endpoint(Resource):
     '''
     Supports flask_swagger documentation endpoint
     '''
+
     def get(self, path):
         return send_from_directory('static', path)
 
@@ -303,7 +310,7 @@ class import_portfolio(Resource):
             df = pd.DataFrame(data=json_data['companies'], index=[0])
             # Todo: Name of document needs to be adjusted.
             df.to_excel('dict1.xlsx')
-            return {'POST Request': {'Response': {'Status Code': 200, 'Message': 'File Saved', 'File':''}}}
+            return {'POST Request': {'Response': {'Status Code': 200, 'Message': 'File Saved', 'File': ''}}}
 
     def put(self):
         remove_doc = request.args.get('document_replace')
@@ -342,7 +349,7 @@ class data_provider(BaseEndpoint):
         super().__init__()
 
     def get(self):
-        return {'GET Request':'Hello World'}
+        return {'GET Request': 'Hello World'}
 
     def post(self):
         json_data = request.get_json(force=True)
@@ -353,8 +360,8 @@ class data_provider(BaseEndpoint):
 
         return {
             "POST Request": {
-                'Status':200,
-                'Data':portfolio_data.to_json(orient='records')
+                'Status': 200,
+                'Data': portfolio_data.to_json(orient='records')
             }
         }
 
