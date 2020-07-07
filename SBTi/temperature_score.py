@@ -168,7 +168,7 @@ class TemperatureScore(PortfolioAggregation):
         except ZeroDivisionError:
             raise ValueError("The mean of the S1+S2 plus the S3 emissions is zero")
 
-    def calculate(self, data: pd.DataFrame):
+    def calculate(self, data: pd.DataFrame, extra_columns: Optional[list] = None):
         """
         Calculate the temperature for a dataframe of company data.
         Required columns:
@@ -198,9 +198,12 @@ class TemperatureScore(PortfolioAggregation):
             aggregation.
         * company_total_assets: The total assets of the company. Only required to use the AOTS portfolio aggregation.
 
+        :param extra_columns: A list of user defined extra, company related, columns
         :param data:
         :return: A data frame containing all relevant information for the targets and companies
         """
+        if extra_columns is None:
+            extra_columns = []
         data[self.c.COLS.SR15] = data.apply(lambda row: self.get_target_mapping(row), axis=1)
         data[self.c.COLS.ANNUAL_REDUCTION_RATE] = data.apply(lambda row: self.get_annual_reduction_rate(row), axis=1)
         data[self.c.COLS.REGRESSION_PARAM], data[self.c.COLS.REGRESSION_INTERCEPT] = zip(
@@ -210,13 +213,14 @@ class TemperatureScore(PortfolioAggregation):
         data[self.c.COLS.TEMPERATURE_SCORE] = data.apply(lambda row: self.process_score(row), axis=1)
 
         combined_data = []
-        company_columns = [column for column in self.c.COLS.COMPANY_COLUMNS if column in data.columns]
+        company_columns = [column for column in self.c.COLS.COMPANY_COLUMNS + extra_columns if column in data.columns]
         for company in data[self.c.COLS.COMPANY_NAME].unique():
             for time_frame in self.c.VALUE_TIME_FRAMES:
                 # We always include all company specific data
                 company_values = data[data[self.c.COLS.COMPANY_NAME] == company]
-                company_data = {column: company_values[column].mode().iloc[0] if len(company_values[column].mode()) > 0 else None
-                                for column in company_columns}
+                company_data = {
+                    column: company_values[column].mode().iloc[0] if len(company_values[column].mode()) > 0 else None
+                    for column in company_columns}
                 company_data[self.c.COLS.COMPANY_NAME] = company
                 company_data[self.c.COLS.SCOPE] = self.c.VALUE_SCOPE_S1S2S3
                 company_data[self.c.COLS.SCOPE_CATEGORY] = self.c.VALUE_SCOPE_CATEGORY_S1S2S3
@@ -226,24 +230,35 @@ class TemperatureScore(PortfolioAggregation):
 
         return pd.concat([data, pd.DataFrame(combined_data)])
 
-    def aggregate_scores(self, data: pd.DataFrame, portfolio_aggregation_method: Type[PortfolioAggregationMethod]):
+    def aggregate_scores(self, data: pd.DataFrame, portfolio_aggregation_method: Type[PortfolioAggregationMethod],
+                         grouping: Optional[list] = None):
         """
         Aggregate scores to create a portfolio score per time_frame (short, mid, long).
 
         :param data: The results of the calculate method
         :param portfolio_aggregation_method: PortfolioAggregationMethod: The aggregation method to use
+        :param grouping: The grouping to use
         :return: A weighted temperature score for the portfolio
         """
         portfolio_scores = {}
         for time_frame in self.c.VALUE_TIME_FRAMES:
-            # Weighted average temperature score (WATS)
             filtered_data = data[(data[self.c.COLS.TIME_FRAME] == time_frame) & (
                     data[self.c.COLS.SCOPE_CATEGORY] == self.c.VALUE_SCOPE_CATEGORY_S1S2S3)].copy()
 
             if not filtered_data.empty:
-                portfolio_scores[time_frame] = self._calculate_aggregate_score(filtered_data, self.c.COLS.TEMPERATURE_SCORE,
-                                                                               self.c.COLS.WEIGHTED_TEMPERATURE_SCORE,
-                                                                               portfolio_aggregation_method)
+                portfolio_scores[time_frame] = {}
+                portfolio_scores[time_frame]["all"] = self._calculate_aggregate_score(
+                    filtered_data, self.c.COLS.TEMPERATURE_SCORE, self.c.COLS.WEIGHTED_TEMPERATURE_SCORE,
+                    portfolio_aggregation_method)
+
+                # If there are grouping column(s) we'll group in pandas and pass the results to the aggregation
+                if grouping is not None:
+                    grouped_data = filtered_data.groupby(grouping)
+                    for group_name, group in grouped_data:
+                        portfolio_scores[time_frame][group_name if type(group_name) == str else "-".join(group_name)] = \
+                            self._calculate_aggregate_score(group.copy(), self.c.COLS.TEMPERATURE_SCORE,
+                                                            self.c.COLS.WEIGHTED_TEMPERATURE_SCORE,
+                                                            portfolio_aggregation_method)
             else:
                 portfolio_scores[time_frame] = None
 

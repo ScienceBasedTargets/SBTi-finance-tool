@@ -109,13 +109,21 @@ class temp_score(BaseEndpoint):
         target_valuation_protocol = TargetValuationProtocol(portfolio_data)
         portfolio_data = target_valuation_protocol.target_valuation_protocol()
 
+        # Add the user-defined columns to the data set for grouping later on
+        extra_columns = []
         for company in json_data["companies"]:
-            portfolio_data.loc[portfolio_data['company_name'] == company["company_name"], "portfolio_weight"] = company[
-                "portfolio_weight"]
-            portfolio_data.loc[portfolio_data['company_name'] == company["company_name"], "investment_value"] = company[
-                "investment_value"]
+            for key, value in company.items():
+                if key not in ["company_name", "company_id"]:
+                    portfolio_data.loc[portfolio_data['company_name'] == company["company_name"], key] = value
+                    extra_columns.append(key)
 
-        scores = temperature_score.calculate(portfolio_data)
+        scores = temperature_score.calculate(portfolio_data, extra_columns)
+
+        # After calculation we'll re-add the extra columns from the input
+        for company in json_data["companies"]:
+            for key, value in company.items():
+                if key not in ["company_name", "company_id"]:
+                    portfolio_data.loc[portfolio_data['company_name'] == company["company_name"], key] = value
 
         # Filter scope (s1s2, s3 or s1s2s3)
         if "filter_scope_category" in json_data:
@@ -126,19 +134,12 @@ class temp_score(BaseEndpoint):
             scores = scores[scores["time_frame"].isin(json_data["filter_time_frame"])]
 
         # Group by certain column names
-        if len(json_data.get("grouping_column", [])) > 0:
-            groupings = []
-            for column in json_data["grouping_column"]:
-                if column in scores.columns:
-                    groupings.append([(column, value) for value in scores[column].unique()])
-
-            all_groupings = list(itertools.product(*groupings))
-            print(all_groupings)
-            # scores = scores[scores["time_frame"].isin(json_data["filter_time_frame"])]
+        grouping = json_data.get("grouping_columns", None)
 
         scores = scores.copy()
         aggregations = temperature_score.aggregate_scores(scores,
-                                                          self.aggregation_map[json_data["aggregation_method"]])
+                                                          self.aggregation_map[json_data["aggregation_method"]],
+                                                          grouping)
 
         # Include columns
         include_columns = ["company_name", "scope_category", "time_frame", "temperature_score"]
@@ -298,6 +299,7 @@ class import_portfolio(Resource):
 
         return {
             'PUT Request': {'Response': {'Status Code': 404, 'Error Message': 'File Not Found', 'File': remove_doc}}}
+
 
 class data_provider(BaseEndpoint):
     """
