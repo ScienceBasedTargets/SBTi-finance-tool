@@ -9,9 +9,9 @@ import { Alert } from './alert';
     styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-    title = 'frontend';
-    excelSkiprows = 0;
-    isNavbarCollapsed = true;
+    title = 'SBTi Temperature score';
+    excelSkiprows: number = 0;
+    isNavbarCollapsed: boolean = true;
     availableTargetColumns: string[] = ["company_id", "company_name", "portfolio_weight", "investment_value"];
     availableTimeFrames: string[] = ["short", "mid", "long"];
     availableScopeCategories: string[] = ["s1s2", "s3", "s1s2s3"];

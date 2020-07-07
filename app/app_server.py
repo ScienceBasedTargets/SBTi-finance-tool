@@ -28,11 +28,14 @@ DATA_PROVIDER_MAP = {
     "csv": CSVProvider,
 }
 
+def get_config():
+    with open('config.json') as f_config:
+        return json.load(f_config)
+
 
 class BaseEndpoint(Resource):
     def __init__(self):
-        with open('config.json') as f_config:
-            self.config = json.load(f_config)
+        self.config = get_config()
 
         self.data_providers = []
         for data_provider in self.config["data_providers"]:
@@ -183,8 +186,14 @@ class report(Resource):
 
 
 class documentation_endpoint(Resource):
-    def get(path):
+    def get(self, path):
         return send_from_directory('static', path)
+
+
+class Frontend(Resource):
+    def get(self, path="index.html"):
+        config = get_config()
+        return send_from_directory(config["frontend_path"], path)
 
 
 class ParsePortfolio(Resource):
@@ -288,6 +297,7 @@ api.add_resource(DataProviders, '/data_providers/')
 api.add_resource(data, '/data/')
 api.add_resource(report, '/report/')
 api.add_resource(documentation_endpoint, '/static/<path:path>')
+api.add_resource(Frontend, '/<path:path>', '/')
 api.add_resource(import_portfolio, '/import_portfolio/')
 api.add_resource(ParsePortfolio, '/parse_portfolio/')
 api.add_resource(data_provider, '/data_provider')

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpErrorResponse, HttpEventType } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from './../environments/environment';
 
 import { Observable, of } from 'rxjs';
@@ -9,6 +9,7 @@ import { DataProvider } from './dataProvider';
 import { Portfolio } from './portfolio';
 import { TemperatureScoreSettings } from './temperatureScoreSettings';
 import { Alert } from './alert';
+import { TemperatureScoreResult } from './temperatureScoreResult';
 
 
 @Injectable({ providedIn: 'root' })
@@ -46,11 +47,11 @@ export class AppService {
             );
     }
 
-    public getTemperatureScore(data: TemperatureScoreSettings): Observable<any> {
-        return this.http.post(`${environment.host}/temperature_score/`, data)
+    public getTemperatureScore(data: TemperatureScoreSettings): Observable<TemperatureScoreResult> {
+        return this.http.post<TemperatureScoreResult>(`${environment.host}/temperature_score/`, data)
             .pipe(
                 tap(_ => console.log('Calculated temperature score')),
-                catchError(this.handleError<any>('getTemperatureScore', {"aggregated_scores": {}, "companies": []}))
+                catchError(this.handleError<TemperatureScoreResult>('getTemperatureScore', {"aggregated_scores": {}, "companies": []}))
             );
     }
 

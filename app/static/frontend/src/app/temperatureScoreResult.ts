@@ -1,4 +1,4 @@
-export interface temperatureScoreResult {
+export interface TemperatureScoreResult {
     aggregated_scores: { [key: string]: number };
-    companies: Object[];
+    companies: any[];
 }
