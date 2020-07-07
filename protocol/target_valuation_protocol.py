@@ -3,10 +3,6 @@ from typing import List
 
 class TargetValuationProtocol:
 
-<<<<<<< Updated upstream
-    def __init__(self):
-        self.data = self.input_data()
-=======
     def __init__(self, input, config: ColumnsConfig = ColumnsConfig):
         self.data = input
         self.c = config
@@ -24,8 +20,6 @@ class TargetValuationProtocol:
         self.test_target_process()
         return self.group_valid_target()
 
-
->>>>>>> Stashed changes
 
     def input_data(self) -> pd.DataFrame:
         """
@@ -224,12 +218,7 @@ class TargetValuationProtocol:
         '''
 
         if data_category is not None:
-<<<<<<< Updated upstream
-            # Need to fill in empty company names
-            empty_company_name = self.data.drop(data_category.index)['company_name'].values
-=======
-            empty_company_name = self.data.drop(data_category.index)[self.c.COMPANY_NAME].values
->>>>>>> Stashed changes
+            empty_comzany_name = self.data.drop(data_category.index)[self.c.COMPANY_NAME].values
             dictionary = {k:{
                 'company_name':empty_company_name[k]
             } for k in range(0,len(empty_company_name))}
