@@ -1,4 +1,5 @@
 export const environment = {
-  production: true,
-  host: ""
+    production: true,
+    levenshteinThreshold: 5,
+    host: ""
 };

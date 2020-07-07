@@ -49,7 +49,8 @@ export class AppComponent implements OnInit {
     constructor(private appService: AppService) { }
 
     ngOnInit() {
-        this.appService.setAlertHandler(this.addAlert.bind(this))
+        this.appService.setAlertHandler(this.addAlert.bind(this));
+        console.log(environment.host);
         this.getDataProviders();
     }
 
