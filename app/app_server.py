@@ -2,7 +2,7 @@ import itertools
 import json
 import os
 
-from typing import List, Set, Dict, Tuple, Optional, Type
+from typing import List, Dict
 
 import pandas as pd
 from pathlib import Path
@@ -17,7 +17,7 @@ from SBTi.data.excel import ExcelProvider
 from SBTi.portfolio_aggregation import PortfolioAggregationMethod
 from SBTi.portfolio_coverage_tvp import PortfolioCoverageTVP
 from SBTi.temperature_score import TemperatureScore
-from protocol.target_valuation_protocol import TargetValuationProtocol
+from SBTi.target_valuation_protocol import TargetValuationProtocol
 
 PATH = os.path.join(os.path.dirname(os.path.realpath(__file__)), "uploads")
 app = Flask(__name__)
