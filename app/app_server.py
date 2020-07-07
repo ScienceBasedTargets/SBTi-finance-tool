@@ -1,5 +1,6 @@
 import json
 import os
+import mimetypes
 
 from typing import List, Set, Dict, Tuple, Optional, Type
 
@@ -256,16 +257,21 @@ class import_portfolio(Resource):
     def post(self):
         doc_type = request.args.get('document_type')
         if doc_type=='excel':
-            files.save(request.files['file'])
-            path = str(sorted(Path(PATH + '/files/').iterdir(), key=os.path.getmtime, reverse=True)[0])
-            file_name = path.split("""\\""")[-1]
-            return {'POST Request': {'Response': {'Status Code': 200, 'Message': 'File Saved', 'File': file_name}}}
+            file = request.files['file']
+            if test_file(file,'excel'):
+                files.save(request.files['file'])
+                path = str(sorted(Path(PATH + '/files/').iterdir(), key=os.path.getmtime, reverse=True)[0])
+                file_name = path.split("""\\""")[-1]
+                return {'POST Request': {'Response': {'Status Code': 200, 'Message': 'File Saved', 'File': file.filename}}}
+            else:
+                return {'POST Request': {'Response': {'Status Code': 404, 'Message': 'Error. File did not save.'}}}
+            
         elif doc_type=='json':
             json_data = request.get_json(force=True)
             df = pd.DataFrame(data=json_data['companies'], index=[0])
             # Todo: Name of document needs to be adjusted.
             df.to_excel('json_example.xlsx')
-            
+
             # Todo: Modify the return response.
             return {'POST Request': {'Response': {'Status Code': 200, 'Message': 'File Saved', 'File':''}}}
 
@@ -287,7 +293,6 @@ class import_portfolio(Resource):
                         df.to_excel('json_example.xlsx')
                     return {'PUT Request': {
                         'Response': {'Status Code': 200, 'Message': 'File Replaced', 'Replaced File': remove_doc}}}
-
         return {'PUT Request': {'Response': {'Status Code': 404, 'Error Message': 'File Not Found', 'File': remove_doc}}}
 
 
@@ -321,6 +326,27 @@ class data_provider(BaseEndpoint):
                 'Data':portfolio_data.to_json(orient='records')
             }
         }
+
+
+def test_file(file,target_type):
+    """
+    This supporting function determines if the file size is not above a predetermine threshold, and if the target type
+    matchs the file that is being imported.
+
+    :param file: file that is being imported through HTTP Protocol
+    :param target_type: <excel|json>
+
+    :rtype: Boolean
+    :return: <True|False>
+    """
+    file.seek(0, 2)
+    file_name = file.filename
+    file_type = file_name.split('.')[-1]
+    file_dictionary = {'excel':'xlsx'}
+    if (int(file.tell())<1000000) & (file_type==file_dictionary[target_type]):
+        return True
+    else:
+        return False
 
 
 SWAGGER_URL = '/docs'
