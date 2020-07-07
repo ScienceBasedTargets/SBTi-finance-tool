@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AppService } from './app.service';
 import { DataProvider } from './dataProvider';
 import { HttpClient } from '@angular/common/http';
+import { environment } from './../environments/environment';
 
 @Component({
     selector: 'app-root',
@@ -38,6 +39,7 @@ export class AppComponent implements OnInit {
     constructor(private appService: AppService, private http: HttpClient) { }
 
     ngOnInit() {
+        console.log(environment.host);
         this.getDataProviders();
     }
 
