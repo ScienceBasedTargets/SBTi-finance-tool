@@ -1,5 +1,6 @@
 import pandas as pd
 from typing import List
+from SBTi.configs import ColumnsConfig
 
 class TargetValuationProtocol:
 
