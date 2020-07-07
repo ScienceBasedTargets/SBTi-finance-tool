@@ -74,10 +74,13 @@ class PortfolioAggregationConfig:
     VALUE_SCOPE_S1S2 = "scope 1+2"
     VALUE_SCOPE_S3 = "scope 3"
     VALUE_SCOPE_S1S2S3 = "scope 1+2+3"
+    VALUE_BASE_SCOPES = [VALUE_SCOPE_S1S2, VALUE_SCOPE_S3]
 
     VALUE_SCOPE_CATEGORY_S1S2 = "s1s2"
     VALUE_SCOPE_CATEGORY_S3 = "s3"
     VALUE_SCOPE_CATEGORY_S1S2S3 = "s1s2s3"
+
+    SCOPE_MAP = {"scope 1+2": "s1s2", "scope 3": "s3", "scope 1+2+3": "s1s2s3"}
 
 
 class TemperatureScoreConfig(PortfolioAggregationConfig):

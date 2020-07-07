@@ -84,7 +84,7 @@ class TemperatureScore(PortfolioAggregation):
         :param target: The target as a row of a dataframe
         :return: The annual reduction
         """
-        if np.isnan(target[self.c.COLS.REDUCTION_FROM_BASE_YEAR]):
+        if pd.isnull(target[self.c.COLS.REDUCTION_FROM_BASE_YEAR]):
             return None
 
         try:
@@ -116,7 +116,6 @@ class TemperatureScore(PortfolioAggregation):
         else:
             return regression.iloc[0][self.c.COLS.PARAM], regression.iloc[0][self.c.COLS.INTERCEPT]
 
-
     def get_score(self, target: pd.Series) -> float:
         """
         Get the temperature score for a certain target based on the annual reduction rate and the regression parameters.
@@ -124,8 +123,8 @@ class TemperatureScore(PortfolioAggregation):
         :param target: The target as a row of a dataframe
         :return: The temperature score
         """
-        if np.isnan(target[self.c.COLS.REGRESSION_PARAM]) or np.isnan(target[self.c.COLS.REGRESSION_INTERCEPT]) \
-                or np.isnan(target[self.c.COLS.ANNUAL_REDUCTION_RATE]):
+        if pd.isnull(target[self.c.COLS.REGRESSION_PARAM]) or pd.isnull(target[self.c.COLS.REGRESSION_INTERCEPT]) \
+                or pd.isnull(target[self.c.COLS.ANNUAL_REDUCTION_RATE]):
             return self.fallback_score
         return target[self.c.COLS.REGRESSION_PARAM] * target[self.c.COLS.ANNUAL_REDUCTION_RATE] + target[
             self.c.COLS.REGRESSION_INTERCEPT]
@@ -138,7 +137,7 @@ class TemperatureScore(PortfolioAggregation):
         :return: The relative temperature score
         """
         if self.boundary_coverage_option == BoundaryCoverageOption.DEFAULT:
-            if np.isnan(target[self.c.COLS.EMISSIONS_IN_SCOPE]) or np.isnan(target[self.c.COLS.TEMPERATURE_SCORE]):
+            if pd.isnull(target[self.c.COLS.EMISSIONS_IN_SCOPE]) or pd.isnull(target[self.c.COLS.TEMPERATURE_SCORE]):
                 return self.fallback_score
             else:
                 try:
@@ -215,7 +214,8 @@ class TemperatureScore(PortfolioAggregation):
         for company in data[self.c.COLS.COMPANY_NAME].unique():
             for time_frame in self.c.VALUE_TIME_FRAMES:
                 # We always include all company specific data
-                company_data = {column: data[data[self.c.COLS.COMPANY_NAME] == company][column].mode().iloc[0]
+                company_values = data[data[self.c.COLS.COMPANY_NAME] == company]
+                company_data = {column: company_values[column].mode().iloc[0] if len(company_values[column].mode()) > 0 else None
                                 for column in company_columns}
                 company_data[self.c.COLS.COMPANY_NAME] = company
                 company_data[self.c.COLS.SCOPE] = self.c.VALUE_SCOPE_S1S2S3

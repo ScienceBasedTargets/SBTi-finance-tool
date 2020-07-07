@@ -1,11 +1,14 @@
+import datetime
+import itertools
+
 import pandas as pd
-from typing import List
-from SBTi.configs import ColumnsConfig
+from typing import Type
+from SBTi.configs import PortfolioAggregationConfig
 
 
 class TargetValuationProtocol:
 
-    def __init__(self, data: pd.DataFrame, config: ColumnsConfig = ColumnsConfig):
+    def __init__(self, data: pd.DataFrame, config: Type[PortfolioAggregationConfig] = PortfolioAggregationConfig):
         self.data = data
         self.c = config
 
@@ -20,7 +23,11 @@ class TargetValuationProtocol:
         self.test_target_type()
         self.test_boundary_coverage()
         self.test_target_process()
-        return self.group_valid_target()
+        self.time_frame()
+        self.data[self.c.COLS.SCOPE_CATEGORY] = self.data.apply(
+            lambda row: self.c.SCOPE_MAP[row[self.c.COLS.SCOPE].lower()], axis=1)
+        self.group_valid_target()
+        return self.data
 
     def test_target_type(self):
         """
@@ -34,10 +41,10 @@ class TargetValuationProtocol:
         """
         index = []
         for record in self.data.iterrows():
-            if not pd.isna(record[1][self.c.TARGET_REFERENCE_NUMBER]):
-                if 'int' in record[1][self.c.TARGET_REFERENCE_NUMBER].lower():
+            if not pd.isna(record[1][self.c.COLS.TARGET_REFERENCE_NUMBER]):
+                if 'int' in record[1][self.c.COLS.TARGET_REFERENCE_NUMBER].lower():
                     index.append(record[0])
-                elif 'abs' in record[1][self.c.TARGET_REFERENCE_NUMBER].lower():
+                elif 'abs' in record[1][self.c.COLS.TARGET_REFERENCE_NUMBER].lower():
                     index.append(record[0])
         self.data = self.data.loc[index]
 
@@ -68,12 +75,12 @@ class TargetValuationProtocol:
         index = []
         # data.reset_index(inplace=True, drop=True)
         for record in self.data.iterrows():
-            if not pd.isna(record[1][self.c.SCOPE]):
-                if 'Scope 1+2' in record[1][self.c.SCOPE]:
-                    if record[1][self.c.EMISSIONS_IN_SCOPE] > 95:
+            if not pd.isna(record[1][self.c.COLS.SCOPE]):
+                if 'Scope 1+2' in record[1][self.c.COLS.SCOPE]:
+                    if record[1][self.c.COLS.EMISSIONS_IN_SCOPE] > 95:
                         index.append(record[0])
-                elif 'Scope 3' in record[1][self.c.SCOPE]:
-                    if record[1][self.c.EMISSIONS_IN_SCOPE] > 67:
+                elif 'Scope 3' in record[1][self.c.COLS.SCOPE]:
+                    if record[1][self.c.COLS.EMISSIONS_IN_SCOPE] > 67:
                         index.append(record[0])
         self.data = self.data.loc[index]
 
@@ -95,8 +102,8 @@ class TargetValuationProtocol:
 
         index = []
         for record in self.data.iterrows():
-            if not pd.isna(record[1][self.c.ACHIEVED_EMISSIONS]):
-                if record[1][self.c.ACHIEVED_EMISSIONS] != 100:
+            if not pd.isna(record[1][self.c.COLS.ACHIEVED_EMISSIONS]):
+                if record[1][self.c.COLS.ACHIEVED_EMISSIONS] != 100:
                     index.append(record[0])
         self.data = self.data.loc[index]
 
@@ -110,12 +117,11 @@ class TargetValuationProtocol:
         :rtype:
         :return:
         '''
-        # Hard coded year
-        current_year = 2020
+        now = datetime.datetime.now()
         time_frame_list = []
         for index, record in self.data.iterrows():
-            if not pd.isna(record[self.c.TARGET_YEAR]):
-                time_frame = record[self.c.TARGET_YEAR] - current_year
+            if not pd.isna(record[self.c.COLS.TARGET_YEAR]):
+                time_frame = record[self.c.COLS.TARGET_YEAR] - now.year
                 if (time_frame < 15) & (time_frame > 5):
                     time_frame_list.append('mid')
                 elif (time_frame < 30) & (time_frame > 15):
@@ -126,10 +132,52 @@ class TargetValuationProtocol:
                     time_frame_list.append(None)
             else:
                 time_frame_list.append(None)
-        self.data[self.c.TIME_FRAME] = time_frame_list
+        self.data[self.c.COLS.TIME_FRAME] = time_frame_list
 
-    def group_valid_target(self) -> List[pd.DataFrame]:
-        '''
+    def _find_target(self, row: pd.Series):
+        """
+        Find the target that corresponds to a given row. If there are multiple targets available, filter them.
+
+        :param row:
+        :return:
+        """
+        # Find all targets that correspond to the given row
+        target_data = self.data[(self.data[self.c.COLS.COMPANY_NAME] == row[self.c.COLS.COMPANY_NAME]) &
+                                (self.data[self.c.COLS.TIME_FRAME] == row[self.c.COLS.TIME_FRAME]) &
+                                (self.data[self.c.COLS.SCOPE_CATEGORY] == row[self.c.COLS.SCOPE_CATEGORY])].copy()
+        if len(target_data) == 0:
+            # If there are no targets, we'll return the original row
+            return row
+        elif len(target_data) == 1:
+            # If there's exactly one target, we'll return that target
+            return target_data.iloc[0]
+        else:
+            # We prefer targets with higher emissions in scope
+            target_data = target_data[
+                target_data[self.c.COLS.EMISSIONS_IN_SCOPE] == target_data[self.c.COLS.EMISSIONS_IN_SCOPE].max()].copy()
+            if len(target_data) == 1:
+                return target_data.iloc[0]
+
+            # We prefer targets with higher base years
+            target_data = target_data[
+                target_data[self.c.COLS.BASE_YEAR] == target_data[self.c.COLS.BASE_YEAR].max()].copy()
+            if len(target_data) == 1:
+                return target_data.iloc[0]
+
+            # We pick abs over int
+            if len(target_data[target_data[self.c.COLS.TARGET_REFERENCE_NUMBER].str.lower().str.startswith("abs")]) > 0:
+                target_data = target_data[
+                    target_data[self.c.COLS.TARGET_REFERENCE_NUMBER].str.lower().str.startswith("abs")].copy()
+            if len(target_data) == 1:
+                return target_data.iloc[0]
+
+            # There are more than 1 targets, so we'll average them out
+            target_data[self.c.COLS.REDUCTION_FROM_BASE_YEAR] = target_data[self.c.COLS.REDUCTION_FROM_BASE_YEAR].mean()
+            return target_data.iloc[0]
+
+    def group_targets(self):
+        """
+        Group the targets and create the 6 field grid (short, mid, long * s1s2, s3).
         Group valid targets by category & filter multiple targets#
         Input: a list of valid targets for each company:
         For each company:
@@ -142,160 +190,14 @@ class TargetValuationProtocol:
         -- Target type: Absolute over intensity
         -- If all else is equal: average the ambition of targets
 
-        :param:
-        :type:
-
-        :rtype: list, dataframe
-        :return: a list of six categories, each one containing a dataframe.
-        '''
-
-        # Creates time frame
-        self.time_frame()
-
-        index_s1s2, index_s3 = [], []
-        for index, record in self.data.iterrows():
-            # Hard coded 1, hard coded scope name
-            if not pd.isna(record[self.c.SCOPE]):
-                if 'Scope 1+2' in record[self.c.SCOPE]:
-                    index_s1s2.append(index)
-                elif 'Scope 3' in record[self.c.SCOPE]:
-                    index_s3.append(index)
-        data_s1s2 = self.data.loc[index_s1s2].copy()
-        data_s3 = self.data.loc[index_s3].copy()
-
-        # # Creates 6 categories and filters each category if more then 1 target per company.
-        data_s1s2_short = self.multiple_target_filter(data_s1s2[data_s1s2[self.c.TIME_FRAME] == 'short'])
-        data_s1s2_mid = self.multiple_target_filter(data_s1s2[data_s1s2[self.c.TIME_FRAME] == 'mid'])
-        data_s1s2_long = self.multiple_target_filter(data_s1s2[data_s1s2[self.c.TIME_FRAME] == 'long'])
-        data_s3_short = self.multiple_target_filter(data_s3[data_s3[self.c.TIME_FRAME] == 'short'])
-        data_s3_mid = self.multiple_target_filter(data_s3[data_s3[self.c.TIME_FRAME] == 'mid'])
-        data_s3_long = self.multiple_target_filter(data_s3[data_s3[self.c.TIME_FRAME] == 'long'])
-
-        data_s1s2_short_final = self.add_company_placeholder(data_s1s2_short)
-        data_s1s2_mid_final = self.add_company_placeholder(data_s1s2_mid)
-        data_s1s2_long_final = self.add_company_placeholder(data_s1s2_long)
-        data_s3_short_final = self.add_company_placeholder(data_s3_short)
-        data_s3_mid_final = self.add_company_placeholder(data_s3_mid)
-        data_s3_long_final = self.add_company_placeholder(data_s3_long)
-
-        return [data_s1s2_short_final, data_s1s2_mid_final, data_s1s2_long_final,
-                data_s3_short_final, data_s3_mid_final, data_s3_long_final]
-
-    def add_company_placeholder(self, data_category: pd.DataFrame) -> pd.DataFrame:
-        '''
-        Adds the additional companies, that did not meet the criteria to the list of
-        categories but with the features as "NaN" values
-
-        :param data_category: companies that made the criteria
-        :type dataframe:
-
-        :rtype: list, dataframe
-        :return: a list of six categories, each one containing a dataframe.
-
-        '''
-
-        if data_category is not None:
-            empty_company_name = self.data.drop(data_category.index)[self.c.COMPANY_NAME].values
-            dictionary = {k: {
-                self.c.COMPANY_NAME: empty_company_name[k]
-            } for k in range(0, len(empty_company_name))}
-
-            for key in dictionary.keys():
-                for column in self.data.columns.drop(self.c.COMPANY_NAME):
-                    dictionary[key][column] = None
-            data_company_placeholder = pd.DataFrame.from_dict(dictionary, orient='index')
-            frames = [data_category, data_company_placeholder]
-            return pd.concat(frames)
-        else:
-            return data_category
-
-    def multiple_target_filter(self, data: pd.DataFrame) -> pd.DataFrame:
-        '''
-        For each category: if more than 1 target is available, filter based on the following criteria
-        -- Highest boundary coverage
-        -- Latest base year
-        -- Target type: Absolute over intensity
-        -- If all else is equal: average the ambition of targets
-
-        :param data: 1/6 predefined category
-        :type data: dataframe
-
-        :rtype: dataframe, dataframe
-        :return: companies filtered based on criterias mentioned above
-        '''
-
-        if not len(data) == 0:
-
-            # Checks last criteria "If all else is equal: average the ambition of targets"
-            if not max(data.groupby([self.c.COMPANY_NAME, self.c.EMISSIONS_IN_SCOPE, self.c.BASE_YEAR,
-                                     self.c.TARGET_REFERENCE_NUMBER]).size().values) == 1:
-                groupby_value = data.groupby(
-                    [self.c.COMPANY_NAME, self.c.EMISSIONS_IN_SCOPE, self.c.BASE_YEAR,
-                     self.c.TARGET_REFERENCE_NUMBER]).size().values
-                index_all_category_equal = [i for i, x in enumerate(groupby_value) if x != 1]
-                company_all_category_equal = data.iloc[index_all_category_equal][self.c.COMPANY_NAME].values
-                for company in company_all_category_equal:
-                    data_company_all_category = data[data[self.c.COMPANY_NAME] == company]
-                    average_ambition_of_target = round(
-                        data_company_all_category[self.c.REDUCTION_FROM_BASE_YEAR].mean(), 2)
-                    index_to_change = data[data[self.c.COMPANY_NAME] == company].index
-                    for index in index_to_change:
-                        data.at[index - 1, self.c.REDUCTION_FROM_BASE_YEAR] = average_ambition_of_target
-
-            # Multiple Targets. Need to filter by: Highest boundary coverage, Latest base year, Target type: Absolute over intensity
-            elif not max(data.groupby([self.c.COMPANY_NAME]).size().values) == 1:
-                multiple_targets = data[self.c.COMPANY_NAME].value_counts()
-                company_list = multiple_targets.index[:list(multiple_targets.values).index(1)]
-                for company in company_list:
-                    df = data[data[self.c.COMPANY_NAME] == company]
-                    df_boundary_coverage = df[
-                        df[self.c.EMISSIONS_IN_SCOPE] == max(df[self.c.EMISSIONS_IN_SCOPE])]
-
-                    # Highest Boundary Coverage
-                    if len(df_boundary_coverage) == 1:
-                        data.drop(list(df.index), inplace=True)  # Drop Multiple Targets
-                        data = data.append(df_boundary_coverage)  # Adds target with highest boundary coverage
-                    else:
-                        df_base_year = df[df[self.c.BASE_YEAR] == max(df[self.c.BASE_YEAR])]
-
-                        # Latest Base Year
-                        if len(df_base_year) == 1:
-                            data.drop(list(df.index), inplace=True)  # Drop Multiple Targets
-                            data = data.append(df_base_year)  # Adds target with highest boundary coverage
-                        else:
-
-                            # Target type: Absolute over intensity
-                            index_to_keep = []
-                            for record in df.iterrows():
-                                if "abs" in record[1][self.c.TARGET_REFERENCE_NUMBER].lower():
-                                    index_to_keep.append(record[0])
-
-                            # Add record to data
-                            if len(index_to_keep) == 1:
-                                data.drop(list(df.index), inplace=True)  # Drop Multiple Targets
-                                data = data.append(df.loc[index_to_keep])  # Adds target with Absolute
-
-                            else:
-                                '''
-                                    Rare Exception to enter here:
-                                    Example: Company A(Abs), Company A(Abs), Company A(Int)
-                                    All Criteria Same: False
-                                    Boundary Condition: True
-                                    Base Year: True
-                                    Target Reference: False ( Abs, Abs, Int)
-                                    Can only happen if targets have multiple "Abs" with a "Int"
-                                '''
-
-                                # One record is chosen and "average the ambition of targets" is applied and remaining duplicate targets are dropped
-                                targets_rare_exception = df[df.index.isin(index_to_keep)]
-                                average_ambition_of_target = round(
-                                    targets_rare_exception[self.c.REDUCTION_FROM_BASE_YEAR].mean(), 2)
-                                data.drop(list(df.index[1:]), inplace=True)  # Drop Multiple Targets
-                                data.at[targets_rare_exception.index[
-                                            0], self.c.REDUCTION_FROM_BASE_YEAR] = average_ambition_of_target
-
-            data = data.sort_values(by=[self.c.COMPANY_NAME, self.c.EMISSIONS_IN_SCOPE, self.c.BASE_YEAR,
-                                        self.c.TARGET_REFERENCE_NUMBER],
-                                    ascending=False)
-
-            return data
+        :return:
+        """
+        grid_columns = [self.c.COLS.COMPANY_NAME, self.c.COLS.TIME_FRAME, self.c.COLS.SCOPE_CATEGORY]
+        companies = self.data[self.c.COLS.COMPANY_NAME].unique()
+        scopes = [self.c.VALUE_SCOPE_CATEGORY_S1S2, self.c.VALUE_SCOPE_CATEGORY_S3]
+        empty_columns = [column for column in self.data.columns if column not in grid_columns]
+        extended_data = pd.DataFrame(
+            list(itertools.product(*[companies, self.c.VALUE_TIME_FRAMES, scopes] + [[None]] * len(empty_columns))),
+            columns=grid_columns + empty_columns)
+        extended_data = extended_data.apply(lambda row: self._find_target(row), axis=1)
+        self.data = extended_data
