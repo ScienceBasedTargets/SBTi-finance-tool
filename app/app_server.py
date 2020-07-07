@@ -236,7 +236,7 @@ class documentation_endpoint(Resource):
     '''
     Supports flask_swagger documentation endpoint
     '''
-    def get(path):
+    def get(self, path):
         return send_from_directory('static', path)
 
 
@@ -265,7 +265,7 @@ class import_portfolio(Resource):
                 return {'POST Request': {'Response': {'Status Code': 200, 'Message': 'File Saved', 'File': file.filename}}}
             else:
                 return {'POST Request': {'Response': {'Status Code': 404, 'Message': 'Error. File did not save.'}}}
-            
+
         elif doc_type=='json':
             json_data = request.get_json(force=True)
             df = pd.DataFrame(data=json_data['companies'], index=[0])
@@ -343,7 +343,7 @@ def test_file(file,target_type):
     file_name = file.filename
     file_type = file_name.split('.')[-1]
     file_dictionary = {'excel':'xlsx'}
-    if (int(file.tell())<1000000) & (file_type==file_dictionary[target_type]):
+    if (int(file.tell())<10000000) & (file_type==file_dictionary[target_type]):
         return True
     else:
         return False
