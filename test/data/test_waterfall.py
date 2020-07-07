@@ -21,18 +21,24 @@ class TestWaterfall(unittest.TestCase):
             {"company_name": "Company N", "company_id": None},
         ]
         self.data_providers = [
-            CSVProvider({
-                "path": os.path.join(os.path.dirname(os.path.realpath(__file__)), "../", "inputs",
-                                     "data_test_waterfall_a.csv")
-            }),
-            CSVProvider({
-                "path": os.path.join(os.path.dirname(os.path.realpath(__file__)), "../", "inputs",
-                                     "data_test_waterfall_b.csv")
-            }),
-            CSVProvider({
-                "path": os.path.join(os.path.dirname(os.path.realpath(__file__)), "../", "inputs",
-                                     "data_test_waterfall_c.csv")
-            }),
+            CSVProvider(
+                path=os.path.join(os.path.dirname(os.path.realpath(__file__)), "../", "inputs",
+                                  "data_test_waterfall_a.csv"),
+                path_targets=os.path.join(os.path.dirname(os.path.realpath(__file__)), "../", "inputs",
+                                          "data_test_temperature_score_targets.csv")
+            ),
+            CSVProvider(
+                path=os.path.join(os.path.dirname(os.path.realpath(__file__)), "../", "inputs",
+                                  "data_test_waterfall_b.csv"),
+                path_targets=os.path.join(os.path.dirname(os.path.realpath(__file__)), "../", "inputs",
+                                          "data_test_temperature_score_targets.csv")
+            ),
+            CSVProvider(
+                path=os.path.join(os.path.dirname(os.path.realpath(__file__)), "../", "inputs",
+                                  "data_test_waterfall_c.csv"),
+                path_targets=os.path.join(os.path.dirname(os.path.realpath(__file__)), "../", "inputs",
+                                          "data_test_temperature_score_targets.csv")
+            ),
         ]
 
     def test_company_data(self) -> None:
@@ -40,7 +46,7 @@ class TestWaterfall(unittest.TestCase):
         Test whether data is retrieved as expected.
         """
         company_data = SBTi.data.get_company_data(self.data_providers, self.companies)
-        assert len(company_data) == 4, "The numbers of companies does not match"
+        assert len(company_data) == 3, "The numbers of companies does not match"
 
 
 if __name__ == "__main__":
