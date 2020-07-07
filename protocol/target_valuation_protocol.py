@@ -219,7 +219,7 @@ class TargetValuationProtocol:
         '''
 
         if data_category is not None:
-            empty_comzany_name = self.data.drop(data_category.index)[self.c.COMPANY_NAME].values
+            empty_company_name = self.data.drop(data_category.index)[self.c.COMPANY_NAME].values
             dictionary = {k:{
                 'company_name':empty_company_name[k]
             } for k in range(0,len(empty_company_name))}
