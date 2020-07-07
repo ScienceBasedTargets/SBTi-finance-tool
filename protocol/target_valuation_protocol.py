@@ -11,8 +11,10 @@ class TargetValuationProtocol:
 
     def target_valuation_protocol(self):
         '''
+        Runs the target valuation protcol by calling on the four required steps
 
-        :return:
+        :rtype: list, dataframe
+        :return: a list of six columns containing dataframes in each one
         '''
 
         self.test_target_type()
@@ -26,8 +28,12 @@ class TargetValuationProtocol:
         """
         Reads in an excel file as input data
 
+        :param input: path to the documentation
+        :type str:
+
         :rtype: dataframe, dataframe
-        :return: excel file as input data
+        :return: a dataframe containing the excel file as input data
+
         """
         return pd.DataFrame.from_dict(input, orient='index')
 
@@ -36,11 +42,11 @@ class TargetValuationProtocol:
         """
         Test on target type and only allow only GHG emission reduction targets (absolute or intensity based).
 
-        :param data: input data
-        :type data: dataframe
+        :param:
+        :type:
 
-        :rtype: dataframe, dataframe
-        :return: excel file as input data
+        :rtype:
+        :return:
         """
         index = []
         for record in self.data.iterrows():
@@ -68,11 +74,11 @@ class TargetValuationProtocol:
         Target is always valid, % uncovered is given default score in temperature score module.
 
 
-        :param data: input data
-        :type data: dataframe
+        :param :
+        :type :
 
-        :rtype: dataframe, dataframe
-        :return: excel file as input data
+        :rtype:
+        :return:
         '''
 
         # Option 1
@@ -98,11 +104,11 @@ class TargetValuationProtocol:
         Target progress: the percentage of the target already achieved
 
 
-        :param data: input data
-        :type data: dataframe
+        :param:
+        :type:
 
-        :rtype: dataframe, dataframe
-        :return: excel file as input data
+        :rtype:
+        :return:
         '''
 
         index = []
@@ -117,11 +123,11 @@ class TargetValuationProtocol:
         '''
         Time frame is forward looking: target year - current year. Less than 5y = short, between 5 and 15 is mid, 15 to 30 is long
 
-        :param data: input data
-        :type data: dataframe
+        :param:
+        :type:
 
-        :rtype: dataframe, dataframe
-        :return: excel file as input data
+        :rtype:
+        :return:
         '''
 
         current_year = 2020; time_frame_list = [];
@@ -156,14 +162,11 @@ class TargetValuationProtocol:
         -- Target type: Absolute over intensity
         -- If all else is equal: average the ambition of targets
 
-        Output:
-        A matrix of the six categories, with each max 1 target per company
+        :param:
+        :type:
 
-        :param data: input data
-        :type data: dataframe
-
-        :rtype: list, list
-        :return: a list of all 6 categories.
+        :rtype: list, dataframe
+        :return: a list of six categories, each one containing a dataframe.
         '''
 
         # Creates time frame
@@ -202,12 +205,18 @@ class TargetValuationProtocol:
 
     def add_company_placeholder(self, data_category: pd.DataFrame) -> pd.DataFrame:
         '''
+        Adds the additional companies, that did not meet the criteria to the list of
+        categories but with the features as "NaN" values
 
-        :return:
+        :param data_category: companies that made the criteria
+        :type dataframe:
+
+        :rtype: list, dataframe
+        :return: a list of six categories, each one containing a dataframe.
+
         '''
 
         if data_category is not None:
-            # Need to fill in empty company names
             empty_company_name = self.data.drop(data_category.index)[self.c.COMPANY_NAME].values
             dictionary = {k:{
                 self.c.COMPANY_NAME:empty_company_name[k]
@@ -232,11 +241,11 @@ class TargetValuationProtocol:
         -- Target type: Absolute over intensity
         -- If all else is equal: average the ambition of targets
 
-        :param data: input data
+        :param data: 1/6 predefined category
         :type data: dataframe
 
         :rtype: dataframe, dataframe
-        :return: excel file as input data
+        :return: companies filtered based on criterias mentioned above
         '''
 
         if not len(data)==0:
