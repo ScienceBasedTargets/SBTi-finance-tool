@@ -254,21 +254,37 @@ class import_portfolio(Resource):
         return {'GET Request': 'Hello World'}
 
     def post(self):
-        files.save(request.files['file'])
-        path = str(sorted(Path(PATH + '/files/').iterdir(), key=os.path.getmtime, reverse=True)[0])
-        file_name = path.split("""\\""")[-1]
-
-        return {'POST Request': {'Response': {'Status Code': 200, 'Message': 'File Saved', 'File': file_name}}}
+        if 'file' in request.files:
+            files.save(request.files['file'])
+            path = str(sorted(Path(PATH + '/files/').iterdir(), key=os.path.getmtime, reverse=True)[0])
+            file_name = path.split("""\\""")[-1]
+            return {'POST Request': {'Response': {'Status Code': 200, 'Message': 'File Saved', 'File': file_name}}}
+        else:
+            json_data = request.get_json(force=True)
+            df = pd.DataFrame(data=json_data['companies'], index=[0])
+            # Todo: Name of document needs to be adjusted.
+            df.to_excel('dict1.xlsx')
+            return {'POST Request': {'Response': {'Status Code': 200, 'Message': 'File Saved', 'File':''}}}
 
     def put(self):
         remove_doc = request.args.get('document_replace')
-        for root, dirs, file in os.walk(PATH):
-            for f in file:
-                if remove_doc == f.split('.')[0]:
-                    os.remove(os.path.join(root, f))
-                    files.save(request.files['file'])
-                    return {'PUT Request': {
-                        'Response': {'Status Code': 200, 'Message': 'File Replaced', 'Replaced File': remove_doc}}}
+        if 'file' in request.files:
+            for root, dirs, file in os.walk(PATH):
+                for f in file:
+                    if remove_doc == f.split('.')[0]:
+                        if 'file' in request.files:
+                            os.remove(os.path.join(root, f))
+                            files.save(request.files['file'])
+                        else:
+                            os.remove(os.path.join(root, f))
+                            json_data = request.get_json(force=True)
+                            df = pd.DataFrame(data=json_data['companies'], index=[0])
+                            # Todo: Name of document needs to be adjusted.
+                            df.to_excel('dict1.xlsx')
+                        return {'PUT Request': {
+                            'Response': {'Status Code': 200, 'Message': 'File Replaced', 'Replaced File': remove_doc}}}
+
+
         return {
             'PUT Request': {'Response': {'Status Code': 404, 'Error Message': 'File Not Found', 'File': remove_doc}}}
 
