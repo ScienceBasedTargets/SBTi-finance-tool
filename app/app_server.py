@@ -5,11 +5,12 @@ import os
 from typing import List, Dict
 
 import pandas as pd
+import numpy as np
 from pathlib import Path
 from flask import Flask, request, send_from_directory
 from flask_restful import Resource, Api
 from flask_swagger_ui import get_swaggerui_blueprint
-from flask_uploads import UploadSet, ALL
+from flask_uploads import UploadSet, ALL, configure_uploads
 
 import SBTi
 from SBTi.data.csv import CSVProvider
@@ -19,16 +20,22 @@ from SBTi.portfolio_coverage_tvp import PortfolioCoverageTVP
 from SBTi.temperature_score import TemperatureScore
 from SBTi.target_valuation_protocol import TargetValuationProtocol
 
-PATH = os.path.join(os.path.dirname(os.path.realpath(__file__)), "uploads")
+PATH = "uploads"
 app = Flask(__name__)
 files = UploadSet('files', ALL)
 app.config['UPLOADS_DEFAULT_DEST'] = PATH
+configure_uploads(app, files)
 api = Api(app)
 
 DATA_PROVIDER_MAP = {
     "excel": ExcelProvider,
     "csv": CSVProvider,
 }
+
+
+def get_config():
+    with open('config.json') as f_config:
+        return json.load(f_config)
 
 
 class BaseEndpoint(Resource):
@@ -40,8 +47,7 @@ class BaseEndpoint(Resource):
     :return:
     """
     def __init__(self):
-        with open('config.json') as f_config:
-            self.config = json.load(f_config)
+        self.config = get_config()
 
         self.data_providers = []
         for data_provider in self.config["data_providers"]:
@@ -126,29 +132,33 @@ class temp_score(BaseEndpoint):
                     portfolio_data.loc[portfolio_data['company_name'] == company["company_name"], key] = value
 
         # Filter scope (s1s2, s3 or s1s2s3)
-        if "filter_scope_category" in json_data:
+        if "filter_scope_category" in json_data and len(json_data["filter_scope_category"]) > 0:
             scores = scores[scores["scope_category"].isin(json_data["filter_scope_category"])]
 
         # Filter timeframe (short, mid, long)
-        if "filter_time_frame" in json_data:
+        if "filter_time_frame" in json_data and len(json_data["filter_time_frame"]) > 0:
             scores = scores[scores["time_frame"].isin(json_data["filter_time_frame"])]
+
 
         # Group by certain column names
         grouping = json_data.get("grouping_columns", None)
 
         scores = scores.copy()
-        aggregations = temperature_score.aggregate_scores(scores,
-                                                          self.aggregation_map[json_data["aggregation_method"]],
-                                                          grouping)
+
+        aggregation_method = self.aggregation_map[self.config["aggregation_method"]]
+        if "aggregation_method" in json_data and json_data["aggregation_method"] in self.aggregation_map:
+            aggregation_method = self.aggregation_map[json_data["aggregation_method"]]
+        aggregations = temperature_score.aggregate_scores(scores, aggregation_method, grouping)
+
 
         # Include columns
         include_columns = ["company_name", "scope_category", "time_frame", "temperature_score"]
-        if "include_columns" in json_data:
+        if "include_columns" in json_data and len(json_data["include_columns"]) > 0:
             include_columns += [column for column in json_data["include_columns"] if column in scores.columns]
 
         return {
             "aggregated_scores": aggregations,
-            "companies": scores[include_columns].to_dict(
+            "companies": scores[include_columns].replace({np.nan: None}).to_dict(
                 orient="records")
         }
 
@@ -247,8 +257,30 @@ class documentation_endpoint(Resource):
     '''
     Supports flask_swagger documentation endpoint
     '''
-    def get(path):
+    def get(self, path):
         return send_from_directory('static', path)
+
+
+class Frontend(Resource):
+    def get(self, path="index.html"):
+        config = get_config()
+        return send_from_directory(config["frontend_path"], path)
+
+
+class ParsePortfolio(Resource):
+    """
+    This class allows the client to user to parse his Excel portfolio and transform it into a JSON object.
+    Note: This endpoint is only meant to be used by the UI!
+    """
+
+    def post(self):
+        skiprows = request.form.get("skiprows")
+        if skiprows is None:
+            skiprows = 0
+
+        df = pd.read_excel(request.files.get('file'), skiprows=int(skiprows))
+
+        return {'portfolio': df.replace({np.nan: None}).to_dict(orient="records")}
 
 
 class import_portfolio(Resource):
@@ -267,10 +299,8 @@ class import_portfolio(Resource):
 
     def post(self):
         if 'file' in request.files:
-            files.save(request.files['file'])
-            path = str(sorted(Path(PATH + '/files/').iterdir(), key=os.path.getmtime, reverse=True)[0])
-            file_name = path.split("""\\""")[-1]
-            return {'POST Request': {'Response': {'Status Code': 200, 'Message': 'File Saved', 'File': file_name}}}
+            filename = files.save(request.files['file'])
+            return {'POST Request': {'Response': {'Status Code': 200, 'Message': 'File Saved', 'File': filename}}}
         else:
             json_data = request.get_json(force=True)
             df = pd.DataFrame(data=json_data['companies'], index=[0])
@@ -295,7 +325,6 @@ class import_portfolio(Resource):
                             df.to_excel('dict1.xlsx')
                         return {'PUT Request': {
                             'Response': {'Status Code': 200, 'Message': 'File Replaced', 'Replaced File': remove_doc}}}
-
 
         return {
             'PUT Request': {'Response': {'Status Code': 404, 'Error Message': 'File Not Found', 'File': remove_doc}}}
@@ -351,8 +380,10 @@ api.add_resource(DataProviders, '/data_providers/')
 api.add_resource(data, '/data/')
 api.add_resource(report, '/report/')
 api.add_resource(documentation_endpoint, '/static/<path:path>')
-api.add_resource(import_portfolio, '/import_portfolio')
+api.add_resource(import_portfolio, '/import_portfolio/')
+api.add_resource(ParsePortfolio, '/parse_portfolio/')
 api.add_resource(data_provider, '/data_provider')
+api.add_resource(Frontend, '/<path:path>', '/')
 
 if __name__ == '__main__':
     app.run(debug=True)  # important to mention debug=True
