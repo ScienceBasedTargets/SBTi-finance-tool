@@ -28,6 +28,7 @@ DATA_PROVIDER_MAP = {
     "csv": CSVProvider,
 }
 
+
 def get_config():
     with open('config.json') as f_config:
         return json.load(f_config)
@@ -297,10 +298,10 @@ api.add_resource(DataProviders, '/data_providers/')
 api.add_resource(data, '/data/')
 api.add_resource(report, '/report/')
 api.add_resource(documentation_endpoint, '/static/<path:path>')
-api.add_resource(Frontend, '/<path:path>', '/')
 api.add_resource(import_portfolio, '/import_portfolio/')
 api.add_resource(ParsePortfolio, '/parse_portfolio/')
 api.add_resource(data_provider, '/data_provider')
+api.add_resource(Frontend, '/<path:path>', '/')
 
 if __name__ == '__main__':
     app.run(debug=True)  # important to mention debug=True
