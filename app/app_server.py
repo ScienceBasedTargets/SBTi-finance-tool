@@ -264,7 +264,8 @@ class import_portfolio(Resource):
             json_data = request.get_json(force=True)
             df = pd.DataFrame(data=json_data['companies'], index=[0])
             # Todo: Name of document needs to be adjusted.
-            df.to_excel('dict1.xlsx')
+            df.to_excel('json_example.xlsx')
+            
             # Todo: Modify the return response.
             return {'POST Request': {'Response': {'Status Code': 200, 'Message': 'File Saved', 'File':''}}}
 
@@ -283,7 +284,7 @@ class import_portfolio(Resource):
                         df = pd.DataFrame(data=json_data['companies'], index=[0])
 
                         # Todo: Name of document needs to be adjusted.
-                        df.to_excel('dict1.xlsx')
+                        df.to_excel('json_example.xlsx')
                     return {'PUT Request': {
                         'Response': {'Status Code': 200, 'Message': 'File Replaced', 'Replaced File': remove_doc}}}
 
