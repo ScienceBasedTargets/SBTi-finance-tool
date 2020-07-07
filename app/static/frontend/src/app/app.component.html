@@ -35,6 +35,10 @@
 
 <div class="container" role="main">
     <h2>SBTi Temperature Scoring</h2>
+    <p *ngFor="let alert of alerts">
+        <ngb-alert [type]="alert.type" (close)="close(alert)">{{ alert.message }}</ngb-alert>
+    </p>
+
     <form>
         <div class="form-group">
             <label for="input-excel_file">Excel file</label>
@@ -97,8 +101,8 @@
         </div>
         <div class="form-group">
             <label for="input-dataProviders">Data provider(s)</label>
-            <select class="form-control" id="input-dataProviders" name="dataProviders" [(ngModel)]="selectedDataProviders"
-                multiple>
+            <select class="form-control" id="input-dataProviders" name="dataProviders"
+                [(ngModel)]="selectedDataProviders" multiple>
                 <option *ngFor="let dataProvider of dataProviders">{{dataProvider.name}}</option>
             </select>
         </div>

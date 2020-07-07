@@ -1,11 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse, HttpEventType } from '@angular/common/http';
-import { map } from  'rxjs/operators';
+import { environment } from './../environments/environment';
 
 import { Observable, of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 
 import { DataProvider } from './dataProvider';
+import { Portfolio } from './portfolio';
+import { TemperatureScoreSettings } from './temperatureScoreSettings';
+import { Alert } from './alert';
 
 
 @Injectable({ providedIn: 'root' })
@@ -14,44 +17,42 @@ export class AppService {
     httpOptions = {
         headers: new HttpHeaders({ 'Content-Type': 'application/json' })
     };
+    alertHandler: (alert: Alert) => void;
 
     constructor(private http: HttpClient) { }
 
+    addAlert(alert: Alert) {
+        console.log(alert);
+    }
+
+    setAlertHandler(addAlert: (alert: Alert) => void) {
+        this.addAlert = addAlert;
+    }
+
     /** GET a list of available data providers */
-    getDataProviders(): Observable<DataProvider[]> {
-        return this.http.get<DataProvider[]>("http://localhost:5000/data_providers")
+    public getDataProviders(): Observable<DataProvider[]> {
+        return this.http.get<DataProvider[]>(`${environment.host}/data_providers`)
             .pipe(
                 tap(_ => console.log('fetched data providers')),
                 catchError(this.handleError<DataProvider[]>('getDataProviders', []))
             );
     }
 
-    public upload(data): Observable<any> {
-        return this.http.post<any>("http://localhost:5000/import_portfolio/", data).pipe(map((event) => {
-            console.log(event);
-
-            switch (event.type) {
-
-                case HttpEventType.UploadProgress:
-                    const progress = Math.round(100 * event.loaded / event.total);
-                    return { status: 'progress', message: progress };
-
-                case HttpEventType.Response:
-                    return event.body;
-                default:
-                    return `Unhandled event: ${event.type}`;
-            }
-        })
-        );
+    public doParsePortfolio(data: FormData): Observable<Portfolio> {
+        return this.http.post<Portfolio>(`${environment.host}/parse_portfolio/`, data)
+            .pipe(
+                tap(_ => console.log('Parsed portfolio')),
+                catchError(this.handleError<Portfolio>('doParsePortfolio', {"portfolio": []}))
+            );
     }
 
-    /** PUT: update the hero on the server */
-    //   updateHero(hero: Hero): Observable<any> {
-    //     return this.http.put(this.heroesUrl, hero, this.httpOptions).pipe(
-    //       tap(_ => this.log(`updated hero id=${hero.id}`)),
-    //       catchError(this.handleError<any>('updateHero'))
-    //     );
-    //   }
+    public getTemperatureScore(data: TemperatureScoreSettings): Observable<any> {
+        return this.http.post(`${environment.host}/temperature_score/`, data)
+            .pipe(
+                tap(_ => console.log('Calculated temperature score')),
+                catchError(this.handleError<any>('getTemperatureScore', {"aggregated_scores": {}, "companies": []}))
+            );
+    }
 
     /**
      * Handle Http operation that failed.
@@ -62,21 +63,15 @@ export class AppService {
     private handleError<T>(operation = 'operation', result?: T) {
         return (error: any): Observable<T> => {
 
-            // TODO: send the error to remote logging infrastructure
-            console.error(error); // log to console instead
-
-            // TODO: better job of transforming error for user consumption
-            console.log(`${operation} failed: ${error.message}`);
+            if (error.status === 500) {
+                this.addAlert({type: "warning", message: "There was a technical error. Please check your inputs."});
+            } else {
+                this.addAlert({type: "danger", message: "Nn unknown error occured."});
+                console.error(error); // log to console instead
+            }
 
             // Let the app keep running by returning an empty result.
             return of(result as T);
         };
     }
 }
-
-
-/*
-Copyright Google LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://angular.io/license
-*/

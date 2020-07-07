@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AppService } from './app.service';
 import { DataProvider } from './dataProvider';
-import { HttpClient } from '@angular/common/http';
-import { environment } from './../environments/environment';
+import { Alert } from './alert';
 
 @Component({
     selector: 'app-root',
@@ -13,34 +12,44 @@ export class AppComponent implements OnInit {
     title = 'frontend';
     excelSkiprows = 0;
     isNavbarCollapsed = true;
-    availableTargetColumns = ["company_id", "company_name", "portfolio_weight", "investment_value"];
-    availableTimeFrames = ["short", "mid", "long"];
-    availableScopeCategories = ["s1s2", "s3", "s1s2s3"];
-    availableAggregationMethods = ["WATS", "TETS", "MOTS", "EOTS", "ECOTS", "AOTS"];
-    availableColumns = ["company_id", "industry", "s1s2_emissions", "s3_emissions", "portfolio_weight", 
-        "market_cap", "investment_value", "company_enterprise_value", "company_ev_plus_cash", "company_total_assets", 
-        "target_reference_number", "scope", "base_year", "start_year", "target_year", "reduction_from_base_year", 
+    availableTargetColumns: string[] = ["company_id", "company_name", "portfolio_weight", "investment_value"];
+    availableTimeFrames: string[] = ["short", "mid", "long"];
+    availableScopeCategories: string[] = ["s1s2", "s3", "s1s2s3"];
+    availableAggregationMethods: string[] = ["WATS", "TETS", "MOTS", "EOTS", "ECOTS", "AOTS"];
+    availableColumns: string[] = ["company_id", "industry", "s1s2_emissions", "s3_emissions", "portfolio_weight",
+        "market_cap", "investment_value", "company_enterprise_value", "company_ev_plus_cash", "company_total_assets",
+        "target_reference_number", "scope", "base_year", "start_year", "target_year", "reduction_from_base_year",
         "emissions_in_scope", "achieved_reduction"];
-    selectedAggregationMethod = null;
-    filterTimeFrames = [];
-    filterScopeCategory = [];
-    includeColumns = [];
-    selectedDataProviders = [];
-    defaultScore = 3.2;
+    selectedAggregationMethod: string = null;
+    filterTimeFrames: string[] = [];
+    filterScopeCategory: string[] = [];
+    includeColumns: string[] = [];
+    selectedDataProviders: string[] = [];
+    defaultScore: number = 3.2;
     uploadedFiles: Array<File>;
     dataProviders: DataProvider[];
-    portfolio = [];
-    columns = [];
-    columnMapping = [];
-    resultColumns = [];
-    resultTargets = [];
-    resultScores = [];
+    portfolio: Object[] = [];
+    columns: string[] = [];
+    columnMapping: { [key: string]: string } = {};
+    resultColumns: string[] = [];
+    resultTargets: Object[] = [];
+    resultScores: { [key: string]: number } = {};
+    alerts: Alert[] = [];
 
-    constructor(private appService: AppService, private http: HttpClient) { }
+
+    constructor(private appService: AppService) { }
 
     ngOnInit() {
-        console.log(environment.host);
+        this.appService.setAlertHandler(this.addAlert.bind(this))
         this.getDataProviders();
+    }
+
+    addAlert(alert: Alert) {
+        this.alerts.push(alert);
+    }
+
+    close(alert: Alert) {
+        this.alerts.splice(this.alerts.indexOf(alert), 1);
     }
 
     fileChange(element) {
@@ -103,22 +112,19 @@ export class AppComponent implements OnInit {
         formData.append("file", this.uploadedFiles[0], this.uploadedFiles[0].name);
         formData.append("skiprows", this.excelSkiprows.toString());
 
-        this.http.post('http://localhost:5000/parse_portfolio/', formData)
-            .subscribe((response) => {
-                this.portfolio = response["portfolio"];
-                if (this.portfolio.length > 0) {
-                    this.columns = Object.keys(this.portfolio[0]);
-                    this.columnMapping = this.columns.reduce(function (map, obj) {
-                        map[obj] = null;
-                        return map;
-                    }, {});
-                    console.log(this.columnMapping);
-                }
-                console.log('response received is ', response);
-            })
+        this.appService.doParsePortfolio(formData).subscribe((response) => {
+            this.portfolio = response["portfolio"];
+            if (this.portfolio.length > 0) {
+                this.columns = Object.keys(this.portfolio[0]);
+                this.columnMapping = this.columns.reduce(function (map, obj) {
+                    map[obj] = null;
+                    return map;
+                }, {});
+            }
+        })
     }
 
-    exportCSV() { 
+    exportCSV() {
         let csv = this.resultTargets.map(row => Object.values(row));
         csv.unshift(this.resultColumns);
         this.exportToCsv("temperature_scores.csv", csv);
@@ -133,9 +139,8 @@ export class AppComponent implements OnInit {
             }
             return newObj;
         });
-        console.log(portfolioData);
-        this.http.post('http://localhost:5000/temperature_score/', {
-            "aggregationMethod": this.selectedAggregationMethod,
+        this.appService.getTemperatureScore({
+            "aggregation_method": this.selectedAggregationMethod,
             "data_providers": this.selectedDataProviders,
             "filter_scope_category": this.filterScopeCategory,
             "filter_time_frame": this.filterTimeFrames,
@@ -144,16 +149,13 @@ export class AppComponent implements OnInit {
             "companies": portfolioData,
         })
             .subscribe((response) => {
-                this.resultScores = response["aggregated_scores"];
-                this.resultTargets = response["companies"];
-                if (this.resultTargets.length > 0) {
-                    this.resultColumns = Object.keys(this.resultTargets[0]);
+                if (response !== undefined) { 
+                    this.resultScores = response["aggregated_scores"];
+                    this.resultTargets = response["companies"];
+                    if (this.resultTargets.length > 0) {
+                        this.resultColumns = Object.keys(this.resultTargets[0]);
+                    }
                 }
-                console.log('response received is ', response);
             })
-        // TODO: Handle errors
-
-        // let result = this.appService.upload(formData);
-        // console.log(result);
     }
 }
