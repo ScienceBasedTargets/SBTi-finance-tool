@@ -199,5 +199,12 @@ class TargetValuationProtocol:
         extended_data = pd.DataFrame(
             list(itertools.product(*[companies, self.c.VALUE_TIME_FRAMES, scopes] + [[None]] * len(empty_columns))),
             columns=grid_columns + empty_columns)
+        # We always include all company specific data
+        company_columns = [column for column in self.c.COLS.COMPANY_COLUMNS if column in extended_data.columns]
+        for company in companies:
+            for column in company_columns:
+                extended_data.loc[extended_data[self.c.COLS.COMPANY_NAME] == company, column] = \
+                    self.data[self.data[self.c.COLS.COMPANY_NAME] == company][column].mode().iloc[0]
+
         extended_data = extended_data.apply(lambda row: self._find_target(row), axis=1)
         self.data = extended_data
