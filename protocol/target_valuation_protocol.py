@@ -3,15 +3,40 @@ from typing import List
 
 class TargetValuationProtocol:
 
+<<<<<<< Updated upstream
     def __init__(self):
         self.data = self.input_data()
+=======
+    def __init__(self, input, config: ColumnsConfig = ColumnsConfig):
+        self.data = input
+        self.c = config
+
+    def target_valuation_protocol(self):
+        '''
+        Runs the target valuation protcol by calling on the four required steps
+
+        :rtype: list, dataframe
+        :return: a list of six columns containing dataframes in each one
+        '''
+
+        self.test_target_type()
+        self.test_boundary_coverage()
+        self.test_target_process()
+        return self.group_valid_target()
+
+
+>>>>>>> Stashed changes
 
     def input_data(self) -> pd.DataFrame:
         """
         Reads in an excel file as input data
 
+        :param input: path to the documentation
+        :type str:
+
         :rtype: dataframe, dataframe
-        :return: excel file as input data
+        :return: a dataframe containing the excel file as input data
+
         """
 
         return pd.read_excel("C:/Projects/SBTi/protocol/input_data/SBTi_FI_tool_data_sample v2.xlsx",
@@ -22,11 +47,11 @@ class TargetValuationProtocol:
         """
         Test on target type and only allow only GHG emission reduction targets (absolute or intensity based).
 
-        :param data: input data
-        :type data: dataframe
+        :param:
+        :type:
 
-        :rtype: dataframe, dataframe
-        :return: excel file as input data
+        :rtype:
+        :return:
         """
         index = []
         for record in self.data.iterrows():
@@ -54,11 +79,11 @@ class TargetValuationProtocol:
         Target is always valid, % uncovered is given default score in temperature score module.
 
 
-        :param data: input data
-        :type data: dataframe
+        :param :
+        :type :
 
-        :rtype: dataframe, dataframe
-        :return: excel file as input data
+        :rtype:
+        :return:
         '''
 
         # Option 1
@@ -87,11 +112,11 @@ class TargetValuationProtocol:
         Target progress: the percentage of the target already achieved
 
 
-        :param data: input data
-        :type data: dataframe
+        :param:
+        :type:
 
-        :rtype: dataframe, dataframe
-        :return: excel file as input data
+        :rtype:
+        :return:
         '''
 
         index = []
@@ -106,11 +131,11 @@ class TargetValuationProtocol:
         '''
         Time frame is forward looking: target year - current year. Less than 5y = short, between 5 and 15 is mid, 15 to 30 is long
 
-        :param data: input data
-        :type data: dataframe
+        :param:
+        :type:
 
-        :rtype: dataframe, dataframe
-        :return: excel file as input data
+        :rtype:
+        :return:
         '''
 
         current_year = 2020; time_frame_list = [];
@@ -144,14 +169,11 @@ class TargetValuationProtocol:
         -- Target type: Absolute over intensity
         -- If all else is equal: average the ambition of targets
 
-        Output:
-        A matrix of the six categories, with each max 1 target per company
+        :param:
+        :type:
 
-        :param data: input data
-        :type data: dataframe
-
-        :rtype: list, list
-        :return: a list of all 6 categories.
+        :rtype: list, dataframe
+        :return: a list of six categories, each one containing a dataframe.
         '''
 
         # Creates time frame
@@ -190,13 +212,24 @@ class TargetValuationProtocol:
 
     def add_company_placeholder(self, data_category: pd.DataFrame) -> pd.DataFrame:
         '''
+        Adds the additional companies, that did not meet the criteria to the list of
+        categories but with the features as "NaN" values
 
-        :return:
+        :param data_category: companies that made the criteria
+        :type dataframe:
+
+        :rtype: list, dataframe
+        :return: a list of six categories, each one containing a dataframe.
+
         '''
 
         if data_category is not None:
+<<<<<<< Updated upstream
             # Need to fill in empty company names
             empty_company_name = self.data.drop(data_category.index)['company_name'].values
+=======
+            empty_company_name = self.data.drop(data_category.index)[self.c.COMPANY_NAME].values
+>>>>>>> Stashed changes
             dictionary = {k:{
                 'company_name':empty_company_name[k]
             } for k in range(0,len(empty_company_name))}
@@ -220,11 +253,11 @@ class TargetValuationProtocol:
         -- Target type: Absolute over intensity
         -- If all else is equal: average the ambition of targets
 
-        :param data: input data
+        :param data: 1/6 predefined category
         :type data: dataframe
 
         :rtype: dataframe, dataframe
-        :return: excel file as input data
+        :return: companies filtered based on criterias mentioned above
         '''
 
         if not len(data)==0:
