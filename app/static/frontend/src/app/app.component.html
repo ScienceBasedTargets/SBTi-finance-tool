@@ -61,7 +61,8 @@
             </div>
             <div class="col">
                 <p *ngFor="let column of columns">
-                    <select class="form-control" name="select-map_{{column}}" [(ngModel)]="columnMapping[column]">
+                    <select class="form-control" name="select-map_{{column}}" [(ngModel)]="columnMapping[column]"
+                        (change)="updateGroupingColumns()">
                         <option></option>
                         <option *ngFor="let targetColumn of availableTargetColumns">{{targetColumn}}</option>
                     </select>
@@ -112,42 +113,51 @@
                 <option *ngFor="let availableColumn of availableColumns">{{availableColumn}}</option>
             </select>
         </div>
+        <div class="form-group">
+            <label for="grouping">Group by</label>
+            <select class="form-control" id="grouping" name="grouping" [(ngModel)]="groupingColumns" multiple>
+                <option *ngFor="let column of availableGroupingColumns">{{column}}</option>
+            </select>
+        </div>
 
         <button class="btn btn-success">Get temperature score</button>
     </form>
 
     <div id="div-results" class="container-results" *ngIf="resultTargets.length > 0">
-        <div class="row" *ngIf="'short' in resultScores">
-            <div class="col">
-                <div class="card text-center">
-                    <div class="card-header">
-                        Short term
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">{{resultScores["short"] | number:'1.2-2'}}&#176;C</h5>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card text-center">
-                    <div class="card-header">
-                        Mid term
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">{{resultScores["mid"] | number:'1.2-2'}}&#176;C</h5>
+        <div *ngFor="let group of resultGroups">
+            <h6>{{group}}</h6>
+            <div class="row" *ngIf="'short' in resultScores">
+                <div class="col">
+                    <div class="card text-center">
+                        <div class="card-header">
+                            Short term
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">{{resultScores["short"][group] | number:'1.2-2'}}&#176;C</h5>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col">
-                <div class="card text-center">
-                    <div class="card-header">
-                        Long term
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">{{resultScores["long"] | number:'1.2-2'}}&#176;C</h5>
+                <div class="col">
+                    <div class="card text-center">
+                        <div class="card-header">
+                            Mid term
+                        </div> 
+                        <div class="card-body">
+                            <h5 class="card-title">{{resultScores["mid"][group] | number:'1.2-2'}}&#176;C</h5>
+                        </div>
                     </div>
                 </div>
-            </div>
+                <div class="col">
+                    <div class="card text-center">
+                        <div class="card-header">
+                            Long term
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">{{resultScores["long"][group] | number:'1.2-2'}}&#176;C</h5>
+                        </div>
+                    </div>
+                </div>
+            </div> 
         </div>
 
         <div class="container-results">

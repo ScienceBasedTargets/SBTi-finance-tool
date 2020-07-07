@@ -3,6 +3,12 @@ import { AppService } from './app.service';
 import { DataProvider } from './dataProvider';
 import { Alert } from './alert';
 
+const AVAILABLE_GROUPING_COLUMNS: string[] = ["industry"];
+const AVAILABLE_COLUMNS: string[] = ["company_id", "industry", "s1s2_emissions", "s3_emissions", "portfolio_weight",
+"market_cap", "investment_value", "company_enterprise_value", "company_ev_plus_cash", "company_total_assets",
+"target_reference_number", "scope", "base_year", "start_year", "target_year", "reduction_from_base_year",
+"emissions_in_scope", "achieved_reduction"];
+
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
@@ -12,14 +18,13 @@ export class AppComponent implements OnInit {
     title = 'SBTi Temperature score';
     excelSkiprows: number = 0;
     isNavbarCollapsed: boolean = true;
-    availableTargetColumns: string[] = ["company_id", "company_name", "portfolio_weight", "investment_value"];
+    availableTargetColumns: string[] = ["company_id", "company_name", "portfolio_weight", "investment_value", "grouping"];
     availableTimeFrames: string[] = ["short", "mid", "long"];
     availableScopeCategories: string[] = ["s1s2", "s3", "s1s2s3"];
     availableAggregationMethods: string[] = ["WATS", "TETS", "MOTS", "EOTS", "ECOTS", "AOTS"];
-    availableColumns: string[] = ["company_id", "industry", "s1s2_emissions", "s3_emissions", "portfolio_weight",
-        "market_cap", "investment_value", "company_enterprise_value", "company_ev_plus_cash", "company_total_assets",
-        "target_reference_number", "scope", "base_year", "start_year", "target_year", "reduction_from_base_year",
-        "emissions_in_scope", "achieved_reduction"];
+    availableColumns: string[] = AVAILABLE_COLUMNS;
+    availableGroupingColumns: string[] = AVAILABLE_GROUPING_COLUMNS;
+    groupingColumns: string[] = [];
     selectedAggregationMethod: string = null;
     filterTimeFrames: string[] = [];
     filterScopeCategory: string[] = [];
@@ -32,6 +37,7 @@ export class AppComponent implements OnInit {
     columns: string[] = [];
     columnMapping: { [key: string]: string } = {};
     resultColumns: string[] = [];
+    resultGroups: string[] = [];
     resultTargets: Object[] = [];
     resultScores: { [key: string]: number } = {};
     alerts: Alert[] = [];
@@ -59,6 +65,13 @@ export class AppComponent implements OnInit {
     getDataProviders(): void {
         this.appService.getDataProviders()
             .subscribe(dataProviders => this.dataProviders = dataProviders);
+    }
+
+    updateGroupingColumns(): void {
+        this.availableGroupingColumns = AVAILABLE_GROUPING_COLUMNS;
+        this.availableGroupingColumns = this.availableGroupingColumns.concat(this.columns.filter((column) => this.columnMapping[column] === null));
+        this.availableColumns = AVAILABLE_COLUMNS;
+        this.availableColumns = this.availableColumns.concat(this.columns.filter((column) => this.columnMapping[column] === null));
     }
 
     exportToCsv(filename: string, rows: Array<Array<any>>) {
@@ -120,6 +133,7 @@ export class AppComponent implements OnInit {
                     map[obj] = null;
                     return map;
                 }, {});
+                this.updateGroupingColumns();
             }
         })
     }
@@ -131,11 +145,15 @@ export class AppComponent implements OnInit {
     }
 
     onSubmit(f) {
-        let columnsToUse = Object.keys(this.columnMapping).filter((key) => this.columnMapping[key] !== null);
+        let columnsMapped = Object.keys(this.columnMapping).filter((key) => this.columnMapping[key] !== null);
+        let columnsUnmapped = Object.keys(this.columnMapping).filter((key) => this.columnMapping[key] === null);
         let portfolioData = this.portfolio.map((obj) => {
             let newObj = {};
-            for (let column of columnsToUse) {
+            for (let column of columnsMapped) {
                 newObj[this.columnMapping[column]] = obj[column];
+            }
+            for (let column of columnsUnmapped) {
+                newObj[column] = obj[column];
             }
             return newObj;
         });
@@ -145,13 +163,15 @@ export class AppComponent implements OnInit {
             "filter_scope_category": this.filterScopeCategory,
             "filter_time_frame": this.filterTimeFrames,
             "include_columns": this.includeColumns,
+            "grouping_columns": this.groupingColumns,
             "default_score": this.defaultScore,
             "companies": portfolioData,
         })
             .subscribe((response) => {
-                if (response !== undefined) { 
+                if (response !== undefined) {
                     this.resultScores = response["aggregated_scores"];
                     this.resultTargets = response["companies"];
+                    this.resultGroups = Object.keys(response["aggregated_scores"]["short"]);
                     if (this.resultTargets.length > 0) {
                         this.resultColumns = Object.keys(this.resultTargets[0]);
                     }

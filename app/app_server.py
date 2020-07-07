@@ -6,7 +6,6 @@ from typing import List, Dict
 
 import pandas as pd
 import numpy as np
-from pathlib import Path
 from flask import Flask, request, send_from_directory
 from flask_restful import Resource, Api
 from flask_swagger_ui import get_swaggerui_blueprint
@@ -139,7 +138,6 @@ class temp_score(BaseEndpoint):
         if "filter_time_frame" in json_data and len(json_data["filter_time_frame"]) > 0:
             scores = scores[scores["time_frame"].isin(json_data["filter_time_frame"])]
 
-
         # Group by certain column names
         grouping = json_data.get("grouping_columns", None)
 
@@ -149,7 +147,6 @@ class temp_score(BaseEndpoint):
         if "aggregation_method" in json_data and json_data["aggregation_method"] in self.aggregation_map:
             aggregation_method = self.aggregation_map[json_data["aggregation_method"]]
         aggregations = temperature_score.aggregate_scores(scores, aggregation_method, grouping)
-
 
         # Include columns
         include_columns = ["company_name", "scope_category", "time_frame", "temperature_score"]
