@@ -60,25 +60,8 @@ class TargetValuationProtocol:
 
     def test_boundary_coverage(self):
         '''
-        Test on boundary coverage:
-
-        Option 1: minimal coverage threshold
-        For S1+S2 targets: coverage% must be above 95%, for S3 targets coverage must be above 67%
-
-        Option 2: weighted coverage
-        Thresholds are still 95% and 67%, target is always valid. Below threshold ambition is scaled.*
-        New target ambition = input target ambition * coverage
-        *either here or in tem score module
-
-        Option 3: default coverage
-        Target is always valid, % uncovered is given default score in temperature score module.
-
-
-        :param :
-        :type :
-
-        :rtype:
-        :return:
+        Test on boundary coverage: For S1+S2 targets: coverage
+        must be above 95%, for S3 targets coverage must be above 67%
         '''
 
         # Option 1
@@ -99,16 +82,7 @@ class TargetValuationProtocol:
         '''
         Test on target process
         If target process is 100%, the target is invalid (only forward looking targets allowed)
-        Output: a list of valid targets per company
 
-        Target progress: the percentage of the target already achieved
-
-
-        :param:
-        :type:
-
-        :rtype:
-        :return:
         '''
 
         index = []
@@ -121,13 +95,8 @@ class TargetValuationProtocol:
 
     def time_frame(self):
         '''
-        Time frame is forward looking: target year - current year. Less than 5y = short, between 5 and 15 is mid, 15 to 30 is long
-
-        :param:
-        :type:
-
-        :rtype:
-        :return:
+        Time frame is forward looking: target year - current year. Less than 5y = short,
+        5 and 15 is mid, 15 to 30 is long
         '''
 
         current_year = 2020; time_frame_list = [];
@@ -161,9 +130,6 @@ class TargetValuationProtocol:
         -- Latest base year
         -- Target type: Absolute over intensity
         -- If all else is equal: average the ambition of targets
-
-        :param:
-        :type:
 
         :rtype: list, dataframe
         :return: a list of six categories, each one containing a dataframe.
@@ -211,7 +177,7 @@ class TargetValuationProtocol:
         :param data_category: companies that made the criteria
         :type dataframe:
 
-        :rtype: list, dataframe
+        :rtype: list, list
         :return: a list of six categories, each one containing a dataframe.
 
         '''
@@ -315,7 +281,6 @@ class TargetValuationProtocol:
                             ascending=False)
 
             return data
-
 
 
 # Testing
