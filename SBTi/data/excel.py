@@ -1,3 +1,5 @@
+from typing import Type
+
 import pandas as pd
 from SBTi.data.data_provider import DataProvider
 from SBTi.configs import ColumnsConfig
@@ -10,7 +12,7 @@ class ExcelProvider(DataProvider):
     :param config: A dictionary containing a "path" field that leads to the path of the CSV file
     """
 
-    def __init__(self, path: str, config: ColumnsConfig = ColumnsConfig):
+    def __init__(self, path: str, config: Type[ColumnsConfig] = ColumnsConfig):
         super().__init__()
         # self.data = pd.read_excel(config["path"], sheet_name=None, skiprows=1)
         self.data = pd.read_excel(path, sheet_name=None, skiprows=1)

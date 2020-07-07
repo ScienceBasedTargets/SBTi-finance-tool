@@ -1,6 +1,6 @@
 from abc import ABC
 from enum import Enum
-from typing import Type
+from typing import Type, Optional
 
 import pandas as pd
 from .configs import PortfolioAggregationConfig
@@ -32,7 +32,7 @@ class PortfolioAggregation(ABC):
         self.c = config
 
     def _calculate_aggregate_score(self, data: pd.DataFrame, input_column: str, output_column: str,
-                                   portfolio_aggregation_method: Type[PortfolioAggregationMethod]) -> float:
+                                   portfolio_aggregation_method: Type[PortfolioAggregationMethod]) -> Optional[float]:
         """
         Aggregate the scores in a given column based on a certain portfolio aggregation method.
 
