@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="fdd298f6-aa7d-45c6-926b-d121178e9a4c" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/protocol/target_valuation_protocol.py" beforeDir="false" afterPath="$PROJECT_DIR$/protocol/target_valuation_protocol.py" afterDir="false" />
-    </list>
+    <list default="true" id="fdd298f6-aa7d-45c6-926b-d121178e9a4c" name="Default" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -25,8 +23,8 @@
       <file leaf-file-name="target_valuation_protocol.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/protocol/target_valuation_protocol.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="463">
-              <caret line="233" column="32" lean-forward="true" selection-start-line="233" selection-start-column="32" selection-end-line="233" selection-end-column="32" />
+            <state relative-caret-position="48">
+              <caret line="18" column="31" selection-start-line="18" selection-start-column="31" selection-end-line="18" selection-end-column="31" />
               <folding>
                 <element signature="e#0#19#0" expanded="true" />
               </folding>
@@ -487,8 +485,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/protocol/target_valuation_protocol.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="463">
-          <caret line="233" column="32" lean-forward="true" selection-start-line="233" selection-start-column="32" selection-end-line="233" selection-end-column="32" />
+        <state relative-caret-position="48">
+          <caret line="18" column="31" selection-start-line="18" selection-start-column="31" selection-end-line="18" selection-end-column="31" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
           </folding>

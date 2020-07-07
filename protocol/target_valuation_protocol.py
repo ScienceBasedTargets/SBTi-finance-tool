@@ -2,6 +2,7 @@ import pandas as pd
 from typing import List
 from SBTi.configs import ColumnsConfig
 
+
 class TargetValuationProtocol:
 
     def __init__(self, input, config: ColumnsConfig = ColumnsConfig):
@@ -22,7 +23,8 @@ class TargetValuationProtocol:
         return self.group_valid_target()
 
 
-    def input_data(self) -> pd.DataFrame:
+
+    def input_data(self, input) -> pd.DataFrame:
         """
         Reads in an excel file as input data
 
@@ -33,9 +35,7 @@ class TargetValuationProtocol:
         :return: a dataframe containing the excel file as input data
 
         """
-
-        return pd.read_excel("C:/Projects/SBTi/protocol/input_data/SBTi_FI_tool_data_sample v2.xlsx",
-                           sheet_name ='Data Inputs',skiprows = 1)
+        return pd.DataFrame.from_dict(input, orient='index')
 
 
     def test_target_type(self):
@@ -50,10 +50,10 @@ class TargetValuationProtocol:
         """
         index = []
         for record in self.data.iterrows():
-            if not pd.isna(record[1]['Target reference number']):
-                if 'int' in record[1]['Target reference number'].lower():
+            if not pd.isna(record[1][self.c.TARGET_REFERENCE_NUMBER]):
+                if 'int' in record[1][self.c.TARGET_REFERENCE_NUMBER].lower():
                     index.append(record[0])
-                elif 'abs' in record[1]['Target reference number'].lower():
+                elif 'abs' in record[1][self.c.TARGET_REFERENCE_NUMBER].lower():
                     index.append(record[0])
         self.data = self.data.loc[index]
 
@@ -85,15 +85,12 @@ class TargetValuationProtocol:
         index = []
         #data.reset_index(inplace=True, drop=True)
         for record in self.data.iterrows():
-            if not pd.isna(record[1]['Scope']):
-                if 'Scope 1 +2' in record[1]['Scope']:
-                    if record[1]['% emissions in Scope']>95:
+            if not pd.isna(record[1][self.c.SCOPE]):
+                if 'S1 + S2' in record[1][self.c.SCOPE]:
+                    if record[1][self.c.PERCENTAGE_EMISSION_IN_SCOPE]>95:
                         index.append(record[0])
-                elif 'Scope 1+2' in record[1]['Scope']:
-                    if record[1]['% emissions in Scope']>95:
-                        index.append(record[0])
-                elif 'Scope 3' in record[1]['Scope']:
-                    if record[1]['% emissions in Scope']>67:
+                elif 'S3' in record[1][self.c.SCOPE]:
+                    if record[1][self.c.PERCENTAGE_EMISSION_IN_SCOPE]>67:
                         index.append(record[0])
         self.data = self.data.loc[index]
 
@@ -116,8 +113,8 @@ class TargetValuationProtocol:
 
         index = []
         for record in self.data.iterrows():
-            if not pd.isna(record[1]['% achieved (emissions)']):
-                if record[1]['% achieved (emissions)']!=100:
+            if not pd.isna(record[1][self.c.PERCENTAGE_ACHIEVED_EMISSIONS]):
+                if record[1][self.c.PERCENTAGE_ACHIEVED_EMISSIONS]!=100:
                     index.append(record[0])
         self.data = self.data.loc[index]
 
@@ -135,8 +132,8 @@ class TargetValuationProtocol:
 
         current_year = 2020; time_frame_list = [];
         for record in self.data.iterrows():
-            if not pd.isna(record[1]['Target year']):
-                time_frame = record[1]['Target year'] - current_year
+            if not pd.isna(record[1][self.c.TARGET_YEAR]):
+                time_frame = record[1][self.c.TARGET_YEAR] - current_year
                 if (time_frame<15) & (time_frame>5):
                     time_frame_list.append('mid')
                 elif (time_frame<30) & (time_frame>15):
@@ -148,6 +145,7 @@ class TargetValuationProtocol:
             else:
                 time_frame_list.append(None)
         self.data['Time frame'] = time_frame_list
+
 
 
     def group_valid_target(self) -> List[pd.DataFrame]:
@@ -176,12 +174,10 @@ class TargetValuationProtocol:
 
         index_s1s2 = []; index_s3 = [];
         for record in self.data.iterrows():
-            if not pd.isna(record[1]['Scope']):
-                if 'Scope 1 +2' in record[1]['Scope']:
+            if not pd.isna(record[1][self.c.SCOPE]):
+                if 'S1 + S2' in record[1][self.c.SCOPE]:
                     index_s1s2.append(record[0])
-                elif 'Scope 1+2' in record[1]['Scope']:
-                    index_s1s2.append(record[0])
-                elif 'Scope 3' in record[1]['Scope']:
+                elif 'S3' in record[1][self.c.SCOPE]:
                     index_s3.append(record[0])
         data_s1s2 = self.data.loc[index_s1s2]
         data_s3 = self.data.loc[index_s3]
@@ -205,6 +201,8 @@ class TargetValuationProtocol:
                data_s3_short_final,data_s3_mid_final,data_s3_long_final]
 
 
+
+
     def add_company_placeholder(self, data_category: pd.DataFrame) -> pd.DataFrame:
         '''
         Adds the additional companies, that did not meet the criteria to the list of
@@ -221,11 +219,11 @@ class TargetValuationProtocol:
         if data_category is not None:
             empty_company_name = self.data.drop(data_category.index)[self.c.COMPANY_NAME].values
             dictionary = {k:{
-                'company_name':empty_company_name[k]
+                self.c.COMPANY_NAME:empty_company_name[k]
             } for k in range(0,len(empty_company_name))}
 
             for key in dictionary.keys():
-                for column in self.data.columns.drop('company_name'):
+                for column in self.data.columns.drop(self.c.COMPANY_NAME):
                     dictionary[key][column] = None
             data_company_placeholder = pd.DataFrame.from_dict(dictionary,orient='index')
             frames = [data_category, data_company_placeholder]
@@ -253,31 +251,31 @@ class TargetValuationProtocol:
         if not len(data)==0:
 
             # Checks last criteria "If all else is equal: average the ambition of targets"
-            if not max(data.groupby(['company_name', '% emissions in Scope', 'Base year', 'Target reference number']).size().values) == 1:
-                groupby_value = data.groupby(['company_name', '% emissions in Scope','Base year','Target reference number']).size().values
+            if not max(data.groupby([self.c.COMPANY_NAME, self.c.PERCENTAGE_EMISSION_IN_SCOPE, self.c.BASE_YEAR, self.c.TARGET_REFERENCE_NUMBER]).size().values) == 1:
+                groupby_value = data.groupby([self.c.COMPANY_NAME, self.c.PERCENTAGE_EMISSION_IN_SCOPE,self.c.BASE_YEAR,self.c.TARGET_REFERENCE_NUMBER]).size().values
                 index_all_category_equal = [i for i, x in enumerate(groupby_value) if x != 1]
-                company_all_category_equal = data.iloc[index_all_category_equal]['company_name'].values
+                company_all_category_equal = data.iloc[index_all_category_equal][self.c.COMPANY_NAME].values
                 for company in company_all_category_equal:
-                    data_company_all_category = data[data['company_name'] == company]
-                    average_ambition_of_target = round(data_company_all_category['% reduction from base year'].mean(), 2)
-                    index_to_change = data[data['company_name'] == company].index
+                    data_company_all_category = data[data[self.c.COMPANY_NAME] == company]
+                    average_ambition_of_target = round(data_company_all_category[self.c.PERCENTAGE_REDUCTION_FROM_BASE_YEAR].mean(), 2)
+                    index_to_change = data[data[self.c.COMPANY_NAME] == company].index
                     for index in index_to_change:
-                        data.at[index - 1, '% reduction from base year'] = average_ambition_of_target
+                        data.at[index - 1, self.c.PERCENTAGE_REDUCTION_FROM_BASE_YEAR] = average_ambition_of_target
 
             # Multiple Targets. Need to filter by: Highest boundary coverage, Latest base year, Target type: Absolute over intensity
-            elif not max(data.groupby(['company_name']).size().values) == 1:
-                multiple_targets = data['company_name'].value_counts()
+            elif not max(data.groupby([self.c.COMPANY_NAME]).size().values) == 1:
+                multiple_targets = data[self.c.COMPANY_NAME].value_counts()
                 company_list = multiple_targets.index[:list(multiple_targets.values).index(1)]
                 for company in company_list:
-                    df = data[data['company_name']==company]
-                    df_boundary_coverage = df[df['% emissions in Scope'] == max(df['% emissions in Scope'])]
+                    df = data[data[self.c.COMPANY_NAME]==company]
+                    df_boundary_coverage = df[df[self.c.PERCENTAGE_EMISSION_IN_SCOPE] == max(df[self.c.PERCENTAGE_EMISSION_IN_SCOPE])]
 
                     # Highest Boundary Coverage
                     if len(df_boundary_coverage)==1:
                         data.drop(list(df.index),inplace=True) # Drop Multiple Targets
                         data = data.append(df_boundary_coverage) # Adds target with highest boundary coverage
                     else:
-                        df_base_year = df[df['Base year'] == max(df['Base year'])]
+                        df_base_year = df[df[self.c.BASE_YEAR] == max(df[self.c.BASE_YEAR])]
 
                         # Latest Base Year
                         if len(df_base_year) == 1:
@@ -288,7 +286,7 @@ class TargetValuationProtocol:
                         # Target type: Absolute over intensity
                             index_to_keep = []
                             for record in df.iterrows():
-                                if "abs" in record[1]['Target reference number'].lower():
+                                if "abs" in record[1][self.c.TARGET_REFERENCE_NUMBER].lower():
                                     index_to_keep.append(record[0])
 
                             # Add record to data
@@ -309,18 +307,18 @@ class TargetValuationProtocol:
 
                                 # One record is chosen and "average the ambition of targets" is applied and remaining duplicate targets are dropped
                                 targets_rare_exception = df[df.index.isin(index_to_keep)]
-                                average_ambition_of_target = round(targets_rare_exception['% reduction from base year'].mean(),2)
+                                average_ambition_of_target = round(targets_rare_exception[self.c.PERCENTAGE_REDUCTION_FROM_BASE_YEAR].mean(),2)
                                 data.drop(list(df.index[1:]), inplace=True)  # Drop Multiple Targets
-                                data.at[targets_rare_exception.index[0], '% reduction from base year'] = average_ambition_of_target
+                                data.at[targets_rare_exception.index[0],self.c.PERCENTAGE_REDUCTION_FROM_BASE_YEAR] = average_ambition_of_target
 
-            data = data.sort_values(by=['company_name', '% emissions in Scope', 'Base year', 'Target reference number'],
+            data = data.sort_values(by=[self.c.COMPANY_NAME, self.c.PERCENTAGE_EMISSION_IN_SCOPE, self.c.BASE_YEAR, self.c.TARGET_REFERENCE_NUMBER],
                             ascending=False)
 
             return data
 
-# # Testing
-# x = TargetValuationProtocol()
-# x.test_target_type()
-# x.test_boundary_coverage()
-# x.test_target_process()
-# x.group_valid_target()
+
+
+# Testing
+# portfolio_data = pd.read_excel("C:/Projects/SBTi/output.xlsx", sheet_name="Sheet1") # Results from data_provider_input
+# x = TargetValuationProtocol(portfolio_data)
+# df = x.target_valuation_protocol()
