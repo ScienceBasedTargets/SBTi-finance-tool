@@ -16,13 +16,13 @@
 <div class="container" role="main">
     <h2>SBTi Temperature Scoring</h2>
     <p *ngFor="let alert of alerts">
-        <ngb-alert [type]="alert.type" (close)="close(alert)">{{ alert.message }}</ngb-alert>
+        <ngb-alert [type]="alert.type" (close)="closeAlert(alert)">{{ alert.message }}</ngb-alert>
     </p>
 
     <form>
         <div class="form-group">
             <label for="input-excel_file">Excel file</label>
-            <input (change)="fileChange($event)" type="file" class="form-control-file" id="input-excel_file"
+            <input (change)="onFileChange($event)" type="file" class="form-control-file" id="input-excel_file"
                 name="input-excel_file" aria-describedby="input-excel_file">
         </div>
         <div class="form-group">
@@ -43,7 +43,7 @@
                 <div class="col">
                     <p *ngFor="let column of columns">
                         <select class="form-control" name="select-map_{{column}}" [(ngModel)]="columnMapping[column]"
-                            (change)="updateGroupingColumns()">
+                            (change)="updateAvailableColumns()">
                             <option></option>
                             <option *ngFor="let targetColumn of availableTargetColumns">{{targetColumn}}</option>
                         </select>
@@ -52,7 +52,7 @@
             </div>
         </span>
     </form>
-    <form (ngSubmit)="onSubmit(f)" #f="ngForm" *ngIf="columns.length > 0">
+    <form (ngSubmit)="getTemperatureScore(f)" #f="ngForm" *ngIf="columns.length > 0">
         <hr />
         <h6>API settings (leave empty to use the defaults)</h6>
         <div class="form-group">

@@ -48,42 +48,62 @@ export class AppComponent implements OnInit {
 
     constructor(private appService: AppService) { }
 
+    /**
+     * Initialize the app.
+     */
     ngOnInit() {
         this.appService.setAlertHandler(this.addAlert.bind(this));
-        console.log(environment.host);
         this.getDataProviders();
     }
 
+    /**
+     * Adds alert
+     * @param alert 
+     */
     addAlert(alert: Alert) {
         this.alerts.push(alert);
     }
 
-    close(alert: Alert) {
+    /**
+     * Closes alert
+     * @param alert 
+     */
+    closeAlert(alert: Alert) {
         this.alerts.splice(this.alerts.indexOf(alert), 1);
     }
 
-    fileChange(element) {
+    /**
+     * Update the uploaded files.
+     * @param element 
+     */
+    onFileChange(element) {
         this.uploadedFiles = element.target.files;
     }
 
+    /**
+     * Gets data providers
+     */
     getDataProviders(): void {
         this.appService.getDataProviders()
             .subscribe(dataProviders => this.dataProviders = dataProviders);
     }
 
-    updateGroupingColumns(): void {
+    /**
+     * Updates grouping columns
+     */
+    updateAvailableColumns(): void {
         this.availableGroupingColumns = AVAILABLE_GROUPING_COLUMNS;
         this.availableGroupingColumns = this.availableGroupingColumns.concat(this.columns.filter((column) => this.columnMapping[column] === null));
         this.availableColumns = AVAILABLE_COLUMNS;
         this.availableColumns = this.availableColumns.concat(this.columns.filter((column) => this.columnMapping[column] === null));
     }
 
-    exportToCsv(filename: string, rows: Array<Array<any>>) {
-        /**
+    /**
          * Export some data (formatted as a 2d array) as a CSV file.
-         * @param filename 
-         * @param row 
-         */
+     * @param filename 
+     * @param rows 
+     */
+    exportToCsv(filename: string, rows: Array<Array<any>>) {
         var processRow = function (row) {
             var finalVal = '';
             for (var j = 0; j < row.length; j++) {
@@ -124,6 +144,9 @@ export class AppComponent implements OnInit {
         }
     }
 
+    /**
+     * Parses excel file by creating an API request.
+     */
     parseExcel() {
         let formData = new FormData();
         formData.append("file", this.uploadedFiles[0], this.uploadedFiles[0].name);
@@ -151,18 +174,25 @@ export class AppComponent implements OnInit {
                     }
                     return map;
                 }, {});
-                this.updateGroupingColumns();
+                this.updateAvailableColumns();
             }
         })
     }
 
+    /**
+     * Exports csv
+     */
     exportCSV() {
         let csv = this.resultTargets.map(row => Object.values(row));
         csv.unshift(this.resultColumns);
         this.exportToCsv("temperature_scores.csv", csv);
     }
 
-    onSubmit(f) {
+    /**
+     * Gets the temperature score
+     * @param f 
+     */
+    getTemperatureScore(f) {
         this.loading = true;
         let columnsMapped = Object.keys(this.columnMapping).filter((key) => this.columnMapping[key] !== null);
         let columnsUnmapped = Object.keys(this.columnMapping).filter((key) => this.columnMapping[key] === null);

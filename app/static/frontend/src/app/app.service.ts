@@ -18,19 +18,29 @@ export class AppService {
     httpOptions = {
         headers: new HttpHeaders({ 'Content-Type': 'application/json' })
     };
-    alertHandler: (alert: Alert) => void;
 
     constructor(private http: HttpClient) { }
 
-    addAlert(alert: Alert) {
+    /**
+     * Adds alert to the log. This can be overwritten by setting the alert handler.
+     * @param alert 
+     */
+    protected addAlert(alert: Alert) {
         console.log(alert);
     }
 
-    setAlertHandler(addAlert: (alert: Alert) => void) {
+    /**
+     * Sets the alert handler.
+     * @param addAlert A method that takes an Alert object as parameter.
+     */
+    public setAlertHandler(addAlert: (alert: Alert) => void) {
         this.addAlert = addAlert;
     }
 
-    /** GET a list of available data providers */
+    /**
+     * Gets a list of the available data providers
+     * @returns data providers 
+     */
     public getDataProviders(): Observable<DataProvider[]> {
         return this.http.get<DataProvider[]>(`${environment.host}/data_providers`)
             .pipe(
@@ -39,6 +49,11 @@ export class AppService {
             );
     }
 
+    /**
+     * Parse an Excel portfolio file.
+     * @param data 
+     * @returns parse portfolio 
+     */
     public doParsePortfolio(data: FormData): Observable<Portfolio> {
         return this.http.post<Portfolio>(`${environment.host}/parse_portfolio/`, data)
             .pipe(
@@ -47,6 +62,11 @@ export class AppService {
             );
     }
 
+    /**
+     * Calculate the temperature score
+     * @param data 
+     * @returns temperature score 
+     */
     public getTemperatureScore(data: TemperatureScoreSettings): Observable<TemperatureScoreResult> {
         return this.http.post<TemperatureScoreResult>(`${environment.host}/temperature_score/`, data)
             .pipe(
