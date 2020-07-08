@@ -45,7 +45,7 @@ class ExcelProvider(DataProvider):
         required_columns = [self.c.COMPANY_NAME, self.c.COMPANY_ID, self.c.TARGET_CLASSIFICATION, self.c.SCOPE,
                             self.c.COVERAGE, self.c.REDUCTION_AMBITION, self.c.BASE_YEAR, self.c.END_YEAR,
                             self.c.START_YEAR, self.c.TARGET_REFERENCE_NUMBER,
-                            self.c.PERCENTAGE_REDUCTION_FROM_BASE_YEAR,
+                            self.c.REDUCTION_FROM_BASE_YEAR,
                             self.c.EMISSIONS_IN_SCOPE, self.c.ACHIEVED_EMISSIONS, self.c.TARGET_YEAR]
 
         data_frame = pd.DataFrame(columns=required_columns)
