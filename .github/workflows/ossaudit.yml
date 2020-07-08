@@ -26,11 +26,13 @@ jobs:
     - name: Install dependencies
       run: |
         pip install ossaudit
+    - name: Security vulnerabilities (Bandit)
+      uses: jpetrucciani/bandit-check@master
     - name: Run OSS Audit
       id: run_oss_audit
       run: |
         echo ::set-output name=audit::$(ossaudit -f requirements.txt)
-    - name: Check vulnerabilities
+    - name: Vulnerabilities in dependencies
       if: ${{!startsWith(steps.run_oss_audit.outputs.audit, 'Found 0 vulnerabilities')}}
       run: |
         echo ${{steps.run_oss_audit.outputs.audit}}
