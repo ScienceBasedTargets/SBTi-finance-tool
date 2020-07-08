@@ -11,6 +11,9 @@ from flask_restful import Resource, Api
 from flask_swagger_ui import get_swaggerui_blueprint
 from flask_uploads import UploadSet, ALL, configure_uploads
 
+import mimetypes
+mimetypes.init()
+
 import SBTi
 from SBTi.data.csv import CSVProvider
 from SBTi.data.excel import ExcelProvider
@@ -267,6 +270,8 @@ class documentation_endpoint(Resource):
 
 class Frontend(Resource):
     def get(self, path="index.html"):
+        mimetypes.add_type('application/javascript', '.js')
+        mimetypes.add_type('text/css', '.css')
         config = get_config()
         return send_from_directory(config["frontend_path"], path)
 
