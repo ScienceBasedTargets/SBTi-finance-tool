@@ -264,7 +264,7 @@ class import_portfolio(Resource):
                 file_name = path.split("""\\""")[-1]
                 return {'POST Request': {'Response': {'Status Code': 200, 'Message': 'File Saved', 'File': file.filename}}}
             else:
-                return {'POST Request': {'Response': {'Status Code': 404, 'Message': 'Error. File did not save.'}}}
+                return {'POST Request': {'Response': {'Status Code': 400, 'Message': 'Error. File did not save.'}}}
 
         elif doc_type=='json':
             json_data = request.get_json(force=True)
@@ -293,7 +293,7 @@ class import_portfolio(Resource):
                         df.to_excel('json_example.xlsx')
                     return {'PUT Request': {
                         'Response': {'Status Code': 200, 'Message': 'File Replaced', 'Replaced File': remove_doc}}}
-        return {'PUT Request': {'Response': {'Status Code': 404, 'Error Message': 'File Not Found', 'File': remove_doc}}}
+        return {'PUT Request': {'Response': {'Status Code': 400, 'Error Message': 'File Not Found', 'File': remove_doc}}}
 
 
 class data_provider(BaseEndpoint):
