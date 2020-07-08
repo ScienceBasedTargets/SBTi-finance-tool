@@ -26,8 +26,16 @@ jobs:
     - name: Install dependencies
       run: |
         pip install ossaudit
-    - name: Security vulnerabilities (Bandit)
-      uses: jpetrucciani/bandit-check@master
+    - name: Security check - Bandit - API
+      uses: ./
+      with:
+        python_version: ${{ matrix.python-version }}
+        project_path: ./app
+    - name: Security check - Bandit - SBTi
+      uses: ./
+      with:
+        python_version: ${{ matrix.python-version }}
+        project_path: ./SBTi
     - name: Run OSS Audit
       id: run_oss_audit
       run: |
