@@ -29,6 +29,9 @@ jobs:
     - name: Check vulnerabilities using Bandit in API
       run: |
         bandit -r ./app
+    - name: Check vulnerabilities using Bandit in API
+      run: |
+        bandit -r ./SBTi
     - name: Run OSS Audit
       id: run_oss_audit
       run: |
