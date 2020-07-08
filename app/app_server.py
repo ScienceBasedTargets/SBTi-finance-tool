@@ -395,4 +395,5 @@ api.add_resource(data_provider, '/data_provider')
 api.add_resource(Frontend, '/<path:path>', '/')
 
 if __name__ == '__main__':
-    app.run(debug=get_config()["debug"])  # important to mention debug=True
+    app.run(debug=True)  # important to mention debug=True
+    # app.run(debug=get_config()["debug"])  # important to mention debug=True
