@@ -63,4 +63,4 @@ class PortfolioCoverageTVP(PortfolioAggregation):
         )
 
         return self._calculate_aggregate_score(company_data, self.c.OUTPUT_TARGET_STATUS,
-                                               self.c.OUTPUT_WEIGHTED_TARGET_STATUS, portfolio_aggregation_method)
+                                               self.c.OUTPUT_WEIGHTED_TARGET_STATUS, portfolio_aggregation_method).sum()

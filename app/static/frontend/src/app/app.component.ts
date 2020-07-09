@@ -4,6 +4,7 @@ import { DataProvider } from './dataProvider';
 import { Alert } from './alert';
 import levenshtein from 'fast-levenshtein';
 import { environment } from 'src/environments/environment';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 const AVAILABLE_GROUPING_COLUMNS: string[] = ["industry"];
 const AVAILABLE_COLUMNS: string[] = ["company_id", "industry", "s1s2_emissions", "s3_emissions", "portfolio_weight",
@@ -38,15 +39,17 @@ export class AppComponent implements OnInit {
     portfolio: Object[] = [];
     columns: string[] = [];
     columnMapping: { [key: string]: string } = {};
+    resultTimeFrames: string[] = [];
     resultColumns: string[] = [];
     resultGroups: string[] = [];
     resultTargets: Object[] = [];
     resultScores: { [key: string]: number } = {};
+    selectedContributions: { [key: string]: number }[] = [];
     alerts: Alert[] = [];
     loading: boolean = false;
     coverage: number;
 
-    constructor(private appService: AppService) { }
+    constructor(private appService: AppService, private modalService: NgbModal) { }
 
     /**
      * Initialize the app.
@@ -78,6 +81,13 @@ export class AppComponent implements OnInit {
      */
     onFileChange(element) {
         this.uploadedFiles = element.target.files;
+    }
+
+    openContributors(group: string, timeFrame: string, template) {
+        console.log(group);
+        console.log(timeFrame);
+        this.selectedContributions = this.resultScores[timeFrame][group]["contributions"];
+        this.modalService.open(template, { scrollable: true, size: 'xl' });
     }
 
     /**
@@ -222,6 +232,7 @@ export class AppComponent implements OnInit {
                     this.resultScores = response["aggregated_scores"];
                     this.resultTargets = response["companies"];
                     this.coverage = response["coverage"];
+                    this.resultTimeFrames = Object.keys(response["aggregated_scores"]);
                     this.resultGroups = Object.keys(response["aggregated_scores"]["short"]);
                     if (this.resultTargets.length > 0) {
                         this.resultColumns = Object.keys(this.resultTargets[0]);

@@ -163,8 +163,7 @@ class temp_score(BaseEndpoint):
         return {
             "aggregated_scores": aggregations,
             "coverage": coverage,
-            "companies": scores[include_columns].replace({np.nan: None}).to_dict(
-                orient="records")
+            "companies": scores[include_columns].replace({np.nan: None}).to_dict(orient="records")
         }
 
 
