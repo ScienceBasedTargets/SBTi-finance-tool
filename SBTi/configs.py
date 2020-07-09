@@ -101,6 +101,13 @@ class TemperatureScoreConfig(PortfolioAggregationConfig):
         "long": "slope30",
     }
 
+    TEMPERATURE_RESULTS = 'temperature_results'
+    PORTFOLIO_WEIGHT = 'portfolio_weight'
+    TIME_FRAME_SHORT = 'short'
+    TIME_FRAME_MID = 'mid'
+    TIME_FRAME_LONG = 'long'
+
+
 
 class PortfolioCoverageTVPConfig(PortfolioAggregationConfig):
     FILE_TARGETS = os.path.join(os.path.dirname(os.path.realpath(__file__)), "inputs",

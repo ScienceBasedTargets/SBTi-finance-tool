@@ -128,6 +128,7 @@ class temp_score(BaseEndpoint):
 
         scores = temperature_score.calculate(portfolio_data, extra_columns)
 
+
         # After calculation we'll re-add the extra columns from the input
         for company in json_data["companies"]:
             for key, value in company.items():
@@ -160,13 +161,16 @@ class temp_score(BaseEndpoint):
         portfolio_coverage_tvp = PortfolioCoverageTVP()
         coverage = portfolio_coverage_tvp.get_portfolio_coverage(portfolio_data, aggregation_method)
 
+        # Temperature score percentage breakdown by default score and target score
+        temperature_percentage_coverage = temperature_score.temperature_score_influence_percentage(portfolio_data)
+
         return {
             "aggregated_scores": aggregations,
             "coverage": coverage,
             "companies": scores[include_columns].replace({np.nan: None}).to_dict(
-                orient="records")
+                orient="records"),
+            "temp_score_percent_coverage": temperature_percentage_coverage
         }
-
 
 class DataProviders(BaseEndpoint):
     """

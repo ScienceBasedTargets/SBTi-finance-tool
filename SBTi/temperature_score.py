@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np
 
 from SBTi.portfolio_aggregation import PortfolioAggregation, PortfolioAggregationMethod
-from .configs import TemperatureScoreConfig
+from .configs import TemperatureScoreConfig # Add '.' once finish
 
 
 class BoundaryCoverageOption(Enum):
@@ -44,6 +44,7 @@ class TemperatureScore(PortfolioAggregation):
         # Load the mappings from industry to SR15 goal
         self.mapping = pd.read_excel(self.c.FILE_SR15_MAPPING, header=0)
         self.regression_model = pd.read_excel(self.c.FILE_REGRESSION_MODEL_SUMMARY, header=0)
+
 
     def get_target_mapping(self, target: pd.Series) -> Optional[str]:
         """
@@ -168,6 +169,23 @@ class TemperatureScore(PortfolioAggregation):
         except ZeroDivisionError:
             raise ValueError("The mean of the S1+S2 plus the S3 emissions is zero")
 
+
+
+    def get_default_score(self, target: pd.Series) -> float:
+        """
+        Get the temperature score for a certain target based on the annual reduction rate and the regression parameters.
+
+        :param target: The target as a row of a dataframe
+        :return: The temperature score
+        """
+        if pd.isnull(target[self.c.COLS.REGRESSION_PARAM]) or pd.isnull(target[self.c.COLS.REGRESSION_INTERCEPT]) \
+                or pd.isnull(target[self.c.COLS.ANNUAL_REDUCTION_RATE]):
+            return 'default'
+        return 'target'
+
+
+
+
     def calculate(self, data: pd.DataFrame, extra_columns: Optional[list] = None):
         """
         Calculate the temperature for a dataframe of company data.
@@ -230,6 +248,7 @@ class TemperatureScore(PortfolioAggregation):
 
         return pd.concat([data, pd.DataFrame(combined_data)])
 
+
     def aggregate_scores(self, data: pd.DataFrame, portfolio_aggregation_method: Type[PortfolioAggregationMethod],
                          grouping: Optional[list] = None):
         """
@@ -263,3 +282,130 @@ class TemperatureScore(PortfolioAggregation):
                 portfolio_scores[time_frame] = None
 
         return portfolio_scores
+
+
+    def temperature_score_influence_percentage(self, data):
+        """
+        Determines the percentage of the temperature score is covered by target and default score
+
+        Required columns:
+        * target_reference_number: Int *x* of Abs *x*
+        * scope: The scope of the target. This should be a valid scope in the SR15 mapping
+        * scope_category: The scope category, options: "s1s2", "s3", "s1s2s3"
+        * base_year: The base year of the target
+        * start_year: The start year of the target
+        * target_year: The year when the target should be achieved
+        * time_frame: The time frame of the target (short, mid, long) -> This field is calculated by the target
+            valuation protocol.
+        * reduction_from_base_year: Targeted reduction in emissions from the base year
+        * emissions_in_scope: Company emissions in the target's scope at start of the base year
+        * achieved_reduction: The emission reduction that has already been achieved
+        * industry: The industry the company is working in. This should be a valid industry in the SR15 mapping. If not
+            it will be converted to "Others" (or whichever value is set in the config as the default
+        * s1s2_emissions: Total company emissions in the S1 + S2 scope
+        * s3_emissions: Total company emissions in the S3 scope
+        * portfolio_weight: The weight of the company in the portfolio. Only required to use the WATS portfolio
+            aggregation.
+        * market_cap: Market capitalization of the company. Only required to use the MOTS portfolio aggregation.
+        * investment_value: The investment value of the investment in this company. Only required to use the MOTS, EOTS,
+            ECOTS and AOTS portfolio aggregation.
+        * company_enterprise_value: The enterprise value of the company. Only required to use the EOTS portfolio
+            aggregation.
+        * company_ev_plus_cash: The enterprise value of the company plus cash. Only required to use the ECOTS portfolio
+            aggregation.
+        * company_total_assets: The total assets of the company. Only required to use the AOTS portfolio aggregation.
+
+        :param data: output from the target_valuation_protocol
+
+        :return: A dataframe containing the percentage contributed by the default and target score for all three timeframes
+        """
+
+        data[self.c.COLS.SR15] = data.apply(lambda row: self.get_target_mapping(row), axis=1)
+        data[self.c.COLS.ANNUAL_REDUCTION_RATE] = data.apply(lambda row: self.get_annual_reduction_rate(row), axis=1)
+        data[self.c.COLS.REGRESSION_PARAM], data[self.c.COLS.REGRESSION_INTERCEPT] = zip(
+            *data.apply(lambda row: self.get_regression(row), axis=1)
+        )
+
+        data[self.c.TEMPERATURE_RESULTS] = data.apply(lambda row: self.get_default_score(row), axis=1)
+
+        portfolio_weight_storage = []
+        for company in data[self.c.COLS.COMPANY_NAME].unique():
+            portfolio_weight_storage.append(data[data[self.c.COLS.COMPANY_NAME] == company].iloc[1][self.c.PORTFOLIO_WEIGHT])
+        portfolio_weight_total = sum(portfolio_weight_storage)
+        data[self.c.PORTFOLIO_WEIGHT] = data[self.c.PORTFOLIO_WEIGHT] / portfolio_weight_total
+
+        company_temp_contribution = {
+            self.c.TIME_FRAME_SHORT: {
+                company: 0 for company in data[self.c.COLS.COMPANY_NAME].unique()
+            },
+            self.c.TIME_FRAME_MID: {
+                company: 0 for company in data[self.c.COLS.COMPANY_NAME].unique()
+            },
+            self.c.TIME_FRAME_LONG: {
+                company: 0 for company in data[self.c.COLS.COMPANY_NAME].unique()
+            }
+        }
+        time_frame_dictionary = {}
+
+        for time_frame in data['time_frame'].unique():
+            for company in data[self.c.COLS.COMPANY_NAME].unique():
+                company_data = data[(data[self.c.COLS.COMPANY_NAME] == company) & (data['time_frame'] == time_frame)]
+                if company_data[company_data[self.c.COLS.SCOPE_CATEGORY] == self.c.VALUE_SCOPE_CATEGORY_S1S2][self.c.TEMPERATURE_RESULTS].unique()[0] == 'default':
+                    ds_s1s2 = 1
+                else:
+                    ds_s1s2 = 0
+                if company_data[company_data[self.c.COLS.SCOPE_CATEGORY] == self.c.VALUE_SCOPE_CATEGORY_S3][self.c.TEMPERATURE_RESULTS].unique()[0] == 'default':
+                    ds_s3 = 1
+                else:
+                    ds_s3 = 0
+                s1s2_emissions = company_data.iloc[1][self.c.COLS.S1S2_EMISSIONS]
+                s3_emissions = company_data.iloc[1][self.c.COLS.S3_EMISSIONS]
+                portfolio_weight = company_data.iloc[1][self.c.PORTFOLIO_WEIGHT]
+
+                value = portfolio_weight * (ds_s1s2 * (s1s2_emissions / (s1s2_emissions + s3_emissions)) +
+                                            ds_s3 * (s3_emissions / (s1s2_emissions + s3_emissions)))
+                company_temp_contribution[time_frame][company] = value
+            time_frame_dictionary[time_frame] = round(sum(company_temp_contribution[time_frame].values()),3)
+
+        # dictionary_target = {
+        #     self.c.TIME_FRAME_SHORT: round(1 - time_frame_dictionary[self.c.TIME_FRAME_SHORT], 3),
+        #     self.c.TIME_FRAME_MID: round(1 - time_frame_dictionary[self.c.TIME_FRAME_MID], 3),
+        #     self.c.TIME_FRAME_LONG: round(1 - time_frame_dictionary[self.c.TIME_FRAME_LONG], 3),
+        # }
+
+        # df_default = pd.DataFrame.from_dict(time_frame_dictionary, orient='index', columns=['Default'])
+        # df_target = pd.DataFrame.from_dict(dictionary_target, orient='index', columns=['Target'])
+
+        # return pd.concat([df_default, df_target], axis=1, join='inner')
+
+        dictionary = {
+            'target':{
+                self.c.TIME_FRAME_SHORT: round(1 - time_frame_dictionary[self.c.TIME_FRAME_SHORT], 3),
+                self.c.TIME_FRAME_MID: round(1 - time_frame_dictionary[self.c.TIME_FRAME_MID], 3),
+                self.c.TIME_FRAME_LONG: round(1 - time_frame_dictionary[self.c.TIME_FRAME_LONG], 3),
+            },
+            'default':{
+                self.c.TIME_FRAME_SHORT:time_frame_dictionary[self.c.TIME_FRAME_SHORT],
+                self.c.TIME_FRAME_MID: time_frame_dictionary[self.c.TIME_FRAME_MID],
+                self.c.TIME_FRAME_LONG: time_frame_dictionary[self.c.TIME_FRAME_LONG]
+            }
+        }
+
+        return dictionary
+
+
+
+# Test
+# portfolio_data = pd.read_csv('C:/Projects/SBTi/portfolio_data_2.csv',sep='\t')
+# portfolio_data.drop(columns = 'Unnamed: 0',inplace=True)
+# temperature_score = TemperatureScore(fallback_score=3.2)
+# df = temperature_score.temperature_score_influence_percentage(portfolio_data)
+
+
+
+
+
+
+
+
+
