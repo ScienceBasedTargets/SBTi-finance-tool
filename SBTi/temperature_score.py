@@ -367,17 +367,6 @@ class TemperatureScore(PortfolioAggregation):
                 company_temp_contribution[time_frame][company] = value
             time_frame_dictionary[time_frame] = round(sum(company_temp_contribution[time_frame].values()),3)
 
-        # dictionary_target = {
-        #     self.c.TIME_FRAME_SHORT: round(1 - time_frame_dictionary[self.c.TIME_FRAME_SHORT], 3),
-        #     self.c.TIME_FRAME_MID: round(1 - time_frame_dictionary[self.c.TIME_FRAME_MID], 3),
-        #     self.c.TIME_FRAME_LONG: round(1 - time_frame_dictionary[self.c.TIME_FRAME_LONG], 3),
-        # }
-
-        # df_default = pd.DataFrame.from_dict(time_frame_dictionary, orient='index', columns=['Default'])
-        # df_target = pd.DataFrame.from_dict(dictionary_target, orient='index', columns=['Target'])
-
-        # return pd.concat([df_default, df_target], axis=1, join='inner')
-
         dictionary = {
             'target':{
                 self.c.TIME_FRAME_SHORT: round(1 - time_frame_dictionary[self.c.TIME_FRAME_SHORT], 3),
