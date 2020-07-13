@@ -343,10 +343,33 @@ class TemperatureScore(PortfolioAggregation):
         data[self.c.COLS.SR15] = data.apply(lambda row: self.get_target_mapping(row), axis=1)
         data[self.c.COLS.ANNUAL_REDUCTION_RATE] = data.apply(lambda row: self.get_annual_reduction_rate(row), axis=1)
         data[self.c.COLS.REGRESSION_PARAM], data[self.c.COLS.REGRESSION_INTERCEPT] = zip(
-            *data.apply(lambda row: self.get_regression(row), axis=1)
-        )
+            *data.apply(lambda row: self.get_regression(row), axis=1))
 
         data[self.c.TEMPERATURE_RESULTS] = data.apply(lambda row: self.get_default_score(row), axis=1)
+
+        if aggregation_method == "MOTS" or \
+                aggregation_method == "EOTS" or \
+                aggregation_method == "ECOTS" or \
+                aggregation_method == "AOTS":
+            # These four methods only differ in the way the company is valued.
+            value_column = self.c.COLS.MARKET_CAP
+            if aggregation_method == "EOTS":
+                value_column = self.c.COLS.COMPANY_ENTERPRISE_VALUE
+            elif aggregation_method == "ECOTS":
+                value_column = self.c.COLS.COMPANY_EV_PLUS_CASH
+            elif aggregation_method == "AOTS":
+                value_column = self.c.COLS.COMPANY_TOTAL_ASSETS
+
+            # Calculate the total owned emissions of all companies
+            try:
+                data[self.c.COLS.OWNED_EMISSIONS] = data.apply(
+                    lambda row: ((row[self.c.COLS.INVESTMENT_VALUE] / row[value_column]) * (
+                            row[self.c.COLS.S1S2_EMISSIONS] + row[self.c.COLS.S3_EMISSIONS])),
+                    axis=1
+                )
+            except ZeroDivisionError:
+                raise ValueError("To calculate the aggregation, the {} column may not be zero".format(value_column))
+            owned_emissions = data[self.c.COLS.OWNED_EMISSIONS].sum()
 
         company_temp_contribution = {
             self.c.TIME_FRAME_SHORT: {
@@ -359,12 +382,6 @@ class TemperatureScore(PortfolioAggregation):
                 company: 0 for company in data[self.c.COLS.COMPANY_NAME].unique()
             }
         }
-
-        portfolio_weight_storage = []
-        for company in data[self.c.COLS.COMPANY_NAME].unique():
-            portfolio_weight_storage.append(data[data[self.c.COLS.COMPANY_NAME] == company].iloc[1][self.c.PORTFOLIO_WEIGHT])
-        portfolio_weight_total = sum(portfolio_weight_storage)
-        data[self.c.PORTFOLIO_WEIGHT] = data[self.c.PORTFOLIO_WEIGHT] / portfolio_weight_total
 
         time_frame_dictionary = {}
         for time_frame in data['time_frame'].unique():
@@ -382,31 +399,67 @@ class TemperatureScore(PortfolioAggregation):
                 s3_emissions = company_data.iloc[1][self.c.COLS.S3_EMISSIONS]
 
                 if aggregation_method == 'WATS':
+                    portfolio_weight_storage = []
+                    for company in data[self.c.COLS.COMPANY_NAME].unique():
+                        portfolio_weight_storage.append(
+                            data[data[self.c.COLS.COMPANY_NAME] == company].iloc[1][self.c.PORTFOLIO_WEIGHT])
+                    portfolio_weight_total = sum(portfolio_weight_storage)
+                    data[self.c.PORTFOLIO_WEIGHT] = data[self.c.PORTFOLIO_WEIGHT] / portfolio_weight_total
+
                     portfolio_weight = company_data.iloc[1][self.c.PORTFOLIO_WEIGHT]
+
                     value = portfolio_weight * (ds_s1s2 * (s1s2_emissions / (s1s2_emissions + s3_emissions)) +
                                                 ds_s3 * (s3_emissions / (s1s2_emissions + s3_emissions)))
+
                 elif aggregation_method == 'TETS':
                     company_emissions = company_data[self.c.COLS.S1S2_EMISSIONS].iloc[0] + \
                                         company_data[self.c.COLS.S3_EMISSIONS].iloc[0] # per company
                     portfolio_emissions = data[self.c.COLS.S1S2_EMISSIONS].sum() + data[
                         self.c.COLS.S3_EMISSIONS].sum()
+
                     value = company_emissions/portfolio_emissions * (ds_s1s2 * (s1s2_emissions / (s1s2_emissions + s3_emissions)) +
                                                 ds_s3 * (s3_emissions / (s1s2_emissions + s3_emissions)))
                 elif aggregation_method == 'MOTS':
                     company_emissions = company_data[self.c.COLS.S1S2_EMISSIONS].iloc[0] + \
                                         company_data[self.c.COLS.S3_EMISSIONS].iloc[0]  # per company
+                    investment_value = company_data[self.c.COLS.INVESTMENT_VALUE].iloc[0]
+                    market_cap = company_data[self.c.COLS.MARKET_CAP].iloc[0]
 
-                    investment_value = company_data[self.ColumnsConfig.INVESTMENT_VALUE]
-                    market_cap = company_data[self.ColumnsConfig.MARKET_CAP]
-                    portfolio_market_value_owned_emissions = ''
+                    value = (((investment_value/market_cap)*company_emissions)/owned_emissions) * (
+                                ds_s1s2 * (s1s2_emissions / (s1s2_emissions + s3_emissions)) +
+                                ds_s3 * (s3_emissions / (s1s2_emissions + s3_emissions)))
 
+                elif aggregation_method == 'EOTS':
+                    company_emissions = company_data[self.c.COLS.S1S2_EMISSIONS].iloc[0] + \
+                                        company_data[self.c.COLS.S3_EMISSIONS].iloc[0]
+                    investment_value = company_data[self.c.COLS.INVESTMENT_VALUE].iloc[0]
+                    enterprise_value = company_data[self.c.COLS.COMPANY_ENTERPRISE_VALUE].iloc[0]
 
+                    value = (((investment_value/enterprise_value)*company_emissions)/owned_emissions) * (
+                            ds_s1s2 * (s1s2_emissions / (s1s2_emissions + s3_emissions)) +
+                            ds_s3 * (s3_emissions / (s1s2_emissions + s3_emissions)))
 
+                elif aggregation_method == 'ECOTS':
+                    investment_value = company_data[self.c.COLS.INVESTMENT_VALUE].iloc[0]
+                    company_emissions = company_data[self.c.COLS.S1S2_EMISSIONS].iloc[0] + \
+                                        company_data[self.c.COLS.S3_EMISSIONS].iloc[0]
+                    company_ev_cash = company_data[self.c.COLS.COMPANY_EV_PLUS_CASH].iloc[0]
 
+                    value = ((((investment_value/company_ev_cash)*company_emissions))/owned_emissions) * (
+                            ds_s1s2 * (s1s2_emissions / (s1s2_emissions + s3_emissions)) +
+                            ds_s3 * (s3_emissions / (s1s2_emissions + s3_emissions)))
 
+                elif aggregation_method == 'AOTS':
+                    investment_value = company_data[self.c.COLS.INVESTMENT_VALUE].iloc[0]
+                    company_emissions = company_data[self.c.COLS.S1S2_EMISSIONS].iloc[0] + \
+                                        company_data[self.c.COLS.S3_EMISSIONS].iloc[0]
+                    company_total_assets = company_data[self.c.COLS.COMPANY_TOTAL_ASSETS].iloc[0]
+
+                    value = (((investment_value/company_total_assets)*company_emissions)/owned_emissions) * (
+                            ds_s1s2 * (s1s2_emissions / (s1s2_emissions + s3_emissions)) +
+                            ds_s3 * (s3_emissions / (s1s2_emissions + s3_emissions)))
 
                 company_temp_contribution[time_frame][company] = value
-
             time_frame_dictionary[time_frame] = round(sum(company_temp_contribution[time_frame].values()),3)
         dictionary = {
             'target':{
@@ -451,12 +504,11 @@ for all aggregation methods
 
 '''
 
-
 # Test
 portfolio_data = pd.read_csv('C:/Projects/SBTi/portfolio_data_2.csv',sep='\t')
 portfolio_data.drop(columns = 'Unnamed: 0',inplace=True)
 temperature_score = TemperatureScore(fallback_score=3.2)
-df = temperature_score.temperature_score_influence_percentage(portfolio_data,'MOTS')
+df = temperature_score.temperature_score_influence_percentage(portfolio_data,'AOTS')
 
 
 
