@@ -77,6 +77,84 @@
           }
         }
       }
+    },
+    "/import_portfolio": {
+      "parameters":[
+               {
+                  "name":"document_type",
+                  "in":"",
+                  "description":"< excel | json >. For example, document_type=excel",
+                  "required":true,
+                  "type":"string"
+               },{
+                  "name":"document_replace",
+                  "in":"",
+                  "description":"< name of document >. Provide the name of document, excluding the extension. For example, document_replace=doc_A",
+                  "required":true,
+                  "type":"string"
+        }],
+      "post": {
+        "summary": "Client can import portfolios",
+        "tags": [
+          "SBTi Request"
+        ],
+        "requestBody": {
+          "description": "Portfolio coverage",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/import_portfolio"
+              }
+            }
+          }
+        },
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/components/schemas/Port_Coverage"
+            }
+          },
+          "400": {
+            "description": "Failed. Bad post data."
+          }
+        }
+      },
+      "put": {
+        "summary": "Client can import portfolios",
+        "tags": [
+          "SBTi Request"
+        ],
+        "requestBody": {
+          "description": "Portfolio coverage",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/import_portfolio"
+              }
+            }
+          }
+        },
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/components/schemas/Port_Coverage"
+            }
+          },
+          "400": {
+            "description": "Failed. Bad post data."
+          }
+        }
+      }
     }
   },
   "components": {
@@ -232,6 +310,11 @@
             "format": "number"
           }
         }
+      },
+      "import_portfolio": {
+        "type": "object",
+        "properties": {
+         }
       }
     }
   }
