@@ -162,7 +162,7 @@ class temp_score(BaseEndpoint):
         coverage = portfolio_coverage_tvp.get_portfolio_coverage(portfolio_data, aggregation_method)
 
         # Temperature score percentage breakdown by default score and target score
-        temperature_percentage_coverage = temperature_score.temperature_score_influence_percentage(portfolio_data)
+        temperature_percentage_coverage = temperature_score.temperature_score_influence_percentage(portfolio_data, aggregation_method)
 
         return {
             "aggregated_scores": aggregations,

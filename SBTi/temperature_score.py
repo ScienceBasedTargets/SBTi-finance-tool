@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np
 
 from SBTi.portfolio_aggregation import PortfolioAggregation, PortfolioAggregationMethod
-from .configs import TemperatureScoreConfig # Add '.' once finish
+from configs import TemperatureScoreConfig, ColumnsConfig # Add '.' once finish
 
 
 class BoundaryCoverageOption(Enum):
@@ -284,7 +284,7 @@ class TemperatureScore(PortfolioAggregation):
         return portfolio_scores
 
 
-    def temperature_score_influence_percentage(self, data):
+    def temperature_score_influence_percentage(self, data, aggregation_method):
         """
         Determines the percentage of the temperature score is covered by target and default score
 
@@ -328,12 +328,6 @@ class TemperatureScore(PortfolioAggregation):
 
         data[self.c.TEMPERATURE_RESULTS] = data.apply(lambda row: self.get_default_score(row), axis=1)
 
-        portfolio_weight_storage = []
-        for company in data[self.c.COLS.COMPANY_NAME].unique():
-            portfolio_weight_storage.append(data[data[self.c.COLS.COMPANY_NAME] == company].iloc[1][self.c.PORTFOLIO_WEIGHT])
-        portfolio_weight_total = sum(portfolio_weight_storage)
-        data[self.c.PORTFOLIO_WEIGHT] = data[self.c.PORTFOLIO_WEIGHT] / portfolio_weight_total
-
         company_temp_contribution = {
             self.c.TIME_FRAME_SHORT: {
                 company: 0 for company in data[self.c.COLS.COMPANY_NAME].unique()
@@ -345,8 +339,14 @@ class TemperatureScore(PortfolioAggregation):
                 company: 0 for company in data[self.c.COLS.COMPANY_NAME].unique()
             }
         }
-        time_frame_dictionary = {}
 
+        portfolio_weight_storage = []
+        for company in data[self.c.COLS.COMPANY_NAME].unique():
+            portfolio_weight_storage.append(data[data[self.c.COLS.COMPANY_NAME] == company].iloc[1][self.c.PORTFOLIO_WEIGHT])
+        portfolio_weight_total = sum(portfolio_weight_storage)
+        data[self.c.PORTFOLIO_WEIGHT] = data[self.c.PORTFOLIO_WEIGHT] / portfolio_weight_total
+
+        time_frame_dictionary = {}
         for time_frame in data['time_frame'].unique():
             for company in data[self.c.COLS.COMPANY_NAME].unique():
                 company_data = data[(data[self.c.COLS.COMPANY_NAME] == company) & (data['time_frame'] == time_frame)]
@@ -360,13 +360,34 @@ class TemperatureScore(PortfolioAggregation):
                     ds_s3 = 0
                 s1s2_emissions = company_data.iloc[1][self.c.COLS.S1S2_EMISSIONS]
                 s3_emissions = company_data.iloc[1][self.c.COLS.S3_EMISSIONS]
-                portfolio_weight = company_data.iloc[1][self.c.PORTFOLIO_WEIGHT]
 
-                value = portfolio_weight * (ds_s1s2 * (s1s2_emissions / (s1s2_emissions + s3_emissions)) +
-                                            ds_s3 * (s3_emissions / (s1s2_emissions + s3_emissions)))
+                if aggregation_method == 'WATS':
+                    portfolio_weight = company_data.iloc[1][self.c.PORTFOLIO_WEIGHT]
+                    value = portfolio_weight * (ds_s1s2 * (s1s2_emissions / (s1s2_emissions + s3_emissions)) +
+                                                ds_s3 * (s3_emissions / (s1s2_emissions + s3_emissions)))
+                elif aggregation_method == 'TETS':
+                    company_emissions = company_data[self.c.COLS.S1S2_EMISSIONS].iloc[0] + \
+                                        company_data[self.c.COLS.S3_EMISSIONS].iloc[0] # per company
+                    portfolio_emissions = data[self.c.COLS.S1S2_EMISSIONS].sum() + data[
+                        self.c.COLS.S3_EMISSIONS].sum()
+                    value = company_emissions/portfolio_emissions * (ds_s1s2 * (s1s2_emissions / (s1s2_emissions + s3_emissions)) +
+                                                ds_s3 * (s3_emissions / (s1s2_emissions + s3_emissions)))
+                elif aggregation_method == 'MOTS':
+                    company_emissions = company_data[self.c.COLS.S1S2_EMISSIONS].iloc[0] + \
+                                        company_data[self.c.COLS.S3_EMISSIONS].iloc[0]  # per company
+
+                    investment_value = company_data[self.ColumnsConfig.INVESTMENT_VALUE]
+                    market_cap = company_data[self.ColumnsConfig.MARKET_CAP]
+                    portfolio_market_value_owned_emissions = ''
+
+
+
+
+
+
                 company_temp_contribution[time_frame][company] = value
-            time_frame_dictionary[time_frame] = round(sum(company_temp_contribution[time_frame].values()),3)
 
+            time_frame_dictionary[time_frame] = round(sum(company_temp_contribution[time_frame].values()),3)
         dictionary = {
             'target':{
                 self.c.TIME_FRAME_SHORT: round(1 - time_frame_dictionary[self.c.TIME_FRAME_SHORT], 3),
@@ -384,11 +405,38 @@ class TemperatureScore(PortfolioAggregation):
 
 
 
+
+
+'''
+
+In order to better understand the temperature score
+As an Asset owner
+I want to see how my scores is build up
+
+For the given temperature score (category) the output contains the percentage of the score covered by targets and the percentage covered by default scores
+-- Based on the chosen aggregation method
+When looking at aggregated temperature scores
+
+Include the perecentage of each category in the output (e.g. when grouping by country, show that 30% of the portfolio is US based, 20% UK, etc..)
+-- Based on the chosen aggregation method
+
+So now, we will do essentially the same with the default and target, and the same timeframe (short, mid, long) but now by country as well or what ever 
+column they would like. 
+
+* Add aggregation method within parameter within "temperature_score_influence_percentage" function and make if statements 
+to change the portfolio_weight feature variable within the equation Jan provided. I need to do this temp_percentage_coverage 
+for all aggregation methods
+
+
+
+'''
+
+
 # Test
-# portfolio_data = pd.read_csv('C:/Projects/SBTi/portfolio_data_2.csv',sep='\t')
-# portfolio_data.drop(columns = 'Unnamed: 0',inplace=True)
-# temperature_score = TemperatureScore(fallback_score=3.2)
-# df = temperature_score.temperature_score_influence_percentage(portfolio_data)
+portfolio_data = pd.read_csv('C:/Projects/SBTi/portfolio_data_2.csv',sep='\t')
+portfolio_data.drop(columns = 'Unnamed: 0',inplace=True)
+temperature_score = TemperatureScore(fallback_score=3.2)
+df = temperature_score.temperature_score_influence_percentage(portfolio_data,'MOTS')
 
 
 

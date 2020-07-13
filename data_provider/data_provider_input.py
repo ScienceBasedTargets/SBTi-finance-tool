@@ -23,7 +23,7 @@ class DataProvider:
         '''
         Excel file will act as a temporary "data provider".
 
-        :return: Dataframe
+        :return: Input data that will act as a data provider for the time being.
         '''
 
         return pd.read_excel("C:/Projects/SBTi/connector/InputFormat.xlsx", sheet_name=None, skiprows=1)
@@ -40,7 +40,7 @@ class DataProvider:
 
         It should be easy to expand on this list at a later stage.
 
-        :return: Data Frame
+        :return: Records for the companies provided.
         '''
 
         data = self.data_provider()
@@ -74,7 +74,7 @@ class DataProvider:
 
         The format in which the data should be returned is clear in the documentation (examples).
 
-        :return: Data Frame
+        :return: the target data of the input data from the client
         '''
 
         data = self.data_provider()

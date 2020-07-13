@@ -1,0 +1,25 @@
+	access	achieved_reduction	base_year	company_enterprise_value	company_ev_plus_cash	company_id_x	company_id_y	company_name	company_total_assets	emissions_in_scope	emissions_in_scope.1	industry	investment_value	market_cap	portfolio_weight	program_id	reduction_from_base_year	s1s2_emissions	s3_emissions	scope	scope_category	start_year	target_reference_number	target_status	target_year	time_frame
+0				64649.13	51067.38			Advanced Micro Devices, Inc	49437.57			Tech	42881	54327	0.128432371			1601576	1601576		s1s2					short
+1				64649.13	51067.38			Advanced Micro Devices, Inc	49437.57			Tech	42881	54327	0.128432371			1601576	1601576		s3					short
+2	public	27.0	2014.0	64649.13	51067.38	US0079031078	US0079031078	Advanced Micro Devices, Inc	49437.57	100.0	99.0	Tech	42881	54327	0.128432371		100.0	1601576	1601576	Scope 1+2	s1s2	2015.0	 Abs 1	 Underway	2030.0	mid
+3				64649.13	51067.38			Advanced Micro Devices, Inc	49437.57			Tech	42881	54327	0.128432371			1601576	1601576		s3					mid
+4				64649.13	51067.38			Advanced Micro Devices, Inc	49437.57			Tech	42881	54327	0.128432371			1601576	1601576		s1s2					long
+5				64649.13	51067.38			Advanced Micro Devices, Inc	49437.57			Tech	42881	54327	0.128432371			1601576	1601576		s3					long
+6				123.0	123.0			Company F	132.0			Energy	132	132	0.12300000000000001			123	123		s1s2					short
+7	public	90.0	2008.0	80679.81	75088.14			Company F	72691.71	100.0	88.0	Tech	45354	79881	0.135839224		25.0	1135983	1135983	Scope 3	s3	2008.0	 Int 1	 Underway	2020.0	short
+8				123.0	123.0			Company F	132.0			Energy	132	132	0.12300000000000001			123	123		s1s2					mid
+9				123.0	123.0			Company F	132.0			Energy	132	132	0.12300000000000001			123	123		s3					mid
+10				123.0	123.0			Company F	132.0			Energy	132	132	0.12300000000000001			123	123		s1s2					long
+11				123.0	123.0			Company F	132.0			Energy	132	132	0.12300000000000001			123	123		s3					long
+12				98511.12	78474.96			Company N	75970.44			Energy	8192	83484	0.024535761			9180000	9180000		s1s2					short
+13				98511.12	78474.96			Company N	75970.44			Energy	8192	83484	0.024535761			9180000	9180000		s3					short
+14				98511.12	78474.96			Company N	75970.44			Energy	8192	83484	0.024535761			9180000	9180000		s1s2					mid
+15	public	98.9	2016.0	98511.12	78474.96			Company N	75970.44	100.0	80.0	Energy	8192	83484	0.024535761		50.0	9180000	9180000	Scope 3	s3	2016.0	 Int 1	 Underway	2030.0	mid
+16				98511.12	78474.96			Company N	75970.44			Energy	8192	83484	0.024535761			9180000	9180000		s1s2					long
+17				98511.12	78474.96			Company N	75970.44			Energy	8192	83484	0.024535761			9180000	9180000		s3					long
+18				65814.85	74537.3			Company Q	72158.45			Energy	23851	79295	0.071435845			81109342	81109342		s1s2					short
+19				65814.85	74537.3			Company Q	72158.45			Energy	23851	79295	0.071435845			81109342	81109342		s3					short
+20	public	63.0	1990.0	65814.85	74537.3			Company Q	72158.45	99.0	100.0	Energy	23851	79295	0.071435845		30.0	81109342	81109342	Scope 1+2	s1s2	2017.0	 Int 1	 Underway	2030.0	mid
+21				65814.85	74537.3			Company Q	72158.45			Energy	23851	79295	0.071435845			81109342	81109342		s3					mid
+22				65814.85	74537.3			Company Q	72158.45			Energy	23851	79295	0.071435845			81109342	81109342		s1s2					long
+23				65814.85	74537.3			Company Q	72158.45			Energy	23851	79295	0.071435845			81109342	81109342		s3					long

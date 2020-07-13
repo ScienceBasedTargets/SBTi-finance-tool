@@ -16,7 +16,7 @@ class TargetValuationProtocol:
         '''
         Runs the target valuation protcol by calling on the four required steps
 
-        :rtype: list, dataframe
+        :rtype: list
         :return: a list of six columns containing dataframes in each one
         '''
 
