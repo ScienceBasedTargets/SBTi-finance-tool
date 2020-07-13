@@ -59,6 +59,8 @@ class ColumnsConfig:
 
     # Output columns
     WEIGHTED_TEMPERATURE_SCORE = "weighted_temperature_score"
+    CONTRIBUTION_RELATIVE = "contribution_relative"
+    CONTRIBUTION = "contribution"
 
     # This defines which column contain company specific, instead of target specific data
     COMPANY_COLUMNS = [INDUSTRY, REGRESSION_PARAM, REGRESSION_INTERCEPT,
@@ -94,6 +96,8 @@ class TemperatureScoreConfig(PortfolioAggregationConfig):
     VALUE_TARGET_REFERENCE_ABSOLUTE = "Absolute"
     VALUE_TARGET_REFERENCE_INTENSITY = "Intensity"
     VALUE_TARGET_REFERENCE_INTENSITY_BASE = "Int"
+    CONTRIBUTION_COLUMNS = [ColumnsConfig.COMPANY_NAME, ColumnsConfig.TEMPERATURE_SCORE,
+                            ColumnsConfig.CONTRIBUTION_RELATIVE, ColumnsConfig.CONTRIBUTION]
 
     SLOPE_MAP = {
         "short": "slope5",
@@ -129,4 +133,3 @@ class PortfolioCoverageTVPConfig(PortfolioAggregationConfig):
     COL_COMPANY_NAME = "Company Name"
     COL_COMPANY_ID = "ISIN"
     COL_TARGET_STATUS = "Status"
-

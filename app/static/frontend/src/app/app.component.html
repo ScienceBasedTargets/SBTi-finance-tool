@@ -105,45 +105,59 @@
     </form>
 
     <div id="div-results" class="container-results" *ngIf="resultTargets.length > 0">
-        <hr />
         <h5>Aggregated temperature scores</h5>
-        <div *ngFor="let group of resultGroups">
-            <h6 class="header-scores-aggregated">{{group}}</h6>
-            <div class="row" *ngIf="'short' in resultScores">
-                <div class="col">
-                    <div class="card text-center">
-                        <div class="card-header">
-                            Short term
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title">{{resultScores["short"][group] | number:'1.2-2'}}&#176;C</h5>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card text-center">
-                        <div class="card-header">
-                            Mid term
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title">{{resultScores["mid"][group] | number:'1.2-2'}}&#176;C</h5>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card text-center">
-                        <div class="card-header">
-                            Long term
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title">{{resultScores["long"][group] | number:'1.2-2'}}&#176;C</h5>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <td>Group</td>
+                    <td>Time frame</td>
+                    <td>Temperature score</td>
+                    <td></td>
+                </tr>
+            </thead>
+            <tbody *ngFor="let group of resultGroups">
+                <tr *ngFor="let timeFrame of resultTimeFrames">
+                    <td>{{group}}</td>
+                    <td>{{timeFrame}}</td>
+                    <td>{{resultScores["short"][group]["score"] | number:'1.2-2'}}&#176;C</td>
+                    <td><button (click)="openContributors(group, timeFrame, templateContributions)" class="btn btn-sm btn-outline-primary">Contributors</button></td>
+                </tr>
+            </tbody>
+        </table>
 
-        <br />
+        <ng-template #templateContributions let-modal>
+            <div class="modal-header">
+                <h4 class="modal-title">Modal title</h4>
+                <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <td>Company</td>
+                            <td>Temperature score</td>
+                            <td>Relative contribution</td>
+                            <td>Contribution</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let company of selectedContributions">
+                            <td>{{company.company_name}}</td>
+                            <td>{{company.temperature_score | number:'1.2-2'}}&#176;C</td>
+                            <td>{{company.contribution_relative | number:'1.2-2'}}%</td>
+                            <td>{{company.contribution | number:'1.2-2'}}&#176;C</td>
+                        </tr>
+                    </tbody>
+                </table>        
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
+            </div>
+        </ng-template>
+
+        <hr />
 
         <div class="row">
             <div class="col">

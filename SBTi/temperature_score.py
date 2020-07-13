@@ -1,3 +1,4 @@
+import itertools
 from typing import Optional, Tuple, Type
 from enum import Enum
 import pandas as pd
@@ -259,27 +260,46 @@ class TemperatureScore(PortfolioAggregation):
         :param grouping: The grouping to use
         :return: A weighted temperature score for the portfolio
         """
-        portfolio_scores = {}
-        for time_frame in self.c.VALUE_TIME_FRAMES:
+        portfolio_scores = {
+            time_frame: {scope: {} for scope in data[self.c.COLS.SCOPE_CATEGORY].unique()}
+            for time_frame in data[self.c.COLS.TIME_FRAME].unique()}
+
+        for time_frame, scope in itertools.product(data[self.c.COLS.TIME_FRAME].unique(),
+                                                   data[self.c.COLS.SCOPE_CATEGORY].unique()):
             filtered_data = data[(data[self.c.COLS.TIME_FRAME] == time_frame) & (
-                    data[self.c.COLS.SCOPE_CATEGORY] == self.c.VALUE_SCOPE_CATEGORY_S1S2S3)].copy()
+                    data[self.c.COLS.SCOPE_CATEGORY] == scope)].copy()
 
             if not filtered_data.empty:
-                portfolio_scores[time_frame] = {}
-                portfolio_scores[time_frame]["all"] = self._calculate_aggregate_score(
-                    filtered_data, self.c.COLS.TEMPERATURE_SCORE, self.c.COLS.WEIGHTED_TEMPERATURE_SCORE,
-                    portfolio_aggregation_method)
+                # portfolio_scores[time_frame] = {}
+                weighted_scores = self._calculate_aggregate_score(filtered_data, self.c.COLS.TEMPERATURE_SCORE,
+                                                                  self.c.COLS.WEIGHTED_TEMPERATURE_SCORE,
+                                                                  portfolio_aggregation_method)
+                portfolio_scores[time_frame][scope]["all"] = {}
+                portfolio_scores[time_frame][scope]["all"]["score"] = weighted_scores.sum()
+                filtered_data[self.c.COLS.CONTRIBUTION_RELATIVE] = weighted_scores / (weighted_scores.sum() / 100)
+                filtered_data[self.c.COLS.CONTRIBUTION] = weighted_scores
+                portfolio_scores[time_frame][scope]["all"]["contributions"] = filtered_data \
+                    .sort_values(self.c.COLS.CONTRIBUTION_RELATIVE, ascending=False)[
+                    self.c.CONTRIBUTION_COLUMNS].to_dict(orient="records")
 
                 # If there are grouping column(s) we'll group in pandas and pass the results to the aggregation
                 if grouping is not None and len(grouping) > 0:
                     grouped_data = filtered_data.groupby(grouping)
                     for group_name, group in grouped_data:
-                        portfolio_scores[time_frame][group_name if type(group_name) == str else "-".join(group_name)] = \
-                            self._calculate_aggregate_score(group.copy(), self.c.COLS.TEMPERATURE_SCORE,
-                                                            self.c.COLS.WEIGHTED_TEMPERATURE_SCORE,
-                                                            portfolio_aggregation_method)
+                        group_data = group.copy()
+                        weighted_scores = self._calculate_aggregate_score(group_data, self.c.COLS.TEMPERATURE_SCORE,
+                                                                          self.c.COLS.WEIGHTED_TEMPERATURE_SCORE,
+                                                                          portfolio_aggregation_method)
+                        group_name_joined = group_name if type(group_name) == str else "-".join(group_name)
+                        group_data[self.c.COLS.CONTRIBUTION_RELATIVE] = weighted_scores / (weighted_scores.sum() / 100)
+                        group_data[self.c.COLS.CONTRIBUTION] = weighted_scores
+                        portfolio_scores[time_frame][scope][group_name_joined] = {}
+                        portfolio_scores[time_frame][scope][group_name_joined]["score"] = weighted_scores.sum()
+                        portfolio_scores[time_frame][scope][group_name_joined]["contributions"] = \
+                            group_data.sort_values(self.c.COLS.CONTRIBUTION_RELATIVE, ascending=False)[
+                                self.c.CONTRIBUTION_COLUMNS].to_dict(orient="records")
             else:
-                portfolio_scores[time_frame] = None
+                portfolio_scores[time_frame][scope] = None
 
         return portfolio_scores
 
