@@ -171,7 +171,7 @@ class TemperatureScore(PortfolioAggregation):
 
 
 
-    def get_default_score(self, target: pd.Series) -> float:
+    def get_default_score(self, target: pd.Series) -> str:
         """
         Get the temperature score for a certain target based on the annual reduction rate and the regression parameters.
 
