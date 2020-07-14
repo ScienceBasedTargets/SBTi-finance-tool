@@ -316,8 +316,6 @@ class import_portfolio(Resource):
             file = request.files['file']
             if test_file(file,'excel'):
                 files.save(request.files['file'])
-                path = str(sorted(Path(PATH + '/files/').iterdir(), key=os.path.getmtime, reverse=True)[0])
-                file_name = path.split("""\\""")[-1]
                 return {'POST Request': {'Response': {'Status Code': 200, 'Message': 'File Saved', 'File': file.filename}}}
             else:
                 return {'POST Request': {'Response': {'Status Code': 400, 'Message': 'Error. File did not save.'}}}

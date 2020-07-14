@@ -5,7 +5,7 @@ import pandas as pd
 import numpy as np
 
 from SBTi.portfolio_aggregation import PortfolioAggregation, PortfolioAggregationMethod
-from configs import TemperatureScoreConfig, ColumnsConfig # Add '.' once finish
+from .configs import TemperatureScoreConfig
 
 
 class BoundaryCoverageOption(Enum):
@@ -492,23 +492,21 @@ When looking at aggregated temperature scores
 
 Include the perecentage of each category in the output (e.g. when grouping by country, show that 30% of the portfolio is US based, 20% UK, etc..)
 -- Based on the chosen aggregation method
-
-So now, we will do essentially the same with the default and target, and the same timeframe (short, mid, long) but now by country as well or what ever 
-column they would like. 
-
+ 
 * Add aggregation method within parameter within "temperature_score_influence_percentage" function and make if statements 
 to change the portfolio_weight feature variable within the equation Jan provided. I need to do this temp_percentage_coverage 
 for all aggregation methods
 
-
-
 '''
 
+
+
+
 # Test
-portfolio_data = pd.read_csv('C:/Projects/SBTi/portfolio_data_2.csv',sep='\t')
-portfolio_data.drop(columns = 'Unnamed: 0',inplace=True)
-temperature_score = TemperatureScore(fallback_score=3.2)
-df = temperature_score.temperature_score_influence_percentage(portfolio_data,'AOTS')
+# portfolio_data = pd.read_csv('C:/Projects/SBTi/portfolio_data_2.csv',sep='\t')
+# portfolio_data.drop(columns = 'Unnamed: 0',inplace=True)
+# temperature_score = TemperatureScore(fallback_score=3.2)
+# df = temperature_score.temperature_score_influence_percentage(portfolio_data,'AOTS')
 
 
 
