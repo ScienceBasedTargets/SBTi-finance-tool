@@ -259,6 +259,8 @@ class TemperatureScore(PortfolioAggregation):
         :param grouping: The grouping to use
         :return: A weighted temperature score for the portfolio
         """
+
+        # type annotation? Checking to see if this fixes the issue.
         portfolio_scores = {
             time_frame: {scope: {} for scope in data[self.c.COLS.SCOPE_CATEGORY].unique()}
             for time_frame in data[self.c.COLS.TIME_FRAME].unique()}
