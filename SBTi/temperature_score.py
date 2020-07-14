@@ -2,7 +2,6 @@ import itertools
 from typing import Optional, Tuple, Type
 from enum import Enum
 import pandas as pd
-import numpy as np
 
 from SBTi.portfolio_aggregation import PortfolioAggregation, PortfolioAggregationMethod
 from .configs import TemperatureScoreConfig
@@ -477,27 +476,23 @@ class TemperatureScore(PortfolioAggregation):
         return dictionary
 
 
+    def columns_percentage_distribution(self, data, columns):
+        '''
+        Percentage distribution of specific column or columns
+
+        :param data: output from the target_valuation_protocol
+        :param columns: specified column names the client would like to have a percentage distribution
+        :return:
+        '''
+
+        if len(columns) == 1:
+            percentage_distribution = (data.groupby(columns[0]).size() / data[columns[0]].count()) * 100
+            return percentage_distribution.to_dict()
+        else:
+            percentage_distribution = (data.groupby(columns).size() / data[columns[0]].count()) * 100
+            return percentage_distribution.to_dict()
 
 
-
-'''
-
-In order to better understand the temperature score
-As an Asset owner
-I want to see how my scores is build up
-
-For the given temperature score (category) the output contains the percentage of the score covered by targets and the percentage covered by default scores
--- Based on the chosen aggregation method
-When looking at aggregated temperature scores
-
-Include the perecentage of each category in the output (e.g. when grouping by country, show that 30% of the portfolio is US based, 20% UK, etc..)
--- Based on the chosen aggregation method
- 
-* Add aggregation method within parameter within "temperature_score_influence_percentage" function and make if statements 
-to change the portfolio_weight feature variable within the equation Jan provided. I need to do this temp_percentage_coverage 
-for all aggregation methods
-
-'''
 
 
 
@@ -506,24 +501,6 @@ for all aggregation methods
 # portfolio_data = pd.read_csv('C:/Projects/SBTi/portfolio_data_2.csv',sep='\t')
 # portfolio_data.drop(columns = 'Unnamed: 0',inplace=True)
 # temperature_score = TemperatureScore(fallback_score=3.2)
-# # df = temperature_score.temperature_score_influence_percentage(portfolio_data,'AOTS')
-#
-#
-# # Error occurs: aggregate_scores
-# scores = temperature_score.calculate(portfolio_data, [])
-#
-# aggregations = temperature_score.aggregate_scores(scores, PortfolioAggregationMethod.WATS)
-#
-# self.assertAlmostEqual(aggregations["short"]["all"]["score"], 3.0994, places=4, msg="Short WATS aggregation failed")
-#
-#
-#
-# aggregations['short']['s1s2']['all']['score']
-#
-#
-
-
-
-
+# df = temperature_score.temperature_score_influence_percentage(portfolio_data,'WATS')
 
 

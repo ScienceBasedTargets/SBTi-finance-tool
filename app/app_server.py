@@ -90,6 +90,7 @@ class BaseEndpoint(Resource):
         return data_providers
 
 
+
 class temp_score(BaseEndpoint):
     '''
     Generates the temperature aggregation scoring for the companies provided.
@@ -165,12 +166,16 @@ class temp_score(BaseEndpoint):
         # Temperature score percentage breakdown by default score and target score
         temperature_percentage_coverage = temperature_score.temperature_score_influence_percentage(portfolio_data, aggregation_method)
 
+        # Distribution of columns
+        column_distribution = temperature_score.columns_percentage_distribution(portfolio_data,['industry'])
+
         return {
             "aggregated_scores": aggregations,
             "coverage": coverage,
             "companies": scores[include_columns].replace({np.nan: None}).to_dict(
                 orient="records"),
-            "temp_score_percent_coverage": temperature_percentage_coverage
+            "temp_score_percent_coverage": temperature_percentage_coverage,
+            "columns_distribution": column_distribution
         }
 
 class DataProviders(BaseEndpoint):
