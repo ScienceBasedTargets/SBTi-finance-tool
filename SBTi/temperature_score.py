@@ -260,7 +260,7 @@ class TemperatureScore(PortfolioAggregation):
         :return: A weighted temperature score for the portfolio
         """
 
-        # type annotation? Checking to see if this fixes the issue.
+        # dictionary composed of time_frame, and scopes within each time_frame
         portfolio_scores = {
             time_frame: {scope: {} for scope in data[self.c.COLS.SCOPE_CATEGORY].unique()}
             for time_frame in data[self.c.COLS.TIME_FRAME].unique()}
