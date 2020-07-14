@@ -506,10 +506,21 @@ for all aggregation methods
 # portfolio_data = pd.read_csv('C:/Projects/SBTi/portfolio_data_2.csv',sep='\t')
 # portfolio_data.drop(columns = 'Unnamed: 0',inplace=True)
 # temperature_score = TemperatureScore(fallback_score=3.2)
-# df = temperature_score.temperature_score_influence_percentage(portfolio_data,'AOTS')
-
-
-
+# # df = temperature_score.temperature_score_influence_percentage(portfolio_data,'AOTS')
+#
+#
+# # Error occurs: aggregate_scores
+# scores = temperature_score.calculate(portfolio_data, [])
+#
+# aggregations = temperature_score.aggregate_scores(scores, PortfolioAggregationMethod.WATS)
+#
+# self.assertAlmostEqual(aggregations["short"]["all"]["score"], 3.0994, places=4, msg="Short WATS aggregation failed")
+#
+#
+#
+# aggregations['short']['s1s2']['all']['score']
+#
+#
 
 
 
