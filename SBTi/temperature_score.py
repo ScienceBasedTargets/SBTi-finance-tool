@@ -274,7 +274,7 @@ class TemperatureScore(PortfolioAggregation):
                                                                   self.c.COLS.WEIGHTED_TEMPERATURE_SCORE,
                                                                   portfolio_aggregation_method)
                 portfolio_scores[time_frame][scope]["all"] = {}
-                portfolio_scores[time_frame][scope]["all"]["score"] = weighted_scores.sum()
+                portfolio_scores[time_frame][scope]["all"]["score"] = round(weighted_scores.sum(),4)
                 filtered_data[self.c.COLS.CONTRIBUTION_RELATIVE] = weighted_scores / (weighted_scores.sum() / 100)
                 filtered_data[self.c.COLS.CONTRIBUTION] = weighted_scores
                 portfolio_scores[time_frame][scope]["all"]["contributions"] = filtered_data \
@@ -300,7 +300,7 @@ class TemperatureScore(PortfolioAggregation):
             else:
                 portfolio_scores[time_frame][scope] = None
 
-        return round(portfolio_scores,4)
+        return portfolio_scores
 
 
     def temperature_score_influence_percentage(self, data, aggregation_method):
