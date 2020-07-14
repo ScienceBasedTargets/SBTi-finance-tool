@@ -50,7 +50,7 @@ class TestTemperatureScore(unittest.TestCase):
     def test_portfolio_aggregations(self):
         scores = self.temperature_score.calculate(self.data)
         aggregations = self.temperature_score.aggregate_scores(scores, PortfolioAggregationMethod.WATS)
-        self.assertAlmostEqual(aggregations["short"]['s1s2']["all"]["score"], 3.0994, places=4, msg="Short WATS aggregation failed")
+        self.assertAlmostEqual(aggregations["short"]['s3']["all"]["score"], 3.0994, places=4, msg="Short WATS aggregation failed")
         self.assertAlmostEqual(aggregations["mid"]["all"]["score"], 2.9981, places=4, msg="Mid WATS aggregation failed")
         self.assertAlmostEqual(aggregations["long"]["all"]["score"], 3.2000, places=4, msg="Long WATS aggregation failed")
         aggregations = self.temperature_score.aggregate_scores(scores, PortfolioAggregationMethod.TETS)
