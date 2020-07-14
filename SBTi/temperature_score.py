@@ -300,7 +300,7 @@ class TemperatureScore(PortfolioAggregation):
             else:
                 portfolio_scores[time_frame][scope] = None
 
-        return portfolio_scores
+        return round(portfolio_scores,4)
 
 
     def temperature_score_influence_percentage(self, data, aggregation_method):
