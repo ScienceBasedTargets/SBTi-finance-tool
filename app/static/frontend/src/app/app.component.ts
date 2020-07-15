@@ -85,9 +85,8 @@ export class AppComponent implements OnInit {
     }
 
     openContributors(group: string, timeFrame: string, template) {
-        console.log(group);
-        console.log(timeFrame);
-        this.selectedContributions = this.resultScores[timeFrame][group]["contributions"];
+        console.log("contributions to group '" + group + "' and timeFrame '" + timeFrame + "'.");
+        this.selectedContributions = this.resultScores[timeFrame][group]["all"]["contributions"];
         this.modalService.open(template, { scrollable: true, size: 'xl' });
     }
 
@@ -231,6 +230,8 @@ export class AppComponent implements OnInit {
                 this.loading = false;
                 if (response !== undefined) {
                     this.resultScores = response["aggregated_scores"];
+                    console.log("TODO: this console log below (this.resultScores) can be removed");
+                    console.log(this.resultScores);
                     this.resultTargets = response["companies"];
                     this.coverage = response["coverage"];
                     this.resultTimeFrames = Object.keys(response["aggregated_scores"]);
