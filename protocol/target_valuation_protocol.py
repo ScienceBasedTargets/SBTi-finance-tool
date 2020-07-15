@@ -1,6 +1,8 @@
+import datetime
 import pandas as pd
 from typing import List
 from SBTi.configs import ColumnsConfig
+
 
 
 class TargetValuationProtocol:
@@ -8,12 +10,7 @@ class TargetValuationProtocol:
     def __init__(self, input, config: ColumnsConfig = ColumnsConfig):
         self.data = input
         self.c = config
-        self.config = get_config()
 
-    def get_config(self):
-        #Todo: add this path to config file
-        with open('C:/Projects/SBTi/app/config.json') as f_config:
-            return json.load(f_config)
 
     def target_valuation_protocol(self):
         '''
@@ -27,7 +24,6 @@ class TargetValuationProtocol:
         self.test_boundary_coverage()
         self.test_target_process()
         return self.group_valid_target()
-
 
 
     def input_data(self, input) -> pd.DataFrame:
