@@ -36,6 +36,22 @@ class ColumnsConfig:
     TEMPERATURE_SCORE = "temperature_score"
     COMPANY_NAME = "company_name"
     OWNED_EMISSIONS = "owned_emissions"
+    CDP_ACS_INDUSTRY = 'CDP_ACS_industry'
+    COUNTRY = 'country'
+    SECTOR = 'sector'
+    GHG_SCOPE12 = 'GHG_scope12'
+    GHG_SCOPE3 = 'GHG_scope3'
+    REVENU = 'Revenu'
+    ENTERPRISE_VALUE = 'enterprise_value'
+    TOTAL_ASSETS = 'total_assets'
+    CASH_EQUIVALENTS = 'cash_equivalents'
+    TARGET_CLASSIFICATION = 'Target_classification'
+    COVERAGE = 'coverage'
+    REDUCTION_AMBITION = 'reduction_ambition'
+    BASE_YEAR = 'base_year'
+    END_YEAR = 'end_year'
+    SBTI_STATUS = 'SBTi_status'
+    ACHIEVED_EMISSIONS = "achieved_reduction"
 
     # SR15 mapping columns
     PARAM = "param"
@@ -43,6 +59,8 @@ class ColumnsConfig:
 
     # Output columns
     WEIGHTED_TEMPERATURE_SCORE = "weighted_temperature_score"
+    CONTRIBUTION_RELATIVE = "contribution_relative"
+    CONTRIBUTION = "contribution"
 
     # This defines which column contain company specific, instead of target specific data
     COMPANY_COLUMNS = [INDUSTRY, REGRESSION_PARAM, REGRESSION_INTERCEPT,
@@ -58,10 +76,13 @@ class PortfolioAggregationConfig:
     VALUE_SCOPE_S1S2 = "scope 1+2"
     VALUE_SCOPE_S3 = "scope 3"
     VALUE_SCOPE_S1S2S3 = "scope 1+2+3"
+    VALUE_BASE_SCOPES = [VALUE_SCOPE_S1S2, VALUE_SCOPE_S3]
 
     VALUE_SCOPE_CATEGORY_S1S2 = "s1s2"
     VALUE_SCOPE_CATEGORY_S3 = "s3"
     VALUE_SCOPE_CATEGORY_S1S2S3 = "s1s2s3"
+
+    SCOPE_MAP = {"scope 1+2": "s1s2", "scope 3": "s3", "scope 1+2+3": "s1s2s3"}
 
 
 class TemperatureScoreConfig(PortfolioAggregationConfig):
@@ -75,12 +96,21 @@ class TemperatureScoreConfig(PortfolioAggregationConfig):
     VALUE_TARGET_REFERENCE_ABSOLUTE = "Absolute"
     VALUE_TARGET_REFERENCE_INTENSITY = "Intensity"
     VALUE_TARGET_REFERENCE_INTENSITY_BASE = "Int"
+    CONTRIBUTION_COLUMNS = [ColumnsConfig.COMPANY_NAME, ColumnsConfig.TEMPERATURE_SCORE,
+                            ColumnsConfig.CONTRIBUTION_RELATIVE, ColumnsConfig.CONTRIBUTION]
 
     SLOPE_MAP = {
         "short": "slope5",
         "mid": "slope15",
         "long": "slope30",
     }
+
+    TEMPERATURE_RESULTS = 'temperature_results'
+    PORTFOLIO_WEIGHT = 'portfolio_weight'
+    TIME_FRAME_SHORT = 'short'
+    TIME_FRAME_MID = 'mid'
+    TIME_FRAME_LONG = 'long'
+
 
 
 class PortfolioCoverageTVPConfig(PortfolioAggregationConfig):
@@ -103,4 +133,3 @@ class PortfolioCoverageTVPConfig(PortfolioAggregationConfig):
     COL_COMPANY_NAME = "Company Name"
     COL_COMPANY_ID = "ISIN"
     COL_TARGET_STATUS = "Status"
-

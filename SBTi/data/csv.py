@@ -9,9 +9,10 @@ class CSVProvider(DataProvider):
     :param config: A dictionary containing a "path" field that leads to the path of the CSV file
     """
 
-    def __init__(self, config: dict):
-        super().__init__(config)
-        self.data = pd.read_csv(config["path"])
+    def __init__(self, path: str, path_targets: str):
+        super().__init__()
+        self.data = pd.read_csv(path)
+        self.data_targets = pd.read_csv(path_targets)
 
     def get_targets(self, companies: list) -> pd.DataFrame:
         """
@@ -20,7 +21,6 @@ class CSVProvider(DataProvider):
 
         * company_name: The name of the company
         * company_id: The ID of the company
-        * target_reference_number: Int *x* of Abs *x*
         * target_reference_number: Int *x* of Abs *x*
         * scope: The scope of the target. This should be a valid scope in the SR15 mapping
         * base_year: The base year of the target
@@ -34,11 +34,13 @@ class CSVProvider(DataProvider):
                             field.
         :return: A dataframe containing the targets
         """
-        return self.data[
-            (self.data["company_id"].isin([company["company_id"] for company in companies]) &
-             self.data["company_id"].notnull()) |
-            (self.data["company_name"].isin([company["company_name"] for company in companies]) &
-             self.data["company_name"].notnull())
+        if "company_id" not in self.data_targets:
+            self.data_targets["company_id"] = None
+        return self.data_targets[
+            (self.data_targets["company_id"].isin([company["company_id"] for company in companies]) &
+             self.data_targets["company_id"].notnull()) |
+            (self.data_targets["company_name"].isin([company["company_name"] for company in companies]) &
+             self.data_targets["company_name"].notnull())
         ].copy()
 
     def get_company_data(self, companies: list) -> pd.DataFrame:
@@ -67,6 +69,9 @@ class CSVProvider(DataProvider):
                             field.
         :return: A dataframe containing the company data
         """
+        if "company_id" not in self.data:
+            self.data["company_id"] = None
+
         return self.data[
             (self.data["company_id"].isin([company["company_id"] for company in companies]) &
              self.data["company_id"].notnull()) |

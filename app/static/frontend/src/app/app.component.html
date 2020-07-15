@@ -1,0 +1,198 @@
+<style>
+</style>
+
+<!-- Toolbar -->
+<nav class="navbar navbar-expand-md navbar-dark bg-primary fixed-top">
+    <a class="navbar-brand" href="#">SBTi</a>
+    <button class="navbar-toggler hidden-sm-up" type="button" (click)="isNavbarCollapsed = !isNavbarCollapsed"
+        data-target="#navbarsDefault" aria-controls="navbarsDefault" aria-expanded="false"
+        aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+</nav>
+
+<div class="loading" *ngIf="loading">Loading&#8230;</div>
+
+<div class="container" role="main">
+    <h2>SBTi Temperature Scoring</h2>
+    <p *ngFor="let alert of alerts">
+        <ngb-alert [type]="alert.type" (close)="closeAlert(alert)">{{ alert.message }}</ngb-alert>
+    </p>
+
+    <form>
+        <div class="form-group">
+            <label for="input-excel_file">Excel file</label>
+            <input (change)="onFileChange($event)" type="file" class="form-control-file" id="input-excel_file"
+                name="input-excel_file" aria-describedby="input-excel_file">
+        </div>
+        <div class="form-group">
+            <label for="input-excel_skiprows">Skip rows</label>
+            <input type="number" class="form-control" id="input-excel_skiprows" name="input-excel_skiprows"
+                [(ngModel)]="excelSkiprows">
+        </div>
+        <button class="btn btn-primary" (click)="parseExcel()">Parse Excel</button>
+        <span *ngIf="columns.length > 0">
+            <hr />
+            <h6>Map your columns to input fields</h6>
+            <div class="row">
+                <div class="col">
+                    <p *ngFor="let column of columns">
+                        <input class="form-control" value="{{column}}" disabled />
+                    </p>
+                </div>
+                <div class="col">
+                    <p *ngFor="let column of columns">
+                        <select class="form-control" name="select-map_{{column}}" [(ngModel)]="columnMapping[column]"
+                            (change)="updateAvailableColumns()">
+                            <option></option>
+                            <option *ngFor="let targetColumn of availableTargetColumns">{{targetColumn}}</option>
+                        </select>
+                    </p>
+                </div>
+            </div>
+        </span>
+    </form>
+    <form (ngSubmit)="getTemperatureScore(f)" #f="ngForm" *ngIf="columns.length > 0">
+        <hr />
+        <h6>API settings (leave empty to use the defaults)</h6>
+        <div class="form-group">
+            <label for="input-defaultScore">Default temperature score</label>
+            <input type="number" class="form-control" id="input-defaultScore" step="0.1" name="input-defaultScore"
+                [(ngModel)]="defaultScore">
+        </div>
+        <div class="form-group">
+            <label for="input-aggregationMethod">Aggregation method</label>
+            <select class="form-control" [(ngModel)]="selectedAggregationMethod" name="aggregationMethod"
+                class="form-control" id="input-aggregationMethod">
+                <option *ngFor="let aggregationMethod of availableAggregationMethods">{{aggregationMethod}}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="input-filterTimeFrames">Time frame</label>
+            <select [(ngModel)]="filterTimeFrames" name="filterTimeFrames" multiple class="form-control"
+                id="input-filterTimeFrames">
+                <option *ngFor="let timeFrame of availableTimeFrames">{{timeFrame}}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="input-filterScopeCategory">Scope</label>
+            <select [(ngModel)]="filterScopeCategory" name="filterScopeCategory" multiple class="form-control"
+                id="input-filterScopeCategory">
+                <option *ngFor="let scopeCategory of availableScopeCategories">{{scopeCategory}}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="input-dataProviders">Data provider(s)</label>
+            <select class="form-control" id="input-dataProviders" name="dataProviders"
+                [(ngModel)]="selectedDataProviders" multiple>
+                <option *ngFor="let dataProvider of dataProviders">{{dataProvider.name}}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="columns">Columns</label>
+            <select class="form-control" id="columns" name="columns" [(ngModel)]="includeColumns" multiple>
+                <option *ngFor="let availableColumn of availableColumns">{{availableColumn}}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="grouping">Group by</label>
+            <select class="form-control" id="grouping" name="grouping" [(ngModel)]="groupingColumns" multiple>
+                <option *ngFor="let column of availableGroupingColumns">{{column}}</option>
+            </select>
+        </div>
+
+        <button class="btn btn-success">Get temperature score</button>
+    </form>
+
+    <div id="div-results" class="container-results" *ngIf="resultTargets.length > 0">
+        <h5>Aggregated temperature scores</h5>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <td>Group</td>
+                    <td>Time frame</td>
+                    <td>Temperature score</td>
+                    <td></td>
+                </tr>
+            </thead>
+            <tbody *ngFor="let group of resultGroups">
+                <tr *ngFor="let timeFrame of resultTimeFrames">
+                    <td>{{group}}</td>
+                    <td>{{timeFrame}}</td>
+                    <td>{{resultScores["short"][group]["score"] | number:'1.2-2'}}&#176;C</td>
+                    <td><button (click)="openContributors(group, timeFrame, templateContributions)" class="btn btn-sm btn-outline-primary">Contributors</button></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <ng-template #templateContributions let-modal>
+            <div class="modal-header">
+                <h4 class="modal-title">Modal title</h4>
+                <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <td>Company</td>
+                            <td>Temperature score</td>
+                            <td>Relative contribution</td>
+                            <td>Contribution</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let company of selectedContributions">
+                            <td>{{company.company_name}}</td>
+                            <td>{{company.temperature_score | number:'1.2-2'}}&#176;C</td>
+                            <td>{{company.contribution_relative | number:'1.2-2'}}%</td>
+                            <td>{{company.contribution | number:'1.2-2'}}&#176;C</td>
+                        </tr>
+                    </tbody>
+                </table>        
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
+            </div>
+        </ng-template>
+
+        <hr />
+
+        <div class="row">
+            <div class="col">
+                <div class="card text-center">
+                    <div class="card-header">
+                        Portfolio coverage
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{coverage | number:'1.2-2'}}&#37;</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col">&nbsp;</div>
+            <div class="col">&nbsp;</div>
+
+        </div>
+
+        <div class="container-results">
+            <h5>Temperature score targets <button class="btn btn-outline-primary"
+                    (click)="exportCSV()">Download</button></h5>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col" *ngFor="let resultColumn of resultColumns">{{resultColumn}}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let target of resultTargets">
+                        <td scope="row" *ngFor="let resultColumn of resultColumns">{{ target[resultColumn] }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<router-outlet></router-outlet>

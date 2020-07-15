@@ -1,4 +1,4 @@
-from typing import Type
+from typing import Type, Optional
 
 import pandas as pd
 
@@ -28,7 +28,7 @@ class PortfolioCoverageTVP(PortfolioAggregation):
         :param company: The company data
         :return: The SBTi status of the target
         """
-        if company[self.c.COLS.COMPANY_ID] is not None:
+        if self.c.COLS.COMPANY_ID in company and company[self.c.COLS.COMPANY_ID] is not None:
             targets = self.targets[self.targets[self.c.COL_COMPANY_ID] == company[self.c.COLS.COMPANY_ID]]
         else:
             targets = []
@@ -44,7 +44,7 @@ class PortfolioCoverageTVP(PortfolioAggregation):
             return targets.iloc[0][self.c.COL_TARGET_STATUS]
 
     def get_portfolio_coverage(self, company_data: pd.DataFrame,
-                               portfolio_aggregation_method: Type[PortfolioAggregationMethod]) -> float:
+                               portfolio_aggregation_method: Type[PortfolioAggregationMethod]) -> Optional[float]:
         """
         For each of the companies, get the status of their target (Target set, Committed or No target) as it's known to
         the SBTi. Matching will be done primarily on the company ID (ASIN) and secondary on the company name.
@@ -63,4 +63,4 @@ class PortfolioCoverageTVP(PortfolioAggregation):
         )
 
         return self._calculate_aggregate_score(company_data, self.c.OUTPUT_TARGET_STATUS,
-                                               self.c.OUTPUT_WEIGHTED_TARGET_STATUS, portfolio_aggregation_method)
+                                               self.c.OUTPUT_WEIGHTED_TARGET_STATUS, portfolio_aggregation_method).sum()

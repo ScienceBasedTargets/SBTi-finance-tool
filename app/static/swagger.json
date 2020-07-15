@@ -21,41 +21,20 @@
     }
   ],
   "paths": {
-    "/temperature_score": {
-            "parameters": [
-        {
-          "name": "<parameter>",
-          "required": true,
-          "description": "<value>",
-          "type": "string"
-        }
-      ],
-      "get": {
-        "tags": [
-          "SBTi Request"
-        ],
-        "summary": "TBD",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/components/schemas/Report"
-            }
-          }
-        }
-      },
+    "/temperature_score/": {
+      "parameters": [],
       "post": {
         "tags": [
           "SBTi Request"
         ],
-        "summary": "TBD",
+        "summary": "Retrieve the temperature score for your portfolio of companies",
         "requestBody": {
           "description": "Temperature Score Evaluation",
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Temp_Score"
+                "$ref": "#/components/schemas/temperature_score"
               }
             }
           }
@@ -65,44 +44,20 @@
         ]
       }
     },
-    "/portfolio_coverage": {
-      "parameters": [
-        {
-          "name": "<parameter>",
-          "required": true,
-          "description": "<value>",
-          "type": "string"
-        }
-      ],
-      "get": {
-        "tags": [
-          "SBTi Request"
-        ],
-        "summary": "TBD",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/components/schemas/Port_Coverage"
-            }
-          },
-          "400": {
-            "description": "Failed. Misunderstood Request."
-          }
-        }
-      },
+    "/portfolio_coverage/": {
+      "parameters": [],
       "post": {
-        "summary": "TBD",
+        "summary": "Retrieve the portfolio coverage score for your portfolio of companies",
         "tags": [
           "SBTi Request"
         ],
         "requestBody": {
-          "description": "Portfolio payload",
+          "description": "Portfolio coverage",
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Port_Coverage"
+                "$ref": "#/components/schemas/portfolio"
               }
             }
           }
@@ -123,20 +78,40 @@
         }
       }
     },
-    "/report": {
-      "parameters": [
-        {
-          "name": "<parameter>",
-          "required": true,
-          "description": "<value>",
-          "type": "string"
-        }
-      ],
-      "get": {
+    "/import_portfolio": {
+      "parameters":[
+               {
+                  "name":"document_type",
+                  "in":"",
+                  "description":"< excel | json >. For example, document_type=excel",
+                  "required":true,
+                  "type":"string"
+               },{
+                  "name":"document_replace",
+                  "in":"",
+                  "description":"< name of document >. Provide the name of document, excluding the extension. For example, document_replace=doc_A",
+                  "required":true,
+                  "type":"string"
+        }],
+      "post": {
+        "summary": "Client can import portfolios",
         "tags": [
           "SBTi Request"
         ],
-        "summary": "TBD",
+        "requestBody": {
+          "description": "Portfolio coverage",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/import_portfolio"
+              }
+            }
+          }
+        },
+        "produces": [
+          "application/json"
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -145,22 +120,22 @@
             }
           },
           "400": {
-            "description": "Failed. Misunderstood Request."
+            "description": "Failed. Bad post data."
           }
         }
       },
-      "post": {
-        "summary": "TBD",
+      "put": {
+        "summary": "Client can import portfolios",
         "tags": [
           "SBTi Request"
         ],
         "requestBody": {
-          "description": "Portfolio payload",
+          "description": "Portfolio coverage",
           "required": true,
           "content": {
-            "application/json": {
+            "application/x-www-form-urlencoded": {
               "schema": {
-                "$ref": "#/components/schemas/Port_Coverage"
+                "$ref": "#/components/schemas/import_portfolio"
               }
             }
           }
@@ -184,46 +159,162 @@
   },
   "components": {
     "schemas": {
-      "Temp_Score": {
+      "temperature_score": {
         "type": "object",
         "properties": {
-          "<example 1>": {
-            "type": "string",
-            "format": "string"
+          "companies": {
+            "required": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/company"
+            }
           },
-          "<example 2>": {
+          "aggregation_method": {
+            "required": true,
+            "description": "The aggregation method that should be used.",
             "type": "string",
-            "format": "string"
+            "format": "string",
+            "items": [
+              "WATS",
+              "TETS",
+              "MOTS",
+              "EOTS",
+              "ECOTS",
+              "AOTS"
+            ]
+          },
+          "data_providers": {
+            "required": false,
+            "description": "The names of the data providers that should be used. To get a list of data providers, use the /data_providers endpoint.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "default_score": {
+            "required": false,
+            "description": "The score that should be used when no target is available.",
+            "type": "number",
+            "format": "number"
+          },
+          "filter_time_frame": {
+            "required": false,
+            "type": "array",
+            "description": "The time frames that should be included in the results",
+            "items": {
+              "type": "string",
+              "format": "string",
+              "enum": [
+                "short",
+                "mid",
+                "long"
+              ]
+            }
+          },
+          "filter_scope_category": {
+            "required": false,
+            "type": "array",
+            "description": "The scopes that should be included in the results",
+            "items": {
+              "type": "string",
+              "format": "string",
+              "enum": [
+                "s1s2",
+                "s3",
+                "s1s2s3"
+              ]
+            }
+          },
+          "include_columns": {
+            "required": false,
+            "type": "array",
+            "description": "The names of the columns that should be included in the output",
+            "items": {
+              "type": "string",
+              "format": "string",
+              "enum": [
+                "company_id",
+                "industry",
+                "s1s2_emissions",
+                "s3_emissions",
+                "portfolio_weight",
+                "market_cap",
+                "investment_value",
+                "company_enterprise_value",
+                "company_ev_plus_cash",
+                "company_total_assets",
+                "target_reference_number",
+                "scope",
+                "base_year",
+                "start_year",
+                "target_year",
+                "reduction_from_base_year",
+                "emissions_in_scope",
+                "achieved_reduction"
+              ]
+            }
           }
         }
       },
-      "Port_Coverage": {
+      "portfolio": {
         "type": "object",
         "properties": {
-          "<example 1>": {
+          "companies": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/company"
+            }
+          },
+          "aggregation_method": {
+            "type": "string",
+            "format": "string",
+            "description": "The aggregation method that should be used.",
+            "items": [
+              "WATS",
+              "TETS",
+              "MOTS",
+              "EOTS",
+              "ECOTS",
+              "AOTS"
+            ]
+          },
+          "data_providers": {
+            "required": false,
+            "description": "The names of the data providers that should be used. To get a list of data providers, use the /data_providers endpoint.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "string"
+            }
+          }
+        }
+      },
+      "company": {
+        "type": "object",
+        "properties": {
+          "company_name": {
             "type": "string",
             "format": "string"
           },
-          "<example 2>": {
+          "company_id": {
             "type": "string",
             "format": "string"
           },
-          "<example 3>": {
-            "type": "string",
+          "portfolio_weight": {
+            "type": "number",
+            "format": "number"
+          },
+          "investment_value": {
+            "type": "number",
             "format": "number"
           }
         }
       },
-      "Report": {
+      "import_portfolio": {
         "type": "object",
         "properties": {
-          "Port_Coverage": {
-            "type": "object",
-            "additionalProperties": {
-              "$ref": "#/components/schemas/Port_Coverage"
-            }
-          }
-        }
+         }
       }
     }
   }

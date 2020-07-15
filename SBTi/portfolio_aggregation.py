@@ -1,6 +1,6 @@
 from abc import ABC
 from enum import Enum
-from typing import Type
+from typing import Type, Optional
 
 import pandas as pd
 from .configs import PortfolioAggregationConfig
@@ -32,7 +32,7 @@ class PortfolioAggregation(ABC):
         self.c = config
 
     def _calculate_aggregate_score(self, data: pd.DataFrame, input_column: str, output_column: str,
-                                   portfolio_aggregation_method: Type[PortfolioAggregationMethod]) -> float:
+                                   portfolio_aggregation_method: Type[PortfolioAggregationMethod]) -> pd.Series:
         """
         Aggregate the scores in a given column based on a certain portfolio aggregation method.
 
@@ -43,12 +43,14 @@ class PortfolioAggregation(ABC):
         :return: The aggregates score
         """
         if portfolio_aggregation_method == PortfolioAggregationMethod.WATS:
-            data[output_column] = data.apply(lambda row: row[self.c.COLS.PORTFOLIO_WEIGHT] * row[input_column], axis=1)
+            total_portfolio_weight = data[self.c.COLS.PORTFOLIO_WEIGHT].sum()
+            data[output_column] = data.apply(
+                lambda row: (row[self.c.COLS.PORTFOLIO_WEIGHT] * row[input_column]) / total_portfolio_weight, axis=1)
 
             # We're dividing by the portfolio weight. This is not done in the methodology, but we need it to account
             # for rounding errors.
             try:
-                return data[output_column].sum() / data[self.c.COLS.PORTFOLIO_WEIGHT].sum()
+                return data[output_column]
             except ZeroDivisionError:
                 raise ValueError("The portfolio weight is not allowed to be zero")
 
@@ -66,7 +68,7 @@ class PortfolioAggregation(ABC):
             except ZeroDivisionError:
                 raise ValueError("The total emissions should be higher than zero")
 
-            return data[output_column].sum()
+            return data[output_column]
         # Market Owned emissions weighted temperature score (MOTS)
         # Enterprise Owned emissions weighted temperature score (EOTS)
         # Enterprise Value + Cash emissions weighted temperature score (ECOTS)
@@ -104,6 +106,6 @@ class PortfolioAggregation(ABC):
             except ZeroDivisionError:
                 raise ValueError("The total owned emissions can not be zero")
 
-            return data[output_column].sum()
+            return data[output_column]
         else:
             raise ValueError("The specified portfolio aggregation method is invalid")

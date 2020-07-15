@@ -3,6 +3,8 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+.idea/*
+
 # C extensions
 *.so
 
@@ -11,6 +13,7 @@ __pycache__/
 build/
 develop-eggs/
 dist/
+!app/static/frontend/dist/
 downloads/
 eggs/
 .eggs/
@@ -130,3 +133,6 @@ dmypy.json
 
 # The actual launch configuration for AWS
 docker-compose_aws.yml
+.idea/workspace.xml
+*.exe
+%USERPROFILE%/*

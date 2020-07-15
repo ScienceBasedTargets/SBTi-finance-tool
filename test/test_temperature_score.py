@@ -50,29 +50,29 @@ class TestTemperatureScore(unittest.TestCase):
     def test_portfolio_aggregations(self):
         scores = self.temperature_score.calculate(self.data)
         aggregations = self.temperature_score.aggregate_scores(scores, PortfolioAggregationMethod.WATS)
-        self.assertAlmostEqual(aggregations["short"], 3.0994, places=4, msg="Short WATS aggregation failed")
-        self.assertAlmostEqual(aggregations["mid"], 2.9981, places=4, msg="Mid WATS aggregation failed")
-        self.assertAlmostEqual(aggregations["long"], 3.2000, places=4, msg="Long WATS aggregation failed")
+        self.assertAlmostEqual(aggregations["short"]['s1s2']["all"]["score"], 3.0357, places=4, msg="Short WATS aggregation failed")
+        self.assertAlmostEqual(aggregations["mid"]['s1s2']["all"]["score"], 2.8163, places=4, msg="Mid WATS aggregation failed")
+        self.assertAlmostEqual(aggregations["long"]['s1s2']["all"]["score"], 3.2000, places=4, msg="Long WATS aggregation failed")
         aggregations = self.temperature_score.aggregate_scores(scores, PortfolioAggregationMethod.TETS)
-        self.assertAlmostEqual(aggregations["short"], 3.0289, places=4, msg="Short TETS aggregation failed")
-        self.assertAlmostEqual(aggregations["mid"], 3.0241, places=4, msg="Mid TETS aggregation failed")
-        self.assertAlmostEqual(aggregations["long"], 3.2000, places=4, msg="Long TETS aggregation failed")
+        self.assertAlmostEqual(aggregations["short"]['s1s2']["all"]["score"], 2.8828, places=4, msg="Short TETS aggregation failed")
+        self.assertAlmostEqual(aggregations["mid"]['s1s2']["all"]["score"], 2.8998, places=4, msg="Mid TETS aggregation failed")
+        self.assertAlmostEqual(aggregations["long"]['s1s2']["all"]["score"], 3.2000, places=4, msg="Long TETS aggregation failed")
         aggregations = self.temperature_score.aggregate_scores(scores, PortfolioAggregationMethod.MOTS)
-        self.assertAlmostEqual(aggregations["short"], 3.0363, places=4, msg="Short MOTS aggregation failed")
-        self.assertAlmostEqual(aggregations["mid"], 3.0293, places=4, msg="Mid MOTS aggregation failed")
-        self.assertAlmostEqual(aggregations["long"], 3.2000, places=4, msg="Long MOTS aggregation failed")
+        self.assertAlmostEqual(aggregations["short"]['s1s2']["all"]["score"], 2.8844, places=4, msg="Short MOTS aggregation failed")
+        self.assertAlmostEqual(aggregations["mid"]['s1s2']["all"]["score"], 2.8766, places=4, msg="Mid MOTS aggregation failed")
+        self.assertAlmostEqual(aggregations["long"]['s1s2']["all"]["score"], 3.2000, places=4, msg="Long MOTS aggregation failed")
         aggregations = self.temperature_score.aggregate_scores(scores, PortfolioAggregationMethod.EOTS)
-        self.assertAlmostEqual(aggregations["short"], 3.0641, places=4, msg="Short EOTS aggregation failed")
-        self.assertAlmostEqual(aggregations["mid"], 3.0359, places=4, msg="Mid EOTS aggregation failed")
-        self.assertAlmostEqual(aggregations["long"], 3.2000, places=4, msg="Long EOTS aggregation failed")
+        self.assertAlmostEqual(aggregations["short"]['s1s2']["all"]["score"], 2.9368, places=4, msg="Short EOTS aggregation failed")
+        self.assertAlmostEqual(aggregations["mid"]['s1s2']["all"]["score"], 2.8853, places=4, msg="Mid EOTS aggregation failed")
+        self.assertAlmostEqual(aggregations["long"]['s1s2']["all"]["score"], 3.2000, places=4, msg="Long EOTS aggregation failed")
         aggregations = self.temperature_score.aggregate_scores(scores, PortfolioAggregationMethod.ECOTS)
-        self.assertAlmostEqual(aggregations["short"], 3.0363, places=4, msg="Short ECOTS aggregation failed")
-        self.assertAlmostEqual(aggregations["mid"], 3.0293, places=4, msg="Mid ECOTS aggregation failed")
-        self.assertAlmostEqual(aggregations["long"], 3.2000, places=4, msg="Long ECOTS aggregation failed")
+        self.assertAlmostEqual(aggregations["short"]['s1s2']["all"]["score"], 2.8844, places=4, msg="Short ECOTS aggregation failed")
+        self.assertAlmostEqual(aggregations["mid"]['s1s2']["all"]["score"], 2.8766, places=4, msg="Mid ECOTS aggregation failed")
+        self.assertAlmostEqual(aggregations["long"]['s1s2']["all"]["score"], 3.2000, places=4, msg="Long ECOTS aggregation failed")
         aggregations = self.temperature_score.aggregate_scores(scores, PortfolioAggregationMethod.AOTS)
-        self.assertAlmostEqual(aggregations["short"], 3.0363, places=4, msg="Short AOTS aggregation failed")
-        self.assertAlmostEqual(aggregations["mid"], 3.0293, places=4, msg="Mid AOTS aggregation failed")
-        self.assertAlmostEqual(aggregations["long"], 3.2000, places=4, msg="Long AOTS aggregation failed")
+        self.assertAlmostEqual(aggregations["short"]['s1s2']["all"]["score"], 2.8844, places=4, msg="Short AOTS aggregation failed")
+        self.assertAlmostEqual(aggregations["mid"]['s1s2']["all"]["score"], 2.8766, places=4, msg="Mid AOTS aggregation failed")
+        self.assertAlmostEqual(aggregations["long"]['s1s2']["all"]["score"], 3.2000, places=4, msg="Long AOTS aggregation failed")
 
 
 if __name__ == "__main__":
@@ -80,3 +80,18 @@ if __name__ == "__main__":
     test.setUp()
     test.test_temp_score()
     test.test_portfolio_aggregations()
+
+
+
+# testing
+# import pandas as pd
+# import os
+#
+# data = pd.read_csv(os.path.join("C:/Projects/SBTi/test/inputs/data_test_temperature_score.csv"))
+# temperature_score = TemperatureScore()
+# scores = temperature_score.calculate(data)
+# aggregations = temperature_score.aggregate_scores(scores, PortfolioAggregationMethod.TETS)
+
+
+
+
