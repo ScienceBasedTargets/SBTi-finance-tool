@@ -247,7 +247,33 @@ class TemperatureScore(PortfolioAggregation):
                 company_data[self.c.COLS.TEMPERATURE_SCORE] = self.get_ghc_temperature_score(data, company, time_frame)
                 combined_data.append(company_data)
 
-        return pd.concat([data, pd.DataFrame(combined_data)])
+        data_score = pd.concat([data, pd.DataFrame(combined_data)])
+        data_score.reset_index(inplace=True, drop=True)
+
+        for time_frame in data_score[self.c.COLS.TIME_FRAME].unique():
+            for company in data_score[self.c.COLS.COMPANY_NAME].unique():
+                company_data = data_score[(data_score[self.c.COLS.COMPANY_NAME] == company)
+                                          & (data_score[self.c.COLS.TIME_FRAME] == time_frame)]
+                scope_3_emissions = company_data[self.c.COLS.S3_EMISSIONS].iloc[0]
+                scope_12_emissions = company_data[self.c.COLS.S1S2_EMISSIONS].iloc[0]
+                scope_123_emissions = scope_12_emissions + scope_3_emissions
+
+                if not pd.isnull(scope_3_emissions) & pd.isnull(scope_123_emissions):
+                    s1s2_temp_score = \
+                    company_data[company_data[self.c.COLS.SCOPE_CATEGORY] == 's1s2'][self.c.COLS.TEMPERATURE_SCORE].values[0]
+                    s3_temp_score = company_data[company_data[self.c.COLS.SCOPE_CATEGORY] == 's3'][self.c.COLS.TEMPERATURE_SCORE].values[0]
+                    index = \
+                    data_score[(data_score[self.c.COLS.COMPANY_NAME] == company) & (data_score[self.c.COLS.TIME_FRAME] == time_frame) &
+                               (data_score[self.c.COLS.SCOPE_CATEGORY] == 's1s2s3')].index[0]
+
+                    if (scope_3_emissions / scope_123_emissions) < 0.4:
+                        data_score.at[index, self.c.COLS.TEMPERATURE_SCORE] = s1s2_temp_score
+
+                    else:
+                        data_score.at[index, self.c.COLS.TEMPERATURE_SCORE] = ((s1s2_temp_score * scope_12_emissions) +
+                                                                     (s3_temp_score * scope_3_emissions)) / (
+                                                                        scope_123_emissions)
+        return data_score
 
 
     def aggregate_scores(self, data: pd.DataFrame, portfolio_aggregation_method: Type[PortfolioAggregationMethod],
@@ -494,12 +520,10 @@ class TemperatureScore(PortfolioAggregation):
             percentage_distribution = (data.groupby(columns).size() / data[columns[0]].count()) * 100
             return percentage_distribution.to_dict()
 
-
 # Test
 # portfolio_data = pd.read_csv('C:/Projects/SBTi/portfolio_data_2.csv',sep='\t')
 # portfolio_data.drop(columns = 'Unnamed: 0',inplace=True)
 # temperature_score = TemperatureScore(fallback_score=3.2)
+# data_score = temperature_score.calculate(portfolio_data, [])
 # temperature_score.columns_percentage_distribution(data,['industry','time_frame'])
 # df = temperature_score.temperature_score_influence_percentage(portfolio_data,'WATS')
-
-
