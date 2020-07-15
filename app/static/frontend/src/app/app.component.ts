@@ -28,11 +28,12 @@ export class AppComponent implements OnInit {
     availableColumns: string[] = AVAILABLE_COLUMNS;
     availableGroupingColumns: string[] = AVAILABLE_GROUPING_COLUMNS;
     groupingColumns: string[] = [];
-    selectedAggregationMethod: string = null;
+    selectedAggregationMethod: string = "WATS";
     filterTimeFrames: string[] = [];
     filterScopeCategory: string[] = [];
     includeColumns: string[] = [];
     selectedDataProviders: string[] = [];
+    availableDefaultScores: number[] = [3.2, 3.9, 4.5];
     defaultScore: number = 3.2;
     uploadedFiles: Array<File>;
     dataProviders: DataProvider[];
@@ -61,7 +62,7 @@ export class AppComponent implements OnInit {
 
     /**
      * Adds alert
-     * @param alert 
+     * @param alert
      */
     addAlert(alert: Alert) {
         this.alerts.push(alert);
@@ -69,7 +70,7 @@ export class AppComponent implements OnInit {
 
     /**
      * Closes alert
-     * @param alert 
+     * @param alert
      */
     closeAlert(alert: Alert) {
         this.alerts.splice(this.alerts.indexOf(alert), 1);
@@ -77,7 +78,7 @@ export class AppComponent implements OnInit {
 
     /**
      * Update the uploaded files.
-     * @param element 
+     * @param element
      */
     onFileChange(element) {
         this.uploadedFiles = element.target.files;
@@ -110,8 +111,8 @@ export class AppComponent implements OnInit {
 
     /**
          * Export some data (formatted as a 2d array) as a CSV file.
-     * @param filename 
-     * @param rows 
+     * @param filename
+     * @param rows
      */
     exportToCsv(filename: string, rows: Array<Array<any>>) {
         var processRow = function (row) {
@@ -176,7 +177,7 @@ export class AppComponent implements OnInit {
                     let sortedMappings = that.availableTargetColumns.filter(elem => !(elem in assigned)).sort((a, b) => {
                         return levenshtein.get(a, obj) - levenshtein.get(b, obj);
                     });
-                    if (sortedMappings.length > 0 && 
+                    if (sortedMappings.length > 0 &&
                         levenshtein.get(sortedMappings[0], obj) < environment.levenshteinThreshold){
                         // If it's smaller than the threshold, we'll assign this column
                         map[obj] = sortedMappings[0];
@@ -200,7 +201,7 @@ export class AppComponent implements OnInit {
 
     /**
      * Gets the temperature score
-     * @param f 
+     * @param f
      */
     getTemperatureScore(f) {
         this.loading = true;
