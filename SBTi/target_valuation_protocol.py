@@ -62,18 +62,10 @@ class TargetValuationProtocol:
 
         Option 3: default coverage
         Target is always valid, % uncovered is given default score in temperature score module.
-
-
-        :param :
-        :type :
-
-        :rtype:
-        :return:
         '''
 
-        # Option 1
         index = []
-        # data.reset_index(inplace=True, drop=True)
+        new_target_ambition = []
         for record in self.data.iterrows():
             if not pd.isna(record[1][self.c.COLS.SCOPE]):
                 if 'Scope 1+2' in record[1][self.c.COLS.SCOPE]:
@@ -82,7 +74,15 @@ class TargetValuationProtocol:
                 elif 'Scope 3' in record[1][self.c.COLS.SCOPE]:
                     if record[1][self.c.COLS.EMISSIONS_IN_SCOPE] > 67:
                         index.append(record[0])
+                else:
+                    index.append(record[0])
+                    self.data.at[record[0], self.c.COLS.ACHIEVED_EMISSIONS] = \
+                    self.data[self.c.COLS.ACHIEVED_EMISSIONS].loc[record[0]] * \
+                    (self.data[self.c.COLS.EMISSIONS_IN_SCOPE].loc[record[0]] / 100)
+
         self.data = self.data.loc[index]
+
+
 
     def test_target_process(self):
         '''
@@ -91,13 +91,6 @@ class TargetValuationProtocol:
         Output: a list of valid targets per company
 
         Target progress: the percentage of the target already achieved
-
-
-        :param:
-        :type:
-
-        :rtype:
-        :return:
         '''
 
         index = []
@@ -110,12 +103,6 @@ class TargetValuationProtocol:
     def time_frame(self):
         '''
         Time frame is forward looking: target year - current year. Less than 5y = short, between 5 and 15 is mid, 15 to 30 is long
-
-        :param:
-        :type:
-
-        :rtype:
-        :return:
         '''
         now = datetime.datetime.now()
         time_frame_list = []
@@ -137,9 +124,6 @@ class TargetValuationProtocol:
     def _find_target(self, row: pd.Series):
         """
         Find the target that corresponds to a given row. If there are multiple targets available, filter them.
-
-        :param row:
-        :return:
         """
         # Find all targets that correspond to the given row
         target_data = self.data[(self.data[self.c.COLS.COMPANY_NAME] == row[self.c.COLS.COMPANY_NAME]) &
@@ -189,8 +173,6 @@ class TargetValuationProtocol:
         -- Latest base year
         -- Target type: Absolute over intensity
         -- If all else is equal: average the ambition of targets
-
-        :return:
         """
         grid_columns = [self.c.COLS.COMPANY_NAME, self.c.COLS.TIME_FRAME, self.c.COLS.SCOPE_CATEGORY]
         companies = self.data[self.c.COLS.COMPANY_NAME].unique()
@@ -208,3 +190,16 @@ class TargetValuationProtocol:
 
         extended_data = extended_data.apply(lambda row: self._find_target(row), axis=1)
         self.data = extended_data
+
+
+
+# Testing
+# data = pd.read_csv('C:/Projects/SBTi/testing_file.csv',sep='\t')
+# x = TargetValuationProtocol(data)
+# x.test_target_type()
+# x.test_boundary_coverage()
+
+
+
+
+

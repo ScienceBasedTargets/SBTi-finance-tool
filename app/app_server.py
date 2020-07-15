@@ -167,7 +167,7 @@ class temp_score(BaseEndpoint):
         temperature_percentage_coverage = temperature_score.temperature_score_influence_percentage(portfolio_data, json_data['aggregation_method'])
 
         # Distribution of columns
-        column_distribution = temperature_score.columns_percentage_distribution(portfolio_data,['industry'])
+        column_distribution = temperature_score.columns_percentage_distribution(portfolio_data,json_data['feature_distribution'])
 
         return {
             "aggregated_scores": aggregations,
@@ -175,7 +175,7 @@ class temp_score(BaseEndpoint):
             "companies": scores[include_columns].replace({np.nan: None}).to_dict(
                 orient="records"),
             "temp_score_percent_coverage": temperature_percentage_coverage,
-            "columns_distribution": column_distribution
+            "feature_distribution": str(column_distribution)
         }
 
 class DataProviders(BaseEndpoint):

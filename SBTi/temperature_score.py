@@ -495,14 +495,11 @@ class TemperatureScore(PortfolioAggregation):
             return percentage_distribution.to_dict()
 
 
-
-
-
-
 # Test
 # portfolio_data = pd.read_csv('C:/Projects/SBTi/portfolio_data_2.csv',sep='\t')
 # portfolio_data.drop(columns = 'Unnamed: 0',inplace=True)
 # temperature_score = TemperatureScore(fallback_score=3.2)
+# temperature_score.columns_percentage_distribution(data,['industry','time_frame'])
 # df = temperature_score.temperature_score_influence_percentage(portfolio_data,'WATS')
 
 
