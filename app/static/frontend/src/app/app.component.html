@@ -75,9 +75,9 @@
         </div>
         <div class="form-group">
             <label for="input-filterTimeFrames">Time frame</label>
-            <select [(ngModel)]="filterTimeFrames" name="filterTimeFrames" multiple class="form-control"
+            <select class="form-control" [(ngModel)]="filterTimeFrames" name="filterTimeFrames" multiple
                 id="input-filterTimeFrames">
-                <option *ngFor="let timeFrame of availableTimeFrames">{{timeFrame}}</option>
+                <option *ngFor="let timeFrame of availableTimeFrames" selected>{{timeFrame}}</option>
             </select>
         </div>
         <div class="form-group">
@@ -125,7 +125,7 @@
                 <tr *ngFor="let timeFrame of resultTimeFrames">
                     <td>{{group}}</td>
                     <td>{{timeFrame}}</td>
-                    <td>{{resultScores["short"][group]["score"] | number:'1.2-2'}}&#176;C</td>
+                    <td>{{resultScores[timeFrame][group]["score"] | number:'1.2-2'}}&#176;C</td>
                     <td><button (click)="openContributors(group, timeFrame, templateContributions)" class="btn btn-sm btn-outline-primary">Contributors</button></td>
                 </tr>
             </tbody>

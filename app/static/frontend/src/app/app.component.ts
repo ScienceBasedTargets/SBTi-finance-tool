@@ -29,8 +29,8 @@ export class AppComponent implements OnInit {
     availableGroupingColumns: string[] = AVAILABLE_GROUPING_COLUMNS;
     groupingColumns: string[] = [];
     selectedAggregationMethod: string = "WATS";
-    filterTimeFrames: string[] = [];
-    filterScopeCategory: string[] = [];
+    filterTimeFrames: string[] = ["mid"];
+    filterScopeCategory: string[] = ["s1s2", "s1s2s3"];
     includeColumns: string[] = [];
     selectedDataProviders: string[] = [];
     availableDefaultScores: number[] = [3.2, 3.9, 4.5];
@@ -234,7 +234,8 @@ export class AppComponent implements OnInit {
                     this.resultTargets = response["companies"];
                     this.coverage = response["coverage"];
                     this.resultTimeFrames = Object.keys(response["aggregated_scores"]);
-                    this.resultGroups = Object.keys(response["aggregated_scores"]["short"]);
+                    const firstTimeFrame = this.resultTimeFrames[0];
+                    this.resultGroups = Object.keys(response["aggregated_scores"][firstTimeFrame]);
                     if (this.resultTargets.length > 0) {
                         this.resultColumns = Object.keys(this.resultTargets[0]);
                     }
