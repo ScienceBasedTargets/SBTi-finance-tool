@@ -68,7 +68,6 @@ class TargetValuationProtocol:
         '''
 
         index = []
-        new_target_ambition = []
         for record in self.data.iterrows():
             if not pd.isna(record[1][self.c.COLS.SCOPE]):
                 if 'Scope 1+2' in record[1][self.c.COLS.SCOPE]:
@@ -124,9 +123,12 @@ class TargetValuationProtocol:
                 time_frame_list.append(None)
         self.data[self.c.COLS.TIME_FRAME] = time_frame_list
 
-    def _find_target(self, row: pd.Series):
+    def _find_target(self, row: pd.Series)-> pd.DataFrame:
         """
         Find the target that corresponds to a given row. If there are multiple targets available, filter them.
+
+        :return: returns records from the input data, which contains company and target information, that meet specific
+        criteria. For example, record of greatest emissions_in_scope
         """
         # Find all targets that correspond to the given row
         target_data = self.data[(self.data[self.c.COLS.COMPANY_NAME] == row[self.c.COLS.COMPANY_NAME]) &

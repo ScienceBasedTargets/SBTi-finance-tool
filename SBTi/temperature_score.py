@@ -510,7 +510,7 @@ class TemperatureScore(PortfolioAggregation):
 
         :param data: output from the target_valuation_protocol
         :param columns: specified column names the client would like to have a percentage distribution
-        :return:
+        :return: percentage distribution of specified columns
         '''
 
         if len(columns) == 1:
