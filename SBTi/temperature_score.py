@@ -1,6 +1,5 @@
 import itertools
 from typing import Optional, Tuple, Type, Dict
-import typing
 
 from enum import Enum
 import pandas as pd
@@ -264,7 +263,7 @@ class TemperatureScore(PortfolioAggregation):
 
         portfolio_scores = {
             time_frame: {scope: {} for scope in data[self.c.COLS.SCOPE_CATEGORY].unique()}
-            for time_frame in data[self.c.COLS.TIME_FRAME].unique()} # typing.Any
+            for time_frame in data[self.c.COLS.TIME_FRAME].unique()}
 
         for time_frame, scope in itertools.product(data[self.c.COLS.TIME_FRAME].unique(),
                                                    data[self.c.COLS.SCOPE_CATEGORY].unique()):
