@@ -32,7 +32,7 @@ class PortfolioAggregation(ABC):
         self.c = config
 
     def _calculate_aggregate_score(self, data: pd.DataFrame, input_column: str, output_column: str,
-                                   portfolio_aggregation_method: Type[PortfolioAggregationMethod]) -> Optional[float]:
+                                   portfolio_aggregation_method: Type[PortfolioAggregationMethod]) -> pd.Series:
         """
         Aggregate the scores in a given column based on a certain portfolio aggregation method.
 

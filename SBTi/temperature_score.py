@@ -261,7 +261,7 @@ class TemperatureScore(PortfolioAggregation):
         :return: A weighted temperature score for the portfolio
         """
 
-        portfolio_scores = {
+        portfolio_scores:Dict = {
             time_frame: {scope: {} for scope in data[self.c.COLS.SCOPE_CATEGORY].unique()}
             for time_frame in data[self.c.COLS.TIME_FRAME].unique()}
 
