@@ -400,6 +400,9 @@ class TemperatureScore(PortfolioAggregation):
                 s1s2_emissions = company_data.iloc[1][self.c.COLS.S1S2_EMISSIONS]
                 s3_emissions = company_data.iloc[1][self.c.COLS.S3_EMISSIONS]
 
+                if str(aggregation_method) == 'PortfolioAggregationMethod.WATS':
+                    aggregation_method = 'WATS'  # added by Louis, because of error here .. TODO: fix error (Vito?)
+
                 if aggregation_method == 'WATS':
                     portfolio_weight_storage = []
                     for company in data[self.c.COLS.COMPANY_NAME].unique():

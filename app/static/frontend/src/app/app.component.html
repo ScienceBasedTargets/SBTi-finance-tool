@@ -125,7 +125,7 @@
                 <tr *ngFor="let timeFrame of resultTimeFrames">
                     <td>{{group}}</td>
                     <td>{{timeFrame}}</td>
-                    <td>{{resultScores[timeFrame][group]["score"] | number:'1.2-2'}}&#176;C</td>
+                    <td>{{resultScores[timeFrame][group]["all"]["score"] | number:'1.2-2'}}&#176;C</td>
                     <td><button (click)="openContributors(group, timeFrame, templateContributions)" class="btn btn-sm btn-outline-primary">Contributors</button></td>
                 </tr>
             </tbody>
