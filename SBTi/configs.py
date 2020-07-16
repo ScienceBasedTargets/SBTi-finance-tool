@@ -41,7 +41,7 @@ class ColumnsConfig:
     SECTOR = 'sector'
     GHG_SCOPE12 = 'GHG_scope12'
     GHG_SCOPE3 = 'GHG_scope3'
-    REVENU = 'Revenu'
+    COMPANY_REVENUE = 'Revenue'
     ENTERPRISE_VALUE = 'enterprise_value'
     TOTAL_ASSETS = 'total_assets'
     CASH_EQUIVALENTS = 'cash_equivalents'
