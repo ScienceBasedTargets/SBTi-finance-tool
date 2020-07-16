@@ -30,6 +30,7 @@ COPY config/nginx.conf /etc/nginx/nginx.conf
 COPY config/flask-site-nginx.conf /etc/nginx/sites-available/flask-site-nginx.conf
 COPY config/uwsgi.ini /etc/uwsgi/uwsgi.ini
 COPY config/supervisord.conf /etc/supervisord.conf
+COPY app/config.json /project/config.json
 
 
 RUN ln -s /etc/nginx/sites-available/flask-site-nginx.conf /etc/nginx/sites-enabled/flask-site-nginx.conf \
