@@ -46,7 +46,6 @@ class TemperatureScore(PortfolioAggregation):
         self.mapping = pd.read_excel(self.c.FILE_SR15_MAPPING, header=0)
         self.regression_model = pd.read_excel(self.c.FILE_REGRESSION_MODEL_SUMMARY, header=0)
 
-
     def get_target_mapping(self, target: pd.Series) -> Optional[str]:
         """
         Map the target onto an SR15 target (None if not available).
@@ -170,8 +169,6 @@ class TemperatureScore(PortfolioAggregation):
         except ZeroDivisionError:
             raise ValueError("The mean of the S1+S2 plus the S3 emissions is zero")
 
-
-
     def get_default_score(self, target: pd.Series) -> str:
         """
         Get the temperature score for a certain target based on the annual reduction rate and the regression parameters.
@@ -183,9 +180,6 @@ class TemperatureScore(PortfolioAggregation):
                 or pd.isnull(target[self.c.COLS.ANNUAL_REDUCTION_RATE]):
             return 'default'
         return 'target'
-
-
-
 
     def calculate(self, data: pd.DataFrame, extra_columns: Optional[list] = None):
         """
@@ -249,7 +243,6 @@ class TemperatureScore(PortfolioAggregation):
 
         return pd.concat([data, pd.DataFrame(combined_data)])
 
-
     def aggregate_scores(self, data: pd.DataFrame, portfolio_aggregation_method: Type[PortfolioAggregationMethod],
                          grouping: Optional[list] = None):
         """
@@ -260,7 +253,6 @@ class TemperatureScore(PortfolioAggregation):
         :param grouping: The grouping to use
         :return: A weighted temperature score for the portfolio
         """
-
         portfolio_scores:Dict = {
             time_frame: {scope: {} for scope in data[self.c.COLS.SCOPE_CATEGORY].unique()}
             for time_frame in data[self.c.COLS.TIME_FRAME].unique()}
@@ -304,7 +296,6 @@ class TemperatureScore(PortfolioAggregation):
 
         return portfolio_scores
 
-
     def temperature_score_influence_percentage(self, data, aggregation_method):
         """
         Determines the percentage of the temperature score is covered by target and default score
@@ -340,7 +331,6 @@ class TemperatureScore(PortfolioAggregation):
 
         :return: A dataframe containing the percentage contributed by the default and target score for all three timeframes
         """
-
         data[self.c.COLS.SR15] = data.apply(lambda row: self.get_target_mapping(row), axis=1)
         data[self.c.COLS.ANNUAL_REDUCTION_RATE] = data.apply(lambda row: self.get_annual_reduction_rate(row), axis=1)
         data[self.c.COLS.REGRESSION_PARAM], data[self.c.COLS.REGRESSION_INTERCEPT] = zip(
@@ -477,16 +467,13 @@ class TemperatureScore(PortfolioAggregation):
 
         return dictionary
 
-
     def columns_percentage_distribution(self, data, columns):
         '''
         Percentage distribution of specific column or columns
 
         :param data: output from the target_valuation_protocol
         :param columns: specified column names the client would like to have a percentage distribution
-        :return:
         '''
-
         if len(columns) == 1:
             percentage_distribution = (data.groupby(columns[0]).size() / data[columns[0]].count()) * 100
             return percentage_distribution.to_dict()
@@ -494,6 +481,14 @@ class TemperatureScore(PortfolioAggregation):
             percentage_distribution = (data.groupby(columns).size() / data[columns[0]].count()) * 100
             return percentage_distribution.to_dict()
 
+    def dump_data(self, scores):
+        '''
+        Saves scores and raw data required to compute scores for each company-target combination
+        '''
+        scores.sort_values(by=['company_name', 'scope_category'], inplace=True)
+        scores.rename(columns={'company_id_x': 'company_id'}, inplace=True)
+        scores.drop(columns=['company_id_y'])
+        scores.to_csv(self.c.FILE_RAW_DATA_DUMP, index=False)
 
 # Test
 # portfolio_data = pd.read_csv('C:/Projects/SBTi/portfolio_data_2.csv',sep='\t')
