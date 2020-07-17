@@ -8,6 +8,7 @@ import os
 class ColumnsConfig:
     # Define a constant for each column used in the
     COMPANY_ID = "company_id"
+    COMPANY_ISIN = "ISIN"
     INDUSTRY = "industry"
     REGRESSION_PARAM = "regression_param"
     REGRESSION_INTERCEPT = "regression_intercept"
@@ -41,7 +42,7 @@ class ColumnsConfig:
     SECTOR = 'sector'
     GHG_SCOPE12 = 'GHG_scope12'
     GHG_SCOPE3 = 'GHG_scope3'
-    REVENU = 'Revenu'
+    COMPANY_REVENUE = 'Revenue'
     ENTERPRISE_VALUE = 'enterprise_value'
     TOTAL_ASSETS = 'total_assets'
     CASH_EQUIVALENTS = 'cash_equivalents'
@@ -90,6 +91,8 @@ class TemperatureScoreConfig(PortfolioAggregationConfig):
                                      "sr15_mapping.xlsx")
     FILE_REGRESSION_MODEL_SUMMARY = os.path.join(os.path.dirname(os.path.realpath(__file__)), "inputs",
                                                  "regression_model_summary.xlsx")
+    FILE_RAW_DATA_DUMP = os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "app",
+                                      "uploads", "test_output.csv")
 
     DEFAULT_INDUSTRY = "Others"
 
