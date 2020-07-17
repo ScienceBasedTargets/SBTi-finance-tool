@@ -1,6 +1,8 @@
+import datetime
 import pandas as pd
 from typing import List
 from SBTi.configs import ColumnsConfig
+
 
 
 class TargetValuationProtocol:
@@ -8,6 +10,7 @@ class TargetValuationProtocol:
     def __init__(self, input, config: ColumnsConfig = ColumnsConfig):
         self.data = input
         self.c = config
+
 
     def target_valuation_protocol(self):
         '''
@@ -21,7 +24,6 @@ class TargetValuationProtocol:
         self.test_boundary_coverage()
         self.test_target_process()
         return self.group_valid_target()
-
 
 
     def input_data(self, input) -> pd.DataFrame:
@@ -95,25 +97,24 @@ class TargetValuationProtocol:
 
     def time_frame(self):
         '''
-        Time frame is forward looking: target year - current year. Less than 5y = short,
-        5 and 15 is mid, 15 to 30 is long
+        Time frame is forward looking: target year - current year. Less than 5y = short, between 5 and 15 is mid, 15 to 30 is long
         '''
-
-        current_year = 2020; time_frame_list = [];
-        for record in self.data.iterrows():
-            if not pd.isna(record[1][self.c.TARGET_YEAR]):
-                time_frame = record[1][self.c.TARGET_YEAR] - current_year
-                if (time_frame<15) & (time_frame>5):
+        now = datetime.datetime.now()
+        time_frame_list = []
+        for index, record in self.data.iterrows():
+            if not pd.isna(record[self.c.COLS.TARGET_YEAR]):
+                time_frame = record[self.c.COLS.TARGET_YEAR] - now.year
+                if (time_frame < 15) & (time_frame > 5):
                     time_frame_list.append('mid')
-                elif (time_frame<30) & (time_frame>15):
+                elif (time_frame < 30) & (time_frame > 15):
                     time_frame_list.append('long')
-                elif time_frame<5:
+                elif time_frame < 5:
                     time_frame_list.append('short')
                 else:
                     time_frame_list.append(None)
             else:
                 time_frame_list.append(None)
-        self.data['Time frame'] = time_frame_list
+        self.data[self.c.COLS.TIME_FRAME] = time_frame_list
 
 
 
@@ -175,11 +176,9 @@ class TargetValuationProtocol:
         categories but with the features as "NaN" values
 
         :param data_category: companies that made the criteria
-        :type dataframe:
 
-        :rtype: list, list
-        :return: a list of six categories, each one containing a dataframe.
-
+        :return: a list of six categories, each one containing a dataframe of remaining companies, which will act as a
+        place holder.
         '''
 
         if data_category is not None:

@@ -117,9 +117,7 @@ class DataProvider:
 
         :param data: input data
 
-
-        :rtype: dataframe, dataframe
-        :return: excel file as input data
+        :return: bolean value that will be used to make sure the excel columns and sheets are valid
         """
 
         return self.validate_sheets(data) and self.validate_columns(data)
@@ -132,7 +130,7 @@ class DataProvider:
         :param data: input data
 
         :rtype: bolean value, <TRUE | FALSE>
-        :return: excel file as input data
+        :return: bolean value that will be used to either raise an error or move onto the next step.
         """
         if ('company' in str(list(data.keys())).lower()) & ('target' in str(list(data.keys())).lower()):
             return True
@@ -147,7 +145,7 @@ class DataProvider:
         :param data: input data
 
         :rtype: bolean value, <TRUE | FALSE>
-        :return: excel file as input data
+        :return: excel file containing company and target data will be returned and later used as input data
         """
         sheets = ['Company data','Target data']
         for sheet in sheets:

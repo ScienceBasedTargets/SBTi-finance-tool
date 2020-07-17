@@ -6,6 +6,7 @@ from typing import Type
 from SBTi.configs import PortfolioAggregationConfig
 
 
+
 class TargetValuationProtocol:
 
     def __init__(self, data: pd.DataFrame, config: Type[PortfolioAggregationConfig] = PortfolioAggregationConfig):
@@ -33,11 +34,12 @@ class TargetValuationProtocol:
         """
         Test on target type and only allow only GHG emission reduction targets (absolute or intensity based).
 
-        :param:
-        :type:
-
-        :rtype:
-        :return:
+        Target validation step 1: target type #64
+        If target type is Absolute => continue
+        If target type is Intensity =>
+        -- If Intensity_metric is Other (or none is specified) => Invalid target
+        -- For all other intensity_metrics => continue
+        If target type is Other (or none is specified) => Invalid target
         """
         index = []
         for record in self.data.iterrows():
@@ -47,6 +49,7 @@ class TargetValuationProtocol:
                 elif 'abs' in record[1][self.c.COLS.TARGET_REFERENCE_NUMBER].lower():
                     index.append(record[0])
         self.data = self.data.loc[index]
+
 
     def test_boundary_coverage(self):
         '''
@@ -65,7 +68,6 @@ class TargetValuationProtocol:
         '''
 
         index = []
-        new_target_ambition = []
         for record in self.data.iterrows():
             if not pd.isna(record[1][self.c.COLS.SCOPE]):
                 if 'Scope 1+2' in record[1][self.c.COLS.SCOPE]:
@@ -121,9 +123,12 @@ class TargetValuationProtocol:
                 time_frame_list.append(None)
         self.data[self.c.COLS.TIME_FRAME] = time_frame_list
 
-    def _find_target(self, row: pd.Series):
+    def _find_target(self, row: pd.Series)-> pd.DataFrame:
         """
         Find the target that corresponds to a given row. If there are multiple targets available, filter them.
+
+        :return: returns records from the input data, which contains company and target information, that meet specific
+        criteria. For example, record of greatest emissions_in_scope
         """
         # Find all targets that correspond to the given row
         target_data = self.data[(self.data[self.c.COLS.COMPANY_NAME] == row[self.c.COLS.COMPANY_NAME]) &

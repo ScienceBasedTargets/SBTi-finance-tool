@@ -130,7 +130,6 @@ class temp_score(BaseEndpoint):
 
         scores = temperature_score.calculate(portfolio_data, extra_columns)
 
-
         # After calculation we'll re-add the extra columns from the input
         for company in json_data["companies"]:
             for key, value in company.items():
