@@ -116,8 +116,11 @@ class temp_score(BaseEndpoint):
         targets = SBTi.data.get_targets(data_providers, json_data["companies"])
         portfolio_data = pd.merge(left=company_data, right=targets, left_on='company_name', right_on='company_name')
 
+        portfolio_data.to_csv('portfolio_data_3',sep='\t')
+
         # Target_Valuation_Protocol
         target_valuation_protocol = TargetValuationProtocol(portfolio_data)
+
         portfolio_data = target_valuation_protocol.target_valuation_protocol()
 
         # Add the user-defined columns to the data set for grouping later on
@@ -166,7 +169,10 @@ class temp_score(BaseEndpoint):
         temperature_percentage_coverage = temperature_score.temperature_score_influence_percentage(portfolio_data, json_data['aggregation_method'])
 
         # Distribution of columns
-        column_distribution = temperature_score.columns_percentage_distribution(portfolio_data,json_data['feature_distribution'])
+        # ToDo: make json_data more robust, optional
+        if 'feature_distribution' in json_data.keys():
+            column_distribution = temperature_score.columns_percentage_distribution(portfolio_data,json_data['feature_distribution'])
+        else:
 
         return {
             "aggregated_scores": aggregations,
@@ -221,6 +227,8 @@ class portfolio_coverage(BaseEndpoint):
                 "portfolio_weight"]
             portfolio_data.loc[portfolio_data['company_name'] == company["company_name"], "investment_value"] = company[
                 "investment_value"]
+
+
 
         coverage = self.portfolio_coverage_tvp.get_portfolio_coverage(portfolio_data,
                                                                       self.aggregation_map[

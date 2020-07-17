@@ -19,9 +19,9 @@ class ColumnsConfig:
     COMPANY_ENTERPRISE_VALUE = "company_enterprise_value"
     COMPANY_EV_PLUS_CASH = "company_ev_plus_cash"
     COMPANY_TOTAL_ASSETS = "company_total_assets"
-    TARGET_REFERENCE_NUMBER = "target_reference_number"
+    TARGET_REFERENCE_NUMBER = "Target type"
     TARGET_TYPE = "target_type"
-    SCOPE = "scope"
+    SCOPE = "Scope"
     SCOPE_CATEGORY = "scope_category"
     SR15 = "SR15"
     REDUCTION_FROM_BASE_YEAR = "reduction_from_base_year"
@@ -39,7 +39,7 @@ class ColumnsConfig:
     CDP_ACS_INDUSTRY = 'CDP_ACS_industry'
     COUNTRY = 'country'
     SECTOR = 'sector'
-    GHG_SCOPE12 = 'GHG_scope12'
+    GHG_SCOPE12 = 'GHG_scope1+2'
     GHG_SCOPE3 = 'GHG_scope3'
     REVENU = 'Revenu'
     ENTERPRISE_VALUE = 'enterprise_value'
@@ -52,6 +52,21 @@ class ColumnsConfig:
     END_YEAR = 'end_year'
     SBTI_STATUS = 'SBTi_status'
     ACHIEVED_EMISSIONS = "achieved_reduction"
+    ISIC = 'ISIC'
+    INDUSTRY_LVL1 = "Industry_lvl1"
+    INDUSTRY_LVL2 = "Industry_lvl2"
+    INDUSTRY_LVL3 = "Industry_lvl3"
+    INDUSTRY_LVL4 = "Industry_lvl4"
+    COVERAGE_S1 = 'Coverage_S1'
+    COVERAGE_S2 = 'Coverage_S2'
+    COVERAGE_S3 = 'Coverage_S3'
+    INTENSITY_METRIC = 'Intensity_metric'
+    INTENSITY_METRIC_SR15 = 'Intensity_metric'
+    TARGET_TYPE_SR15 = "Target_type"
+    SR15_VARIABLE = "SR15_variable"
+    ENTERPRISE_VALUE = 'enterprise_value'
+
+
 
     # SR15 mapping columns
     PARAM = "param"
@@ -63,11 +78,9 @@ class ColumnsConfig:
     CONTRIBUTION = "contribution"
 
     # This defines which column contain company specific, instead of target specific data
-    COMPANY_COLUMNS = [INDUSTRY, REGRESSION_PARAM, REGRESSION_INTERCEPT,
-                       S1S2_EMISSIONS,
-                       S3_EMISSIONS, MARKET_CAP, INVESTMENT_VALUE, PORTFOLIO_WEIGHT,
-                       COMPANY_ENTERPRISE_VALUE, COMPANY_EV_PLUS_CASH,
-                       COMPANY_TOTAL_ASSETS]
+    COMPANY_COLUMNS = [INDUSTRY_LVL1,INDUSTRY_LVL2,INDUSTRY_LVL3,INDUSTRY_LVL4,INTENSITY_METRIC, REGRESSION_PARAM,
+                      REGRESSION_INTERCEPT, GHG_SCOPE12, GHG_SCOPE3, MARKET_CAP, INVESTMENT_VALUE, PORTFOLIO_WEIGHT,
+                      ENTERPRISE_VALUE, CASH_EQUIVALENTS, TOTAL_ASSETS]
 
 
 class PortfolioAggregationConfig:
@@ -82,7 +95,7 @@ class PortfolioAggregationConfig:
     VALUE_SCOPE_CATEGORY_S3 = "s3"
     VALUE_SCOPE_CATEGORY_S1S2S3 = "s1s2s3"
 
-    SCOPE_MAP = {"scope 1+2": "s1s2", "scope 3": "s3", "scope 1+2+3": "s1s2s3"}
+    SCOPE_MAP = {"s1+s2": "s1s2", "s3": "s3", "s1+s2+s3": "s1s2s3",'s2':'s1s2','s1':'s1s2'}
 
 
 class TemperatureScoreConfig(PortfolioAggregationConfig):
