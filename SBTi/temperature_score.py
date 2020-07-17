@@ -520,12 +520,17 @@ class TemperatureScore(PortfolioAggregation):
         :param columns: specified column names the client would like to have a percentage distribution
         :return: percentage distribution of specified columns
         '''
-        if len(columns) == 1:
+        if columns==None:
+            return None
+        elif len(columns) == 1:
             percentage_distribution = (data.groupby(columns[0]).size() / data[columns[0]].count()) * 100
             return percentage_distribution.to_dict()
-        else:
+        elif len(columns) > 1:
             percentage_distribution = (data.groupby(columns).size() / data[columns[0]].count()) * 100
             return percentage_distribution.to_dict()
+
+
+
 
     def set_scenario(self, scenario: Dict):
         self.scenario = scenario

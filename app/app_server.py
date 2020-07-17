@@ -173,7 +173,11 @@ class temp_score(BaseEndpoint):
         temperature_percentage_coverage = temperature_score.temperature_score_influence_percentage(portfolio_data, json_data['aggregation_method'])
 
         # Distribution of columns
-        column_distribution = temperature_score.columns_percentage_distribution(portfolio_data, json_data['feature_distribution'])
+        if 'feature_distribution' in json_data.keys():
+            column_distribution = temperature_score.columns_percentage_distribution(portfolio_data, json_data['feature_distribution'])
+        else:
+            column_distribution = temperature_score.columns_percentage_distribution(portfolio_data,
+                                                                                    None)
 
         # Dump raw data to compute the scores
         data_dump = json_data.get("data_dump", None)
