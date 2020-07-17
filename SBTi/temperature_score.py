@@ -41,6 +41,8 @@ class TemperatureScore(PortfolioAggregation):
         self.model = model
         self.boundary_coverage_option = boundary_coverage_option
         self.c: Type[TemperatureScoreConfig] = config
+        self.scenario = None
+        self.score_cap = None
 
         # Load the mappings from industry to SR15 goal
         self.mapping = pd.read_excel(self.c.FILE_SR15_MAPPING, header=0)
@@ -273,8 +275,10 @@ class TemperatureScore(PortfolioAggregation):
                         data_score.at[index, self.c.COLS.TEMPERATURE_SCORE] = ((s1s2_temp_score * scope_12_emissions) +
                                                                      (s3_temp_score * scope_3_emissions)) / (
                                                                         scope_123_emissions)
-        return data_score
 
+        if (self.scenario['number'] == 2) or (self.scenario['number'] == 3):
+            self.cap_scores(data_score)
+        return data_score
 
     def aggregate_scores(self, data: pd.DataFrame, portfolio_aggregation_method: Type[PortfolioAggregationMethod],
                          grouping: Optional[list] = None):
@@ -519,6 +523,29 @@ class TemperatureScore(PortfolioAggregation):
         else:
             percentage_distribution = (data.groupby(columns).size() / data[columns[0]].count()) * 100
             return percentage_distribution.to_dict()
+
+    def set_scenario(self, scenario: Dict):
+        self.scenario = scenario
+        # Scenario 1: Engage companies to set targets
+        if self.scenario['number'] == 1:
+            self.fallback_score = 2.0
+        # Scenario 2: Engage companies to validate targets by SBTi
+        if self.scenario['number'] == 2:
+            self.score_cap = 1.75
+        # Scenario 3: Engaging the highest contributors (top 10) to set (better) targets
+        if self.scenario['number'] == 3:
+            if self.scenario['engagement_type'] == 'set_targets':
+                self.score_cap = 2.0
+            elif self.scenario['engagement_type'] == 'set_SBTi_targets':
+                self.score_cap = 1.75
+
+    def cap_scores(self, scores: pd.DataFrame):
+        if self.scenario['number'] == 2:
+            score_based_on_target = ~pd.isnull(scores[self.c.COLS.TARGET_REFERENCE_NUMBER])
+            scores[self.c.COLS.TEMPERATURE_SCORE][score_based_on_target] = self.score_cap
+        elif self.scenario['number'] == 3:
+            pass
+        return scores
 
 # Test
 # portfolio_data = pd.read_csv('C:/Projects/SBTi/portfolio_data_2.csv',sep='\t')
