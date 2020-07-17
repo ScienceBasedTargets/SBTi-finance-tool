@@ -51,35 +51,20 @@ export class AppComponent implements OnInit {
 
   constructor(private appService: AppService, private modalService: NgbModal) {
   }
-
-  /**
-   * Initialize the app.
-   */
+  
   ngOnInit() {
     this.appService.setAlertHandler(this.addAlert.bind(this));
     this.getDataProviders();
   }
 
-  /**
-   * Adds alert
-   * @param alert
-   */
   addAlert(alert: Alert) {
     this.alerts.push(alert);
   }
 
-  /**
-   * Closes alert
-   * @param alert
-   */
   closeAlert(alert: Alert) {
     this.alerts.splice(this.alerts.indexOf(alert), 1);
   }
 
-  /**
-   * Update the uploaded files.
-   * @param element
-   */
   onFileChange(element) {
     this.uploadedFiles = element.target.files;
   }
@@ -91,17 +76,11 @@ export class AppComponent implements OnInit {
     this.modalService.open(template, {scrollable: true, size: 'xl'});
   }
 
-  /**
-   * Gets data providers
-   */
   getDataProviders(): void {
     this.appService.getDataProviders()
       .subscribe(dataProviders => this.dataProviders = dataProviders);
   }
 
-  /**
-   * Updates grouping columns
-   */
   updateAvailableColumns(): void {
     this.availableGroupingColumns = AVAILABLE_GROUPING_COLUMNS;
     this.availableGroupingColumns = this.availableGroupingColumns.concat(this.columns.filter((column) => this.columnMapping[column] === null));
@@ -111,11 +90,9 @@ export class AppComponent implements OnInit {
 
   /**
    * Export some data (formatted as a 2d array) as a CSV file.
-   * @param filename
-   * @param rows
    */
   exportToCsv(filename: string, rows: Array<Array<any>>) {
-    const processRow = function(row) {
+    const processRow = function (row) {
       let finalVal = '';
       for (let j = 0; j < row.length; j++) {
         let innerValue = row[j] === null ? '' : row[j].toString();
@@ -174,7 +151,7 @@ export class AppComponent implements OnInit {
       this.portfolio = response.portfolio;
       if (this.portfolio.length > 0) {
         this.columns = Object.keys(this.portfolio[0]);
-        this.columnMapping = this.columns.reduce(function(map, obj) {
+        this.columnMapping = this.columns.reduce(function (map, obj) {
           map[obj] = null;
           // We use the Levenshtein distance to try and map the columns to the targets
           const sortedMappings = that.availableTargetColumns.filter(elem => !(elem in assigned)).sort((a, b) => {
@@ -193,19 +170,12 @@ export class AppComponent implements OnInit {
     });
   }
 
-  /**
-   * Exports csv
-   */
   exportCSV() {
     const csv = this.resultTargets.map(row => Object.values(row));
     csv.unshift(this.resultColumns);
     this.exportToCsv('temperature_scores.csv', csv);
   }
 
-  /**
-   * Gets the temperature score
-   * @param f
-   */
   getTemperatureScore(f) {
     this.loading = true;
     const columnsMapped = Object.keys(this.columnMapping).filter((key) => this.columnMapping[key] !== null);
