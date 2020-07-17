@@ -8,6 +8,7 @@ import os
 class ColumnsConfig:
     # Define a constant for each column used in the
     COMPANY_ID = "company_id"
+    COMPANY_ISIN = "ISIN"
     INDUSTRY = "industry"
     REGRESSION_PARAM = "regression_param"
     REGRESSION_INTERCEPT = "regression_intercept"
