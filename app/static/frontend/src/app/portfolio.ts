@@ -1,3 +1,3 @@
 export interface Portfolio {
-    portfolio: Object[];
+  portfolio: Object[];
 }
