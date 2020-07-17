@@ -112,6 +112,10 @@ class temp_score(BaseEndpoint):
             default_score = json_data["default_score"]
         temperature_score = TemperatureScore(fallback_score=default_score)
 
+        scenario = json_data.get('scenario', None)
+        if scenario is not None:
+            temperature_score.set_scenario(scenario)
+
         company_data = SBTi.data.get_company_data(data_providers, json_data["companies"])
         targets = SBTi.data.get_targets(data_providers, json_data["companies"])
         portfolio_data = pd.merge(left=company_data, right=targets, left_on='company_name', right_on='company_name')
