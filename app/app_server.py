@@ -170,9 +170,9 @@ class temp_score(BaseEndpoint):
         column_distribution = temperature_score.columns_percentage_distribution(portfolio_data,json_data['feature_distribution'])
 
         # Dump raw data to compute the scores
-        dump_data = json_data.get("dump_data", False)
-        if dump_data:
-            temperature_score.dump_data(scores)
+        data_dump = json_data.get("data_dump", None)
+        if data_dump is not None:
+            temperature_score.dump_data(scores, data_dump['anonymize'])
 
         return {
             "aggregated_scores": aggregations,
