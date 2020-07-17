@@ -210,6 +210,7 @@ class TemperatureScore(PortfolioAggregation):
         * company_ev_plus_cash: The enterprise value of the company plus cash. Only required to use the ECOTS portfolio
             aggregation.
         * company_total_assets: The total assets of the company. Only required to use the AOTS portfolio aggregation.
+        * company_revenue: The revenue of the company. Only required to use the ROTS portfolio aggregation.
 
         :param extra_columns: A list of user defined extra, company related, columns
         :param data:
@@ -346,7 +347,7 @@ class TemperatureScore(PortfolioAggregation):
             aggregation.
         * market_cap: Market capitalization of the company. Only required to use the MOTS portfolio aggregation.
         * investment_value: The investment value of the investment in this company. Only required to use the MOTS, EOTS,
-            ECOTS and AOTS portfolio aggregation.
+            ECOTS, AOTS and ROTS portfolio aggregation.
         * company_enterprise_value: The enterprise value of the company. Only required to use the EOTS portfolio
             aggregation.
         * company_ev_plus_cash: The enterprise value of the company plus cash. Only required to use the ECOTS portfolio
@@ -367,7 +368,8 @@ class TemperatureScore(PortfolioAggregation):
         if aggregation_method == "MOTS" or \
                 aggregation_method == "EOTS" or \
                 aggregation_method == "ECOTS" or \
-                aggregation_method == "AOTS":
+                aggregation_method == "AOTS" or \
+                aggregation_method == "ROTS":
             # These four methods only differ in the way the company is valued.
             value_column = self.c.COLS.MARKET_CAP
             if aggregation_method == "EOTS":
@@ -376,6 +378,8 @@ class TemperatureScore(PortfolioAggregation):
                 value_column = self.c.COLS.COMPANY_EV_PLUS_CASH
             elif aggregation_method == "AOTS":
                 value_column = self.c.COLS.COMPANY_TOTAL_ASSETS
+            elif aggregation_method == "ROTS":
+                value_column = self.c.COLS.COMPANY_REVENUE
 
             # Calculate the total owned emissions of all companies
             try:
@@ -473,6 +477,16 @@ class TemperatureScore(PortfolioAggregation):
                     company_total_assets = company_data[self.c.COLS.COMPANY_TOTAL_ASSETS].iloc[0]
 
                     value = (((investment_value/company_total_assets)*company_emissions)/owned_emissions) * (
+                            ds_s1s2 * (s1s2_emissions / (s1s2_emissions + s3_emissions)) +
+                            ds_s3 * (s3_emissions / (s1s2_emissions + s3_emissions)))
+
+                elif aggregation_method == 'ROTS':
+                    investment_value = company_data[self.c.COLS.INVESTMENT_VALUE].iloc[0]
+                    company_emissions = company_data[self.c.COLS.S1S2_EMISSIONS].iloc[0] + \
+                                        company_data[self.c.COLS.S3_EMISSIONS].iloc[0]
+                    company_revenue = company_data[self.c.COLS.COMPANY_REVENUE].iloc[0]
+
+                    value = (((investment_value/company_revenue)*company_emissions)/owned_emissions) * (
                             ds_s1s2 * (s1s2_emissions / (s1s2_emissions + s3_emissions)) +
                             ds_s3 * (s3_emissions / (s1s2_emissions + s3_emissions)))
 
