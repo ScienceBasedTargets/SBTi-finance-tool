@@ -112,13 +112,22 @@ class temp_score(BaseEndpoint):
             default_score = json_data["default_score"]
         temperature_score = TemperatureScore(fallback_score=default_score)
 
-        scenario = json_data.get('scenario', None)
-        if scenario is not None:
-            temperature_score.set_scenario(scenario)
-
         company_data = SBTi.data.get_company_data(data_providers, json_data["companies"])
         targets = SBTi.data.get_targets(data_providers, json_data["companies"])
         portfolio_data = pd.merge(left=company_data, right=targets, left_on='company_name', right_on='company_name')
+
+        aggregation_method = self.aggregation_map[self.config["aggregation_method"]]
+        if "aggregation_method" in json_data and json_data["aggregation_method"] in self.aggregation_map:
+            aggregation_method = self.aggregation_map[json_data["aggregation_method"]]
+
+        # Group aggregates by certain column names
+        grouping = json_data.get("grouping_columns", None)
+
+        scenario = json_data.get('scenario', None)
+        if scenario is not None:
+            scenario['aggregation_method'] = aggregation_method
+            scenario['grouping'] = grouping
+            temperature_score.set_scenario(scenario)
 
         # Target_Valuation_Protocol
         target_valuation_protocol = TargetValuationProtocol(portfolio_data)
@@ -148,14 +157,8 @@ class temp_score(BaseEndpoint):
         if "filter_time_frame" in json_data and len(json_data["filter_time_frame"]) > 0:
             scores = scores[scores["time_frame"].isin(json_data["filter_time_frame"])]
 
-        # Group by certain column names
-        grouping = json_data.get("grouping_columns", None)
-
         scores = scores.copy()
 
-        aggregation_method = self.aggregation_map[self.config["aggregation_method"]]
-        if "aggregation_method" in json_data and json_data["aggregation_method"] in self.aggregation_map:
-            aggregation_method = self.aggregation_map[json_data["aggregation_method"]]
         aggregations = temperature_score.aggregate_scores(scores, aggregation_method, grouping)
 
         # Include columns
