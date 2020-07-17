@@ -277,7 +277,7 @@ class TemperatureScore(PortfolioAggregation):
                                                                         scope_123_emissions)
 
         if (self.scenario['number'] == 2) or (self.scenario['number'] == 3):
-            self.cap_scores(data_score)
+            data_score = self.cap_scores(data_score)
         return data_score
 
     def aggregate_scores(self, data: pd.DataFrame, portfolio_aggregation_method: Type[PortfolioAggregationMethod],
@@ -544,7 +544,16 @@ class TemperatureScore(PortfolioAggregation):
             score_based_on_target = ~pd.isnull(scores[self.c.COLS.TARGET_REFERENCE_NUMBER])
             scores[self.c.COLS.TEMPERATURE_SCORE][score_based_on_target] = self.score_cap
         elif self.scenario['number'] == 3:
-            pass
+            # Cap scores of 10 highest contributors per time frame-scope combination
+            aggregations = self.aggregate_scores(scores, self.scenario['aggregation_method'], self.scenario['grouping'])
+            for time_frame in self.c.VALUE_TIME_FRAMES:
+                for scope in scores[self.c.COLS.SCOPE_CATEGORY].unique():
+                    number_top_contributors = min(10, len(aggregations[time_frame][scope]['all']['contributions']))
+                    for contributor in range(number_top_contributors):
+                        company_name = aggregations[time_frame][scope]['all']['contributions'][contributor][self.c.COLS.COMPANY_NAME]
+                        scores[self.c.COLS.TEMPERATURE_SCORE][(scores[self.c.COLS.COMPANY_NAME] == company_name) &
+                                                              (scores[self.c.COLS.SCOPE_CATEGORY] == scope) &
+                                                              (scores[self.c.COLS.TIME_FRAME] == time_frame)] = self.score_cap
         return scores
 
 # Test
