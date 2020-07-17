@@ -168,6 +168,11 @@ class temp_score(BaseEndpoint):
         # Distribution of columns
         column_distribution = temperature_score.columns_percentage_distribution(portfolio_data,json_data['feature_distribution'])
 
+        # Dump raw data to compute the scores
+        data_dump = json_data.get("data_dump", None)
+        if data_dump is not None:
+            temperature_score.dump_data(scores, data_dump['anonymize'])
+
         return {
             "aggregated_scores": aggregations,
             "coverage": coverage,
@@ -359,7 +364,7 @@ class data_provider(BaseEndpoint):
     """
     This class allows the client to receive information from the data provider.
 
-    :param BaseEndpoint: inherites from a different class
+    :param BaseEndpoint: inherits from a different class
 
     :rtype: Dictionary
     :return: HTTP Request.
