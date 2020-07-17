@@ -481,13 +481,18 @@ class TemperatureScore(PortfolioAggregation):
             percentage_distribution = (data.groupby(columns).size() / data[columns[0]].count()) * 100
             return percentage_distribution.to_dict()
 
-    def dump_data(self, scores):
+    def dump_data(self, scores, anonymize):
         '''
         Saves scores and raw data required to compute scores for each company-target combination
         '''
-        scores.sort_values(by=['company_name', 'scope_category'], inplace=True)
-        scores.rename(columns={'company_id_x': 'company_id'}, inplace=True)
-        scores.drop(columns=['company_id_y'])
+        scores.sort_values(by=[self.c.COLS.COMPANY_NAME, self.c.COLS.SCOPE_CATEGORY], inplace=True)
+        scores.rename(columns={self.c.COLS.COMPANY_ID+'_x': self.c.COLS.COMPANY_ID}, inplace=True)
+        scores.drop(columns=[self.c.COLS.COMPANY_ID+'_y'])
+        if anonymize:
+            scores.drop(columns=[self.c.COLS.COMPANY_ISIN, self.c.COLS.COMPANY_ID], inplace=True)
+            for index, company_name in enumerate(scores[self.c.COLS.COMPANY_NAME].unique()):
+                scores[self.c.COLS.COMPANY_NAME][scores[self.c.COLS.COMPANY_NAME] == company_name] = 'Company' + str(index + 1)
+
         scores.to_csv(self.c.FILE_RAW_DATA_DUMP, index=False)
 
 # Test
