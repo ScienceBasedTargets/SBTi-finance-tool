@@ -41,7 +41,7 @@ class TemperatureScore(PortfolioAggregation):
         self.model = model
         self.boundary_coverage_option = boundary_coverage_option
         self.c: Type[TemperatureScoreConfig] = config
-        self.scenario = None
+        self.scenario = dict(number=0)
         self.score_cap = None
 
         # Load the mappings from industry to SR15 goal
