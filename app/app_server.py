@@ -131,6 +131,7 @@ class temp_score(BaseEndpoint):
 
         # Target_Valuation_Protocol
         target_valuation_protocol = TargetValuationProtocol(portfolio_data)
+
         portfolio_data = target_valuation_protocol.target_valuation_protocol()
 
         # Add the user-defined columns to the data set for grouping later on
@@ -172,17 +173,10 @@ class temp_score(BaseEndpoint):
         # Temperature score percentage breakdown by default score and target score
         temperature_percentage_coverage = temperature_score.temperature_score_influence_percentage(portfolio_data, json_data['aggregation_method'])
 
-        # Distribution of columns
         if 'feature_distribution' in json_data.keys():
             column_distribution = temperature_score.columns_percentage_distribution(portfolio_data, json_data['feature_distribution'])
         else:
-            column_distribution = temperature_score.columns_percentage_distribution(portfolio_data,
-                                                                                    None)
-
-        # Dump raw data to compute the scores
-        data_dump = json_data.get("data_dump", None)
-        if data_dump is not None:
-            temperature_score.dump_data(scores, data_dump['anonymize'])
+            column_distribution = None
 
         return {
             "aggregated_scores": aggregations,

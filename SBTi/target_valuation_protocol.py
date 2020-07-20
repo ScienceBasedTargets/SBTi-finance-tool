@@ -6,7 +6,6 @@ from typing import Type
 from SBTi.configs import PortfolioAggregationConfig
 
 
-
 class TargetValuationProtocol:
 
     def __init__(self, data: pd.DataFrame, config: Type[PortfolioAggregationConfig] = PortfolioAggregationConfig):
@@ -25,8 +24,9 @@ class TargetValuationProtocol:
         self.test_boundary_coverage()
         self.test_target_process()
         self.time_frame()
+        self.data[self.c.COLS.SCOPE] = self.data[self.c.COLS.SCOPE].str.lower()
         self.data[self.c.COLS.SCOPE_CATEGORY] = self.data.apply(
-            lambda row: self.c.SCOPE_MAP[row[self.c.COLS.SCOPE].lower()], axis=1)
+            lambda row: self.c.SCOPE_MAP[row[self.c.COLS.SCOPE]], axis=1)
         self.group_targets()
         return self.data
 
@@ -66,22 +66,25 @@ class TargetValuationProtocol:
         Option 3: default coverage
         Target is always valid, % uncovered is given default score in temperature score module.
         '''
-
         index = []
         for record in self.data.iterrows():
             if not pd.isna(record[1][self.c.COLS.SCOPE]):
-                if 'Scope 1+2' in record[1][self.c.COLS.SCOPE]:
-                    if record[1][self.c.COLS.EMISSIONS_IN_SCOPE] > 95:
+                if 'S1+S2' in record[1][self.c.COLS.SCOPE]:
+                    if record[1][self.c.COLS.COVERAGE_S1] > 95:
                         index.append(record[0])
-                elif 'Scope 3' in record[1][self.c.COLS.SCOPE]:
-                    if record[1][self.c.COLS.EMISSIONS_IN_SCOPE] > 67:
+                    else:
                         index.append(record[0])
-                else:
-                    index.append(record[0])
-                    self.data.at[record[0], self.c.COLS.ACHIEVED_EMISSIONS] = \
-                    self.data[self.c.COLS.ACHIEVED_EMISSIONS].loc[record[0]] * \
-                    (self.data[self.c.COLS.EMISSIONS_IN_SCOPE].loc[record[0]] / 100)
-
+                        self.data.at[record[0], self.c.COLS.REDUCTION_AMBITION] = \
+                            self.data[self.c.COLS.REDUCTION_AMBITION].loc[record[0]] * \
+                            (self.data[self.c.COLS.COVERAGE_S1].loc[record[0]])
+                elif 'S3' in record[1][self.c.COLS.SCOPE]:
+                    if record[1][self.c.COLS.COVERAGE_S3] > 67:
+                        index.append(record[0])
+                    else:
+                        index.append(record[0])
+                        self.data.at[record[0], self.c.COLS.REDUCTION_AMBITION] = \
+                            self.data[self.c.COLS.REDUCTION_AMBITION].loc[record[0]] * \
+                            (self.data[self.c.COLS.COVERAGE_S3].loc[record[0]])
         self.data = self.data.loc[index]
 
 
@@ -94,13 +97,13 @@ class TargetValuationProtocol:
 
         Target progress: the percentage of the target already achieved
         '''
-
-        index = []
-        for record in self.data.iterrows():
-            if not pd.isna(record[1][self.c.COLS.ACHIEVED_EMISSIONS]):
-                if record[1][self.c.COLS.ACHIEVED_EMISSIONS] != 100:
-                    index.append(record[0])
-        self.data = self.data.loc[index]
+        if self.c.COLS.ACHIEVED_EMISSIONS in self.data.columns:
+            index = []
+            for record in self.data.iterrows():
+                if not pd.isna(record[1][self.c.COLS.ACHIEVED_EMISSIONS]):
+                    if record[1][self.c.COLS.ACHIEVED_EMISSIONS] != 100:
+                        index.append(record[0])
+            self.data = self.data.loc[index]
 
     def time_frame(self):
         '''
@@ -109,13 +112,13 @@ class TargetValuationProtocol:
         now = datetime.datetime.now()
         time_frame_list = []
         for index, record in self.data.iterrows():
-            if not pd.isna(record[self.c.COLS.TARGET_YEAR]):
-                time_frame = record[self.c.COLS.TARGET_YEAR] - now.year
-                if (time_frame < 15) & (time_frame > 5):
+            if not pd.isna(record[self.c.COLS.END_YEAR]):
+                time_frame = record[self.c.COLS.END_YEAR] - now.year
+                if (time_frame <= 15) & (time_frame > 5):
                     time_frame_list.append('mid')
-                elif (time_frame < 30) & (time_frame > 15):
+                elif (time_frame <= 30) & (time_frame > 15):
                     time_frame_list.append('long')
-                elif time_frame < 5:
+                elif time_frame <= 5:
                     time_frame_list.append('short')
                 else:
                     time_frame_list.append(None)
@@ -142,8 +145,15 @@ class TargetValuationProtocol:
             return target_data.iloc[0]
         else:
             # We prefer targets with higher emissions in scope
-            target_data = target_data[
-                target_data[self.c.COLS.EMISSIONS_IN_SCOPE] == target_data[self.c.COLS.EMISSIONS_IN_SCOPE].max()].copy()
+            if target[self.c.COLS.SCOPE_CATEGORY] == self.c.VALUE_SCOPE_CATEGORY_S1S2:
+                target_data = target_data[
+                    target_data[self.c.COLS.GHG_SCOPE12] == target_data[
+                        self.c.COLS.GHG_SCOPE12].max()].copy()
+            elif target[self.c.COLS.SCOPE_CATEGORY] == self.c.VALUE_SCOPE_CATEGORY_S3:
+                target_data = target_data[
+                    target_data[self.c.COLS.GHG_SCOPE3] == target_data[
+                        self.c.COLS.GHG_SCOPE3].max()].copy()
+
             if len(target_data) == 1:
                 return target_data.iloc[0]
 
@@ -161,7 +171,7 @@ class TargetValuationProtocol:
                 return target_data.iloc[0]
 
             # There are more than 1 targets, so we'll average them out
-            target_data[self.c.COLS.REDUCTION_FROM_BASE_YEAR] = target_data[self.c.COLS.REDUCTION_FROM_BASE_YEAR].mean()
+            target_data[self.c.COLS.REDUCTION_AMBITION] = target_data[self.c.COLS.REDUCTION_AMBITION].mean()
             return target_data.iloc[0]
 
     def group_targets(self):
@@ -191,20 +201,21 @@ class TargetValuationProtocol:
         for company in companies:
             for column in company_columns:
                 extended_data.loc[extended_data[self.c.COLS.COMPANY_NAME] == company, column] = \
-                    self.data[self.data[self.c.COLS.COMPANY_NAME] == company][column].mode().iloc[0]
-
+                    self.data[self.data[self.c.COLS.COMPANY_NAME] == company][column].mode() # removed ".iloc[0]" kept receiving an index error
         extended_data = extended_data.apply(lambda row: self._find_target(row), axis=1)
         self.data = extended_data
 
 
 
 # Testing
-# data = pd.read_csv('C:/Projects/SBTi/testing_file.csv',sep='\t')
+# data = pd.read_csv('C:/Projects/SBTi/portfolio_data_3.csv',sep='\t')
+# data.drop(columns='Unnamed: 0',inplace=True)
 # x = TargetValuationProtocol(data)
 # x.test_target_type()
 # x.test_boundary_coverage()
-
-
-
-
-
+# x.test_target_process()
+# x.time_frame()
+# x.data[c.COLS.SCOPE] = x.data[c.COLS.SCOPE].str.lower()
+# x.data[c.COLS.SCOPE_CATEGORY] = x.data.apply(
+#     lambda row: c.SCOPE_MAP[row[c.COLS.SCOPE]], axis=1)
+# x.group_targets()

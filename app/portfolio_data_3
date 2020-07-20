@@ -1,0 +1,12 @@
+	company_name	company_id_x	ISIC	Country	Region	Industry_lvl1	Industry_lvl2	Industry_lvl3	Industry_lvl4	sector	GHG_scope1+2	GHG_scope3	Revenue 	market_cap	enterprise_value	total_assets	cash_equivalents	A	B	C	SBTi status	BaseYear_GHG_S1	BaseYear_GHG_S2	BaseYear_GHG_S3	Coverage_S1	Coverage_S2	Coverage_S3	Intensity_metric	Scope	Target type	base_year	company_ID	company_id_y	end_year	reduction_ambition	start_year
+0	A	1123	2105.0	US							25943.0	674.0	1300.0	20000.0	25043.0	300000.0	1543.0				Approved	11000.0	1200.0		1.0	1.0			S1+S2	Absolute	2018.0		1123	2025.0	0.3	2020.0
+1	A	1123	2105.0	US							25943.0	674.0	1300.0	20000.0	25043.0	300000.0	1543.0				Approved	1558.0	13333.0	1350.0		1.0		Revenue	S2	Intensity	2015.0		1123	2030.0	0.4	2019.0
+2	A	1123	2105.0	US							25943.0	674.0	1300.0	20000.0	25043.0	300000.0	1543.0				Approved						0.6	Aluminum	S3	Intensity	2018.0		1123	2050.0	0.15	2018.0
+3	A	1123	2105.0	US							25943.0	674.0	1300.0	20000.0	25043.0	300000.0	1543.0				Approved				0.95	0.95	0.5	Power Generation	S1+S2+S3	Intensity	2018.0		1123	2035.0		2020.0
+4	B	4231	2200.0	NL																	committed				1.0	1.0		Steel	S1+S2+S3	Intensity			4231			
+5	D	da51		FR																								Cement		Intensity			da51			
+6	D	da51		FR																										Absolute			da51			
+7	D	da51		FR																								Other		Intensity			da51			
+8	D	da51		FR																								Product		Intensity			da51			
+9	D	da51		FR																								Oil		Intensity			da51			
+10	D	da51		FR																										Other			da51			

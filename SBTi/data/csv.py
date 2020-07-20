@@ -43,6 +43,7 @@ class CSVProvider(DataProvider):
              self.data_targets["company_name"].notnull())
         ].copy()
 
+
     def get_company_data(self, companies: list) -> pd.DataFrame:
         """
         Get all relevant data for a certain company. Should return a dataframe, containing at least the following
@@ -78,6 +79,7 @@ class CSVProvider(DataProvider):
             (self.data["company_name"].isin([company["company_name"] for company in companies]) &
              self.data["company_name"].notnull())
         ].copy()
+
 
     def get_sbti_targets(self, companies: list) -> list:
         """

@@ -56,21 +56,30 @@ class TemperatureScore(PortfolioAggregation):
         :return: The mapped SR15 target
         """
 
+        # Todo: For beta test, we are using a different SR15 Mapping excel. We are mapping based on Target Type and Intensity Metric
         # Check if the industry exists, if not use a default
-        industry = target[self.c.COLS.INDUSTRY] \
-            if target[self.c.COLS.INDUSTRY] in self.mapping[self.c.COLS.INDUSTRY] \
-            else self.c.DEFAULT_INDUSTRY
+        # industry = target[self.c.COLS.INDUSTRY] \
+        #     if target[self.c.COLS.INDUSTRY] in self.mapping[self.c.COLS.INDUSTRY] \
+        #     else self.c.DEFAULT_INDUSTRY
 
-        # Map the target reference numbers (Int 1, Abs 1, etc. to target types (Intensity or Absolute)
+        # mappings = self.mapping[(self.mapping[self.c.COLS.INDUSTRY] == industry) &
+        #                         (self.mapping[self.c.COLS.TARGET_TYPE] == target_type) &
+        #                         (self.mapping[self.c.COLS.SCOPE] == target[self.c.COLS.SCOPE_CATEGORY])]
+
+
+        # Todo: Talk with Daan, after Beta testing, to see how to address this. I do believe this is only for the testing
         target_type = self.c.VALUE_TARGET_REFERENCE_INTENSITY \
             if type(target[self.c.COLS.TARGET_REFERENCE_NUMBER]) == str and \
                target[self.c.COLS.TARGET_REFERENCE_NUMBER].strip().startswith(
                    self.c.VALUE_TARGET_REFERENCE_INTENSITY_BASE) \
             else self.c.VALUE_TARGET_REFERENCE_ABSOLUTE
 
-        mappings = self.mapping[(self.mapping[self.c.COLS.INDUSTRY] == industry) &
-                                (self.mapping[self.c.COLS.TARGET_TYPE] == target_type) &
-                                (self.mapping[self.c.COLS.SCOPE] == target[self.c.COLS.SCOPE_CATEGORY])]
+        if target_type== self.c.VALUE_TARGET_REFERENCE_ABSOLUTE:
+            mappings = self.mapping[(self.mapping[self.c.COLS.TARGET_TYPE_SR15] == target_type)]
+
+        elif target_type== self.c.VALUE_TARGET_REFERENCE_INTENSITY:
+            mappings = self.mapping[(self.mapping[self.c.COLS.TARGET_TYPE_SR15] == target_type) &
+                                    (self.mapping[self.c.COLS.INTENSITY_METRIC_SR15] == target[self.c.COLS.INTENSITY_METRIC])]
 
         if len(mappings) == 0:
             return None
@@ -78,7 +87,7 @@ class TemperatureScore(PortfolioAggregation):
             # There should never be more than one potential mapping
             raise ValueError("There is more than one potential mapping to a SR15 goal.")
         else:
-            return mappings.iloc[0][self.c.COLS.SR15]
+            return mappings.iloc[0][self.c.COLS.SR15_VARIABLE]
 
     def get_annual_reduction_rate(self, target: pd.Series) -> Optional[float]:
         """
@@ -87,11 +96,11 @@ class TemperatureScore(PortfolioAggregation):
         :param target: The target as a row of a dataframe
         :return: The annual reduction
         """
-        if pd.isnull(target[self.c.COLS.REDUCTION_FROM_BASE_YEAR]):
+        if pd.isnull(target[self.c.COLS.REDUCTION_AMBITION]):
             return None
 
         try:
-            return target[self.c.COLS.REDUCTION_FROM_BASE_YEAR] / float(target[self.c.COLS.TARGET_YEAR] -
+            return target[self.c.COLS.REDUCTION_AMBITION] / float(target[self.c.COLS.END_YEAR] -
                                                                         target[self.c.COLS.START_YEAR])
         except ZeroDivisionError:
             raise ValueError("Couldn't calculate the annual reduction rate because the start and target year are the "
@@ -140,15 +149,27 @@ class TemperatureScore(PortfolioAggregation):
         :return: The relative temperature score
         """
         if self.boundary_coverage_option == BoundaryCoverageOption.DEFAULT:
-            if pd.isnull(target[self.c.COLS.EMISSIONS_IN_SCOPE]) or pd.isnull(target[self.c.COLS.TEMPERATURE_SCORE]):
-                return self.fallback_score
-            else:
-                try:
-                    return target[self.c.COLS.EMISSIONS_IN_SCOPE] / 100 * target[self.c.COLS.TEMPERATURE_SCORE] + \
-                           (1 - (target[self.c.COLS.EMISSIONS_IN_SCOPE] / 100)) * self.fallback_score
-                except ZeroDivisionError:
-                    raise ValueError(
-                        "The temperature score for company {} is zero".format(target[self.c.COLS.COMPANY_NAME]))
+            if target[self.c.COLS.SCOPE_CATEGORY] == self.c.VALUE_SCOPE_CATEGORY_S1S2:
+                if pd.isnull(target[self.c.COLS.GHG_SCOPE12]) or pd.isnull(
+                        target[self.c.COLS.TEMPERATURE_SCORE]):
+                    return self.fallback_score
+                else:
+                    try:
+                        return target[self.c.COLS.GHG_SCOPE12] / 100 * target[self.c.COLS.TEMPERATURE_SCORE] + \
+                               (1 - (target[self.c.COLS.GHG_SCOPE12] / 100)) * self.fallback_score
+                    except ZeroDivisionError:
+                        raise ValueError(
+                            "The temperature score for company {} is zero".format(target[self.c.COLS.COMPANY_NAME]))
+            elif target[self.c.COLS.SCOPE_CATEGORY] == self.c.VALUE_SCOPE_CATEGORY_S3:
+                if pd.isnull(target[self.c.COLS.GHG_SCOPE3]) or pd.isnull(target[self.c.COLS.TEMPERATURE_SCORE]):
+                    return self.fallback_score
+                else:
+                    try:
+                        return target[self.c.COLS.GHG_SCOPE3] / 100 * target[self.c.COLS.TEMPERATURE_SCORE] + \
+                               (1 - (target[self.c.COLS.GHG_SCOPE3] / 100)) * self.fallback_score
+                    except ZeroDivisionError:
+                        raise ValueError(
+                            "The temperature score for company {} is zero".format(target[self.c.COLS.COMPANY_NAME]))
         else:
             return target[self.c.COLS.TEMPERATURE_SCORE]
 
@@ -165,9 +186,9 @@ class TemperatureScore(PortfolioAggregation):
         s1s2 = filtered_data[filtered_data[self.c.COLS.SCOPE_CATEGORY] == self.c.VALUE_SCOPE_CATEGORY_S1S2]
         s3 = filtered_data[filtered_data[self.c.COLS.SCOPE_CATEGORY] == self.c.VALUE_SCOPE_CATEGORY_S3]
         try:
-            return (s1s2[self.c.COLS.TEMPERATURE_SCORE].mean() * s1s2[self.c.COLS.S1S2_EMISSIONS].mean() +
-                    s3[self.c.COLS.TEMPERATURE_SCORE].mean() * s3[self.c.COLS.S3_EMISSIONS].mean()) / \
-                   (s1s2[self.c.COLS.S1S2_EMISSIONS].mean() + s3[self.c.COLS.S3_EMISSIONS].mean())
+            return (s1s2[self.c.COLS.TEMPERATURE_SCORE].mean() * s1s2[self.c.COLS.GHG_SCOPE12].mean() +
+                    s3[self.c.COLS.TEMPERATURE_SCORE].mean() * s3[self.c.COLS.GHG_SCOPE3].mean()) / \
+                   (s1s2[self.c.COLS.GHG_SCOPE12].mean() + s3[self.c.COLS.GHG_SCOPE3].mean())
         except ZeroDivisionError:
             raise ValueError("The mean of the S1+S2 plus the S3 emissions is zero")
 
@@ -220,6 +241,7 @@ class TemperatureScore(PortfolioAggregation):
         """
         if extra_columns is None:
             extra_columns = []
+
         data[self.c.COLS.SR15] = data.apply(lambda row: self.get_target_mapping(row), axis=1)
         data[self.c.COLS.ANNUAL_REDUCTION_RATE] = data.apply(lambda row: self.get_annual_reduction_rate(row), axis=1)
         data[self.c.COLS.REGRESSION_PARAM], data[self.c.COLS.REGRESSION_INTERCEPT] = zip(
@@ -227,7 +249,6 @@ class TemperatureScore(PortfolioAggregation):
         )
         data[self.c.COLS.TEMPERATURE_SCORE] = data.apply(lambda row: self.get_score(row), axis=1)
         data[self.c.COLS.TEMPERATURE_SCORE] = data.apply(lambda row: self.process_score(row), axis=1)
-
         combined_data = []
         company_columns = [column for column in self.c.COLS.COMPANY_COLUMNS + extra_columns if column in data.columns]
         for company in data[self.c.COLS.COMPANY_NAME].unique():
@@ -246,15 +267,13 @@ class TemperatureScore(PortfolioAggregation):
 
         data_score = pd.concat([data, pd.DataFrame(combined_data)])
         data_score.reset_index(inplace=True, drop=True)
-
         for time_frame in data_score[self.c.COLS.TIME_FRAME].unique():
             for company in data_score[self.c.COLS.COMPANY_NAME].unique():
                 company_data = data_score[(data_score[self.c.COLS.COMPANY_NAME] == company)
                                           & (data_score[self.c.COLS.TIME_FRAME] == time_frame)]
-                scope_3_emissions = company_data[self.c.COLS.S3_EMISSIONS].iloc[0]
-                scope_12_emissions = company_data[self.c.COLS.S1S2_EMISSIONS].iloc[0]
+                scope_3_emissions = company_data[self.c.COLS.GHG_SCOPE3].iloc[0]
+                scope_12_emissions = company_data[self.c.COLS.GHG_SCOPE12].iloc[0]
                 scope_123_emissions = scope_12_emissions + scope_3_emissions
-
                 if not pd.isnull(scope_3_emissions) & pd.isnull(scope_123_emissions):
                     s1s2_temp_score = \
                     company_data[company_data[self.c.COLS.SCOPE_CATEGORY] == 's1s2'][self.c.COLS.TEMPERATURE_SCORE].values[0]
@@ -262,7 +281,6 @@ class TemperatureScore(PortfolioAggregation):
                     index = \
                     data_score[(data_score[self.c.COLS.COMPANY_NAME] == company) & (data_score[self.c.COLS.TIME_FRAME] == time_frame) &
                                (data_score[self.c.COLS.SCOPE_CATEGORY] == 's1s2s3')].index[0]
-
                     if (scope_3_emissions / scope_123_emissions) < 0.4:
                         data_score.at[index, self.c.COLS.TEMPERATURE_SCORE] = s1s2_temp_score
 
@@ -378,9 +396,9 @@ class TemperatureScore(PortfolioAggregation):
             # These four methods only differ in the way the company is valued.
             value_column = self.c.COLS.MARKET_CAP
             if aggregation_method == "EOTS":
-                value_column = self.c.COLS.COMPANY_ENTERPRISE_VALUE
+                value_column = self.c.COLS.ENTERPRISE_VALUE
             elif aggregation_method == "ECOTS":
-                value_column = self.c.COLS.COMPANY_EV_PLUS_CASH
+                value_column = self.c.COLS.CASH_EQUIVALENTS
             elif aggregation_method == "AOTS":
                 value_column = self.c.COLS.COMPANY_TOTAL_ASSETS
             elif aggregation_method == "ROTS":
@@ -390,7 +408,7 @@ class TemperatureScore(PortfolioAggregation):
             try:
                 data[self.c.COLS.OWNED_EMISSIONS] = data.apply(
                     lambda row: ((row[self.c.COLS.INVESTMENT_VALUE] / row[value_column]) * (
-                            row[self.c.COLS.S1S2_EMISSIONS] + row[self.c.COLS.S3_EMISSIONS])),
+                            row[self.c.COLS.GHG_SCOPE12] + row[self.c.COLS.GHG_SCOPE3])),
                     axis=1
                 )
             except ZeroDivisionError:
@@ -410,9 +428,9 @@ class TemperatureScore(PortfolioAggregation):
         }
 
         time_frame_dictionary = {}
-        for time_frame in data['time_frame'].unique():
+        for time_frame in data[self.c.COLS.TIME_FRAME].unique():
             for company in data[self.c.COLS.COMPANY_NAME].unique():
-                company_data = data[(data[self.c.COLS.COMPANY_NAME] == company) & (data['time_frame'] == time_frame)]
+                company_data = data[(data[self.c.COLS.COMPANY_NAME] == company) & (data[self.c.COLS.TIME_FRAME] == time_frame)]
                 if company_data[company_data[self.c.COLS.SCOPE_CATEGORY] == self.c.VALUE_SCOPE_CATEGORY_S1S2][self.c.TEMPERATURE_RESULTS].unique()[0] == 'default':
                     ds_s1s2 = 1
                 else:
@@ -421,8 +439,8 @@ class TemperatureScore(PortfolioAggregation):
                     ds_s3 = 1
                 else:
                     ds_s3 = 0
-                s1s2_emissions = company_data.iloc[1][self.c.COLS.S1S2_EMISSIONS]
-                s3_emissions = company_data.iloc[1][self.c.COLS.S3_EMISSIONS]
+                s1s2_emissions = company_data.iloc[1][self.c.COLS.GHG_SCOPE12]
+                s3_emissions = company_data.iloc[1][self.c.COLS.GHG_SCOPE3]
 
                 if str(aggregation_method) == 'PortfolioAggregationMethod.WATS':
                     aggregation_method = 'WATS'  # added by Louis, because of error here .. TODO: fix error (Vito?)
@@ -441,16 +459,16 @@ class TemperatureScore(PortfolioAggregation):
                                                 ds_s3 * (s3_emissions / (s1s2_emissions + s3_emissions)))
 
                 elif aggregation_method == 'TETS':
-                    company_emissions = company_data[self.c.COLS.S1S2_EMISSIONS].iloc[0] + \
-                                        company_data[self.c.COLS.S3_EMISSIONS].iloc[0] # per company
-                    portfolio_emissions = data[self.c.COLS.S1S2_EMISSIONS].sum() + data[
-                        self.c.COLS.S3_EMISSIONS].sum()
+                    company_emissions = company_data[self.c.COLS.GHG_SCOPE12].iloc[0] + \
+                                        company_data[self.c.COLS.GHG_SCOPE3].iloc[0] # per company
+                    portfolio_emissions = data[self.c.COLS.GHG_SCOPE12].sum() + data[
+                        self.c.COLS.GHG_SCOPE3].sum()
 
                     value = company_emissions/portfolio_emissions * (ds_s1s2 * (s1s2_emissions / (s1s2_emissions + s3_emissions)) +
                                                 ds_s3 * (s3_emissions / (s1s2_emissions + s3_emissions)))
                 elif aggregation_method == 'MOTS':
-                    company_emissions = company_data[self.c.COLS.S1S2_EMISSIONS].iloc[0] + \
-                                        company_data[self.c.COLS.S3_EMISSIONS].iloc[0]  # per company
+                    company_emissions = company_data[self.c.COLS.GHG_SCOPE12].iloc[0] + \
+                                        company_data[self.c.COLS.GHG_SCOPE3].iloc[0]  # per company
                     investment_value = company_data[self.c.COLS.INVESTMENT_VALUE].iloc[0]
                     market_cap = company_data[self.c.COLS.MARKET_CAP].iloc[0]
 
@@ -459,8 +477,8 @@ class TemperatureScore(PortfolioAggregation):
                                 ds_s3 * (s3_emissions / (s1s2_emissions + s3_emissions)))
 
                 elif aggregation_method == 'EOTS':
-                    company_emissions = company_data[self.c.COLS.S1S2_EMISSIONS].iloc[0] + \
-                                        company_data[self.c.COLS.S3_EMISSIONS].iloc[0]
+                    company_emissions = company_data[self.c.COLS.GHG_SCOPE12].iloc[0] + \
+                                        company_data[self.c.COLS.GHG_SCOPE3].iloc[0]
                     investment_value = company_data[self.c.COLS.INVESTMENT_VALUE].iloc[0]
                     enterprise_value = company_data[self.c.COLS.COMPANY_ENTERPRISE_VALUE].iloc[0]
 
@@ -470,9 +488,9 @@ class TemperatureScore(PortfolioAggregation):
 
                 elif aggregation_method == 'ECOTS':
                     investment_value = company_data[self.c.COLS.INVESTMENT_VALUE].iloc[0]
-                    company_emissions = company_data[self.c.COLS.S1S2_EMISSIONS].iloc[0] + \
-                                        company_data[self.c.COLS.S3_EMISSIONS].iloc[0]
-                    company_ev_cash = company_data[self.c.COLS.COMPANY_EV_PLUS_CASH].iloc[0]
+                    company_emissions = company_data[self.c.COLS.GHG_SCOPE12].iloc[0] + \
+                                        company_data[self.c.COLS.GHG_SCOPE3].iloc[0]
+                    company_ev_cash = company_data[self.c.COLS.CASH_EQUIVALENTS].iloc[0]
 
                     value = ((((investment_value/company_ev_cash)*company_emissions))/owned_emissions) * (
                             ds_s1s2 * (s1s2_emissions / (s1s2_emissions + s3_emissions)) +
@@ -480,9 +498,9 @@ class TemperatureScore(PortfolioAggregation):
 
                 elif aggregation_method == 'AOTS':
                     investment_value = company_data[self.c.COLS.INVESTMENT_VALUE].iloc[0]
-                    company_emissions = company_data[self.c.COLS.S1S2_EMISSIONS].iloc[0] + \
-                                        company_data[self.c.COLS.S3_EMISSIONS].iloc[0]
-                    company_total_assets = company_data[self.c.COLS.COMPANY_TOTAL_ASSETS].iloc[0]
+                    company_emissions = company_data[self.c.COLS.GHG_SCOPE12].iloc[0] + \
+                                        company_data[self.c.COLS.GHG_SCOPE3].iloc[0]
+                    company_total_assets = company_data[self.c.COLS.TOTAL_ASSETS].iloc[0]
 
                     value = (((investment_value/company_total_assets)*company_emissions)/owned_emissions) * (
                             ds_s1s2 * (s1s2_emissions / (s1s2_emissions + s3_emissions)) +
@@ -582,9 +600,9 @@ class TemperatureScore(PortfolioAggregation):
         scores.to_csv(self.c.FILE_RAW_DATA_DUMP, index=False)
 
 # Test
-# portfolio_data = pd.read_csv('C:/Projects/SBTi/portfolio_data_2.csv',sep='\t')
-# portfolio_data.drop(columns = 'Unnamed: 0',inplace=True)
+# data = pd.read_csv('C:/Projects/SBTi/portfolio_4.csv',sep='\t')
+# data.drop(columns = 'Unnamed: 0',inplace=True)
 # temperature_score = TemperatureScore(fallback_score=3.2)
 # data_score = temperature_score.calculate(portfolio_data, [])
-# temperature_score.columns_percentage_distribution(data,['industry','time_frame'])
+# temperature_score.columns_percentage_distribution(portfolio_data,['time_frame','Country'])
 # df = temperature_score.temperature_score_influence_percentage(portfolio_data,'WATS')
