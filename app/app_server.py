@@ -168,11 +168,10 @@ class temp_score(BaseEndpoint):
         # Temperature score percentage breakdown by default score and target score
         temperature_percentage_coverage = temperature_score.temperature_score_influence_percentage(portfolio_data, json_data['aggregation_method'])
 
-        # Distribution of columns
-        # ToDo: make json_data more robust, optional
         if 'feature_distribution' in json_data.keys():
-            column_distribution = temperature_score.columns_percentage_distribution(portfolio_data,json_data['feature_distribution'])
+            column_distribution = temperature_score.columns_percentage_distribution(portfolio_data, json_data['feature_distribution'])
         else:
+            column_distribution = None
 
         return {
             "aggregated_scores": aggregations,
@@ -227,8 +226,6 @@ class portfolio_coverage(BaseEndpoint):
                 "portfolio_weight"]
             portfolio_data.loc[portfolio_data['company_name'] == company["company_name"], "investment_value"] = company[
                 "investment_value"]
-
-
 
         coverage = self.portfolio_coverage_tvp.get_portfolio_coverage(portfolio_data,
                                                                       self.aggregation_map[

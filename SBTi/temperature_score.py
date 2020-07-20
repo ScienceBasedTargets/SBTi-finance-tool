@@ -5,7 +5,7 @@ from enum import Enum
 import pandas as pd
 
 from SBTi.portfolio_aggregation import PortfolioAggregation, PortfolioAggregationMethod
-from configs import TemperatureScoreConfig
+from .configs import TemperatureScoreConfig
 
 
 class BoundaryCoverageOption(Enum):
@@ -540,16 +540,9 @@ class TemperatureScore(PortfolioAggregation):
 
 
 # Test
-data = pd.read_csv('C:/Projects/SBTi/portfolio_4.csv',sep='\t')
-data.drop(columns = 'Unnamed: 0',inplace=True)
-temperature_score = TemperatureScore(fallback_score=3.2)
-data_score = temperature_score.calculate(portfolio_data, [])
-#
-temperature_score.columns_percentage_distribution(portfolio_data,['time_frame','Country'])
-df = temperature_score.temperature_score_influence_percentage(portfolio_data,'WATS')
-
-
-
-columns = ['time_frame','Country']
-percentage_distribution = (data.groupby(columns).size() / data[columns[0]].count()) * 100
-return percentage_distribution.to_dict()
+# data = pd.read_csv('C:/Projects/SBTi/portfolio_4.csv',sep='\t')
+# data.drop(columns = 'Unnamed: 0',inplace=True)
+# temperature_score = TemperatureScore(fallback_score=3.2)
+# data_score = temperature_score.calculate(portfolio_data, [])
+# temperature_score.columns_percentage_distribution(portfolio_data,['time_frame','Country'])
+# df = temperature_score.temperature_score_influence_percentage(portfolio_data,'WATS')
