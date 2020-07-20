@@ -183,7 +183,7 @@ class temp_score(BaseEndpoint):
             "coverage": coverage,
             "companies": scores[include_columns].replace({np.nan: None}).to_dict(
                 orient="records"),
-            "temp_score_percent_coverage": temperature_percentage_coverage,
+            "temp_score_percent_coverage": json.dumps(temperature_percentage_coverage),
             "feature_distribution": str(column_distribution)
         }
 
