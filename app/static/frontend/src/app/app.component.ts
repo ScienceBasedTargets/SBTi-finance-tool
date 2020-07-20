@@ -44,6 +44,7 @@ export class AppComponent implements OnInit {
     resultColumns: string[] = [];
     resultGroups: string[] = [];
     resultTargets: Object[] = [];
+    resultItems: Object[] = [];
     resultScores: { [key: string]: number } = {};
     selectedContributions: { [key: string]: number }[] = [];
     alerts: Alert[] = [];
@@ -84,9 +85,9 @@ export class AppComponent implements OnInit {
         this.uploadedFiles = element.target.files;
     }
 
-    openContributors(group: string, timeFrame: string, template) {
-        console.log("contributions to group '" + group + "' and timeFrame '" + timeFrame + "'.");
-        this.selectedContributions = this.resultScores[timeFrame][group]["all"]["contributions"];
+    openContributors(group: string, timeFrame: string, item: string, template) {
+        console.log("contributions to group '" + group + "' and timeFrame '" + timeFrame + "' and item '" + item +"'.");
+        this.selectedContributions = this.resultScores[timeFrame][group][item]["contributions"];
         this.modalService.open(template, { scrollable: true, size: 'xl' });
     }
 
@@ -230,13 +231,12 @@ export class AppComponent implements OnInit {
                 this.loading = false;
                 if (response !== undefined) {
                     this.resultScores = response["aggregated_scores"];
-                    console.log("TODO: this console log below (this.resultScores) can be removed");
-                    console.log(this.resultScores);
                     this.resultTargets = response["companies"];
                     this.coverage = response["coverage"];
                     this.resultTimeFrames = Object.keys(response["aggregated_scores"]);
                     const firstTimeFrame = this.resultTimeFrames[0];
                     this.resultGroups = Object.keys(response["aggregated_scores"][firstTimeFrame]);
+                    this.resultItems = Object.keys(response["aggregated_scores"][firstTimeFrame][this.resultGroups[0]]);
                     if (this.resultTargets.length > 0) {
                         this.resultColumns = Object.keys(this.resultTargets[0]);
                     }
