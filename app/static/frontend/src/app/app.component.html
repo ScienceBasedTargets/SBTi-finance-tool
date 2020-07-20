@@ -56,9 +56,14 @@
     <form (ngSubmit)="getTemperatureScore(f)" #f="ngForm" *ngIf="columns.length > 0">
         <hr />
         <h6>API settings (leave empty to use the defaults)</h6>
-        <p>Choose the following filters for data-filtering or aggregation of columns.</p>
+        <p>Choose the following filters for data-filtering or aggregation of columns.
+          <br>
+          Use CTR-click to deselect items.
+        </p>
         <div class="form-group">
             <label for="input-defaultScore">Default temperature score</label>
+            <!--<input type="number" class="form-control" id="input-defaultScore" step="0.1" name="input-defaultScore"-->
+                <!--[(ngModel)]="defaultScore">-->
             <select class="form-control" [(ngModel)]="defaultScore" name="defaultMethod"
                 class="form-control" id="input-defaultScore">
                 <option *ngFor="let defaultMethod of availableDefaultScores" [ngValue]="defaultMethod">{{defaultMethod}}</option>
@@ -69,14 +74,31 @@
             <label for="input-aggregationMethod">Aggregation method</label>
             <select class="form-control" [(ngModel)]="selectedAggregationMethod" name="aggregationMethod"
                 class="form-control" id="input-aggregationMethod">
-                <option *ngFor="let aggregationMethod of availableAggregationMethods">{{aggregationMethod}}</option>
+                <option *ngFor="let aggregationMethod of availableAggregationMethods" [ngValue]="aggregationMethod">{{aggregationMethod}}</option>
             </select>
         </div>
       <label for="input-filterTimeFrames">Time frame (default: mid)</label>
         <div class="form-group">
+          <!-- *ngFor="let timeFrame of availableTimeFrames"  -->
+          <!--<div class="form-check" [(ngModel)]="filterTimeFrames">-->
+                <!--<input class="form-check-input" [(ngModel)]="cat.id" name="{{ cat.name }}" type="checkbox" id="{{cat.name}}" (change)="onChangeCategory($event, cat)">-->
+                <!--<label class="form-check-label" for="{{cat.name}}">-->
+                    <!--{{cat.name}}-->
+                <!--</label>-->
+
+              <!--<input class="form-check-input" type="checkbox" value="" id="{{timeFrame}}">-->
+              <!--<label class="form-check-label" for="{{timeFrame}}">-->
+                  <!--{{timeFrame}}-->
+              <!--</label>-->
+          <!--</div>-->
+
             <select class="form-control" [(ngModel)]="filterTimeFrames" name="filterTimeFrames" multiple
                 id="input-filterTimeFrames">
                 <option *ngFor="let timeFrame of availableTimeFrames">{{timeFrame}}</option>
+                  <!--<option *ngFor="let timeFrame of availableTimeFrames"-->
+                  <!--[attr.selected]="timeFrame == 'mid' ? true : false">-->
+                    <!--{{timeFrame}}-->
+                  <!--</option>-->
             </select>
         </div>
         <div class="form-group">
@@ -86,13 +108,43 @@
                 <option *ngFor="let scopeCategory of availableScopeCategories">{{scopeCategory}}</option>
             </select>
         </div>
+
+        <!-- Data providers -->
         <div class="form-group">
-            <label for="input-dataProviders">Data provider(s)</label>
-            <select class="form-control" id="input-dataProviders" name="dataProviders"
-                [(ngModel)]="selectedDataProviders" multiple>
+            <label for="input-dataProviders-1">First Dataprovider</label>
+            <select class="form-control" id="input-dataProviders-1" name="dataProviders-1"
+                [(ngModel)]="selectedDataProviders1">
                 <option *ngFor="let dataProvider of dataProviders">{{dataProvider.name}}</option>
             </select>
+            <label for="input-dataProviders-1-path"></label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <div class="input-group-text">/SBTI/app/</div>
+              </div>
+              <input [(ngModel)]="selectedDataProvider1Path" type="text" class="form-control"
+                     id="input-dataProviders-1-path" aria-describedby="dataProvider1Path"
+                     placeholder="data/data_test_temperature_score.csv" name="selectedDataProvider1Path">
+            </div>
+              <small id="dataProvider1Path" class="form-text text-muted">Use this input box to serve a different source path for the first dataprovider.</small>
         </div>
+        <div class="form-group">
+            <label for="input-dataProviders-2">Second Dataprovider</label>
+            <select class="form-control" id="input-dataProviders-2" name="dataProviders-2"
+                [(ngModel)]="selectedDataProviders2">
+                <option *ngFor="let dataProvider of dataProviders">{{dataProvider.name}}</option>
+            </select>
+          <label for="input-dataProviders-2-path"></label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <div class="input-group-text">/SBTI/app/</div>
+              </div>
+              <input [(ngModel)]="selectedDataProvider2Path" type="text" class="form-control"
+                     id="input-dataProviders-2-path" aria-describedby="dataProvider2Path"
+                     placeholder="data/data_test_temperature_score.csv" name="selectedDataProvider2Path">
+            </div>
+              <small id="dataProvider2Path" class="form-text text-muted">Use this input box to serve a different source path for the second dataprovider.</small>
+        </div>
+
         <div class="form-group">
             <label for="columns">Columns</label>
             <select class="form-control" id="columns" name="columns" [(ngModel)]="includeColumns" multiple>

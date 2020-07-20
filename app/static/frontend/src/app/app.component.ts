@@ -33,6 +33,11 @@ export class AppComponent implements OnInit {
     filterScopeCategory: string[] = ["s1s2", "s1s2s3"];
     includeColumns: string[] = [];
     selectedDataProviders: string[] = [];
+    selectedDataProviders1: string = "";
+    selectedDataProvider1Path: string = "";
+    selectedDataProviders2: string = "";
+    selectedDataProvider2Path: string = "";
+    selectedDataProviderPaths: string[] = [];
     availableDefaultScores: number[] = [3.2, 3.9, 4.5];
     defaultScore: number = 3.2;
     uploadedFiles: Array<File>;
@@ -217,6 +222,10 @@ export class AppComponent implements OnInit {
             }
             return newObj;
         });
+        this.selectedDataProviders = [this.selectedDataProviders1, this.selectedDataProviders2];
+        this.selectedDataProviderPaths = [this.selectedDataProvider1Path, this.selectedDataProvider2Path];
+        console.log("Data providers: " + this.selectedDataProviders);
+        console.log("Data providers paths: " + this.selectedDataProviderPaths);
         this.appService.getTemperatureScore({
             "aggregation_method": this.selectedAggregationMethod,
             "data_providers": this.selectedDataProviders,
@@ -237,6 +246,10 @@ export class AppComponent implements OnInit {
                     const firstTimeFrame = this.resultTimeFrames[0];
                     this.resultGroups = Object.keys(response["aggregated_scores"][firstTimeFrame]);
                     this.resultItems = Object.keys(response["aggregated_scores"][firstTimeFrame][this.resultGroups[0]]);
+                    console.log("TODO: this console log below (this.resultScores) can be removed");
+                    console.log(response);
+                    console.log(this.resultScores);
+                    console.log(this.resultItems);
                     if (this.resultTargets.length > 0) {
                         this.resultColumns = Object.keys(this.resultTargets[0]);
                     }
