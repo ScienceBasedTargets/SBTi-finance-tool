@@ -5,7 +5,7 @@ from enum import Enum
 import pandas as pd
 
 from SBTi.portfolio_aggregation import PortfolioAggregation, PortfolioAggregationMethod
-from .configs import TemperatureScoreConfig
+from configs import TemperatureScoreConfig
 
 
 class BoundaryCoverageOption(Enum):
@@ -442,9 +442,6 @@ class TemperatureScore(PortfolioAggregation):
                 s1s2_emissions = company_data.iloc[1][self.c.COLS.GHG_SCOPE12]
                 s3_emissions = company_data.iloc[1][self.c.COLS.GHG_SCOPE3]
 
-                if str(aggregation_method) == 'PortfolioAggregationMethod.WATS':
-                    aggregation_method = 'WATS'  # added by Louis, because of error here .. TODO: fix error (Vito?)
-
                 if aggregation_method == 'WATS':
                     portfolio_weight_storage = []
                     for company in data[self.c.COLS.COMPANY_NAME].unique():
@@ -457,6 +454,8 @@ class TemperatureScore(PortfolioAggregation):
 
                     value = portfolio_weight * (ds_s1s2 * (s1s2_emissions / (s1s2_emissions + s3_emissions)) +
                                                 ds_s3 * (s3_emissions / (s1s2_emissions + s3_emissions)))
+
+                    # print("ds_s1s2: {}, s1s2_emissions: {}, ds_s3: {}, s3_emissions:{}, value: {}".format(ds_s1s2,s1s2_emissions,ds_s3, s3_emissions, value))
 
                 elif aggregation_method == 'TETS':
                     company_emissions = company_data[self.c.COLS.GHG_SCOPE12].iloc[0] + \
@@ -541,6 +540,8 @@ class TemperatureScore(PortfolioAggregation):
         :param columns: specified column names the client would like to have a percentage distribution
         :return: percentage distribution of specified columns
         '''
+
+        data = data[columns].fillna('<EMPTY>')
         if columns==None:
             return None
         elif len(columns) == 1:
@@ -549,8 +550,6 @@ class TemperatureScore(PortfolioAggregation):
         elif len(columns) > 1:
             percentage_distribution = (data.groupby(columns).size() / data[columns[0]].count()) * 100
             return percentage_distribution.to_dict()
-
-
 
 
     def set_scenario(self, scenario: Dict):
@@ -599,10 +598,11 @@ class TemperatureScore(PortfolioAggregation):
 
         scores.to_csv(self.c.FILE_RAW_DATA_DUMP, index=False)
 
+
 # Test
-# data = pd.read_csv('C:/Projects/SBTi/portfolio_4.csv',sep='\t')
-# data.drop(columns = 'Unnamed: 0',inplace=True)
+# portfolio_data = pd.read_csv('C:/Projects/SBTi/portfolio.csv',sep='\t')
+# portfolio_data.drop(columns = 'Unnamed: 0',inplace=True)
 # temperature_score = TemperatureScore(fallback_score=3.2)
-# data_score = temperature_score.calculate(portfolio_data, [])
+# # data_score = temperature_score.calculate(portfolio_data, [])
 # temperature_score.columns_percentage_distribution(portfolio_data,['time_frame','Country'])
 # df = temperature_score.temperature_score_influence_percentage(portfolio_data,'WATS')
