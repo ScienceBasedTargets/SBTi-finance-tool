@@ -5,7 +5,7 @@
   "data_providers": [
     {
       "type": "csv",
-      "name": "csv-a",
+      "name": "CSV file 1",
       "parameters": {
         "path": "data/data_test_temperature_score.csv",
         "path_targets": "data/data_test_temperature_score_targets.csv"
@@ -13,7 +13,14 @@
     },
     {
       "type": "excel",
-      "name": "excel-test-123",
+      "name": "Excel file 1",
+      "parameters": {
+        "path": "data/InputFormat.xlsx"
+      }
+    },
+    {
+      "type": "excel",
+      "name": "Excel file 2",
       "parameters": {
         "path": "data/InputFormat.xlsx"
       }
