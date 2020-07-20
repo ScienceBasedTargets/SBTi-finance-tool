@@ -66,6 +66,7 @@ class ColumnsConfig:
     TARGET_TYPE_SR15 = "Target_type"
     SR15_VARIABLE = "SR15_variable"
     ENTERPRISE_VALUE = 'enterprise_value'
+    REGRESSION_MODEL = 'Regression_model'
 
 
 
@@ -102,7 +103,7 @@ class PortfolioAggregationConfig:
 
 class TemperatureScoreConfig(PortfolioAggregationConfig):
     FILE_SR15_MAPPING = os.path.join(os.path.dirname(os.path.realpath(__file__)), "inputs",
-                                     "sr15_mapping.xlsx")
+                                     "SR15_mapping_Beta_release.xlsx")
     FILE_REGRESSION_MODEL_SUMMARY = os.path.join(os.path.dirname(os.path.realpath(__file__)), "inputs",
                                                  "regression_model_summary.xlsx")
     FILE_RAW_DATA_DUMP = os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "app",
