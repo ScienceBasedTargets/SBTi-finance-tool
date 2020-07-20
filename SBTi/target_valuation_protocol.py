@@ -41,14 +41,18 @@ class TargetValuationProtocol:
         -- For all other intensity_metrics => continue
         If target type is Other (or none is specified) => Invalid target
         """
-        index = []
-        for record in self.data.iterrows():
-            if not pd.isna(record[1][self.c.COLS.TARGET_REFERENCE_NUMBER]):
-                if 'int' in record[1][self.c.COLS.TARGET_REFERENCE_NUMBER].lower():
-                    index.append(record[0])
-                elif 'abs' in record[1][self.c.COLS.TARGET_REFERENCE_NUMBER].lower():
-                    index.append(record[0])
-        self.data = self.data.loc[index]
+        index_list = []
+        self.data[self.c.COLS.TARGET_REFERENCE_NUMBER] = self.data[self.c.COLS.TARGET_REFERENCE_NUMBER].str.lower()
+        self.data[self.c.COLS.INTENSITY_METRIC] = self.data[self.c.COLS.INTENSITY_METRIC].str.lower()
+        for index, record in self.data.iterrows():
+            if not pd.isna(record[self.c.COLS.TARGET_REFERENCE_NUMBER]):
+                if 'abs' in record[self.c.COLS.TARGET_REFERENCE_NUMBER]:
+                    index_list.append(index)
+                elif 'int' in record[self.c.COLS.TARGET_REFERENCE_NUMBER]:
+                    if (not pd.isna(record[self.c.COLS.INTENSITY_METRIC])):
+                        if ('other' not in record[self.c.COLS.INTENSITY_METRIC]):
+                            index_list.append(index)
+        self.data = self.data.loc[index_list]
 
 
     def test_boundary_coverage(self):
@@ -133,6 +137,7 @@ class TargetValuationProtocol:
         :return: returns records from the input data, which contains company and target information, that meet specific
         criteria. For example, record of greatest emissions_in_scope
         """
+
         # Find all targets that correspond to the given row
         target_data = self.data[(self.data[self.c.COLS.COMPANY_NAME] == row[self.c.COLS.COMPANY_NAME]) &
                                 (self.data[self.c.COLS.TIME_FRAME] == row[self.c.COLS.TIME_FRAME]) &
@@ -145,15 +150,14 @@ class TargetValuationProtocol:
             return target_data.iloc[0]
         else:
             # We prefer targets with higher emissions in scope
-            if target[self.c.COLS.SCOPE_CATEGORY] == self.c.VALUE_SCOPE_CATEGORY_S1S2:
+            if target_data.iloc[0][self.c.COLS.SCOPE_CATEGORY] == self.c.VALUE_SCOPE_CATEGORY_S1S2:
                 target_data = target_data[
                     target_data[self.c.COLS.GHG_SCOPE12] == target_data[
                         self.c.COLS.GHG_SCOPE12].max()].copy()
-            elif target[self.c.COLS.SCOPE_CATEGORY] == self.c.VALUE_SCOPE_CATEGORY_S3:
+            elif target_data.iloc[0][self.c.COLS.SCOPE_CATEGORY] == self.c.VALUE_SCOPE_CATEGORY_S3:
                 target_data = target_data[
                     target_data[self.c.COLS.GHG_SCOPE3] == target_data[
                         self.c.COLS.GHG_SCOPE3].max()].copy()
-
             if len(target_data) == 1:
                 return target_data.iloc[0]
 
@@ -208,7 +212,7 @@ class TargetValuationProtocol:
 
 
 # Testing
-# data = pd.read_csv('C:/Projects/SBTi/portfolio_data_3.csv',sep='\t')
+# data = pd.read_csv('C:/Projects/SBTi/testing.csv',sep='\t')
 # data.drop(columns='Unnamed: 0',inplace=True)
 # x = TargetValuationProtocol(data)
 # x.test_target_type()
