@@ -87,7 +87,7 @@ class TemperatureScore(PortfolioAggregation):
             # There should never be more than one potential mapping
             raise ValueError("There is more than one potential mapping to a SR15 goal.")
         else:
-            return mappings.iloc[0][self.c.COLS.SR15_VARIABLE]
+            return mappings.iloc[0][self.c.COLS.REGRESSION_MODEL]
 
     def get_annual_reduction_rate(self, target: pd.Series) -> Optional[float]:
         """
