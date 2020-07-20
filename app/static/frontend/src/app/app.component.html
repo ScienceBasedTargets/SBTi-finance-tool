@@ -1,3 +1,4 @@
+<!--suppress BuyFluidPluginNoteInspection -->
 <style>
 </style>
 
@@ -57,8 +58,13 @@
         <h6>API settings (leave empty to use the defaults)</h6>
         <div class="form-group">
             <label for="input-defaultScore">Default temperature score</label>
-            <input type="number" class="form-control" id="input-defaultScore" step="0.1" name="input-defaultScore"
-                [(ngModel)]="defaultScore">
+            <!--<input type="number" class="form-control" id="input-defaultScore" step="0.1" name="input-defaultScore"-->
+                <!--[(ngModel)]="defaultScore">-->
+            <select class="form-control" [(ngModel)]="defaultScore" name="defaultMethod"
+                class="form-control" id="input-defaultScore">
+                <option *ngFor="let defaultMethod of availableDefaultScores" [ngValue]="defaultMethod">{{defaultMethod}}</option>
+            </select>
+
         </div>
         <div class="form-group">
             <label for="input-aggregationMethod">Aggregation method</label>
@@ -69,9 +75,9 @@
         </div>
         <div class="form-group">
             <label for="input-filterTimeFrames">Time frame</label>
-            <select [(ngModel)]="filterTimeFrames" name="filterTimeFrames" multiple class="form-control"
+            <select class="form-control" [(ngModel)]="filterTimeFrames" name="filterTimeFrames" multiple
                 id="input-filterTimeFrames">
-                <option *ngFor="let timeFrame of availableTimeFrames">{{timeFrame}}</option>
+                <option *ngFor="let timeFrame of availableTimeFrames" selected>{{timeFrame}}</option>
             </select>
         </div>
         <div class="form-group">
@@ -119,7 +125,7 @@
                 <tr *ngFor="let timeFrame of resultTimeFrames">
                     <td>{{group}}</td>
                     <td>{{timeFrame}}</td>
-                    <td>{{resultScores["short"][group]["score"] | number:'1.2-2'}}&#176;C</td>
+                    <td>{{resultScores[timeFrame][group]["all"]["score"] | number:'1.2-2'}}&#176;C</td>
                     <td><button (click)="openContributors(group, timeFrame, templateContributions)" class="btn btn-sm btn-outline-primary">Contributors</button></td>
                 </tr>
             </tbody>
@@ -127,7 +133,7 @@
 
         <ng-template #templateContributions let-modal>
             <div class="modal-header">
-                <h4 class="modal-title">Modal title</h4>
+                <h4 class="modal-title">Company contributions</h4>
                 <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -150,7 +156,7 @@
                             <td>{{company.contribution | number:'1.2-2'}}&#176;C</td>
                         </tr>
                     </tbody>
-                </table>        
+                </table>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>

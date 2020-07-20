@@ -28,11 +28,12 @@ export class AppComponent implements OnInit {
     availableColumns: string[] = AVAILABLE_COLUMNS;
     availableGroupingColumns: string[] = AVAILABLE_GROUPING_COLUMNS;
     groupingColumns: string[] = [];
-    selectedAggregationMethod: string = null;
-    filterTimeFrames: string[] = [];
-    filterScopeCategory: string[] = [];
+    selectedAggregationMethod: string = "WATS";
+    filterTimeFrames: string[] = ["mid"];
+    filterScopeCategory: string[] = ["s1s2", "s1s2s3"];
     includeColumns: string[] = [];
     selectedDataProviders: string[] = [];
+    availableDefaultScores: number[] = [3.2, 3.9, 4.5];
     defaultScore: number = 3.2;
     uploadedFiles: Array<File>;
     dataProviders: DataProvider[];
@@ -61,7 +62,7 @@ export class AppComponent implements OnInit {
 
     /**
      * Adds alert
-     * @param alert 
+     * @param alert
      */
     addAlert(alert: Alert) {
         this.alerts.push(alert);
@@ -69,7 +70,7 @@ export class AppComponent implements OnInit {
 
     /**
      * Closes alert
-     * @param alert 
+     * @param alert
      */
     closeAlert(alert: Alert) {
         this.alerts.splice(this.alerts.indexOf(alert), 1);
@@ -77,16 +78,15 @@ export class AppComponent implements OnInit {
 
     /**
      * Update the uploaded files.
-     * @param element 
+     * @param element
      */
     onFileChange(element) {
         this.uploadedFiles = element.target.files;
     }
 
     openContributors(group: string, timeFrame: string, template) {
-        console.log(group);
-        console.log(timeFrame);
-        this.selectedContributions = this.resultScores[timeFrame][group]["contributions"];
+        console.log("contributions to group '" + group + "' and timeFrame '" + timeFrame + "'.");
+        this.selectedContributions = this.resultScores[timeFrame][group]["all"]["contributions"];
         this.modalService.open(template, { scrollable: true, size: 'xl' });
     }
 
@@ -110,8 +110,8 @@ export class AppComponent implements OnInit {
 
     /**
          * Export some data (formatted as a 2d array) as a CSV file.
-     * @param filename 
-     * @param rows 
+     * @param filename
+     * @param rows
      */
     exportToCsv(filename: string, rows: Array<Array<any>>) {
         var processRow = function (row) {
@@ -176,7 +176,7 @@ export class AppComponent implements OnInit {
                     let sortedMappings = that.availableTargetColumns.filter(elem => !(elem in assigned)).sort((a, b) => {
                         return levenshtein.get(a, obj) - levenshtein.get(b, obj);
                     });
-                    if (sortedMappings.length > 0 && 
+                    if (sortedMappings.length > 0 &&
                         levenshtein.get(sortedMappings[0], obj) < environment.levenshteinThreshold){
                         // If it's smaller than the threshold, we'll assign this column
                         map[obj] = sortedMappings[0];
@@ -200,7 +200,7 @@ export class AppComponent implements OnInit {
 
     /**
      * Gets the temperature score
-     * @param f 
+     * @param f
      */
     getTemperatureScore(f) {
         this.loading = true;
@@ -230,10 +230,13 @@ export class AppComponent implements OnInit {
                 this.loading = false;
                 if (response !== undefined) {
                     this.resultScores = response["aggregated_scores"];
+                    console.log("TODO: this console log below (this.resultScores) can be removed");
+                    console.log(this.resultScores);
                     this.resultTargets = response["companies"];
                     this.coverage = response["coverage"];
                     this.resultTimeFrames = Object.keys(response["aggregated_scores"]);
-                    this.resultGroups = Object.keys(response["aggregated_scores"]["short"]);
+                    const firstTimeFrame = this.resultTimeFrames[0];
+                    this.resultGroups = Object.keys(response["aggregated_scores"][firstTimeFrame]);
                     if (this.resultTargets.length > 0) {
                         this.resultColumns = Object.keys(this.resultTargets[0]);
                     }
