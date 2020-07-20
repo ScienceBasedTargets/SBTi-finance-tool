@@ -1,7 +1,7 @@
 {
   "default_score": 3.2,
   "aggregation_method": "WATS",
-  "frontend_path": "static/frontend/dist/frontend/",
+  "frontend_path": "static/frontend/dist/",
   "data_providers": [
     {
       "type": "csv",
