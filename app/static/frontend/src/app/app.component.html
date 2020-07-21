@@ -116,16 +116,19 @@
                 [(ngModel)]="selectedDataProviders1">
                 <option *ngFor="let dataProvider of dataProviders">{{dataProvider.name}}</option>
             </select>
-            <label for="input-dataProviders-1-path"></label>
-            <div class="input-group">
-              <div class="input-group-prepend">
-                <div class="input-group-text">/SBTI/app/</div>
-              </div>
-              <input [(ngModel)]="selectedDataProvider1Path" type="text" class="form-control"
-                     id="input-dataProviders-1-path" aria-describedby="dataProvider1Path"
-                     placeholder="data/data_test_temperature_score.csv" name="selectedDataProvider1Path">
-            </div>
-              <small id="dataProvider1Path" class="form-text text-muted">Use this input box to serve a different source path for the first dataprovider.</small>
+            <label for="input-dataProviders-1-file"></label>
+            <input (change)="onFileChange($event)" type="file" class="form-control-file" id="input-dataProviders-1-file"
+                name="input-dataProviders-1-file" aria-describedby="dataProvider1File">
+            <small id="dataProvider1File" class="form-text text-muted">Use this file upload to provide your own dataprovider.</small>
+            <!--<div class="input-group">-->
+              <!--<div class="input-group-prepend">-->
+                <!--<div class="input-group-text">/SBTI/app/</div>-->
+              <!--</div>-->
+              <!--<input [(ngModel)]="selectedDataProvider1Path" type="text" class="form-control"-->
+                     <!--id="input-dataProviders-1-path" aria-describedby="dataProvider1Path"-->
+                     <!--placeholder="data/data_test_temperature_score.csv" name="selectedDataProvider1Path">-->
+            <!--</div>-->
+              <!--<small id="dataProvider1Path" class="form-text text-muted">Use this input box to serve a different source path for the first dataprovider.</small>-->
         </div>
         <div class="form-group">
             <label for="input-dataProviders-2">Second Dataprovider</label>
@@ -133,16 +136,19 @@
                 [(ngModel)]="selectedDataProviders2">
                 <option *ngFor="let dataProvider of dataProviders">{{dataProvider.name}}</option>
             </select>
-          <label for="input-dataProviders-2-path"></label>
-            <div class="input-group">
-              <div class="input-group-prepend">
-                <div class="input-group-text">/SBTI/app/</div>
-              </div>
-              <input [(ngModel)]="selectedDataProvider2Path" type="text" class="form-control"
-                     id="input-dataProviders-2-path" aria-describedby="dataProvider2Path"
-                     placeholder="data/data_test_temperature_score.csv" name="selectedDataProvider2Path">
-            </div>
-              <small id="dataProvider2Path" class="form-text text-muted">Use this input box to serve a different source path for the second dataprovider.</small>
+          <label for="input-dataProviders-2-file"></label>
+          <input (change)="onFileChange($event)" type="file" class="form-control-file" id="input-dataProviders-2-file"
+                name="input-dataProviders-2-file" aria-describedby="dataProvider2File">
+            <small id="dataProvider2File" class="form-text text-muted">Use this file upload to provide your own dataprovider.</small>
+            <!--<div class="input-group">-->
+              <!--<div class="input-group-prepend">-->
+                <!--<div class="input-group-text">/SBTI/app/</div>-->
+              <!--</div>-->
+              <!--<input [(ngModel)]="selectedDataProvider2Path" type="text" class="form-control"-->
+                     <!--id="input-dataProviders-2-path" aria-describedby="dataProvider2Path"-->
+                     <!--placeholder="data/data_test_temperature_score.csv" name="selectedDataProvider2Path">-->
+            <!--</div>-->
+              <!--<small id="dataProvider2Path" class="form-text text-muted">Use this input box to serve a different source path for the second dataprovider.</small>-->
         </div>
 
         <div class="form-group">
