@@ -8,19 +8,6 @@ from SBTi.portfolio_aggregation import PortfolioAggregation, PortfolioAggregatio
 from .configs import TemperatureScoreConfig
 
 
-class BoundaryCoverageOption(Enum):
-    """
-    The boundary coverage determines how partial targets are processed.
-    * DEFAULT: Target is always valid, % uncovered is given default score in temperature score module.
-    * THRESHOLD: For S1+S2 targets: coverage% must be above 95%, for S3 targets coverage must be above 67%.
-    * WEIGHTED: Thresholds are still 95% and 67%, target is always valid. Below threshold ambition is scaled.*
-        New target ambition = input target ambition * coverage
-    """
-    DEFAULT = 3
-    THRESHOLD = 1
-    WEIGHTED = 2
-
-
 class TemperatureScore(PortfolioAggregation):
     """
     This class is provides a temperature score based on the climate goals.
@@ -34,7 +21,6 @@ class TemperatureScore(PortfolioAggregation):
     """
 
     def __init__(self, fallback_score: float = 3.2, model: int = 4,
-                 boundary_coverage_option: BoundaryCoverageOption = BoundaryCoverageOption.DEFAULT,
                  config: Type[TemperatureScoreConfig] = TemperatureScoreConfig):
         super().__init__(config)
         self.fallback_score = fallback_score
@@ -141,38 +127,6 @@ class TemperatureScore(PortfolioAggregation):
         return target[self.c.COLS.REGRESSION_PARAM] * target[self.c.COLS.ANNUAL_REDUCTION_RATE] + target[
             self.c.COLS.REGRESSION_INTERCEPT]
 
-    def process_score(self, target: pd.Series) -> float:
-        """
-        Process the temperature score, such that it's relative to the emissions in the scope.
-
-        :param target: The target as a row of a dataframe
-        :return: The relative temperature score
-        """
-        if self.boundary_coverage_option == BoundaryCoverageOption.DEFAULT:
-            if target[self.c.COLS.SCOPE_CATEGORY] == self.c.VALUE_SCOPE_CATEGORY_S1S2:
-                if pd.isnull(target[self.c.COLS.GHG_SCOPE12]) or pd.isnull(
-                        target[self.c.COLS.TEMPERATURE_SCORE]):
-                    return self.fallback_score
-                else:
-                    try:
-                        return target[self.c.COLS.GHG_SCOPE12] / 100 * target[self.c.COLS.TEMPERATURE_SCORE] + \
-                               (1 - (target[self.c.COLS.GHG_SCOPE12] / 100)) * self.fallback_score
-                    except ZeroDivisionError:
-                        raise ValueError(
-                            "The temperature score for company {} is zero".format(target[self.c.COLS.COMPANY_NAME]))
-            elif target[self.c.COLS.SCOPE_CATEGORY] == self.c.VALUE_SCOPE_CATEGORY_S3:
-                if pd.isnull(target[self.c.COLS.GHG_SCOPE3]) or pd.isnull(target[self.c.COLS.TEMPERATURE_SCORE]):
-                    return self.fallback_score
-                else:
-                    try:
-                        return target[self.c.COLS.GHG_SCOPE3] / 100 * target[self.c.COLS.TEMPERATURE_SCORE] + \
-                               (1 - (target[self.c.COLS.GHG_SCOPE3] / 100)) * self.fallback_score
-                    except ZeroDivisionError:
-                        raise ValueError(
-                            "The temperature score for company {} is zero".format(target[self.c.COLS.COMPANY_NAME]))
-        else:
-            return target[self.c.COLS.TEMPERATURE_SCORE]
-
     def get_ghc_temperature_score(self, data: pd.DataFrame, company: str, time_frame: str):
         """
         Get the aggregated temperature score for a certain company based on the emissions of company.
@@ -248,7 +202,6 @@ class TemperatureScore(PortfolioAggregation):
             *data.apply(lambda row: self.get_regression(row), axis=1)
         )
         data[self.c.COLS.TEMPERATURE_SCORE] = data.apply(lambda row: self.get_score(row), axis=1)
-        data[self.c.COLS.TEMPERATURE_SCORE] = data.apply(lambda row: self.process_score(row), axis=1)
         combined_data = []
         company_columns = [column for column in self.c.COLS.COMPANY_COLUMNS + extra_columns if column in data.columns]
         for company in data[self.c.COLS.COMPANY_NAME].unique():
