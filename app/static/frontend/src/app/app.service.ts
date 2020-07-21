@@ -24,7 +24,6 @@ export class AppService {
 
   /**
    * Adds alert to the log. This can be overwritten by setting the alert handler.
-   * @param alert
    */
   protected addAlert(alert: Alert) {
     console.log(alert);
@@ -52,7 +51,6 @@ export class AppService {
 
   /**
    * Parse an Excel portfolio file.
-   * @param data
    * @returns parse portfolio
    */
   public doParsePortfolio(data: FormData): Observable<Portfolio> {
@@ -65,7 +63,6 @@ export class AppService {
 
   /**
    * Calculate the temperature score
-   * @param data
    * @returns temperature score
    */
   public getTemperatureScore(data: TemperatureScoreSettings): Observable<TemperatureScoreResult> {
