@@ -545,10 +545,11 @@ class TemperatureScore(PortfolioAggregation):
         """
         for time_frame in [self.c.TIME_FRAME_SHORT, self.c.TIME_FRAME_MID, self.c.TIME_FRAME_LONG]:
             for scope in self.c.VALUE_SCOPE_CATEGORIES:
-                aggregations[time_frame][scope]['influence_percentage'] = {
-                    'default': temperature_percentage_coverage['default'][time_frame][scope],
-                    'target': temperature_percentage_coverage['target'][time_frame][scope]
-                }
+                if aggregations.get(time_frame) and aggregations[time_frame].get(scope):
+                    aggregations[time_frame][scope]['influence_percentage'] = {
+                        'default': temperature_percentage_coverage['default'][time_frame][scope],
+                        'target': temperature_percentage_coverage['target'][time_frame][scope]
+                    }
         return aggregations
 
 # Test
