@@ -6,7 +6,7 @@ import levenshtein from 'fast-levenshtein';
 import { environment } from 'src/environments/environment';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-const AVAILABLE_GROUPING_COLUMNS: string[] = ['industry'];
+const AVAILABLE_GROUPING_COLUMNS: string[] = ['Country', 'Region', 'Industry_lvl1', 'Industry_lvl2', 'Industry_lvl3',  'Industry_lvl4'];
 const AVAILABLE_COLUMNS: string[] = ['company_id', 'industry', 's1s2_emissions', 's3_emissions', 'portfolio_weight',
 'market_cap', 'investment_value', 'company_enterprise_value', 'company_ev_plus_cash', 'company_total_assets',
 'target_reference_number', 'scope', 'base_year', 'start_year', 'target_year', 'reduction_from_base_year',
@@ -233,8 +233,6 @@ export class AppComponent implements OnInit {
         });
         this.selectedDataProviders = [this.selectedDataProviders1, this.selectedDataProviders2];
         this.selectedDataProviderPaths = [this.selectedDataProvider1Path, this.selectedDataProvider2Path];
-        console.log('Data providers: ' + this.selectedDataProviders);
-        console.log('Data providers paths: ' + this.selectedDataProviderPaths);
         this.appService.getTemperatureScore({
             aggregation_method: this.selectedAggregationMethod,
             data_providers: this.selectedDataProviders,
@@ -248,6 +246,7 @@ export class AppComponent implements OnInit {
             .subscribe((response) => {
                 this.loading = false;
                 if (response !== undefined) {
+
                     this.resultScores = response.aggregated_scores;
                     this.resultTargets = response.companies;
                     this.coverage = response.coverage;
@@ -255,10 +254,7 @@ export class AppComponent implements OnInit {
                     const firstTimeFrame = this.resultTimeFrames[0];
                     this.resultGroups = Object.keys(response.aggregated_scores[firstTimeFrame]);
                     this.resultItems = Object.keys(response.aggregated_scores[firstTimeFrame][this.resultGroups[0]]);
-                    console.log('TODO: this console log below (this.resultScores) can be removed');
-                    console.log(response);
-                    console.log(this.resultScores);
-                    console.log(this.resultItems);
+
                     if (this.resultTargets.length > 0) {
                         this.resultColumns = Object.keys(this.resultTargets[0]);
                     }
