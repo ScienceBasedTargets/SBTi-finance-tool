@@ -247,6 +247,7 @@ export class AppComponent implements OnInit {
                 this.loading = false;
                 if (response !== undefined) {
 
+                    console.log(response);
                     this.resultScores = response.aggregated_scores;
                     this.resultTargets = response.companies;
                     this.coverage = response.coverage;
