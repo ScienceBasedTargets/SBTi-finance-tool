@@ -186,7 +186,7 @@ class temp_score(BaseEndpoint):
             "companies": scores[include_columns].replace({np.nan: None}).to_dict(
                 orient="records"),
             "temp_score_percent_coverage": temperature_percentage_coverage,
-            "feature_distribution": str(column_distribution)
+            "feature_distribution": column_distribution
         }
 
 class DataProviders(BaseEndpoint):
