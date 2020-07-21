@@ -14,7 +14,6 @@ class TemperatureScore(PortfolioAggregation):
 
     :param fallback_score: The temp score if a company is not found
     :param model: The regression model to use
-    :param boundary_coverage_option: The technique the boundary coverage is calculated
     :param config: A class defining the constants that are used throughout this class. This parameter is only required
                     if you'd like to overwrite a constant. This can be done by extending the TemperatureScoreConfig
                     class and overwriting one of the parameters.
@@ -25,7 +24,6 @@ class TemperatureScore(PortfolioAggregation):
         super().__init__(config)
         self.fallback_score = fallback_score
         self.model = model
-        self.boundary_coverage_option = boundary_coverage_option
         self.c: Type[TemperatureScoreConfig] = config
         self.scenario = dict(number=0)
         self.score_cap = None
