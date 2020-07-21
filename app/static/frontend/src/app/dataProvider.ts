@@ -1,4 +1,4 @@
 export interface DataProvider {
-    name: string;
-    type: string;
+  name: string;
+  type: string;
 }

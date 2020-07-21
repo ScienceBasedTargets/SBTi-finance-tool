@@ -114,6 +114,8 @@ class temp_score(BaseEndpoint):
 
         company_data = SBTi.data.get_company_data(data_providers, json_data["companies"])
         targets = SBTi.data.get_targets(data_providers, json_data["companies"])
+        # portfolio_data = pd.merge(left=company_data, right=targets, how = 'outer', on = ['company_name'])
+
         portfolio_data = pd.merge(left=company_data, right=targets, left_on='company_name', right_on='company_name')
 
         aggregation_method = self.aggregation_map[self.config["aggregation_method"]]
@@ -130,7 +132,8 @@ class temp_score(BaseEndpoint):
             temperature_score.set_scenario(scenario)
 
         # Target_Valuation_Protocol
-        target_valuation_protocol = TargetValuationProtocol(portfolio_data)
+        # target_valuation_protocol = TargetValuationProtocol(portfolio_data)
+        target_valuation_protocol = TargetValuationProtocol(portfolio_data,company_data)
 
         portfolio_data = target_valuation_protocol.target_valuation_protocol()
 
@@ -173,11 +176,12 @@ class temp_score(BaseEndpoint):
         # Temperature score percentage breakdown by default score and target score
         temperature_percentage_coverage = temperature_score.temperature_score_influence_percentage(portfolio_data, json_data['aggregation_method'])
 
-        if 'feature_distribution' in json_data.keys():
-            column_distribution = temperature_score.columns_percentage_distribution(portfolio_data, json_data['feature_distribution'])
+        if grouping:
+            column_distribution = temperature_score.columns_percentage_distribution(portfolio_data, json_data['grouping_columns'])
         else:
             column_distribution = None
 
+        temperature_percentage_coverage = pd.DataFrame.from_dict(temperature_percentage_coverage).replace({np.nan: None}).to_dict()
         aggregations = temperature_score.merge_percentage_coverage_to_aggregations(aggregations, temperature_percentage_coverage)
 
         return {
@@ -185,7 +189,7 @@ class temp_score(BaseEndpoint):
             "coverage": coverage,
             "companies": scores[include_columns].replace({np.nan: None}).to_dict(
                 orient="records"),
-            "feature_distribution": str(column_distribution)
+            "feature_distribution": column_distribution
         }
 
 class DataProviders(BaseEndpoint):

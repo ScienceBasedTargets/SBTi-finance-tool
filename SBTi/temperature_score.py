@@ -476,6 +476,8 @@ class TemperatureScore(PortfolioAggregation):
         :param columns: specified column names the client would like to have a percentage distribution
         :return: percentage distribution of specified columns
         '''
+
+        data = data[columns].fillna('<EMPTY>')
         if columns==None:
             return None
         elif len(columns) == 1:
@@ -484,8 +486,6 @@ class TemperatureScore(PortfolioAggregation):
         elif len(columns) > 1:
             percentage_distribution = (data.groupby(columns).size() / data[columns[0]].count()) * 100
             return percentage_distribution.to_dict()
-
-
 
 
     def set_scenario(self, scenario: Dict):
@@ -552,9 +552,10 @@ class TemperatureScore(PortfolioAggregation):
         return aggregations
 
 # Test
-# data = pd.read_csv('C:/Projects/SBTi/portfolio_4.csv',sep='\t')
-# data.drop(columns = 'Unnamed: 0',inplace=True)
+# portfolio_data = pd.read_excel('C:/Projects/SBTi/testing_2.xlsx')
+# portfolio_data.drop(columns = 'Unnamed: 0',inplace=True)
 # temperature_score = TemperatureScore(fallback_score=3.2)
 # data_score = temperature_score.calculate(portfolio_data, [])
 # temperature_score.columns_percentage_distribution(portfolio_data,['time_frame','Country'])
 # df = temperature_score.temperature_score_influence_percentage(portfolio_data,'WATS')
+# data_score[pd.isna(data_score['temperature_score'])]['scope_category']
