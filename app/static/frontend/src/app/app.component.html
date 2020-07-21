@@ -121,7 +121,7 @@
         <div class="card">
             <div class="card-header">
               <h5 class="mb-0">
-                <button class="btn btn-link" (click)="toggleAccordion('Scope-container')" for="input-filterTimeFrames">Scope (default: s1s2, s1s2s3)</button>
+                <button class="btn btn-link" (click)="toggleAccordion('Scope-container')">Scope (default: s1s2, s1s2s3)</button>
               </h5>
             </div>
             <div id="Scope-container" class="collapse show" style="display:none">
@@ -143,7 +143,7 @@
         <div class="card">
             <div class="card-header">
               <h5 class="mb-0">
-                <button class="btn btn-link" (click)="toggleAccordion('DataProvider-container')" for="input-filterTimeFrames">Data providers (default CSV sample data)</button>
+                <button class="btn btn-link" (click)="toggleAccordion('DataProvider-container')">Data providers (default CSV sample data)</button>
               </h5>
             </div>
             <div id="DataProvider-container" class="collapse show" style="display:none">
@@ -199,7 +199,7 @@
         <div class="card">
             <div class="card-header">
               <h5 class="mb-0">
-                <button class="btn btn-link" (click)="toggleAccordion('Scope-container')" for="input-filterTimeFrames">Columns</button>
+                <button class="btn btn-link" (click)="toggleAccordion('Column-container')">Columns</button>
               </h5>
             </div>
             <div id="Column-container" class="collapse show" style="display:none">
@@ -218,7 +218,7 @@
         <div class="card">
             <div class="card-header">
               <h5 class="mb-0">
-                <button class="btn btn-link" (click)="toggleAccordion('Groupby-container')" for="input-filterTimeFrames">Group by</button>
+                <button class="btn btn-link" (click)="toggleAccordion('Groupby-container')">Group by</button>
               </h5>
             </div>
             <div id="Groupby-container" class="collapse show" style="display:none">
@@ -246,21 +246,19 @@
                 <tr>
                     <td>Group</td>
                     <td>Time frame</td>
-                    <td>Groupby</td>
                     <td>Temperature score</td>
+                    <td>Targets & Default (%)</td>
                     <td></td>
                 </tr>
             </thead>
             <tbody *ngFor="let group of resultGroups">
-              <ng-container *ngFor="let item of resultItems | keyvalue">
                 <tr *ngFor="let timeFrame of resultTimeFrames">
                     <td>{{group}}</td>
                     <td>{{timeFrame}}</td>
-                    <td>{{item.value}}</td>
-                    <td>{{resultScores[timeFrame][group][item.value]["score"] | number:'1.2-2'}}&#176;C</td>
-                    <td><button (click)="openContributors(group, timeFrame, item.value, templateContributions)" class="btn btn-sm btn-outline-primary">Contributors</button></td>
+                    <td>{{resultScores[timeFrame][group]["all"]["score"] | number:'1.2-2'}}&#176;C</td>
+                    <td></td>
+                    <td><button (click)="openContributors(group, timeFrame, 'all', templateContributions)" class="btn btn-sm btn-outline-primary">Contributors</button></td>
                 </tr>
-              </ng-container>
             </tbody>
         </table>
 
@@ -299,7 +297,7 @@
 
         <hr />
 
-        <div class="row">
+        <div class="row" style="margin-bottom: 1em;">
             <div class="col">
                 <div class="card text-center">
                     <div class="card-header">
@@ -312,8 +310,38 @@
             </div>
             <div class="col">&nbsp;</div>
             <div class="col">&nbsp;</div>
-
         </div>
+
+      <ng-container *ngIf="this.groupingColumns.length > 0">
+        <h5>Group by temperature scores</h5>
+          <table class="table table-striped">
+              <thead>
+                  <tr>
+                      <td>Group</td>
+                      <td>Time frame</td>
+                      <td>Groupby</td>
+                      <td>Temperature score</td>
+                      <td>Targets & Default (%)</td>
+                      <td></td>
+                  </tr>
+              </thead>
+              <tbody *ngFor="let group of resultGroups">
+                <ng-container *ngFor="let item of resultItems | keyvalue">
+                  <ng-container *ngIf="item.value != 'all'">
+                  <tr *ngFor="let timeFrame of resultTimeFrames">
+                      <td>{{group}}</td>
+                      <td>{{timeFrame}}</td>
+                      <td>{{item.value}}</td>
+                      <td>{{resultScores[timeFrame][group][item.value]["score"] | number:'1.2-2'}}&#176;C</td>
+                      <td></td>
+                      <td><button (click)="openContributors(group, timeFrame, item.value, templateContributions)" class="btn btn-sm btn-outline-primary">Contributors</button></td>
+                  </tr>
+                  </ng-container>
+                </ng-container>
+              </tbody>
+          </table>
+      </ng-container>
+
 
         <div class="container-results">
             <h5>Temperature score targets <button class="btn btn-outline-primary"
@@ -334,23 +362,5 @@
     </div>
 
 </div>
-
-      <div>
-        <div class="card">
-          <div class="card-header">
-            <h5 class="mb-0">
-              <button class="btn btn-link" (click)="toggleAccordion('accordion-container')">
-                Collapsible Group Item #1
-              </button>
-            </h5>
-          </div>
-              <div id="accordion-container" class="collapse show" style="display:none">
-            <div class="card-body" >
-              Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-            </div>
-          </div>
-        </div>
-      </div>
-
 
 <router-outlet></router-outlet>

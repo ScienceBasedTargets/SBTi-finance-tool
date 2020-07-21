@@ -207,10 +207,6 @@ export class AppComponent implements OnInit {
       }
     };
 
-
-
-
-
     /**
      * Exports csv
      */
