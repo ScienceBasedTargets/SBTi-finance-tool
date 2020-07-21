@@ -8,38 +8,22 @@ from SBTi.portfolio_aggregation import PortfolioAggregation, PortfolioAggregatio
 from .configs import TemperatureScoreConfig
 
 
-class BoundaryCoverageOption(Enum):
-    """
-    The boundary coverage determines how partial targets are processed.
-    * DEFAULT: Target is always valid, % uncovered is given default score in temperature score module.
-    * THRESHOLD: For S1+S2 targets: coverage% must be above 95%, for S3 targets coverage must be above 67%.
-    * WEIGHTED: Thresholds are still 95% and 67%, target is always valid. Below threshold ambition is scaled.*
-        New target ambition = input target ambition * coverage
-    """
-    DEFAULT = 3
-    THRESHOLD = 1
-    WEIGHTED = 2
-
-
 class TemperatureScore(PortfolioAggregation):
     """
     This class is provides a temperature score based on the climate goals.
 
     :param fallback_score: The temp score if a company is not found
     :param model: The regression model to use
-    :param boundary_coverage_option: The technique the boundary coverage is calculated
     :param config: A class defining the constants that are used throughout this class. This parameter is only required
                     if you'd like to overwrite a constant. This can be done by extending the TemperatureScoreConfig
                     class and overwriting one of the parameters.
     """
 
     def __init__(self, fallback_score: float = 3.2, model: int = 4,
-                 boundary_coverage_option: BoundaryCoverageOption = BoundaryCoverageOption.DEFAULT,
                  config: Type[TemperatureScoreConfig] = TemperatureScoreConfig):
         super().__init__(config)
         self.fallback_score = fallback_score
         self.model = model
-        self.boundary_coverage_option = boundary_coverage_option
         self.c: Type[TemperatureScoreConfig] = config
         self.scenario = dict(number=0)
         self.score_cap = None
@@ -87,7 +71,7 @@ class TemperatureScore(PortfolioAggregation):
             # There should never be more than one potential mapping
             raise ValueError("There is more than one potential mapping to a SR15 goal.")
         else:
-            return mappings.iloc[0][self.c.COLS.SR15_VARIABLE]
+            return mappings.iloc[0][self.c.COLS.REGRESSION_MODEL]
 
     def get_annual_reduction_rate(self, target: pd.Series) -> Optional[float]:
         """
@@ -140,38 +124,6 @@ class TemperatureScore(PortfolioAggregation):
             return self.fallback_score
         return target[self.c.COLS.REGRESSION_PARAM] * target[self.c.COLS.ANNUAL_REDUCTION_RATE] + target[
             self.c.COLS.REGRESSION_INTERCEPT]
-
-    def process_score(self, target: pd.Series) -> float:
-        """
-        Process the temperature score, such that it's relative to the emissions in the scope.
-
-        :param target: The target as a row of a dataframe
-        :return: The relative temperature score
-        """
-        if self.boundary_coverage_option == BoundaryCoverageOption.DEFAULT:
-            if target[self.c.COLS.SCOPE_CATEGORY] == self.c.VALUE_SCOPE_CATEGORY_S1S2:
-                if pd.isnull(target[self.c.COLS.GHG_SCOPE12]) or pd.isnull(
-                        target[self.c.COLS.TEMPERATURE_SCORE]):
-                    return self.fallback_score
-                else:
-                    try:
-                        return target[self.c.COLS.GHG_SCOPE12] / 100 * target[self.c.COLS.TEMPERATURE_SCORE] + \
-                               (1 - (target[self.c.COLS.GHG_SCOPE12] / 100)) * self.fallback_score
-                    except ZeroDivisionError:
-                        raise ValueError(
-                            "The temperature score for company {} is zero".format(target[self.c.COLS.COMPANY_NAME]))
-            elif target[self.c.COLS.SCOPE_CATEGORY] == self.c.VALUE_SCOPE_CATEGORY_S3:
-                if pd.isnull(target[self.c.COLS.GHG_SCOPE3]) or pd.isnull(target[self.c.COLS.TEMPERATURE_SCORE]):
-                    return self.fallback_score
-                else:
-                    try:
-                        return target[self.c.COLS.GHG_SCOPE3] / 100 * target[self.c.COLS.TEMPERATURE_SCORE] + \
-                               (1 - (target[self.c.COLS.GHG_SCOPE3] / 100)) * self.fallback_score
-                    except ZeroDivisionError:
-                        raise ValueError(
-                            "The temperature score for company {} is zero".format(target[self.c.COLS.COMPANY_NAME]))
-        else:
-            return target[self.c.COLS.TEMPERATURE_SCORE]
 
     def get_ghc_temperature_score(self, data: pd.DataFrame, company: str, time_frame: str):
         """
@@ -248,7 +200,6 @@ class TemperatureScore(PortfolioAggregation):
             *data.apply(lambda row: self.get_regression(row), axis=1)
         )
         data[self.c.COLS.TEMPERATURE_SCORE] = data.apply(lambda row: self.get_score(row), axis=1)
-        data[self.c.COLS.TEMPERATURE_SCORE] = data.apply(lambda row: self.process_score(row), axis=1)
         combined_data = []
         company_columns = [column for column in self.c.COLS.COMPANY_COLUMNS + extra_columns if column in data.columns]
         for company in data[self.c.COLS.COMPANY_NAME].unique():
@@ -442,7 +393,6 @@ class TemperatureScore(PortfolioAggregation):
                 s1s2_emissions = company_data.iloc[1][self.c.COLS.GHG_SCOPE12]
                 s3_emissions = company_data.iloc[1][self.c.COLS.GHG_SCOPE3]
 
-
                 if aggregation_method == 'WATS':
                     portfolio_weight_storage = []
                     for company in data[self.c.COLS.COMPANY_NAME].unique():
@@ -455,6 +405,8 @@ class TemperatureScore(PortfolioAggregation):
 
                     value = portfolio_weight * (ds_s1s2 * (s1s2_emissions / (s1s2_emissions + s3_emissions)) +
                                                 ds_s3 * (s3_emissions / (s1s2_emissions + s3_emissions)))
+
+                    # print("ds_s1s2: {}, s1s2_emissions: {}, ds_s3: {}, s3_emissions:{}, value: {}".format(ds_s1s2,s1s2_emissions,ds_s3, s3_emissions, value))
 
                 elif aggregation_method == 'TETS':
                     company_emissions = company_data[self.c.COLS.GHG_SCOPE12].iloc[0] + \
@@ -539,6 +491,8 @@ class TemperatureScore(PortfolioAggregation):
         :param columns: specified column names the client would like to have a percentage distribution
         :return: percentage distribution of specified columns
         '''
+
+        data = data[columns].fillna('<EMPTY>')
         if columns==None:
             return None
         elif len(columns) == 1:
@@ -547,8 +501,6 @@ class TemperatureScore(PortfolioAggregation):
         elif len(columns) > 1:
             percentage_distribution = (data.groupby(columns).size() / data[columns[0]].count()) * 100
             return percentage_distribution.to_dict()
-
-
 
 
     def set_scenario(self, scenario: Dict):
@@ -597,10 +549,12 @@ class TemperatureScore(PortfolioAggregation):
 
         scores.to_csv(self.c.FILE_RAW_DATA_DUMP, index=False)
 
+
 # Test
-# data = pd.read_csv('C:/Projects/SBTi/portfolio_4.csv',sep='\t')
-# data.drop(columns = 'Unnamed: 0',inplace=True)
+# portfolio_data = pd.read_excel('C:/Projects/SBTi/testing_2.xlsx')
+# portfolio_data.drop(columns = 'Unnamed: 0',inplace=True)
 # temperature_score = TemperatureScore(fallback_score=3.2)
 # data_score = temperature_score.calculate(portfolio_data, [])
 # temperature_score.columns_percentage_distribution(portfolio_data,['time_frame','Country'])
 # df = temperature_score.temperature_score_influence_percentage(portfolio_data,'WATS')
+# data_score[pd.isna(data_score['temperature_score'])]['scope_category']

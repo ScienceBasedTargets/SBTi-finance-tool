@@ -1,6 +1,27 @@
+### STAGE 1: Build ###
+
+# We label our stage as ‘builder’
+FROM node:10-alpine as builder
+
+COPY app/static/frontend/package.json app/static/frontend/package-lock.json ./
+
+## Storing node modules on a separate layer will prevent unnecessary npm installs at each build
+RUN npm i && mkdir /ng-app && mv ./node_modules ./ng-app
+
+WORKDIR /ng-app
+
+COPY app/static/frontend/ .
+
+## Build the angular app in production mode and store the artifacts in dist folder
+RUN $(npm bin)/ng build --prod --output-path=dist
+
+
+### STAGE 2: Setup ###
+
 FROM python:3.6
 
 COPY requirements.txt config/config.yaml setup.py /project/
+COPY --from=builder /ng-app/dist /project/app/static/frontend/dist
 
 RUN apt-get update \
  && apt-get install -y --no-install-recommends \
@@ -43,3 +64,5 @@ RUN python /project/setup.py install
 USER dock_sbtiapi
 EXPOSE 80
 CMD ["/usr/bin/supervisord"]
+
+

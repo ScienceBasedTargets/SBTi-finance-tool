@@ -23,7 +23,6 @@ export class AppService {
 
     /**
      * Adds alert to the log. This can be overwritten by setting the alert handler.
-     * @param alert
      */
     protected addAlert(alert: Alert) {
         console.log(alert);
@@ -51,27 +50,26 @@ export class AppService {
 
     /**
      * Parse an Excel portfolio file.
-     * @param data
      * @returns parse portfolio
      */
     public doParsePortfolio(data: FormData): Observable<Portfolio> {
         return this.http.post<Portfolio>(`${environment.host}/parse_portfolio/`, data)
             .pipe(
                 tap(_ => console.log('Parsed portfolio')),
-                catchError(this.handleError<Portfolio>('doParsePortfolio', {"portfolio": []}))
+                catchError(this.handleError<Portfolio>('doParsePortfolio', {portfolio: []}))
             );
     }
 
     /**
      * Calculate the temperature score
-     * @param data
      * @returns temperature score
      */
     public getTemperatureScore(data: TemperatureScoreSettings): Observable<TemperatureScoreResult> {
         return this.http.post<TemperatureScoreResult>(`${environment.host}/temperature_score/`, data)
             .pipe(
                 tap(_ => console.log('Calculated temperature score')),
-                catchError(this.handleError<TemperatureScoreResult>('getTemperatureScore', {"aggregated_scores": {}, "coverage": 0.00, "companies": []}))
+                catchError(this.handleError<TemperatureScoreResult>('getTemperatureScore',
+                  {aggregated_scores: {}, coverage: 0.00, companies: []}))
             );
     }
 
@@ -85,9 +83,9 @@ export class AppService {
         return (error: any): Observable<T> => {
 
             if (error.status === 500) {
-                this.addAlert({type: "warning", message: "There was a technical error. Please check your inputs."});
+                this.addAlert({type: 'warning', message: 'There was a technical error. Please check your inputs.'});
             } else {
-                this.addAlert({type: "danger", message: "An unknown error occured."});
+                this.addAlert({type: 'danger', message: 'An unknown error occured.'});
                 console.error(error); // log to console instead
             }
 
