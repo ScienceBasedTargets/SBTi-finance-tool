@@ -67,6 +67,9 @@ class ColumnsConfig:
     SR15_VARIABLE = "SR15_variable"
     ENTERPRISE_VALUE = 'enterprise_value'
     REGRESSION_MODEL = 'Regression_model'
+    BASEYEAR_GHG_S1 = 'BaseYear_GHG_S1'
+    BASEYEAR_GHG_S2 = 'BaseYear_GHG_S2'
+    BASEYEAR_GHG_S3 = 'BaseYear_GHG_S3'
 
 
 
