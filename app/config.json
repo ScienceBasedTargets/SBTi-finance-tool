@@ -1,16 +1,8 @@
 {
   "default_score": 3.2,
   "aggregation_method": "WATS",
-  "frontend_path": "static/frontend/dist/",
+  "frontend_path": "static/frontend/dist/frontend/",
   "data_providers": [
-    {
-      "type": "csv",
-      "name": "CSV file 1",
-      "parameters": {
-        "path": "data/data_test_temperature_score.csv",
-        "path_targets": "data/data_test_temperature_score_targets.csv"
-      }
-    },
     {
       "type": "excel",
       "name": "Excel file 1",
