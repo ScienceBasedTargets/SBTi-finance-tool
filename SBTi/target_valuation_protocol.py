@@ -8,7 +8,8 @@ from SBTi.configs import PortfolioAggregationConfig
 
 class TargetValuationProtocol:
 
-    def __init__(self, data: pd.DataFrame, company_data: pd.DataFrame, config: Type[PortfolioAggregationConfig] = PortfolioAggregationConfig):
+    def __init__(self, data: pd.DataFrame, company_data: pd.DataFrame,
+                 config: Type[PortfolioAggregationConfig] = PortfolioAggregationConfig):
         self.data = data
         self.c = config
         self.company_data = company_data
@@ -27,12 +28,12 @@ class TargetValuationProtocol:
         self.test_boundary_coverage()
         self.test_target_process()
         self.test_end_year()
+        self.split_s1s2s3()
         self.time_frame()
         self.group_targets()
         self.combining_records()
         self.creating_records_scope_timeframe()
         return self.data
-
 
     def test_end_year(self):
         '''
@@ -45,7 +46,6 @@ class TargetValuationProtocol:
             if record[self.c.COLS.END_YEAR] > record[self.c.COLS.START_YEAR]:
                 index_list.append(index)
         self.data = self.data.loc[index_list]
-
 
     def test_target_type(self):
         """
@@ -70,7 +70,6 @@ class TargetValuationProtocol:
                         if ('other' not in record[self.c.COLS.INTENSITY_METRIC]):
                             index_list.append(index)
         self.data = self.data.loc[index_list]
-
 
     def test_boundary_coverage(self):
         '''
@@ -108,8 +107,6 @@ class TargetValuationProtocol:
                             (self.data[self.c.COLS.COVERAGE_S3].loc[record[0]])
         self.data = self.data.loc[index]
 
-
-
     def test_target_process(self):
         '''
         Test on target process
@@ -125,6 +122,36 @@ class TargetValuationProtocol:
                     if record[1][self.c.COLS.ACHIEVED_EMISSIONS] != 100:
                         index.append(record[0])
             self.data = self.data.loc[index]
+
+    def split_s1s2s3(self):
+        '''
+        If there is a s1s2s3 scope, split it into two targets with s1s2 and s3
+        '''
+        s1s2s3_mask = self.data[self.c.COLS.SCOPE_CATEGORY] == self.c.VALUE_SCOPE_CATEGORY_S1S2S3
+        s1s2s3 = self.data[s1s2s3_mask]
+        self.data = self.data[~s1s2s3_mask]
+        for _, row in s1s2s3.iterrows():
+            if (pd.isnull(row[self.c.COLS.BASEYEAR_GHG_S1]) or pd.isnull(row[self.c.COLS.BASEYEAR_GHG_S2])) and \
+                    (row[self.c.COLS.COVERAGE_S1] != row[self.c.COLS.COVERAGE_S2]):
+                pass
+            else:
+                s1s2 = row.copy()
+                s1s2[self.c.COLS.SCOPE_CATEGORY] = self.c.VALUE_SCOPE_CATEGORY_S1S2
+                if (pd.isnull(s1s2[self.c.COLS.BASEYEAR_GHG_S1]) or pd.isnull(s1s2[self.c.COLS.BASEYEAR_GHG_S2])):
+                    pass
+                else:
+                    coverage_percentage = (s1s2[self.c.COLS.COVERAGE_S1] * s1s2[self.c.COLS.BASEYEAR_GHG_S1] +
+                                           s1s2[self.c.COLS.COVERAGE_S2] * s1s2[self.c.COLS.BASEYEAR_GHG_S2]) / \
+                                          (s1s2[self.c.COLS.BASEYEAR_GHG_S1] + s1s2[self.c.COLS.BASEYEAR_GHG_S2])
+                    s1s2[self.c.COLS.COVERAGE_S1] = coverage_percentage
+                    s1s2[self.c.COLS.COVERAGE_S2] = coverage_percentage
+                self.data = self.data.append(s1s2).reset_index(drop=True)
+            if pd.isnull(row[self.c.COLS.COVERAGE_S3]):
+                pass
+            else:
+                s3 = row.copy()
+                s3[self.c.COLS.SCOPE_CATEGORY] = self.c.VALUE_SCOPE_CATEGORY_S3
+                self.data = self.data.append(s3).reset_index(drop=True)
 
     def time_frame(self):
         '''
@@ -147,7 +174,7 @@ class TargetValuationProtocol:
                 time_frame_list.append(None)
         self.data[self.c.COLS.TIME_FRAME] = time_frame_list
 
-    def _find_target(self, row: pd.Series)-> pd.DataFrame:
+    def _find_target(self, row: pd.Series) -> pd.DataFrame:
         """
         Find the target that corresponds to a given row. If there are multiple targets available, filter them.
 
@@ -222,10 +249,10 @@ class TargetValuationProtocol:
         for company in companies:
             for column in company_columns:
                 extended_data.loc[extended_data[self.c.COLS.COMPANY_NAME] == company, column] = \
-                    self.data[self.data[self.c.COLS.COMPANY_NAME] == company][column].mode() # removed ".iloc[0]" kept receiving an index error
+                    self.data[self.data[self.c.COLS.COMPANY_NAME] == company][
+                        column].mode()  # removed ".iloc[0]" kept receiving an index error
         extended_data = extended_data.apply(lambda row: self._find_target(row), axis=1)
         self.data = extended_data
-
 
     def creating_records_scope_timeframe(self):
         '''
@@ -241,7 +268,6 @@ class TargetValuationProtocol:
         scopeless_data_3[self.c.COLS.SCOPE_CATEGORY] = 's3'
         self.data = pd.concat([self.data, scopeless_data_s1s2, scopeless_data_3])
 
-
         timeframe_data_short = self.data[pd.isna(self.data[self.c.COLS.TIME_FRAME])].copy()
         timeframe_data_mid = self.data[pd.isna(self.data[self.c.COLS.TIME_FRAME])].copy()
         timeframe_data_long = self.data[pd.isna(self.data[self.c.COLS.TIME_FRAME])].copy()
@@ -253,15 +279,12 @@ class TargetValuationProtocol:
         timeframe_data_mid[self.c.COLS.TIME_FRAME] = 'mid'
         timeframe_data_long[self.c.COLS.TIME_FRAME] = 'long'
 
-
-
-        self.data = pd.concat([self.data, scopeless_data_s1s2, scopeless_data_3,timeframe_data_short,timeframe_data_mid,
-                               timeframe_data_long])
+        self.data = pd.concat(
+            [self.data, scopeless_data_s1s2, scopeless_data_3, timeframe_data_short, timeframe_data_mid,
+             timeframe_data_long])
 
         self.data.reset_index(drop=True, inplace=True)
         self.data.drop(self.data[pd.isna(self.data[self.c.COLS.TIME_FRAME])].index, inplace=True)
-
-
 
     def combining_records(self):
         '''
@@ -269,7 +292,8 @@ class TargetValuationProtocol:
         :return:
         '''
         for company_remove in self.data['company_name'].unique():
-            self.company_data.drop(self.company_data[self.company_data['company_name'] == company_remove].index.values, inplace=True)
+            self.company_data.drop(self.company_data[self.company_data['company_name'] == company_remove].index.values,
+                                   inplace=True)
         # self.data = pd.merge(left=self.company_data, right=self.data, how='outer', on=['company_name'])
         self.data = pd.concat([self.company_data, self.data], ignore_index=True, sort=False)
 
@@ -290,10 +314,3 @@ class TargetValuationProtocol:
 # x.group_targets()
 # x.combining_records()
 # x.creating_records_scope_timeframe()
-
-
-
-
-
-
-
