@@ -63,8 +63,6 @@
         </p>
         <div class="form-group">
             <label for="input-defaultScore">Default temperature score</label>
-            <!--<input type="number" class="form-control" id="input-defaultScore" step="0.1" name="input-defaultScore"-->
-                <!--[(ngModel)]="defaultScore">-->
             <select class="form-control" [(ngModel)]="defaultScore" name="defaultMethod"
                 class="form-control" id="input-defaultScore">
                 <option *ngFor="let defaultMethod of availableDefaultScores" [ngValue]="defaultMethod">{{defaultMethod}}</option>
@@ -82,34 +80,17 @@
         <!-- TimeFrame -->
         <div class="card">
           <div class="card-header">
-            <h5 class="mb-0">
-              <button class="btn btn-link" (click)="toggleAccordion('timeFrame-container')" for="input-filterTimeFrames">Time frame (default: mid)</button>
+            <h5 class="mb-0 btn btn-link" (click)="toggleAccordion('timeFrame-container')" for="input-filterTimeFrames">
+              Time frame (default: mid)
             </h5>
           </div>
           <div id="timeFrame-container" class="collapse show" style="display:none">
             <div class="card-body" >
               <div class="form-group">
                 <label for="input-dataProviders-1">Choose the desired timeframe:</label>
-                <!-- *ngFor="let timeFrame of availableTimeFrames"  -->
-                <!--<div class="form-check" [(ngModel)]="filterTimeFrames">-->
-                      <!--<input class="form-check-input" [(ngModel)]="cat.id" name="{{ cat.name }}" type="checkbox" id="{{cat.name}}" (change)="onChangeCategory($event, cat)">-->
-                      <!--<label class="form-check-label" for="{{cat.name}}">-->
-                          <!--{{cat.name}}-->
-                      <!--</label>-->
-
-                    <!--<input class="form-check-input" type="checkbox" value="" id="{{timeFrame}}">-->
-                    <!--<label class="form-check-label" for="{{timeFrame}}">-->
-                        <!--{{timeFrame}}-->
-                    <!--</label>-->
-                <!--</div>-->
-
                   <select class="form-control" [(ngModel)]="filterTimeFrames" name="filterTimeFrames" multiple
                       id="input-filterTimeFrames">
                       <option *ngFor="let timeFrame of availableTimeFrames">{{timeFrame}}</option>
-                        <!--<option *ngFor="let timeFrame of availableTimeFrames"-->
-                        <!--[attr.selected]="timeFrame == 'mid' ? true : false">-->
-                          <!--{{timeFrame}}-->
-                        <!--</option>-->
                   </select>
                 </div>
             </div>
@@ -120,8 +101,8 @@
         <!-- Scope -->
         <div class="card">
             <div class="card-header">
-              <h5 class="mb-0">
-                <button class="btn btn-link" (click)="toggleAccordion('Scope-container')">Scope (default: s1s2, s1s2s3)</button>
+              <h5 class="mb-0 btn btn-link" (click)="toggleAccordion('Scope-container')">
+                Scope (default: s1s2, s1s2s3)
               </h5>
             </div>
             <div id="Scope-container" class="collapse show" style="display:none">
@@ -142,8 +123,8 @@
         <!-- Data providers -->
         <div class="card">
             <div class="card-header">
-              <h5 class="mb-0">
-                <button class="btn btn-link" (click)="toggleAccordion('DataProvider-container')">Data providers (default CSV sample data)</button>
+              <h5 class="mb-0 btn btn-link" (click)="toggleAccordion('DataProvider-container')">
+                Data providers (default CSV sample data)
               </h5>
             </div>
             <div id="DataProvider-container" class="collapse show" style="display:none">
@@ -156,18 +137,9 @@
                       <option *ngFor="let dataProvider of dataProviders">{{dataProvider.name}}</option>
                   </select>
                   <label for="input-dataProviders-1-file"></label>
-                  <input (change)="onFileChange($event)" type="file" class="form-control-file" id="input-dataProviders-1-file"
+                  <input type="file" class="form-control-file" id="input-dataProviders-1-file"
                       name="input-dataProviders-1-file" aria-describedby="dataProvider1File">
                   <small id="dataProvider1File" class="form-text text-muted">Use this file upload to provide your own dataprovider.</small>
-                  <!--<div class="input-group">-->
-                    <!--<div class="input-group-prepend">-->
-                      <!--<div class="input-group-text">/SBTI/app/</div>-->
-                    <!--</div>-->
-                    <!--<input [(ngModel)]="selectedDataProvider1Path" type="text" class="form-control"-->
-                           <!--id="input-dataProviders-1-path" aria-describedby="dataProvider1Path"-->
-                           <!--placeholder="data/data_test_temperature_score.csv" name="selectedDataProvider1Path">-->
-                  <!--</div>-->
-                    <!--<small id="dataProvider1Path" class="form-text text-muted">Use this input box to serve a different source path for the first dataprovider.</small>-->
               </div>
               <div class="form-group">
                   <label for="input-dataProviders-2">Second Dataprovider</label>
@@ -176,18 +148,9 @@
                       <option *ngFor="let dataProvider of dataProviders">{{dataProvider.name}}</option>
                   </select>
                 <label for="input-dataProviders-2-file"></label>
-                <input (change)="onFileChange($event)" type="file" class="form-control-file" id="input-dataProviders-2-file"
+                <input type="file" class="form-control-file" id="input-dataProviders-2-file"
                       name="input-dataProviders-2-file" aria-describedby="dataProvider2File">
                   <small id="dataProvider2File" class="form-text text-muted">Use this file upload to provide your own dataprovider.</small>
-                  <!--<div class="input-group">-->
-                    <!--<div class="input-group-prepend">-->
-                      <!--<div class="input-group-text">/SBTI/app/</div>-->
-                    <!--</div>-->
-                    <!--<input [(ngModel)]="selectedDataProvider2Path" type="text" class="form-control"-->
-                           <!--id="input-dataProviders-2-path" aria-describedby="dataProvider2Path"-->
-                           <!--placeholder="data/data_test_temperature_score.csv" name="selectedDataProvider2Path">-->
-                  <!--</div>-->
-                    <!--<small id="dataProvider2Path" class="form-text text-muted">Use this input box to serve a different source path for the second dataprovider.</small>-->
               </div>
 
               </div>
@@ -198,8 +161,8 @@
         <!-- Columns -->
         <div class="card">
             <div class="card-header">
-              <h5 class="mb-0">
-                <button class="btn btn-link" (click)="toggleAccordion('Column-container')">Columns</button>
+              <h5 class="mb-0 btn btn-link" (click)="toggleAccordion('Column-container')">
+                Columns
               </h5>
             </div>
             <div id="Column-container" class="collapse show" style="display:none">
@@ -217,8 +180,8 @@
         <!-- Groupby -->
         <div class="card">
             <div class="card-header">
-              <h5 class="mb-0">
-                <button class="btn btn-link" (click)="toggleAccordion('Groupby-container')">Group by</button>
+              <h5 class="mb-0 btn btn-link" (click)="toggleAccordion('Groupby-container')">
+                Group by
               </h5>
             </div>
             <div id="Groupby-container" class="collapse show" style="display:none">
