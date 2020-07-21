@@ -114,9 +114,8 @@ class temp_score(BaseEndpoint):
 
         company_data = SBTi.data.get_company_data(data_providers, json_data["companies"])
         targets = SBTi.data.get_targets(data_providers, json_data["companies"])
-        # portfolio_data = pd.merge(left=company_data, right=targets, how = 'outer', on = ['company_name'])
 
-        portfolio_data = pd.merge(left=company_data, right=targets, left_on='company_name', right_on='company_name')
+        portfolio_data = pd.merge(left=company_data, right=targets, how='outer', on=['company_name', 'company_id'])
 
         aggregation_method = self.aggregation_map[self.config["aggregation_method"]]
         if "aggregation_method" in json_data and json_data["aggregation_method"] in self.aggregation_map:

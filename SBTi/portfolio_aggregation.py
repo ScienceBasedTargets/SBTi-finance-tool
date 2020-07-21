@@ -58,11 +58,11 @@ class PortfolioAggregation(ABC):
         # Total emissions weighted temperature score (TETS)
         elif portfolio_aggregation_method == PortfolioAggregationMethod.TETS:
             # Calculate the total emissions of all companies
-            emissions = data[self.c.COLS.S1S2_EMISSIONS].sum() + data[
-                self.c.COLS.S3_EMISSIONS].sum()
+            emissions = data[self.c.COLS.GHG_SCOPE12].sum() + data[
+                self.c.COLS.GHG_SCOPE3].sum()
             try:
                 data[output_column] = data.apply(
-                    lambda row: (row[self.c.COLS.S1S2_EMISSIONS] + row[self.c.COLS.S3_EMISSIONS]) / emissions * row[
+                    lambda row: (row[self.c.COLS.GHG_SCOPE12] + row[self.c.COLS.GHG_SCOPE3]) / emissions * row[
                         input_column],
                     axis=1
                 )
@@ -95,7 +95,7 @@ class PortfolioAggregation(ABC):
             try:
                 data[self.c.COLS.OWNED_EMISSIONS] = data.apply(
                     lambda row: (row[self.c.COLS.INVESTMENT_VALUE] / row[value_column]) * (
-                            row[self.c.COLS.S1S2_EMISSIONS] + row[self.c.COLS.S3_EMISSIONS]),
+                            row[self.c.COLS.GHG_SCOPE12] + row[self.c.COLS.GHG_SCOPE3]),
                     axis=1
                 )
             except ZeroDivisionError:
