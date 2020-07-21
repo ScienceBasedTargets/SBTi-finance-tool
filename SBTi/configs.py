@@ -104,7 +104,7 @@ class PortfolioAggregationConfig:
 
 class TemperatureScoreConfig(PortfolioAggregationConfig):
     FILE_SR15_MAPPING = os.path.join(os.path.dirname(os.path.realpath(__file__)), "inputs",
-                                     "SR15_mapping_Beta_release.xlsx")
+                                     "sr15_mapping.xlsx")
     FILE_REGRESSION_MODEL_SUMMARY = os.path.join(os.path.dirname(os.path.realpath(__file__)), "inputs",
                                                  "regression_model_summary.xlsx")
     FILE_RAW_DATA_DUMP = os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "app",
