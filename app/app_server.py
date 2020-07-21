@@ -105,6 +105,7 @@ class temp_score(BaseEndpoint):
     def post(self):
 
         json_data = request.get_json(force=True)
+        print(json_data)
         data_providers = self._get_data_providers(json_data)
 
         default_score = self.config["default_score"]
@@ -177,6 +178,8 @@ class temp_score(BaseEndpoint):
             column_distribution = temperature_score.columns_percentage_distribution(portfolio_data, json_data['feature_distribution'])
         else:
             column_distribution = None
+
+        temperature_percentage_coverage = pd.DataFrame.from_dict(temperature_percentage_coverage).replace({np.nan: None}).to_dict()
 
         return {
             "aggregated_scores": aggregations,
