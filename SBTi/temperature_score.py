@@ -5,7 +5,7 @@ from enum import Enum
 import pandas as pd
 
 from SBTi.portfolio_aggregation import PortfolioAggregation, PortfolioAggregationMethod
-from configs import TemperatureScoreConfig
+from .configs import TemperatureScoreConfig
 
 
 class BoundaryCoverageOption(Enum):
@@ -600,9 +600,10 @@ class TemperatureScore(PortfolioAggregation):
 
 
 # Test
-# portfolio_data = pd.read_csv('C:/Projects/SBTi/portfolio.csv',sep='\t')
+# portfolio_data = pd.read_excel('C:/Projects/SBTi/testing_2.xlsx')
 # portfolio_data.drop(columns = 'Unnamed: 0',inplace=True)
 # temperature_score = TemperatureScore(fallback_score=3.2)
-# # data_score = temperature_score.calculate(portfolio_data, [])
+# data_score = temperature_score.calculate(portfolio_data, [])
 # temperature_score.columns_percentage_distribution(portfolio_data,['time_frame','Country'])
 # df = temperature_score.temperature_score_influence_percentage(portfolio_data,'WATS')
+# data_score[pd.isna(data_score['temperature_score'])]['scope_category']

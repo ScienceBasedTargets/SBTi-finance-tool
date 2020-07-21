@@ -19,7 +19,7 @@ class ExcelProvider(DataProvider):
         self.c = config
 
 
-    def get_targets(self, companies: pd.DataFrame) -> pd.DataFrame:
+    def get_targets(self, companies: list) -> pd.DataFrame:
         """
         Get all the targets for the whole portfolio of companies. This should return a dataframe, containing at least
         the following columns:
@@ -53,7 +53,7 @@ class ExcelProvider(DataProvider):
 
 
 
-    def get_company_data(self, companies: pd.DataFrame) -> pd.DataFrame:
+    def get_company_data(self, companies: list) -> pd.DataFrame:
         """
         Get all relevant data for a certain company. Should return a dataframe, containing at least the following
         columns:
