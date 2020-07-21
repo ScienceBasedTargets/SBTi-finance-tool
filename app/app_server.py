@@ -178,12 +178,13 @@ class temp_score(BaseEndpoint):
         else:
             column_distribution = None
 
+        aggregations = temperature_score.merge_percentage_coverage_to_aggregations(aggregations, temperature_percentage_coverage)
+
         return {
             "aggregated_scores": aggregations,
             "coverage": coverage,
             "companies": scores[include_columns].replace({np.nan: None}).to_dict(
                 orient="records"),
-            "temp_score_percent_coverage": temperature_percentage_coverage,
             "feature_distribution": str(column_distribution)
         }
 
