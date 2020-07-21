@@ -18,7 +18,7 @@ const AVAILABLE_COLUMNS: string[] = ['company_id', 'industry', 's1s2_emissions',
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  title = 'SBTi Temperature score';
+  title = 'SBTi Temperature Scoring';
   excelSkiprows = 0;
   isNavbarCollapsed = true;
   availableTargetColumns: string[] = ['company_id', 'company_name', 'portfolio_weight', 'investment_value'];

@@ -25,7 +25,7 @@ describe('AppComponent', () => {
   it(`should have as title 'SBTi Temperature score'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('SBTi Temperature score');
+    expect(app.title).toEqual('SBTi Temperature Scoring');
   });
 
   it('should render title', () => {

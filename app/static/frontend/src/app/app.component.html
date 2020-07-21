@@ -15,7 +15,7 @@
 <div class="loading" *ngIf="loading">Loading&#8230;</div>
 
 <div class="container" role="main">
-    <h2>SBTi Temperature Scoring</h2>
+    <h2>{{title}}</h2>
     <p *ngFor="let alert of alerts">
         <ngb-alert [type]="alert.type" (close)="closeAlert(alert)">{{ alert.message }}</ngb-alert>
     </p>
