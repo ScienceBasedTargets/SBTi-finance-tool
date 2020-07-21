@@ -132,8 +132,7 @@ class temp_score(BaseEndpoint):
             temperature_score.set_scenario(scenario)
 
         # Target_Valuation_Protocol
-        # target_valuation_protocol = TargetValuationProtocol(portfolio_data)
-        target_valuation_protocol = TargetValuationProtocol(portfolio_data,company_data)
+        target_valuation_protocol = TargetValuationProtocol(portfolio_data, company_data)
 
         portfolio_data = target_valuation_protocol.target_valuation_protocol()
 
