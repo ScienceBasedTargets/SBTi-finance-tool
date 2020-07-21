@@ -196,6 +196,22 @@ export class AppComponent implements OnInit {
     }
 
     /**
+     * Accordion
+    */
+    toggleAccordion(elementDiv) {
+      var x = document.getElementById(elementDiv);
+      if (x.style.display === "none") {
+        x.style.display = "block";
+      } else {
+        x.style.display = "none";
+      }
+    };
+
+
+
+
+
+    /**
      * Exports csv
      */
     exportCSV() {
