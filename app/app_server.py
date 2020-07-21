@@ -115,6 +115,8 @@ class temp_score(BaseEndpoint):
 
         company_data = SBTi.data.get_company_data(data_providers, json_data["companies"])
         targets = SBTi.data.get_targets(data_providers, json_data["companies"])
+        # portfolio_data = pd.merge(left=company_data, right=targets, how = 'outer', on = ['company_name'])
+
         portfolio_data = pd.merge(left=company_data, right=targets, left_on='company_name', right_on='company_name')
 
         aggregation_method = self.aggregation_map[self.config["aggregation_method"]]
@@ -131,7 +133,8 @@ class temp_score(BaseEndpoint):
             temperature_score.set_scenario(scenario)
 
         # Target_Valuation_Protocol
-        target_valuation_protocol = TargetValuationProtocol(portfolio_data)
+        # target_valuation_protocol = TargetValuationProtocol(portfolio_data)
+        target_valuation_protocol = TargetValuationProtocol(portfolio_data,company_data)
 
         portfolio_data = target_valuation_protocol.target_valuation_protocol()
 

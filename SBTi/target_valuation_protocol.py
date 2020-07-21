@@ -8,9 +8,10 @@ from SBTi.configs import PortfolioAggregationConfig
 
 class TargetValuationProtocol:
 
-    def __init__(self, data: pd.DataFrame, config: Type[PortfolioAggregationConfig] = PortfolioAggregationConfig):
+    def __init__(self, data: pd.DataFrame, company_data: pd.DataFrame, config: Type[PortfolioAggregationConfig] = PortfolioAggregationConfig):
         self.data = data
         self.c = config
+        self.company_data = company_data
 
     def target_valuation_protocol(self):
         '''
@@ -19,16 +20,32 @@ class TargetValuationProtocol:
         :rtype: list
         :return: a list of six columns containing dataframes in each one
         '''
-
         self.test_target_type()
-        self.test_boundary_coverage()
-        self.test_target_process()
-        self.time_frame()
         self.data[self.c.COLS.SCOPE] = self.data[self.c.COLS.SCOPE].str.lower()
         self.data[self.c.COLS.SCOPE_CATEGORY] = self.data.apply(
             lambda row: self.c.SCOPE_MAP[row[self.c.COLS.SCOPE]], axis=1)
+        self.test_boundary_coverage()
+        self.test_target_process()
+        self.test_end_year()
+        self.time_frame()
         self.group_targets()
+        self.combining_records()
+        self.creating_records_scope_timeframe()
         return self.data
+
+
+    def test_end_year(self):
+        '''
+        Records that have a valid end_year will be returned. A valid end_year is defined as a year that is greater then
+        the start_year.
+        :return: a dataframe containing records that have correct end_year feature.
+        '''
+        index_list = []
+        for index, record in self.data.iterrows():
+            if record[self.c.COLS.END_YEAR] > record[self.c.COLS.START_YEAR]:
+                index_list.append(index)
+        self.data = self.data.loc[index_list]
+
 
     def test_target_type(self):
         """
@@ -72,8 +89,8 @@ class TargetValuationProtocol:
         '''
         index = []
         for record in self.data.iterrows():
-            if not pd.isna(record[1][self.c.COLS.SCOPE]):
-                if 'S1+S2' in record[1][self.c.COLS.SCOPE]:
+            if not pd.isna(record[1][self.c.COLS.SCOPE_CATEGORY]):
+                if 's1s2' in record[1][self.c.COLS.SCOPE_CATEGORY]:
                     if record[1][self.c.COLS.COVERAGE_S1] > 95:
                         index.append(record[0])
                     else:
@@ -81,7 +98,7 @@ class TargetValuationProtocol:
                         self.data.at[record[0], self.c.COLS.REDUCTION_AMBITION] = \
                             self.data[self.c.COLS.REDUCTION_AMBITION].loc[record[0]] * \
                             (self.data[self.c.COLS.COVERAGE_S1].loc[record[0]])
-                elif 'S3' in record[1][self.c.COLS.SCOPE]:
+                elif 's3' in record[1][self.c.COLS.SCOPE_CATEGORY]:
                     if record[1][self.c.COLS.COVERAGE_S3] > 67:
                         index.append(record[0])
                     else:
@@ -210,16 +227,73 @@ class TargetValuationProtocol:
         self.data = extended_data
 
 
+    def creating_records_scope_timeframe(self):
+        '''
+        Create S1+S2 and S3 scopes for records that have an empty scope
+        '''
+        scopeless_data_s1s2 = self.data[pd.isna(self.data[self.c.COLS.SCOPE_CATEGORY])].copy()
+        scopeless_data_3 = self.data[pd.isna(self.data[self.c.COLS.SCOPE_CATEGORY])].copy()
+
+        index_to_drop = self.data[pd.isna(self.data[self.c.COLS.SCOPE_CATEGORY])].index
+        self.data.drop(index_to_drop, inplace=True)
+
+        scopeless_data_s1s2[self.c.COLS.SCOPE_CATEGORY] = 's1s2'
+        scopeless_data_3[self.c.COLS.SCOPE_CATEGORY] = 's3'
+        self.data = pd.concat([self.data, scopeless_data_s1s2, scopeless_data_3])
+
+
+        timeframe_data_short = self.data[pd.isna(self.data[self.c.COLS.TIME_FRAME])].copy()
+        timeframe_data_mid = self.data[pd.isna(self.data[self.c.COLS.TIME_FRAME])].copy()
+        timeframe_data_long = self.data[pd.isna(self.data[self.c.COLS.TIME_FRAME])].copy()
+
+        index_to_drop = self.data[pd.isna(self.data[self.c.COLS.TIME_FRAME])].index
+        self.data.drop(index_to_drop, inplace=True)
+
+        timeframe_data_short[self.c.COLS.TIME_FRAME] = 'short'
+        timeframe_data_mid[self.c.COLS.TIME_FRAME] = 'mid'
+        timeframe_data_long[self.c.COLS.TIME_FRAME] = 'long'
+
+
+
+        self.data = pd.concat([self.data, scopeless_data_s1s2, scopeless_data_3,timeframe_data_short,timeframe_data_mid,
+                               timeframe_data_long])
+
+        self.data.reset_index(drop=True, inplace=True)
+        self.data.drop(self.data[pd.isna(self.data[self.c.COLS.TIME_FRAME])].index, inplace=True)
+
+
+
+    def combining_records(self):
+        '''
+        Combines both dataframes together. The company_data and the portfolio data that filtered out companies.
+        :return:
+        '''
+        for company_remove in self.data['company_name'].unique():
+            self.company_data.drop(self.company_data[self.company_data['company_name'] == company_remove].index.values, inplace=True)
+        # self.data = pd.merge(left=self.company_data, right=self.data, how='outer', on=['company_name'])
+        self.data = pd.concat([self.company_data, self.data], ignore_index=True, sort=False)
 
 # Testing
-# data = pd.read_csv('C:/Projects/SBTi/testing.csv',sep='\t')
+# data = pd.read_excel('C:/Projects/SBTi/testing.xlsx')
+# company_data = pd.read_excel('C:/Projects/SBTi/company_data.xlsx')
 # data.drop(columns='Unnamed: 0',inplace=True)
-# x = TargetValuationProtocol(data)
+# company_data.drop(columns='Unnamed: 0',inplace=True)
+# x = TargetValuationProtocol(data,company_data)
 # x.test_target_type()
-# x.test_boundary_coverage()
-# x.test_target_process()
-# x.time_frame()
 # x.data[c.COLS.SCOPE] = x.data[c.COLS.SCOPE].str.lower()
 # x.data[c.COLS.SCOPE_CATEGORY] = x.data.apply(
-#     lambda row: c.SCOPE_MAP[row[c.COLS.SCOPE]], axis=1)
+#     lambda row: c.SCOPE_MAP[row[c.COLS.SCOPE]], axis=1)#
+# x.test_boundary_coverage()
+# x.test_target_process()
+# x.test_end_year()
+# x.time_frame()
 # x.group_targets()
+# x.combining_records()
+# x.creating_records_scope_timeframe()
+
+
+
+
+
+
+
