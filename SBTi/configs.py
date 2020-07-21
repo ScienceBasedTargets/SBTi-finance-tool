@@ -96,6 +96,7 @@ class PortfolioAggregationConfig:
     VALUE_SCOPE_CATEGORY_S1S2 = "s1s2"
     VALUE_SCOPE_CATEGORY_S3 = "s3"
     VALUE_SCOPE_CATEGORY_S1S2S3 = "s1s2s3"
+    VALUE_SCOPE_CATEGORIES = [VALUE_SCOPE_CATEGORY_S1S2, VALUE_SCOPE_CATEGORY_S1S2S3, VALUE_SCOPE_CATEGORY_S3]
 
     SCOPE_MAP = {"s1+s2": "s1s2", "s3": "s3", "s1+s2+s3": "s1s2s3",'s2':'s1s2','s1':'s1s2','s3_up':'s3','s3_down':'s3',
                  's3_total':'s3'}

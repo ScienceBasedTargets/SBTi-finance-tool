@@ -181,13 +181,13 @@ class temp_score(BaseEndpoint):
             column_distribution = None
 
         temperature_percentage_coverage = pd.DataFrame.from_dict(temperature_percentage_coverage).replace({np.nan: None}).to_dict()
+        aggregations = temperature_score.merge_percentage_coverage_to_aggregations(aggregations, temperature_percentage_coverage)
 
         return {
             "aggregated_scores": aggregations,
             "coverage": coverage,
             "companies": scores[include_columns].replace({np.nan: None}).to_dict(
                 orient="records"),
-            "temp_score_percent_coverage": temperature_percentage_coverage,
             "feature_distribution": column_distribution
         }
 

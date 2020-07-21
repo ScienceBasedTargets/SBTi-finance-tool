@@ -368,116 +368,101 @@ class TemperatureScore(PortfolioAggregation):
 
         company_temp_contribution = {
             self.c.TIME_FRAME_SHORT: {
-                company: 0 for company in data[self.c.COLS.COMPANY_NAME].unique()
+                scope: {company: 0 for company in data[self.c.COLS.COMPANY_NAME].unique()} for scope in self.c.VALUE_SCOPE_CATEGORIES
             },
             self.c.TIME_FRAME_MID: {
-                company: 0 for company in data[self.c.COLS.COMPANY_NAME].unique()
+                scope: {company: 0 for company in data[self.c.COLS.COMPANY_NAME].unique()} for scope in self.c.VALUE_SCOPE_CATEGORIES
             },
             self.c.TIME_FRAME_LONG: {
-                company: 0 for company in data[self.c.COLS.COMPANY_NAME].unique()
+                scope: {company: 0 for company in data[self.c.COLS.COMPANY_NAME].unique()} for scope in self.c.VALUE_SCOPE_CATEGORIES
             }
         }
 
-        time_frame_dictionary = {}
+        time_frame_dictionary = {time_frame: {} for time_frame in data[self.c.COLS.TIME_FRAME].unique()}
         for time_frame in data[self.c.COLS.TIME_FRAME].unique():
-            for company in data[self.c.COLS.COMPANY_NAME].unique():
-                company_data = data[(data[self.c.COLS.COMPANY_NAME] == company) & (data[self.c.COLS.TIME_FRAME] == time_frame)]
-                if company_data[company_data[self.c.COLS.SCOPE_CATEGORY] == self.c.VALUE_SCOPE_CATEGORY_S1S2][self.c.TEMPERATURE_RESULTS].unique()[0] == 'default':
-                    ds_s1s2 = 1
-                else:
-                    ds_s1s2 = 0
-                if company_data[company_data[self.c.COLS.SCOPE_CATEGORY] == self.c.VALUE_SCOPE_CATEGORY_S3][self.c.TEMPERATURE_RESULTS].unique()[0] == 'default':
-                    ds_s3 = 1
-                else:
-                    ds_s3 = 0
-                s1s2_emissions = company_data.iloc[1][self.c.COLS.GHG_SCOPE12]
-                s3_emissions = company_data.iloc[1][self.c.COLS.GHG_SCOPE3]
+            for scope in self.c.VALUE_SCOPE_CATEGORIES:
+                for company in data[self.c.COLS.COMPANY_NAME].unique():
+                    company_data = data[(data[self.c.COLS.COMPANY_NAME] == company) & (data[self.c.COLS.TIME_FRAME] == time_frame)]
+                    if company_data[company_data[self.c.COLS.SCOPE_CATEGORY] == self.c.VALUE_SCOPE_CATEGORY_S1S2][self.c.TEMPERATURE_RESULTS].unique()[0] == 'default':
+                        ds_s1s2 = 1
+                    else:
+                        ds_s1s2 = 0
+                    if company_data[company_data[self.c.COLS.SCOPE_CATEGORY] == self.c.VALUE_SCOPE_CATEGORY_S3][self.c.TEMPERATURE_RESULTS].unique()[0] == 'default':
+                        ds_s3 = 1
+                    else:
+                        ds_s3 = 0
+                    s1s2_emissions = company_data.iloc[1][self.c.COLS.GHG_SCOPE12]
+                    s3_emissions = company_data.iloc[1][self.c.COLS.GHG_SCOPE3]
 
-                if aggregation_method == 'WATS':
-                    portfolio_weight_storage = []
-                    for company in data[self.c.COLS.COMPANY_NAME].unique():
-                        portfolio_weight_storage.append(
-                            data[data[self.c.COLS.COMPANY_NAME] == company].iloc[1][self.c.PORTFOLIO_WEIGHT])
-                    portfolio_weight_total = sum(portfolio_weight_storage)
-                    data[self.c.PORTFOLIO_WEIGHT] = data[self.c.PORTFOLIO_WEIGHT] / portfolio_weight_total
+                    if scope == self.c.VALUE_SCOPE_CATEGORY_S1S2:
+                        scope_weight = ds_s1s2
+                    elif scope == self.c.VALUE_SCOPE_CATEGORY_S1S2S3:
+                        scope_weight = (ds_s1s2 * (s1s2_emissions / (s1s2_emissions + s3_emissions)) +
+                                        ds_s3 * (s3_emissions / (s1s2_emissions + s3_emissions)))
+                    elif scope == self.c.VALUE_SCOPE_CATEGORY_S3:
+                        scope_weight = ds_s3
 
-                    portfolio_weight = company_data.iloc[1][self.c.PORTFOLIO_WEIGHT]
+                    if aggregation_method == 'WATS':
+                        portfolio_weight_storage = []
+                        for company in data[self.c.COLS.COMPANY_NAME].unique():
+                            portfolio_weight_storage.append(
+                                data[data[self.c.COLS.COMPANY_NAME] == company].iloc[1][self.c.PORTFOLIO_WEIGHT])
+                        portfolio_weight_total = sum(portfolio_weight_storage)
+                        data[self.c.PORTFOLIO_WEIGHT] = data[self.c.PORTFOLIO_WEIGHT] / portfolio_weight_total
 
-                    value = portfolio_weight * (ds_s1s2 * (s1s2_emissions / (s1s2_emissions + s3_emissions)) +
-                                                ds_s3 * (s3_emissions / (s1s2_emissions + s3_emissions)))
+                        portfolio_weight = company_data.iloc[1][self.c.PORTFOLIO_WEIGHT]
+                        value = portfolio_weight * scope_weight
 
-                    # print("ds_s1s2: {}, s1s2_emissions: {}, ds_s3: {}, s3_emissions:{}, value: {}".format(ds_s1s2,s1s2_emissions,ds_s3, s3_emissions, value))
+                    elif aggregation_method == 'TETS':
+                        company_emissions = company_data[self.c.COLS.GHG_SCOPE12].iloc[0] + \
+                                            company_data[self.c.COLS.GHG_SCOPE3].iloc[0] # per company
+                        portfolio_emissions = data[self.c.COLS.GHG_SCOPE12].sum() + data[
+                            self.c.COLS.GHG_SCOPE3].sum()
+                        value = company_emissions/portfolio_emissions * scope_weight
 
-                elif aggregation_method == 'TETS':
-                    company_emissions = company_data[self.c.COLS.GHG_SCOPE12].iloc[0] + \
-                                        company_data[self.c.COLS.GHG_SCOPE3].iloc[0] # per company
-                    portfolio_emissions = data[self.c.COLS.GHG_SCOPE12].sum() + data[
-                        self.c.COLS.GHG_SCOPE3].sum()
+                    elif aggregation_method == 'MOTS':
+                        company_emissions = company_data[self.c.COLS.GHG_SCOPE12].iloc[0] + \
+                                            company_data[self.c.COLS.GHG_SCOPE3].iloc[0]  # per company
+                        investment_value = company_data[self.c.COLS.INVESTMENT_VALUE].iloc[0]
+                        market_cap = company_data[self.c.COLS.MARKET_CAP].iloc[0]
+                        value = (((investment_value/market_cap)*company_emissions)/owned_emissions) * scope_weight
 
-                    value = company_emissions/portfolio_emissions * (ds_s1s2 * (s1s2_emissions / (s1s2_emissions + s3_emissions)) +
-                                                ds_s3 * (s3_emissions / (s1s2_emissions + s3_emissions)))
-                elif aggregation_method == 'MOTS':
-                    company_emissions = company_data[self.c.COLS.GHG_SCOPE12].iloc[0] + \
-                                        company_data[self.c.COLS.GHG_SCOPE3].iloc[0]  # per company
-                    investment_value = company_data[self.c.COLS.INVESTMENT_VALUE].iloc[0]
-                    market_cap = company_data[self.c.COLS.MARKET_CAP].iloc[0]
+                    elif aggregation_method == 'EOTS':
+                        company_emissions = company_data[self.c.COLS.GHG_SCOPE12].iloc[0] + \
+                                            company_data[self.c.COLS.GHG_SCOPE3].iloc[0]
+                        investment_value = company_data[self.c.COLS.INVESTMENT_VALUE].iloc[0]
+                        enterprise_value = company_data[self.c.COLS.COMPANY_ENTERPRISE_VALUE].iloc[0]
+                        value = (((investment_value/enterprise_value)*company_emissions)/owned_emissions) * scope_weight
 
-                    value = (((investment_value/market_cap)*company_emissions)/owned_emissions) * (
-                                ds_s1s2 * (s1s2_emissions / (s1s2_emissions + s3_emissions)) +
-                                ds_s3 * (s3_emissions / (s1s2_emissions + s3_emissions)))
+                    elif aggregation_method == 'ECOTS':
+                        investment_value = company_data[self.c.COLS.INVESTMENT_VALUE].iloc[0]
+                        company_emissions = company_data[self.c.COLS.GHG_SCOPE12].iloc[0] + \
+                                            company_data[self.c.COLS.GHG_SCOPE3].iloc[0]
+                        company_ev_cash = company_data[self.c.COLS.CASH_EQUIVALENTS].iloc[0]
+                        value = ((((investment_value/company_ev_cash)*company_emissions))/owned_emissions) * scope_weight
 
-                elif aggregation_method == 'EOTS':
-                    company_emissions = company_data[self.c.COLS.GHG_SCOPE12].iloc[0] + \
-                                        company_data[self.c.COLS.GHG_SCOPE3].iloc[0]
-                    investment_value = company_data[self.c.COLS.INVESTMENT_VALUE].iloc[0]
-                    enterprise_value = company_data[self.c.COLS.COMPANY_ENTERPRISE_VALUE].iloc[0]
+                    elif aggregation_method == 'AOTS':
+                        investment_value = company_data[self.c.COLS.INVESTMENT_VALUE].iloc[0]
+                        company_emissions = company_data[self.c.COLS.GHG_SCOPE12].iloc[0] + \
+                                            company_data[self.c.COLS.GHG_SCOPE3].iloc[0]
+                        company_total_assets = company_data[self.c.COLS.TOTAL_ASSETS].iloc[0]
+                        value = (((investment_value/company_total_assets)*company_emissions)/owned_emissions) * scope_weight
 
-                    value = (((investment_value/enterprise_value)*company_emissions)/owned_emissions) * (
-                            ds_s1s2 * (s1s2_emissions / (s1s2_emissions + s3_emissions)) +
-                            ds_s3 * (s3_emissions / (s1s2_emissions + s3_emissions)))
+                    elif aggregation_method == 'ROTS':
+                        investment_value = company_data[self.c.COLS.INVESTMENT_VALUE].iloc[0]
+                        company_emissions = company_data[self.c.COLS.S1S2_EMISSIONS].iloc[0] + \
+                                            company_data[self.c.COLS.S3_EMISSIONS].iloc[0]
+                        company_revenue = company_data[self.c.COLS.COMPANY_REVENUE].iloc[0]
+                        value = (((investment_value/company_revenue)*company_emissions)/owned_emissions) * scope_weight
 
-                elif aggregation_method == 'ECOTS':
-                    investment_value = company_data[self.c.COLS.INVESTMENT_VALUE].iloc[0]
-                    company_emissions = company_data[self.c.COLS.GHG_SCOPE12].iloc[0] + \
-                                        company_data[self.c.COLS.GHG_SCOPE3].iloc[0]
-                    company_ev_cash = company_data[self.c.COLS.CASH_EQUIVALENTS].iloc[0]
-
-                    value = ((((investment_value/company_ev_cash)*company_emissions))/owned_emissions) * (
-                            ds_s1s2 * (s1s2_emissions / (s1s2_emissions + s3_emissions)) +
-                            ds_s3 * (s3_emissions / (s1s2_emissions + s3_emissions)))
-
-                elif aggregation_method == 'AOTS':
-                    investment_value = company_data[self.c.COLS.INVESTMENT_VALUE].iloc[0]
-                    company_emissions = company_data[self.c.COLS.GHG_SCOPE12].iloc[0] + \
-                                        company_data[self.c.COLS.GHG_SCOPE3].iloc[0]
-                    company_total_assets = company_data[self.c.COLS.TOTAL_ASSETS].iloc[0]
-
-                    value = (((investment_value/company_total_assets)*company_emissions)/owned_emissions) * (
-                            ds_s1s2 * (s1s2_emissions / (s1s2_emissions + s3_emissions)) +
-                            ds_s3 * (s3_emissions / (s1s2_emissions + s3_emissions)))
-
-                elif aggregation_method == 'ROTS':
-                    investment_value = company_data[self.c.COLS.INVESTMENT_VALUE].iloc[0]
-                    company_emissions = company_data[self.c.COLS.S1S2_EMISSIONS].iloc[0] + \
-                                        company_data[self.c.COLS.S3_EMISSIONS].iloc[0]
-                    company_revenue = company_data[self.c.COLS.COMPANY_REVENUE].iloc[0]
-
-                    value = (((investment_value/company_revenue)*company_emissions)/owned_emissions) * (
-                            ds_s1s2 * (s1s2_emissions / (s1s2_emissions + s3_emissions)) +
-                            ds_s3 * (s3_emissions / (s1s2_emissions + s3_emissions)))
-
-                company_temp_contribution[time_frame][company] = value
-            time_frame_dictionary[time_frame] = round(sum(company_temp_contribution[time_frame].values()),3)
+                    company_temp_contribution[time_frame][scope][company] = value
+                time_frame_dictionary[time_frame][scope] = round(sum(company_temp_contribution[time_frame][scope].values()), 3)
         dictionary = {
-            'target':{
-                self.c.TIME_FRAME_SHORT: round(1 - time_frame_dictionary[self.c.TIME_FRAME_SHORT], 3),
-                self.c.TIME_FRAME_MID: round(1 - time_frame_dictionary[self.c.TIME_FRAME_MID], 3),
-                self.c.TIME_FRAME_LONG: round(1 - time_frame_dictionary[self.c.TIME_FRAME_LONG], 3),
+            'target': {
+                time_frame: {scope: round(1 - time_frame_dictionary[time_frame][scope], 3) for scope in self.c.VALUE_SCOPE_CATEGORIES} for time_frame in data[self.c.COLS.TIME_FRAME].unique()
             },
-            'default':{
-                self.c.TIME_FRAME_SHORT:time_frame_dictionary[self.c.TIME_FRAME_SHORT],
-                self.c.TIME_FRAME_MID: time_frame_dictionary[self.c.TIME_FRAME_MID],
-                self.c.TIME_FRAME_LONG: time_frame_dictionary[self.c.TIME_FRAME_LONG]
+            'default': {
+                time_frame: {scope: time_frame_dictionary[time_frame][scope] for scope in self.c.VALUE_SCOPE_CATEGORIES} for time_frame in data[self.c.COLS.TIME_FRAME].unique()
             }
         }
 
@@ -549,6 +534,22 @@ class TemperatureScore(PortfolioAggregation):
 
         scores.to_csv(self.c.FILE_RAW_DATA_DUMP, index=False)
 
+    def merge_percentage_coverage_to_aggregations(self, aggregations: Dict, temperature_percentage_coverage: Dict):
+        """Iterates over two dictionaries and ads keys from second dictionary to the first.
+        :param temperature_percentage_coverage: first 'main' dictionary where keys should be added
+        :type temperature_percentage_coverage: dict
+        :param aggregations: second dictionary wherefrom key-value pairs are added to first dictionary
+        :type aggregations: dict
+        :rtype: aggregations, dict
+        :return: aggregations
+        """
+        for time_frame in [self.c.TIME_FRAME_SHORT, self.c.TIME_FRAME_MID, self.c.TIME_FRAME_LONG]:
+            for scope in self.c.VALUE_SCOPE_CATEGORIES:
+                aggregations[time_frame][scope]['influence_percentage'] = {
+                    'default': temperature_percentage_coverage['default'][time_frame][scope],
+                    'target': temperature_percentage_coverage['target'][time_frame][scope]
+                }
+        return aggregations
 
 # Test
 # portfolio_data = pd.read_excel('C:/Projects/SBTi/testing_2.xlsx')
