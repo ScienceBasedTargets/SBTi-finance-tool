@@ -6,7 +6,7 @@ import levenshtein from 'fast-levenshtein';
 import { environment } from 'src/environments/environment';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-const AVAILABLE_GROUPING_COLUMNS: string[] = ["industry"];
+const AVAILABLE_GROUPING_COLUMNS: string[] = ["Country", "Region", "Industry_lvl1", "Industry_lvl2", "Industry_lvl3",  "Industry_lvl4"];
 const AVAILABLE_COLUMNS: string[] = ["company_id", "industry", "s1s2_emissions", "s3_emissions", "portfolio_weight",
 "market_cap", "investment_value", "company_enterprise_value", "company_ev_plus_cash", "company_total_assets",
 "target_reference_number", "scope", "base_year", "start_year", "target_year", "reduction_from_base_year",
