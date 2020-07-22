@@ -77,18 +77,15 @@ class BaseEndpoint(Resource):
         '''
         data_providers = []
         if "data_providers" in json_data:
-            for data_provider_name in json_data["data_providers"]:
-                for data_provider in self.data_providers:
-                    if data_provider["name"] == data_provider_name:
-                        data_providers.append(data_provider["class"])
-                        break
+            for path in json_data["data_providers"]:
+                data_provider = DATA_PROVIDER_MAP['excel'](path)
+                data_providers.append(data_provider)
 
         # TODO: When the user did give us data providers, but we can't match them this fails silently, maybe we should
         # fail louder
         if len(data_providers) == 0:
             data_providers = [data_provider["class"] for data_provider in self.data_providers]
         return data_providers
-
 
 
 class temp_score(BaseEndpoint):
@@ -105,6 +102,7 @@ class temp_score(BaseEndpoint):
     def post(self):
 
         json_data = request.get_json(force=True)
+
         data_providers = self._get_data_providers(json_data)
 
         default_score = self.config["default_score"]
