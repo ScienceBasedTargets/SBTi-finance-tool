@@ -52,6 +52,7 @@ export class AppComponent implements OnInit {
     resultGroups: string[] = [];
     resultTargets: any[] = [];
     resultItems: any[] = [];
+    resultDistribution:  { [key: string]: string } = {};
     resultScores: { [key: string]: number } = {};
     selectedContributions: { [key: string]: number }[] = [];
     alerts: Alert[] = [];
@@ -274,7 +275,7 @@ export class AppComponent implements OnInit {
                     const firstTimeFrame = this.resultTimeFrames[0];
                     this.resultGroups = Object.keys(response.aggregated_scores[firstTimeFrame]);
                     this.resultItems = Object.keys(response.aggregated_scores[firstTimeFrame][this.resultGroups[0]]);
-
+                    this.resultDistribution = response["feature_distribution"];
                     if (this.resultTargets.length > 0) {
                         this.resultColumns = Object.keys(this.resultTargets[0]);
                     }
