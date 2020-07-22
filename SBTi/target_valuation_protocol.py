@@ -145,7 +145,8 @@ class TargetValuationProtocol:
                                           (s1s2[self.c.COLS.BASEYEAR_GHG_S1] + s1s2[self.c.COLS.BASEYEAR_GHG_S2])
                     s1s2[self.c.COLS.COVERAGE_S1] = coverage_percentage
                     s1s2[self.c.COLS.COVERAGE_S2] = coverage_percentage
-                self.data = self.data.append(s1s2).reset_index(drop=True)
+                if not pd.isnull(coverage_percentage):
+                    self.data = self.data.append(s1s2).reset_index(drop=True)
             if pd.isnull(row[self.c.COLS.COVERAGE_S3]):
                 pass
             else:
