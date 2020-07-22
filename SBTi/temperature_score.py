@@ -200,6 +200,8 @@ class TemperatureScore(PortfolioAggregation):
             *data.apply(lambda row: self.get_regression(row), axis=1)
         )
         data[self.c.COLS.TEMPERATURE_SCORE] = data.apply(lambda row: self.get_score(row), axis=1)
+        if (self.scenario['number'] == 2) or (self.scenario['number'] == 3):
+            data = self.cap_scores(data)
         combined_data = []
         company_columns = [column for column in self.c.COLS.COMPANY_COLUMNS + extra_columns if column in data.columns]
         for company in data[self.c.COLS.COMPANY_NAME].unique():
@@ -227,11 +229,11 @@ class TemperatureScore(PortfolioAggregation):
                 scope_123_emissions = scope_12_emissions + scope_3_emissions
                 if not pd.isnull(scope_3_emissions) & pd.isnull(scope_123_emissions):
                     s1s2_temp_score = \
-                    company_data[company_data[self.c.COLS.SCOPE_CATEGORY] == 's1s2'][self.c.COLS.TEMPERATURE_SCORE].values[0]
+                        company_data[company_data[self.c.COLS.SCOPE_CATEGORY] == 's1s2'][self.c.COLS.TEMPERATURE_SCORE].values[0]
                     s3_temp_score = company_data[company_data[self.c.COLS.SCOPE_CATEGORY] == 's3'][self.c.COLS.TEMPERATURE_SCORE].values[0]
                     index = \
-                    data_score[(data_score[self.c.COLS.COMPANY_NAME] == company) & (data_score[self.c.COLS.TIME_FRAME] == time_frame) &
-                               (data_score[self.c.COLS.SCOPE_CATEGORY] == 's1s2s3')].index[0]
+                        data_score[(data_score[self.c.COLS.COMPANY_NAME] == company) & (data_score[self.c.COLS.TIME_FRAME] == time_frame) &
+                                   (data_score[self.c.COLS.SCOPE_CATEGORY] == 's1s2s3')].index[0]
                     if (scope_3_emissions / scope_123_emissions) < 0.4:
                         data_score.at[index, self.c.COLS.TEMPERATURE_SCORE] = s1s2_temp_score
 
@@ -239,9 +241,6 @@ class TemperatureScore(PortfolioAggregation):
                         data_score.at[index, self.c.COLS.TEMPERATURE_SCORE] = ((s1s2_temp_score * scope_12_emissions) +
                                                                      (s3_temp_score * scope_3_emissions)) / (
                                                                         scope_123_emissions)
-
-        if (self.scenario['number'] == 2) or (self.scenario['number'] == 3):
-            data_score = self.cap_scores(data_score)
         return data_score
 
     def aggregate_scores(self, data: pd.DataFrame, portfolio_aggregation_method: Type[PortfolioAggregationMethod],
@@ -486,7 +485,6 @@ class TemperatureScore(PortfolioAggregation):
         elif len(columns) > 1:
             percentage_distribution = (data.groupby(columns).size() / data[columns[0]].count()) * 100
             return percentage_distribution.to_dict()
-
 
     def set_scenario(self, scenario: Dict):
         self.scenario = scenario
