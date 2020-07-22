@@ -86,6 +86,7 @@ class PortfolioAggregation(ABC):
                 value_column = self.c.COLS.COMPANY_ENTERPRISE_VALUE
             elif portfolio_aggregation_method == PortfolioAggregationMethod.ECOTS:
                 value_column = self.c.COLS.COMPANY_EV_PLUS_CASH
+                data[self.c.COLS.COMPANY_EV_PLUS_CASH] = data[self.c.COLS.COMPANY_ENTERPRISE_VALUE] + data[self.c.COLS.CASH_EQUIVALENTS]
             elif portfolio_aggregation_method == PortfolioAggregationMethod.AOTS:
                 value_column = self.c.COLS.COMPANY_TOTAL_ASSETS
             elif portfolio_aggregation_method == PortfolioAggregationMethod.ROTS:
