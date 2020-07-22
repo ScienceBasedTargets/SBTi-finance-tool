@@ -18,7 +18,6 @@ class ColumnsConfig:
     COMPANY_EV_PLUS_CASH = "company_ev_plus_cash"
     COMPANY_TOTAL_ASSETS = "company_total_assets"
     TARGET_REFERENCE_NUMBER = "Target type"
-    TARGET_TYPE = "target_type"
     SCOPE = "Scope"
     SCOPE_CATEGORY = "scope_category"
     SR15 = "SR15"
@@ -76,7 +75,7 @@ class ColumnsConfig:
     CONTRIBUTION_RELATIVE = "contribution_relative"
     CONTRIBUTION = "contribution"
 
-    # This defines which column contain company specific, instead of target specific data
+    # This defines which columns contain company specific, instead of target specific data
     COMPANY_COLUMNS = [INDUSTRY_LVL1,INDUSTRY_LVL2,INDUSTRY_LVL3,INDUSTRY_LVL4,INTENSITY_METRIC, REGRESSION_PARAM,
                       REGRESSION_INTERCEPT, GHG_SCOPE12, GHG_SCOPE3, MARKET_CAP, INVESTMENT_VALUE, PORTFOLIO_WEIGHT,
                       ENTERPRISE_VALUE, CASH_EQUIVALENTS, TOTAL_ASSETS]
@@ -147,5 +146,5 @@ class PortfolioCoverageTVPConfig(PortfolioAggregationConfig):
 
     # SBTi targets overview (TVP coverage)
     COL_COMPANY_NAME = "Company Name"
-    COL_COMPANY_ID = "ISIC"
+    COL_COMPANY_ID = "ISIN"
     COL_TARGET_STATUS = "Status"
