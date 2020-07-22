@@ -7,10 +7,9 @@ import { environment } from 'src/environments/environment';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 const AVAILABLE_GROUPING_COLUMNS: string[] = ['Country', 'Region', 'Industry_lvl1', 'Industry_lvl2', 'Industry_lvl3',  'Industry_lvl4'];
-const AVAILABLE_COLUMNS: string[] = ['company_id', 'industry', 's1s2_emissions', 's3_emissions',
-'market_cap', 'investment_value', 'company_enterprise_value', 'company_ev_plus_cash', 'company_total_assets',
-'target_reference_number', 'scope', 'base_year', 'start_year', 'target_year', 'reduction_from_base_year',
-'emissions_in_scope', 'achieved_reduction'];
+const AVAILABLE_COLUMNS: string[] = ['company_id', 'Country', 'Region', 'Industry_lvl1', 'Industry_lvl2', 'Industry_lvl3',  'Industry_lvl4', 'GHG_scope1+2', 'GHG_scope3',
+'market_cap', 'investment_value', 'company_enterprise_value', 'cash_equivalents', 'company_total_assets',
+'Target type', 'Scope', 'Intensity_metric', 'base_year', 'start_year', 'end_year', 'reduction_ambition', 'achieved_reduction'];
 
 @Component({
     selector: 'app-root',
@@ -29,7 +28,7 @@ export class AppComponent implements OnInit {
     availableGroupingColumns: string[] = AVAILABLE_GROUPING_COLUMNS;
     groupingColumns: string[] = [];
     selectedAggregationMethod = 'WATS';
-    availableScenarios: string[] = [{'label':'scenario_1', 'description': 'Scenario 0: real life situation'}, {'label':'scenario_2', 'description': 'Scenario 1: "What-if" - all companies set targets (default scores go to 2.0)'}, {'value': {"number": 2}, 'label':'scenario_3', 'description': 'Scenario 2: "What-if" - all companies with targets get SBTs (scores from targets are capped at 1.75)'}, {'value': {"number": 1}, 'label':'scenario_4', 'description': 'Scenario 3a: "What-if" - the 10 highest contributors to the portfolio set targets (scores of 10 highest contributors are capped at 2.0)'}, {'value': {"number": 1}, 'label':'scenario_5', 'description': 'Scenario 3b: "What-if" - the 10 highest contributors to the portfolio set SBTs (scores of 10 highest contributors are capped at 1.75)'}];
+    availableScenarios: any[] = [{'label':'scenario_1', 'description': 'Scenario 0: real life situation'}, {'label':'scenario_2', 'description': 'Scenario 1: "What-if" - all companies set targets (default scores go to 2.0)'}, {'value': {"number": 2}, 'label':'scenario_3', 'description': 'Scenario 2: "What-if" - all companies with targets get SBTs (scores from targets are capped at 1.75)'}, {'value': {"number": 1}, 'label':'scenario_4', 'description': 'Scenario 3a: "What-if" - the 10 highest contributors to the portfolio set targets (scores of 10 highest contributors are capped at 2.0)'}, {'value': {"number": 1}, 'label':'scenario_5', 'description': 'Scenario 3b: "What-if" - the 10 highest contributors to the portfolio set SBTs (scores of 10 highest contributors are capped at 1.75)'}];
     filterTimeFrames: string[] = ['mid'];
     filterScopeCategory: string[] = ['s1s2', 's1s2s3'];
     includeColumns: string[] = [];
@@ -37,7 +36,7 @@ export class AppComponent implements OnInit {
     defaultScore = 3.2;
     uploadedFiles: Array<File>;
     selectedScenario: { [key: string]: number } = {'number': 0};
-    selectedDumpOption: { [key: string]: number } = {'anonymized': true};
+    selectedDumpOption: { [key: string]: boolean } = {'anonymized': true};
     selectedDataProviders: string[] = [];
     selectedDataProviders1 = '';
     selectedDataProvider1Path = '';
@@ -55,7 +54,7 @@ export class AppComponent implements OnInit {
     resultDumpColumns: string[] = [];
     resultGroups: string[] = [];
     resultTargets: any[] = [];
-    dataDump: any[] = []
+    dataDump:  any[] = [];
     resultItems: any[] = [];
     resultDistribution:  { [key: string]: string } = {};
     resultScores: { [key: string]: number } = {};

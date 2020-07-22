@@ -469,7 +469,7 @@ class TemperatureScore(PortfolioAggregation):
         :return: percentage distribution of specified columns
         '''
 
-        data = data[columns].fillna('<EMPTY>')
+        data = data[columns].fillna('unknown')
         if columns==None:
             return None
         elif len(columns) == 1:
