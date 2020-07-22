@@ -348,7 +348,9 @@ class TemperatureScore(PortfolioAggregation):
             if aggregation_method == "EOTS":
                 value_column = self.c.COLS.ENTERPRISE_VALUE
             elif aggregation_method == "ECOTS":
-                value_column = self.c.COLS.CASH_EQUIVALENTS
+                value_column = self.c.COLS.COMPANY_EV_PLUS_CASH
+                data[self.c.COLS.COMPANY_EV_PLUS_CASH] = data[self.c.COLS.COMPANY_ENTERPRISE_VALUE] + data[
+                    self.c.COLS.CASH_EQUIVALENTS]
             elif aggregation_method == "AOTS":
                 value_column = self.c.COLS.COMPANY_TOTAL_ASSETS
             elif aggregation_method == "ROTS":
