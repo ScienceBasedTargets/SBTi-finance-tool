@@ -64,7 +64,8 @@ class BaseEndpoint(Resource):
             "MOTS": PortfolioAggregationMethod.MOTS,
             "EOTS": PortfolioAggregationMethod.EOTS,
             "ECOTS": PortfolioAggregationMethod.ECOTS,
-            "AOTS": PortfolioAggregationMethod.AOTS
+            "AOTS": PortfolioAggregationMethod.AOTS,
+            "ROTS": PortfolioAggregationMethod.ROTS
         }
 
     def _get_data_providers(self, json_data: Dict):
@@ -287,9 +288,18 @@ class portfolio_coverage(BaseEndpoint):
 
         # Adding ISIN to Portfolio_data
         companies = json_data['companies']
-        company_ISIN = {
-            company['company_id']: company['ISIN'] for company in companies
-        }
+
+        try:
+            company_ISIN = {
+                company['company_id']: company['ISIN']  for company in companies
+            }
+        except:
+            return {'Response':{
+                'Error_Code':404,
+                'Message':'Invalid body. ISIN is required.'
+            }}
+
+
         portfolio_data['ISIN'] = None
         for company_id in company_ISIN.keys():
             index = portfolio_data[portfolio_data['company_id'] == company_id].index

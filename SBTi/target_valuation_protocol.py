@@ -39,9 +39,12 @@ class TargetValuationProtocol:
             return self.single_record_edgecase()
 
 
+
+
+
     def single_record_edgecase(self):
         '''
-        Creates six categories for when there is a singular record.
+        Creates six categories for when there is a singular record with no target value.
         :return:
         '''
         new_dataframe = pd.DataFrame()
@@ -257,8 +260,8 @@ class TargetValuationProtocol:
         -- Target type: Absolute over intensity
         -- If all else is equal: average the ambition of targets
         """
-        grid_columns = [self.c.COLS.COMPANY_NAME, self.c.COLS.TIME_FRAME, self.c.COLS.SCOPE_CATEGORY]
-        companies = self.data[self.c.COLS.COMPANY_NAME].unique()
+        grid_columns = [self.c.COLS.COMPANY_ID, self.c.COLS.TIME_FRAME, self.c.COLS.SCOPE_CATEGORY]
+        companies = self.data[self.c.COLS.COMPANY_ID].unique()
         scopes = [self.c.VALUE_SCOPE_CATEGORY_S1S2, self.c.VALUE_SCOPE_CATEGORY_S3]
         empty_columns = [column for column in self.data.columns if column not in grid_columns]
         extended_data = pd.DataFrame(
@@ -268,8 +271,16 @@ class TargetValuationProtocol:
         company_columns = [column for column in self.c.COLS.COMPANY_COLUMNS if column in extended_data.columns]
         for company in companies:
             for column in company_columns:
-                extended_data.loc[extended_data[self.c.COLS.COMPANY_NAME] == company, column] = \
-                    self.data[self.data[self.c.COLS.COMPANY_NAME] == company][column].mode()
+                # extended_data.loc[extended_data[self.c.COLS.COMPANY_ID] == company, column] = \
+                #     self.data[self.data[self.c.COLS.COMPANY_ID] == company][column].mode()
+                mode_value = self.data[self.data[self.c.COLS.COMPANY_ID] == company][column].mode()
+                if not mode_value.empty:
+                    for index in extended_data.loc[extended_data[self.c.COLS.COMPANY_ID] == company, column].index:
+                        extended_data.loc[index, column] = mode_value.values[0]
+
+
+
+
         extended_data = extended_data.apply(lambda row: self._find_target(row), axis=1)
         self.data = extended_data
 
@@ -335,5 +346,9 @@ class TargetValuationProtocol:
 # x.combining_records()
 # x.creating_records_scope_timeframe()
 
+# data = pd.read_excel('C:/Projects/SBTi/portfolio_data_test.xlsx')
+# company_data = pd.read_excel('C:/Projects/SBTi/company_data_test.xlsx')
+# data.drop(columns='Unnamed: 0',inplace=True)
+# company_data.drop(columns='Unnamed: 0',inplace=True)
 # target_valuation_protocol = TargetValuationProtocol(data, company_data)
 # portfolio_data = target_valuation_protocol.target_valuation_protocol()

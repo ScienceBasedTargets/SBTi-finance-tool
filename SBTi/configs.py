@@ -31,7 +31,7 @@ class ColumnsConfig:
     TEMPERATURE_SCORE = "temperature_score"
     COMPANY_NAME = "company_name"
     OWNED_EMISSIONS = "owned_emissions"
-    COUNTRY = 'country'
+    COUNTRY = 'Country'
     SECTOR = 'sector'
     GHG_SCOPE12 = 'GHG_scope1+2'
     GHG_SCOPE3 = 'GHG_scope3'
@@ -62,6 +62,7 @@ class ColumnsConfig:
     BASEYEAR_GHG_S1 = 'BaseYear_GHG_S1'
     BASEYEAR_GHG_S2 = 'BaseYear_GHG_S2'
     BASEYEAR_GHG_S3 = 'BaseYear_GHG_S3'
+    REGION = 'Region'
 
 
 
@@ -75,9 +76,12 @@ class ColumnsConfig:
     CONTRIBUTION = "contribution"
 
     # This defines which columns contain company specific, instead of target specific data
-    COMPANY_COLUMNS = [INDUSTRY_LVL1,INDUSTRY_LVL2,INDUSTRY_LVL3,INDUSTRY_LVL4,INTENSITY_METRIC, REGRESSION_PARAM,
+    COMPANY_COLUMNS = [COMPANY_NAME, INDUSTRY_LVL1,INDUSTRY_LVL2,INDUSTRY_LVL3,INDUSTRY_LVL4,INTENSITY_METRIC, REGRESSION_PARAM,
                       REGRESSION_INTERCEPT, GHG_SCOPE12, GHG_SCOPE3, MARKET_CAP, INVESTMENT_VALUE,
-                      ENTERPRISE_VALUE, CASH_EQUIVALENTS, TOTAL_ASSETS]
+                       COMPANY_ENTERPRISE_VALUE, CASH_EQUIVALENTS, COMPANY_TOTAL_ASSETS, REGION, COUNTRY, COMPANY_REVENUE]
+
+
+
 
 
 class PortfolioAggregationConfig:
