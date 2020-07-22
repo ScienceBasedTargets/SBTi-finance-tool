@@ -34,7 +34,7 @@ class TargetValuationProtocol:
             self.group_targets()
             self.combining_records()
             self.creating_records_scope_timeframe()
-            self.filling_empty_known_values()
+            # self.filling_empty_known_values()
             return self.data
         else:
             return self.single_record_edgecase()
@@ -281,7 +281,8 @@ class TargetValuationProtocol:
             list(itertools.product(*[companies, self.c.VALUE_TIME_FRAMES, scopes] + [[None]] * len(empty_columns))),
             columns=grid_columns + empty_columns)
         # We always include all company specific data
-        company_columns = [column for column in self.c.COLS.COMPANY_COLUMNS if column in extended_data.columns]
+        # company_columns = [column for column in self.c.COLS.COMPANY_COLUMNS if column in extended_data.columns]
+        company_columns = list(extended_data.columns)
         for company in companies:
             for column in company_columns:
                 extended_data.loc[extended_data[self.c.COLS.COMPANY_ID] == company, column] = \

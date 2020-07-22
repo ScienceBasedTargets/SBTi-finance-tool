@@ -1,7 +1,6 @@
 import itertools
 from typing import Optional, Tuple, Type, Dict
 
-from enum import Enum
 import pandas as pd
 
 from SBTi.portfolio_aggregation import PortfolioAggregation, PortfolioAggregationMethod
@@ -203,7 +202,8 @@ class TemperatureScore(PortfolioAggregation):
         if (self.scenario['number'] == 2) or (self.scenario['number'] == 3):
             data = self.cap_scores(data)
         combined_data = []
-        company_columns = [column for column in self.c.COLS.COMPANY_COLUMNS + extra_columns if column in data.columns]
+        # company_columns = [column for column in self.c.COLS.COMPANY_COLUMNS + extra_columns if column in data.columns]
+        company_columns = extra_columns + list(data.columns)
         for company in data[self.c.COLS.COMPANY_NAME].unique():
             for time_frame in self.c.VALUE_TIME_FRAMES:
                 # We always include all company specific data
@@ -550,11 +550,30 @@ class TemperatureScore(PortfolioAggregation):
                     }
         return aggregations
 
+
+
 # Test
-# portfolio_data = pd.read_excel('C:/Projects/SBTi/testing_2.xlsx')
-# portfolio_data.drop(columns = 'Unnamed: 0',inplace=True)
+portfolio_data = pd.read_excel('C:/Projects/SBTi/portfolio.xlsx')
+portfolio_data.drop(columns = 'Unnamed: 0',inplace=True)
+temperature_score = TemperatureScore(fallback_score=3.2)
+data_score = temperature_score.calculate(portfolio_data, [])
+
+temperature_score.columns_percentage_distribution(portfolio_data,['time_frame','Country'])
+df = temperature_score.temperature_score_influence_percentage(portfolio_data,'WATS')
+data_score[pd.isna(data_score['temperature_score'])]['scope_category']
+
+
+
+
+
+'''
+company_total_assets are "NaN", which is causing "NaN" for "owned_emissions", 
+which returns "NaN" for "weighted_scores" and that is causing the "NaN" AOTS 
+in temperature score. What is causing company_total_asset to be NaN is temperature_score.calculate
+'''
+# from SBTi.portfolio_aggregation import PortfolioAggregationMethod
+# scores = pd.read_excel('C:/Projects/SBTi/scores.xlsx')
 # temperature_score = TemperatureScore(fallback_score=3.2)
-# data_score = temperature_score.calculate(portfolio_data, [])
-# temperature_score.columns_percentage_distribution(portfolio_data,['time_frame','Country'])
-# df = temperature_score.temperature_score_influence_percentage(portfolio_data,'WATS')
-# data_score[pd.isna(data_score['temperature_score'])]['scope_category']
+# aggregations = temperature_score.aggregate_scores(scores[(scores['scope_category']=='s1s2s3') &
+#                                                          (scores['time_frame']=='short')], PortfolioAggregationMethod.AOTS, None)
+#
