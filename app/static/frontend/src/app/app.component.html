@@ -210,7 +210,7 @@
                     <td>Group</td>
                     <td>Time frame</td>
                     <td>Temperature score</td>
-                    <td>Targets & Default (%)</td>
+                    <td>Target/Default</td>
                     <td></td>
                 </tr>
             </thead>
@@ -219,7 +219,12 @@
                     <td>{{group}}</td>
                     <td>{{timeFrame}}</td>
                     <td>{{resultScores[timeFrame][group]["all"]["score"] | number:'1.2-2'}}&#176;C</td>
-                    <td></td>
+                    <td>
+                      {{resultScores[timeFrame][group]["influence_percentage"]["default"] | number:'1.2-2'}}
+                      /
+                      {{resultScores[timeFrame][group]["influence_percentage"]["target"] | number:'1.2-2'}}
+                      %
+                    </td>
                     <td><button (click)="openContributors(group, timeFrame, 'all', templateContributions)" class="btn btn-sm btn-outline-primary">Contributors</button></td>
                 </tr>
             </tbody>
@@ -275,8 +280,15 @@
             <div class="col">&nbsp;</div>
         </div>
 
-      <ng-container *ngIf="this.groupingColumns.length > 0">
+      <ng-container *ngIf="this.groupingColumns.length > 0 && resultItems.length > 2">
         <h5>Group by temperature scores</h5>
+            <!--{{resultTimeFrames}}<br>-->
+           <!--{{ resultColumns}}<br>-->
+           <!--{{ resultGroups}}<br>-->
+           <!--{{ resultTargets}}<br>-->
+           <!--{{ resultItems}}<br>-->
+           <!--{{ resultDistribution}}<br><br>-->
+            <!--{{resultScores}}-->
           <table class="table table-striped">
               <thead>
                   <tr>
@@ -284,19 +296,22 @@
                       <td>Time frame</td>
                       <td>Groupby</td>
                       <td>Temperature score</td>
-                      <td>Targets & Default (%)</td>
+                      <td>Feature distribution</td>
                       <td></td>
                   </tr>
               </thead>
               <tbody *ngFor="let group of resultGroups">
                 <ng-container *ngFor="let item of resultItems | keyvalue">
-                  <ng-container *ngIf="item.value != 'all'">
+                  <ng-container *ngIf="item.value != 'all' && item.value != 'influence_percentage'">
                   <tr *ngFor="let timeFrame of resultTimeFrames">
                       <td>{{group}}</td>
                       <td>{{timeFrame}}</td>
                       <td>{{item.value}}</td>
                       <td>{{resultScores[timeFrame][group][item.value]["score"] | number:'1.2-2'}}&#176;C</td>
-                      <td></td>
+                      <td>
+                        {{ resultDistribution[item.value] }}
+                        %
+                      </td>
                       <td><button (click)="openContributors(group, timeFrame, item.value, templateContributions)" class="btn btn-sm btn-outline-primary">Contributors</button></td>
                   </tr>
                   </ng-container>

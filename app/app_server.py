@@ -103,6 +103,8 @@ class temp_score(BaseEndpoint):
 
         json_data = request.get_json(force=True)
 
+        print(json_data)
+
         data_providers = self._get_data_providers(json_data)
 
         default_score = self.config["default_score"]
@@ -226,6 +228,9 @@ def convert_nan_to_none(nested_dictionary):
                                                         clean_company[identifier] = None
                                                 clean_v.append(clean_company)
                                                 scores_el[k] = clean_v
+
+                                    if str(v) == 'nan':
+                                        scores_el[k] = None
 
     return nested_dictionary
 

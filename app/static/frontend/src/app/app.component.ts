@@ -35,6 +35,12 @@ export class AppComponent implements OnInit {
     availableDefaultScores: number[] = [3.2, 3.9, 4.5];
     defaultScore = 3.2;
     uploadedFiles: Array<File>;
+    selectedDataProviders: string[] = [];
+    selectedDataProviders1 = '';
+    selectedDataProvider1Path = '';
+    selectedDataProviders2 = '';
+    selectedDataProvider2Path = '';
+    selectedDataProviderPaths: string[] = [];
     dataProviders: DataProvider[];
     dataProviderFile1: Array<File>;
     dataProviderFile2: Array<File>;
@@ -46,6 +52,7 @@ export class AppComponent implements OnInit {
     resultGroups: string[] = [];
     resultTargets: any[] = [];
     resultItems: any[] = [];
+    resultDistribution:  { [key: string]: string } = {};
     resultScores: { [key: string]: number } = {};
     selectedContributions: { [key: string]: number }[] = [];
     alerts: Alert[] = [];
@@ -234,21 +241,21 @@ export class AppComponent implements OnInit {
             return newObj;
         });
 
-        var formData1 = '';
+        this.selectedDataProviders = [this.selectedDataProviders1, this.selectedDataProviders2];
+        this.selectedDataProviderPaths = [this.selectedDataProvider1Path, this.selectedDataProvider2Path];
+
+        const formData1 = new FormData();
         if (this.dataProviderFile1) {
-            var formData1 = new FormData();
             formData1.append('file', this.dataProviderFile1[0], this.dataProviderFile1[0].name);
         }
-
-        var formData2 = '';
+        const formData2 = new FormData();
         if (this.dataProviderFile2) {
-            var formData2 = new FormData();
             formData2.append('file', this.dataProviderFile2[0], this.dataProviderFile2[0].name);
         }
 
         this.appService.getTemperatureScore({
             aggregation_method: this.selectedAggregationMethod,
-            data_providers: [formData1, formData2],
+            data_providers: [],
             filter_scope_category: this.filterScopeCategory,
             filter_time_frame: this.filterTimeFrames,
             include_columns: this.includeColumns,
@@ -268,7 +275,7 @@ export class AppComponent implements OnInit {
                     const firstTimeFrame = this.resultTimeFrames[0];
                     this.resultGroups = Object.keys(response.aggregated_scores[firstTimeFrame]);
                     this.resultItems = Object.keys(response.aggregated_scores[firstTimeFrame][this.resultGroups[0]]);
-
+                    this.resultDistribution = response["feature_distribution"];
                     if (this.resultTargets.length > 0) {
                         this.resultColumns = Object.keys(this.resultTargets[0]);
                     }
