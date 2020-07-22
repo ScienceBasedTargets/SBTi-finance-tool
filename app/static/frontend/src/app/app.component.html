@@ -196,6 +196,28 @@
             </div>
         </div>
 
+        <!-- Scenarios -->
+        <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0 btn btn-link" (click)="toggleAccordion('Scenarios-container')">
+                Scenarios
+              </h5>
+            </div>
+            <div id="Scenarios-container" class="collapse show" style="display:none">
+              <div class="card-body" >
+                <div class="form-group">
+                  <div class="">
+                    <div *ngFor="let scenario of availableScenarios" class="form-check" id="{{scenario.label}}">
+                      <input (click)="addScenario($event)" class="form-check-input" type="radio" name="gridRadios" value="{{scenario.label}}">
+                      <label class="form-check-label" for="{{scenario.label}}">
+                        {{ scenario.description }}
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
 
       <div class="form-group" style="margin-top: 1em;">
           <button class="btn btn-success">Get temperature score</button>

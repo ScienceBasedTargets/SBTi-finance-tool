@@ -29,12 +29,14 @@ export class AppComponent implements OnInit {
     availableGroupingColumns: string[] = AVAILABLE_GROUPING_COLUMNS;
     groupingColumns: string[] = [];
     selectedAggregationMethod = 'WATS';
+    availableScenarios: string[] = [{'label':'scenario_1', 'description': 'Scenario 0: real life situation'}, {'label':'scenario_2', 'description': 'Scenario 1: "What-if" - all companies set targets (default scores go to 2.0)'}, {'value': {"number": 2}, 'label':'scenario_3', 'description': 'Scenario 2: "What-if" - all companies with targets get SBTs (scores from targets are capped at 1.75)'}, {'value': {"number": 1}, 'label':'scenario_4', 'description': 'Scenario 3a: "What-if" - the 10 highest contributors to the portfolio set targets (scores of 10 highest contributors are capped at 2.0)'}, {'value': {"number": 1}, 'label':'scenario_5', 'description': 'Scenario 3b: "What-if" - the 10 highest contributors to the portfolio set SBTs (scores of 10 highest contributors are capped at 1.75)'}];
     filterTimeFrames: string[] = ['mid'];
     filterScopeCategory: string[] = ['s1s2', 's1s2s3'];
     includeColumns: string[] = [];
     availableDefaultScores: number[] = [3.2, 3.9, 4.5];
     defaultScore = 3.2;
     uploadedFiles: Array<File>;
+    selectedScenario: { [key: string]: number } = {"number": 0};
     selectedDataProviders: string[] = [];
     selectedDataProviders1 = '';
     selectedDataProvider1Path = '';
@@ -94,6 +96,15 @@ export class AppComponent implements OnInit {
     }
     onFileChangeDataProvider2(element) {
         this.dataProviderFile2 = element.target.files;
+    }
+
+
+    /**
+     * Select Scenario 
+     */
+    addScenario(element) {
+      const dicts = {'scenario_1': {'number': 0}, 'scenario_2': {'number': 1}, 'scenario_3': {'number': 2}, 'scenario_4': {'number': 3, 'engagement_type': 'set_targets'}, 'scenario_5': {'number': 3, 'engagement_type': 'set_SBTi_targets'}};
+      this.selectedScenario = dicts[element.target.value];
     }
 
     openContributors(group: string, timeFrame: string, item: string, template) {
@@ -253,6 +264,8 @@ export class AppComponent implements OnInit {
             formData2.append('file', this.dataProviderFile2[0], this.dataProviderFile2[0].name);
         }
 
+        console.log(this.selectedScenario);
+
         this.appService.getTemperatureScore({
             aggregation_method: this.selectedAggregationMethod,
             data_providers: [],
@@ -262,6 +275,7 @@ export class AppComponent implements OnInit {
             grouping_columns: this.groupingColumns,
             default_score: this.defaultScore,
             companies: portfolioData,
+            scenario: this.selectedScenario
         })
             .subscribe((response) => {
                 this.loading = false;
