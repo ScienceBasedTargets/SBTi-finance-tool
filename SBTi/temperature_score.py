@@ -430,7 +430,7 @@ class TemperatureScore(PortfolioAggregation):
                         investment_value = company_data[self.c.COLS.INVESTMENT_VALUE].iloc[0]
                         company_emissions = company_data[self.c.COLS.GHG_SCOPE12].iloc[0] + \
                                             company_data[self.c.COLS.GHG_SCOPE3].iloc[0]
-                        company_ev_cash = company_data[self.c.COLS.CASH_EQUIVALENTS].iloc[0]
+                        company_ev_cash = company_data[self.c.COLS.COMPANY_ENTERPRISE_VALUE].iloc[0] + company_data[self.c.COLS.CASH_EQUIVALENTS].iloc[0]
                         value = ((((investment_value/company_ev_cash)*company_emissions))/owned_emissions) * scope_weight
 
                     elif aggregation_method == 'AOTS':
