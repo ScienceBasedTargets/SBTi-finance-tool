@@ -46,10 +46,7 @@ class ExcelProvider(DataProvider):
             data_targets["company_id"] = None
         return data_targets[
             (data_targets["company_id"].isin([company["company_id"] for company in companies]) &
-             data_targets["company_id"].notnull()) |
-            (data_targets["company_name"].isin([company["company_name"] for company in companies]) &
-             data_targets["company_name"].notnull())
-        ].copy()
+             data_targets["company_id"].notnull())].copy()
 
 
 
@@ -80,33 +77,13 @@ class ExcelProvider(DataProvider):
         :return: A dataframe containing the company data
         """
 
-        # data_company = self.data['Fundemental data']
-        #
-        # required_columns = [self.c.COMPANY_NAME, self.c.COMPANY_ID, self.c.ISIC, self.c.COUNTRY,
-        #                     self.c.INDUSTRY_LVL1, self.c.INDUSTRY_LVL2, self.c.INDUSTRY_LVL3, self.c.INDUSTRY_LVL4,
-        #                     self.c.SECTOR, self.c.GHG_SCOPE12, self.c.GHG_SCOPE3, self.c.REVENU, self.c.MARKET_CAP,
-        #                     self.c.ENTERPRISE_VALUE, self.c.TOTAL_ASSETS, self.c.CASH_EQUIVALENTS]
-        #
-        # data_frame = pd.DataFrame(columns=required_columns)
-        #
-        # for company in companies:
-        #     data_frame = data_frame.append(
-        #         data_company[(data_company[self.c.COMPANY_NAME] == company[self.c.COMPANY_NAME]) &
-        #                      (data_company[self.c.COMPANY_ID] == company[self.c.COMPANY_ID])][required_columns],
-        #         ignore_index=True)
-        #
-        # return data_frame
-
         data_company = self.data['Fundemental data']
         if "company_id" not in data_company:
             data_company["company_id"] = None
 
         return data_company[
             (data_company["company_id"].isin([company["company_id"] for company in companies]) &
-             data_company["company_id"].notnull()) |
-            (data_company["company_name"].isin([company["company_name"] for company in companies]) &
-             data_company["company_name"].notnull())
-        ].copy()
+             data_company["company_id"].notnull())].copy()
 
 
     def get_sbti_targets(self, companies: list) -> list:
