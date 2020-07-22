@@ -114,9 +114,8 @@ class temp_score(BaseEndpoint):
 
         company_data = SBTi.data.get_company_data(data_providers, json_data["companies"])
         targets = SBTi.data.get_targets(data_providers, json_data["companies"])
-        # portfolio_data = pd.merge(left=company_data, right=targets, how = 'outer', on = ['company_name'])
 
-        portfolio_data = pd.merge(left=company_data, right=targets, left_on='company_name', right_on='company_name')
+        portfolio_data = pd.merge(left=company_data, right = targets, how='outer', on = ['company_name','company_id'])
 
         aggregation_method = self.aggregation_map[self.config["aggregation_method"]]
         if "aggregation_method" in json_data and json_data["aggregation_method"] in self.aggregation_map:
@@ -228,7 +227,17 @@ class portfolio_coverage(BaseEndpoint):
         data_providers = self._get_data_providers(json_data)
         company_data = SBTi.data.get_company_data(data_providers, json_data["companies"])
         targets = SBTi.data.get_targets(data_providers, json_data["companies"])
-        portfolio_data = pd.merge(left=company_data, right=targets, left_on='company_name', right_on='company_name')
+        portfolio_data = pd.merge(left=company_data, right = targets, how='outer', on = ['company_name','company_id'])
+
+        # Adding ISIN to Portfolio_data
+        companies = json_data['companies']
+        company_ISIN = {
+            company['company_id']: company['ISIN'] for company in companies
+        }
+        portfolio_data['ISIN'] = None
+        for company_id in company_ISIN.keys():
+            index = portfolio_data[portfolio_data['company_id'] == company_id].index
+            portfolio_data.loc[index, 'ISIN'] = company_ISIN[company_id]
 
         for company in json_data["companies"]:
             portfolio_data.loc[portfolio_data['company_name'] == company["company_name"], "portfolio_weight"] = company[

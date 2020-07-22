@@ -10,6 +10,7 @@ class TargetValuationProtocol:
 
     def __init__(self, data: pd.DataFrame, company_data: pd.DataFrame, config: Type[PortfolioAggregationConfig] = PortfolioAggregationConfig):
         self.data = data
+        self.data_backup = data
         self.c = config
         self.company_data = company_data
 
@@ -21,17 +22,33 @@ class TargetValuationProtocol:
         :return: a list of six columns containing dataframes in each one
         '''
         self.test_target_type()
-        self.data[self.c.COLS.SCOPE] = self.data[self.c.COLS.SCOPE].str.lower()
-        self.data[self.c.COLS.SCOPE_CATEGORY] = self.data.apply(
-            lambda row: self.c.SCOPE_MAP[row[self.c.COLS.SCOPE]], axis=1)
-        self.test_boundary_coverage()
-        self.test_target_process()
-        self.test_end_year()
-        self.time_frame()
-        self.group_targets()
-        self.combining_records()
-        self.creating_records_scope_timeframe()
-        return self.data
+        if len(self.data)>0:
+            self.data[self.c.COLS.SCOPE] = self.data[self.c.COLS.SCOPE].str.lower()
+            self.data[self.c.COLS.SCOPE_CATEGORY] = self.data.apply(
+                lambda row: self.c.SCOPE_MAP[row[self.c.COLS.SCOPE]], axis=1)
+            self.test_boundary_coverage()
+            self.test_target_process()
+            self.test_end_year()
+            self.time_frame()
+            self.group_targets()
+            self.combining_records()
+            self.creating_records_scope_timeframe()
+            return self.data
+        else:
+            return self.single_record_edgecase()
+
+
+    def single_record_edgecase(self):
+        '''
+        Creates six categories for when there is a singular record.
+        :return:
+        '''
+        new_dataframe = pd.DataFrame()
+        new_dataframe = new_dataframe.append([self.data_backup] * 6, ignore_index=True)
+        new_dataframe['scope_category'] = ['s1s2', 's1s2', 's1s2', 's3', 's3', 's3']
+        new_dataframe['time_frame'] = ['short', 'mid', 'long', 'short', 'mid', 'long']
+        return new_dataframe
+
 
 
     def test_end_year(self):
@@ -59,6 +76,9 @@ class TargetValuationProtocol:
         If target type is Other (or none is specified) => Invalid target
         """
         index_list = []
+
+        self.data[self.c.COLS.TARGET_REFERENCE_NUMBER] = self.data[self.c.COLS.TARGET_REFERENCE_NUMBER].astype(str)
+        self.data[self.c.COLS.INTENSITY_METRIC] = self.data[self.c.COLS.INTENSITY_METRIC].astype(str)
         self.data[self.c.COLS.TARGET_REFERENCE_NUMBER] = self.data[self.c.COLS.TARGET_REFERENCE_NUMBER].str.lower()
         self.data[self.c.COLS.INTENSITY_METRIC] = self.data[self.c.COLS.INTENSITY_METRIC].str.lower()
         for index, record in self.data.iterrows():
@@ -156,7 +176,7 @@ class TargetValuationProtocol:
         """
 
         # Find all targets that correspond to the given row
-        target_data = self.data[(self.data[self.c.COLS.COMPANY_NAME] == row[self.c.COLS.COMPANY_NAME]) &
+        target_data = self.data[(self.data[self.c.COLS.COMPANY_ID] == row[self.c.COLS.COMPANY_ID]) &
                                 (self.data[self.c.COLS.TIME_FRAME] == row[self.c.COLS.TIME_FRAME]) &
                                 (self.data[self.c.COLS.SCOPE_CATEGORY] == row[self.c.COLS.SCOPE_CATEGORY])].copy()
         if len(target_data) == 0:
@@ -222,7 +242,7 @@ class TargetValuationProtocol:
         for company in companies:
             for column in company_columns:
                 extended_data.loc[extended_data[self.c.COLS.COMPANY_NAME] == company, column] = \
-                    self.data[self.data[self.c.COLS.COMPANY_NAME] == company][column].mode() # removed ".iloc[0]" kept receiving an index error
+                    self.data[self.data[self.c.COLS.COMPANY_NAME] == company][column].mode()
         extended_data = extended_data.apply(lambda row: self._find_target(row), axis=1)
         self.data = extended_data
 
@@ -253,8 +273,6 @@ class TargetValuationProtocol:
         timeframe_data_mid[self.c.COLS.TIME_FRAME] = 'mid'
         timeframe_data_long[self.c.COLS.TIME_FRAME] = 'long'
 
-
-
         self.data = pd.concat([self.data, scopeless_data_s1s2, scopeless_data_3,timeframe_data_short,timeframe_data_mid,
                                timeframe_data_long])
 
@@ -273,9 +291,11 @@ class TargetValuationProtocol:
         # self.data = pd.merge(left=self.company_data, right=self.data, how='outer', on=['company_name'])
         self.data = pd.concat([self.company_data, self.data], ignore_index=True, sort=False)
 
+
+
 # Testing
-# data = pd.read_excel('C:/Projects/SBTi/testing.xlsx')
-# company_data = pd.read_excel('C:/Projects/SBTi/company_data.xlsx')
+# data = pd.read_excel('C:/Projects/SBTi/portfolio_1.xlsx')
+# company_data = pd.read_excel('C:/Projects/SBTi/company_data_1.xlsx')
 # data.drop(columns='Unnamed: 0',inplace=True)
 # company_data.drop(columns='Unnamed: 0',inplace=True)
 # x = TargetValuationProtocol(data,company_data)
@@ -291,9 +311,5 @@ class TargetValuationProtocol:
 # x.combining_records()
 # x.creating_records_scope_timeframe()
 
-
-
-
-
-
-
+# target_valuation_protocol = TargetValuationProtocol(data, company_data)
+# portfolio_data = target_valuation_protocol.target_valuation_protocol()
