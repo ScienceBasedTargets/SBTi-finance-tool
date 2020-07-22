@@ -36,7 +36,8 @@ export class AppComponent implements OnInit {
     availableDefaultScores: number[] = [3.2, 3.9, 4.5];
     defaultScore = 3.2;
     uploadedFiles: Array<File>;
-    selectedScenario: { [key: string]: number } = {"number": 0};
+    selectedScenario: { [key: string]: number } = {'number': 0};
+    selectedDumpOption: { [key: string]: number } = {'anonymized': true};
     selectedDataProviders: string[] = [];
     selectedDataProviders1 = '';
     selectedDataProvider1Path = '';
@@ -51,8 +52,10 @@ export class AppComponent implements OnInit {
     columnMapping: { [key: string]: string } = {};
     resultTimeFrames: string[] = [];
     resultColumns: string[] = [];
+    resultDumpColumns: string[] = [];
     resultGroups: string[] = [];
     resultTargets: any[] = [];
+    dataDump: any[] = []
     resultItems: any[] = [];
     resultDistribution:  { [key: string]: string } = {};
     resultScores: { [key: string]: number } = {};
@@ -100,12 +103,21 @@ export class AppComponent implements OnInit {
 
 
     /**
-     * Select Scenario 
+     * Select Scenario
      */
     addScenario(element) {
       const dicts = {'scenario_1': {'number': 0}, 'scenario_2': {'number': 1}, 'scenario_3': {'number': 2}, 'scenario_4': {'number': 3, 'engagement_type': 'set_targets'}, 'scenario_5': {'number': 3, 'engagement_type': 'set_SBTi_targets'}};
       this.selectedScenario = dicts[element.target.value];
     }
+
+    /**
+     * Select Data Dump option
+     */
+    addDumpOption(element) {
+        const dump = {"false": false, "true": true}
+      this.selectedDumpOption = {'anonimyzed': dump[element.target.value]};
+    }
+
 
     openContributors(group: string, timeFrame: string, item: string, template) {
         console.log('contributions to group \'' + group + '\' and timeFrame \'' + timeFrame + '\' and item \'' + item + '\'.');
@@ -233,6 +245,15 @@ export class AppComponent implements OnInit {
         csv.unshift(this.resultColumns);
         this.exportToCsv('temperature_scores.csv', csv);
     }
+    /**
+     * Data dump csv
+     */
+    dumpCSV() {
+        const dump = this.dataDump.map(row => Object.values(row));
+        dump.unshift(this.resultDumpColumns);
+        this.exportToCsv('data_dump.csv', dump);
+    }
+
 
     /**
      * Gets the temperature score
@@ -264,8 +285,6 @@ export class AppComponent implements OnInit {
             formData2.append('file', this.dataProviderFile2[0], this.dataProviderFile2[0].name);
         }
 
-        console.log(this.selectedScenario);
-
         this.appService.getTemperatureScore({
             aggregation_method: this.selectedAggregationMethod,
             data_providers: [],
@@ -275,7 +294,8 @@ export class AppComponent implements OnInit {
             grouping_columns: this.groupingColumns,
             default_score: this.defaultScore,
             companies: portfolioData,
-            scenario: this.selectedScenario
+            scenario: this.selectedScenario,
+            data_dump: this.selectedDumpOption
         })
             .subscribe((response) => {
                 this.loading = false;
@@ -284,6 +304,7 @@ export class AppComponent implements OnInit {
                     console.log(response);
                     this.resultScores = response.aggregated_scores;
                     this.resultTargets = response.companies;
+                    this.dataDump = response.scores;
                     this.coverage = response.coverage;
                     this.resultTimeFrames = Object.keys(response.aggregated_scores);
                     const firstTimeFrame = this.resultTimeFrames[0];
@@ -292,6 +313,9 @@ export class AppComponent implements OnInit {
                     this.resultDistribution = response["feature_distribution"];
                     if (this.resultTargets.length > 0) {
                         this.resultColumns = Object.keys(this.resultTargets[0]);
+                    }
+                    if (this.dataDump.length > 0) {
+                        this.resultDumpColumns = Object.keys(this.dataDump[0]);
                     }
                 }
             });

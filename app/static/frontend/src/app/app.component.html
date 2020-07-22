@@ -219,6 +219,18 @@
             </div>
         </div>
 
+      <div>
+        <p for="inlineRadio1">Data dump options</p>
+        <div class="form-check form-check-inline">
+          <input (click)="addDumpOption($event)" class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="true" checked>
+          <label class="form-check-label" for="inlineRadio2">Anonimyzed</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input (click)="addDumpOption($event)"class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="false">
+          <label class="form-check-label" for="inlineRadio1">Non-anonimyzed</label>
+        </div>
+      </div>
+
       <div class="form-group" style="margin-top: 1em;">
           <button class="btn btn-success">Get temperature score</button>
       </div>
@@ -302,13 +314,6 @@
 
       <ng-container *ngIf="this.groupingColumns.length > 0 && resultItems.length > 2">
         <h5>Group by temperature scores</h5>
-            <!--{{resultTimeFrames}}<br>-->
-           <!--{{ resultColumns}}<br>-->
-           <!--{{ resultGroups}}<br>-->
-           <!--{{ resultTargets}}<br>-->
-           <!--{{ resultItems}}<br>-->
-           <!--{{ resultDistribution}}<br><br>-->
-            <!--{{resultScores}}-->
           <table class="table table-striped">
               <thead>
                   <tr>
@@ -342,8 +347,10 @@
 
 
         <div class="container-results">
-            <h5>Temperature score targets <button class="btn btn-outline-primary"
-                    (click)="exportCSV()">Download</button></h5>
+            <h5>Temperature score targets
+              <button class="btn btn-outline-primary" (click)="exportCSV()">Download</button>
+              <button class="btn btn-outline-primary" (click)="dumpCSV()">Data dump</button>
+            </h5>
             <table class="table table-striped">
                 <thead>
                     <tr>
