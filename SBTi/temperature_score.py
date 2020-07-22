@@ -346,7 +346,7 @@ class TemperatureScore(PortfolioAggregation):
             # These four methods only differ in the way the company is valued.
             value_column = self.c.COLS.MARKET_CAP
             if aggregation_method == "EOTS":
-                value_column = self.c.COLS.ENTERPRISE_VALUE
+                value_column = self.c.COLS.COMPANY_ENTERPRISE_VALUE
             elif aggregation_method == "ECOTS":
                 value_column = self.c.COLS.CASH_EQUIVALENTS
             elif aggregation_method == "AOTS":
@@ -549,20 +549,6 @@ class TemperatureScore(PortfolioAggregation):
                         'target': temperature_percentage_coverage['target'][time_frame][scope]
                     }
         return aggregations
-
-
-
-# Test
-portfolio_data = pd.read_excel('C:/Projects/SBTi/portfolio.xlsx')
-portfolio_data.drop(columns = 'Unnamed: 0',inplace=True)
-temperature_score = TemperatureScore(fallback_score=3.2)
-data_score = temperature_score.calculate(portfolio_data, [])
-
-temperature_score.columns_percentage_distribution(portfolio_data,['time_frame','Country'])
-df = temperature_score.temperature_score_influence_percentage(portfolio_data,'WATS')
-data_score[pd.isna(data_score['temperature_score'])]['scope_category']
-
-
 
 
 
