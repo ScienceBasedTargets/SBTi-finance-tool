@@ -69,7 +69,7 @@ export class AppService {
             .pipe(
                 tap(_ => console.log('Calculated temperature score')),
                 catchError(this.handleError<TemperatureScoreResult>('getTemperatureScore',
-                  {aggregated_scores: {}, coverage: 0.00, companies: []}))
+                  {aggregated_scores: {}, coverage: 0.00, companies: [], scores: []}))
             );
     }
 

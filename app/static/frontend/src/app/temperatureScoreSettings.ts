@@ -7,4 +7,6 @@ export interface TemperatureScoreSettings {
   grouping_columns: string[];
   default_score: number;
   companies: any[];
+  scenario: { [key: string]: number };
+  data_dump: { [key: string]: boolean };
 }
