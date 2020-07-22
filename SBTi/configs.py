@@ -122,6 +122,7 @@ class TemperatureScoreConfig(PortfolioAggregationConfig):
 
     TEMPERATURE_RESULTS = 'temperature_results'
     PORTFOLIO_WEIGHT = 'portfolio_weight'
+    INVESTMENT_VALUE = "investment_value"
     TIME_FRAME_SHORT = 'short'
     TIME_FRAME_MID = 'mid'
     TIME_FRAME_LONG = 'long'
