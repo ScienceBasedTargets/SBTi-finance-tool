@@ -351,8 +351,8 @@ class TargetValuationProtocol:
 # x.combining_records()
 # x.creating_records_scope_timeframe()
 
-# data = pd.read_excel('C:/Projects/SBTi/portfolio_data.xlsx')
-# company_data = pd.read_excel('C:/Projects/SBTi/company_data.xlsx')
+# data = pd.read_excel('C:/Projects/SBTi/portfolio_data_test.xlsx')
+# company_data = pd.read_excel('C:/Projects/SBTi/company_data_test.xlsx')
 # data.drop(columns='Unnamed: 0',inplace=True)
 # company_data.drop(columns='Unnamed: 0',inplace=True)
 # target_valuation_protocol = TargetValuationProtocol(data, company_data)
