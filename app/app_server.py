@@ -280,8 +280,6 @@ class portfolio_coverage(BaseEndpoint):
             portfolio_data.loc[index, 'ISIN'] = company_ISIN[company_id]
 
         for company in json_data["companies"]:
-            # portfolio_data.loc[portfolio_data['company_name'] == company["company_name"], "portfolio_weight"] = company[
-            #     "portfolio_weight"]
             portfolio_data.loc[portfolio_data['company_name'] == company["company_name"], "investment_value"] = company[
                 "investment_value"]
 
