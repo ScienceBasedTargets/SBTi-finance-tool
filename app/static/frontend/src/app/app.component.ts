@@ -7,10 +7,9 @@ import { environment } from 'src/environments/environment';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 const AVAILABLE_GROUPING_COLUMNS: string[] = ['Country', 'Region', 'Industry_lvl1', 'Industry_lvl2', 'Industry_lvl3',  'Industry_lvl4'];
-const AVAILABLE_COLUMNS: string[] = ['company_id', 'industry', 's1s2_emissions', 's3_emissions',
-'market_cap', 'investment_value', 'company_enterprise_value', 'company_ev_plus_cash', 'company_total_assets',
-'target_reference_number', 'scope', 'base_year', 'start_year', 'target_year', 'reduction_from_base_year',
-'emissions_in_scope', 'achieved_reduction'];
+const AVAILABLE_COLUMNS: string[] = ['company_id', 'Country', 'Region', 'Industry_lvl1', 'Industry_lvl2', 'Industry_lvl3',  'Industry_lvl4', 'GHG_scope1+2', 'GHG_scope3',
+'market_cap', 'investment_value', 'company_enterprise_value', 'cash_equivalents', 'company_total_assets',
+'Target type', 'Scope', 'Intensity_metric', 'base_year', 'start_year', 'end_year', 'reduction_ambition', 'achieved_reduction'];
 
 @Component({
     selector: 'app-root',
