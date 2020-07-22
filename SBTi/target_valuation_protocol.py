@@ -34,14 +34,30 @@ class TargetValuationProtocol:
             self.group_targets()
             self.combining_records()
             self.creating_records_scope_timeframe()
+            self.filling_empty_known_values()
             return self.data
         else:
             return self.single_record_edgecase()
 
 
+    def filling_empty_known_values(self):
+        '''
+        Known values within records that are empty will be filled in with appropriate value.
+        :return:
+        '''
+
+        for company_id in self.data[self.c.COLS.COMPANY_ID].unique():
+            company_data = self.data[self.data[self.c.COLS.COMPANY_ID] == company_id]
+            for column in self.c.COLS.COMPANY_COLUMNS_TVP:
+                if company_data[column].values[0] is not None:
+                    if not pd.isna(company_data[column].values[0]):
+                        for index in company_data.index:
+                            self.data.loc[index, column] = company_data[column].values[0]
+
+
     def single_record_edgecase(self):
         '''
-        Creates six categories for when there is a singular record.
+        Creates six categories for when there is a singular record with no target value.
         :return:
         '''
         new_dataframe = pd.DataFrame()
@@ -257,8 +273,8 @@ class TargetValuationProtocol:
         -- Target type: Absolute over intensity
         -- If all else is equal: average the ambition of targets
         """
-        grid_columns = [self.c.COLS.COMPANY_NAME, self.c.COLS.TIME_FRAME, self.c.COLS.SCOPE_CATEGORY]
-        companies = self.data[self.c.COLS.COMPANY_NAME].unique()
+        grid_columns = [self.c.COLS.COMPANY_ID, self.c.COLS.TIME_FRAME, self.c.COLS.SCOPE_CATEGORY]
+        companies = self.data[self.c.COLS.COMPANY_ID].unique()
         scopes = [self.c.VALUE_SCOPE_CATEGORY_S1S2, self.c.VALUE_SCOPE_CATEGORY_S3]
         empty_columns = [column for column in self.data.columns if column not in grid_columns]
         extended_data = pd.DataFrame(
@@ -268,8 +284,8 @@ class TargetValuationProtocol:
         company_columns = [column for column in self.c.COLS.COMPANY_COLUMNS if column in extended_data.columns]
         for company in companies:
             for column in company_columns:
-                extended_data.loc[extended_data[self.c.COLS.COMPANY_NAME] == company, column] = \
-                    self.data[self.data[self.c.COLS.COMPANY_NAME] == company][column].mode()
+                extended_data.loc[extended_data[self.c.COLS.COMPANY_ID] == company, column] = \
+                    self.data[self.data[self.c.COLS.COMPANY_ID] == company][column].mode()
         extended_data = extended_data.apply(lambda row: self._find_target(row), axis=1)
         self.data = extended_data
 
@@ -335,5 +351,9 @@ class TargetValuationProtocol:
 # x.combining_records()
 # x.creating_records_scope_timeframe()
 
+# data = pd.read_excel('C:/Projects/SBTi/portfolio_data.xlsx')
+# company_data = pd.read_excel('C:/Projects/SBTi/company_data.xlsx')
+# data.drop(columns='Unnamed: 0',inplace=True)
+# company_data.drop(columns='Unnamed: 0',inplace=True)
 # target_valuation_protocol = TargetValuationProtocol(data, company_data)
 # portfolio_data = target_valuation_protocol.target_valuation_protocol()
