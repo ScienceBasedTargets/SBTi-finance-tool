@@ -36,7 +36,7 @@ export class AppComponent implements OnInit {
     defaultScore = 3.2;
     uploadedFiles: Array<File>;
     selectedScenario: { [key: string]: number } = {'number': 0};
-    selectedDumpOption: { [key: string]: boolean } = {'anonymized': false};
+    selectedDumpOption: boolean = false;
     selectedDataProviders: string[] = [];
     selectedDataProviders1 = '';
     selectedDataProvider1Path = '';
@@ -114,7 +114,7 @@ export class AppComponent implements OnInit {
      */
     addDumpOption(element) {
         const dump = {"false": false, "true": true}
-      this.selectedDumpOption = {'anonimyzed': dump[element.target.value]};
+      this.selectedDumpOption = dump[element.target.value];
     }
 
 
@@ -294,7 +294,7 @@ export class AppComponent implements OnInit {
             default_score: this.defaultScore,
             companies: portfolioData,
             scenario: this.selectedScenario,
-            data_dump: this.selectedDumpOption
+            anonymize_data_dump: this.selectedDumpOption
         })
             .subscribe((response) => {
                 this.loading = false;
