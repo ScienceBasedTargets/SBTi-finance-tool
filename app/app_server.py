@@ -187,7 +187,7 @@ class temp_score(BaseEndpoint):
 
         return_dic = {
             "aggregated_scores": aggregations,
-            "scores": scores.to_dict(),
+            "scores": scores.to_dict(orient="records"),
             "coverage": coverage,
             "companies": scores[include_columns].replace({np.nan: None}).to_dict(
                 orient="records"),
@@ -209,7 +209,18 @@ def convert_nan_to_none(nested_dictionary):
     :return: cleaned dictionary where all NaN values are converted to None
     """
     for parent, dictionary in nested_dictionary.items():
-        if isinstance(dictionary, dict):
+        if isinstance(dictionary, list):
+            clean_list = []
+            for element in dictionary:
+                clean_element = element
+                if isinstance(element, dict):
+                    for x, y in element.items():
+                        if str(y) == 'nan':
+                            clean_element[x] = None
+                clean_list.append(clean_element)
+            nested_dictionary[parent] = clean_list
+
+        elif isinstance(dictionary, dict):
             for key, value in dictionary.items():
                 if isinstance(value, dict):
                     for time_frame, values in value.items():
