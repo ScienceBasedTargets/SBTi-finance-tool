@@ -102,8 +102,8 @@ class TargetValuationProtocol:
         now = datetime.datetime.now()
         time_frame_list = []
         for index, record in self.data.iterrows():
-            if not pd.isna(record[self.c.COLS.TARGET_YEAR]):
-                time_frame = record[self.c.COLS.TARGET_YEAR] - now.year
+            if not pd.isna(record[self.c.COLS.END_YEAR]):
+                time_frame = record[self.c.COLS.END_YEAR] - now.year
                 if (time_frame < 15) & (time_frame > 5):
                     time_frame_list.append('mid')
                 elif (time_frame < 30) & (time_frame > 15):

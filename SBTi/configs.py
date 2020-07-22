@@ -9,11 +9,8 @@ class ColumnsConfig:
     # Define a constant for each column used in the
     COMPANY_ID = "company_id"
     COMPANY_ISIC = "ISIC"
-    INDUSTRY = "industry"
     REGRESSION_PARAM = "regression_param"
     REGRESSION_INTERCEPT = "regression_intercept"
-    S1S2_EMISSIONS = "s1s2_emissions"
-    S3_EMISSIONS = "s3_emissions"
     MARKET_CAP = "market_cap"
     INVESTMENT_VALUE = "investment_value"
     PORTFOLIO_WEIGHT = "portfolio_weight"
@@ -21,12 +18,10 @@ class ColumnsConfig:
     COMPANY_EV_PLUS_CASH = "company_ev_plus_cash"
     COMPANY_TOTAL_ASSETS = "company_total_assets"
     TARGET_REFERENCE_NUMBER = "Target type"
-    TARGET_TYPE = "target_type"
     SCOPE = "Scope"
     SCOPE_CATEGORY = "scope_category"
     SR15 = "SR15"
     REDUCTION_FROM_BASE_YEAR = "reduction_from_base_year"
-    TARGET_YEAR = "target_year"
     START_YEAR = "start_year"
     VARIABLE = "variable"
     SLOPE = "slope"
@@ -37,7 +32,6 @@ class ColumnsConfig:
     TEMPERATURE_SCORE = "temperature_score"
     COMPANY_NAME = "company_name"
     OWNED_EMISSIONS = "owned_emissions"
-    CDP_ACS_INDUSTRY = 'CDP_ACS_industry'
     COUNTRY = 'country'
     SECTOR = 'sector'
     GHG_SCOPE12 = 'GHG_scope1+2'
@@ -47,7 +41,6 @@ class ColumnsConfig:
     TOTAL_ASSETS = 'total_assets'
     CASH_EQUIVALENTS = 'cash_equivalents'
     TARGET_CLASSIFICATION = 'Target_classification'
-    COVERAGE = 'coverage'
     REDUCTION_AMBITION = 'reduction_ambition'
     BASE_YEAR = 'base_year'
     END_YEAR = 'end_year'
@@ -82,7 +75,7 @@ class ColumnsConfig:
     CONTRIBUTION_RELATIVE = "contribution_relative"
     CONTRIBUTION = "contribution"
 
-    # This defines which column contain company specific, instead of target specific data
+    # This defines which columns contain company specific, instead of target specific data
     COMPANY_COLUMNS = [INDUSTRY_LVL1,INDUSTRY_LVL2,INDUSTRY_LVL3,INDUSTRY_LVL4,INTENSITY_METRIC, REGRESSION_PARAM,
                       REGRESSION_INTERCEPT, GHG_SCOPE12, GHG_SCOPE3, MARKET_CAP, INVESTMENT_VALUE, PORTFOLIO_WEIGHT,
                       ENTERPRISE_VALUE, CASH_EQUIVALENTS, TOTAL_ASSETS]
@@ -153,5 +146,5 @@ class PortfolioCoverageTVPConfig(PortfolioAggregationConfig):
 
     # SBTi targets overview (TVP coverage)
     COL_COMPANY_NAME = "Company Name"
-    COL_COMPANY_ID = "ISIC"
+    COL_COMPANY_ID = "ISIN"
     COL_TARGET_STATUS = "Status"
