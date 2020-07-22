@@ -8,7 +8,7 @@ import os
 class ColumnsConfig:
     # Define a constant for each column used in the
     COMPANY_ID = "company_id"
-    COMPANY_ISIN = "ISIN"
+    COMPANY_ISIC = "ISIC"
     INDUSTRY = "industry"
     REGRESSION_PARAM = "regression_param"
     REGRESSION_INTERCEPT = "regression_intercept"
@@ -153,5 +153,5 @@ class PortfolioCoverageTVPConfig(PortfolioAggregationConfig):
 
     # SBTi targets overview (TVP coverage)
     COL_COMPANY_NAME = "Company Name"
-    COL_COMPANY_ID = "ISIN"
+    COL_COMPANY_ID = "ISIC"
     COL_TARGET_STATUS = "Status"
