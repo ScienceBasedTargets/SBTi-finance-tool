@@ -181,7 +181,7 @@ class temp_score(BaseEndpoint):
         aggregations = temperature_score.merge_percentage_coverage_to_aggregations(aggregations, temperature_percentage_coverage)
 
         # Dump raw data to compute the scores
-        anonymize_data_dump = json_data.get("anonymize_data_dump", True)
+        anonymize_data_dump = json_data.get("anonymize_data_dump", False)
         if anonymize_data_dump:
             scores = temperature_score.anonymize_data_dump(scores)
 
