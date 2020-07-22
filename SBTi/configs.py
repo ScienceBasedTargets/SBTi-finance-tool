@@ -13,7 +13,6 @@ class ColumnsConfig:
     REGRESSION_INTERCEPT = "regression_intercept"
     MARKET_CAP = "market_cap"
     INVESTMENT_VALUE = "investment_value"
-    PORTFOLIO_WEIGHT = "portfolio_weight"
     COMPANY_ENTERPRISE_VALUE = "company_enterprise_value"
     COMPANY_EV_PLUS_CASH = "company_ev_plus_cash"
     COMPANY_TOTAL_ASSETS = "company_total_assets"
@@ -77,7 +76,7 @@ class ColumnsConfig:
 
     # This defines which columns contain company specific, instead of target specific data
     COMPANY_COLUMNS = [INDUSTRY_LVL1,INDUSTRY_LVL2,INDUSTRY_LVL3,INDUSTRY_LVL4,INTENSITY_METRIC, REGRESSION_PARAM,
-                      REGRESSION_INTERCEPT, GHG_SCOPE12, GHG_SCOPE3, MARKET_CAP, INVESTMENT_VALUE, PORTFOLIO_WEIGHT,
+                      REGRESSION_INTERCEPT, GHG_SCOPE12, GHG_SCOPE3, MARKET_CAP, INVESTMENT_VALUE,
                       ENTERPRISE_VALUE, CASH_EQUIVALENTS, TOTAL_ASSETS]
 
 
@@ -121,12 +120,10 @@ class TemperatureScoreConfig(PortfolioAggregationConfig):
     }
 
     TEMPERATURE_RESULTS = 'temperature_results'
-    PORTFOLIO_WEIGHT = 'portfolio_weight'
     INVESTMENT_VALUE = "investment_value"
     TIME_FRAME_SHORT = 'short'
     TIME_FRAME_MID = 'mid'
     TIME_FRAME_LONG = 'long'
-
 
 
 class PortfolioCoverageTVPConfig(PortfolioAggregationConfig):
