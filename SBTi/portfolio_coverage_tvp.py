@@ -28,14 +28,10 @@ class PortfolioCoverageTVP(PortfolioAggregation):
         :param company: The company data
         :return: The SBTi status of the target
         """
-        if self.c.COLS.COMPANY_ID in company and company[self.c.COLS.COMPANY_ID] is not None:
-            if not pd.isna(company[self.c.COLS.COMPANY_ID]):
-                try:
-                    targets = self.targets[self.targets[self.c.COL_COMPANY_ID] == company[self.c.COL_COMPANY_ID]]
-                except:
-                    targets = []
-            else:
-                targets = []
+        if self.c.COL_COMPANY_ID in company and company[self.c.COL_COMPANY_ID] is not None:
+            targets = self.targets[self.targets[self.c.COL_COMPANY_ID] == company[self.c.COL_COMPANY_ID]]
+        elif self.c.COLS.COMPANY_ID in company and company[self.c.COLS.COMPANY_ID] is not None:
+            targets = self.targets[self.targets[self.c.COL_COMPANY_ID] == company[self.c.COLS.COMPANY_ID]]
         else:
             targets = []
 
@@ -73,7 +69,7 @@ class PortfolioCoverageTVP(PortfolioAggregation):
 
 # Testing
 # from SBTi.portfolio_aggregation import PortfolioAggregationMethod
-# portfolio_data = pd.read_excel('C:/Projects/SBTi/testing_2.xlsx')
+# portfolio_data = pd.read_excel('C:/Projects/SBTi/testing.xlsx')
 # portfolio_data.drop(columns='Unnamed: 0',inplace=True)
 # x = PortfolioCoverageTVP()
 # coverage = x.get_portfolio_coverage(portfolio_data,PortfolioAggregationMethod.WATS)

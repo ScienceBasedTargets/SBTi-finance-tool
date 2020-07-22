@@ -185,7 +185,7 @@ class temp_score(BaseEndpoint):
         if anonymize_data_dump:
             scores = temperature_score.anonymize_data_dump(scores)
 
-        return {
+        return_dic = {
             "aggregated_scores": aggregations,
             "scores": scores.to_dict(),
             "coverage": coverage,
@@ -193,6 +193,42 @@ class temp_score(BaseEndpoint):
                 orient="records"),
             "feature_distribution": column_distribution
         }
+
+        return_dic = convert_nan_to_none(return_dic)
+
+        return return_dic
+
+
+def convert_nan_to_none(nested_dictionary):
+    """Convert NaN values to None in a list in a nested dictionary.
+
+    :param nested_dictionary: dictionary to return that possible contains NaN values
+    :type nested_dictionary: dict
+
+    :rtype: dict
+    :return: cleaned dictionary where all NaN values are converted to None
+    """
+    for parent, dictionary in nested_dictionary.items():
+        if isinstance(dictionary, dict):
+            for key, value in dictionary.items():
+                if isinstance(value, dict):
+                    for time_frame, values in value.items():
+                        if isinstance(values, dict):
+                            for scope, scores_el in values.items():
+                                for k, v in scores_el.items():
+                                    if isinstance(v, list):
+                                        clean_v = []
+                                        for company in v:
+                                            clean_company = company
+                                            if isinstance(company, dict):
+                                                for identifier, number in company.items():
+                                                    if str(number) == 'nan':
+                                                        clean_company[identifier] = None
+                                                clean_v.append(clean_company)
+                                                scores_el[k] = clean_v
+
+    return nested_dictionary
+
 
 class DataProviders(BaseEndpoint):
     """
@@ -231,7 +267,17 @@ class portfolio_coverage(BaseEndpoint):
         data_providers = self._get_data_providers(json_data)
         company_data = SBTi.data.get_company_data(data_providers, json_data["companies"])
         targets = SBTi.data.get_targets(data_providers, json_data["companies"])
-        portfolio_data = pd.merge(left=company_data, right=targets, left_on='company_name', right_on='company_name')
+        portfolio_data = pd.merge(left=company_data, right = targets, how='outer', on = ['company_name','company_id'])
+
+        # Adding ISIN to Portfolio_data
+        companies = json_data['companies']
+        company_ISIN = {
+            company['company_id']: company['ISIN'] for company in companies
+        }
+        portfolio_data['ISIN'] = None
+        for company_id in company_ISIN.keys():
+            index = portfolio_data[portfolio_data['company_id'] == company_id].index
+            portfolio_data.loc[index, 'ISIN'] = company_ISIN[company_id]
 
         for company in json_data["companies"]:
             portfolio_data.loc[portfolio_data['company_name'] == company["company_name"], "portfolio_weight"] = company[

@@ -46,7 +46,7 @@ In order to run the docker container locally on none linux machines one needs to
 Both the master and DEV branch have public images at docker hub. 
 
 ```bash
-docker run -d -p 5000:8080 sbti/sbti_tool:lastest # to run  the latest stable release
+docker run -d -p 5000:8080 sbti/sbti_tool:latest # to run  the latest stable release
 ```
 or 
 ```bash

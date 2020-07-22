@@ -38,10 +38,7 @@ class CSVProvider(DataProvider):
             self.data_targets["company_id"] = None
         return self.data_targets[
             (self.data_targets["company_id"].isin([company["company_id"] for company in companies]) &
-             self.data_targets["company_id"].notnull()) |
-            (self.data_targets["company_name"].isin([company["company_name"] for company in companies]) &
-             self.data_targets["company_name"].notnull())
-        ].copy()
+             self.data_targets["company_id"].notnull())].copy()
 
 
     def get_company_data(self, companies: list) -> pd.DataFrame:
@@ -75,10 +72,7 @@ class CSVProvider(DataProvider):
 
         return self.data[
             (self.data["company_id"].isin([company["company_id"] for company in companies]) &
-             self.data["company_id"].notnull()) |
-            (self.data["company_name"].isin([company["company_name"] for company in companies]) &
-             self.data["company_name"].notnull())
-        ].copy()
+             self.data["company_id"].notnull())].copy()
 
 
     def get_sbti_targets(self, companies: list) -> list:
@@ -92,7 +86,4 @@ class CSVProvider(DataProvider):
         """
         return self.data[
             (self.data["company_id"].isin([company["company_id"] for company in companies]) &
-             self.data["company_id"].notnull()) |
-            (self.data["company_name"].isin([company["company_name"] for company in companies]) &
-             self.data["company_name"].notnull())
-        ].copy()
+             self.data["company_id"].notnull())].copy()
