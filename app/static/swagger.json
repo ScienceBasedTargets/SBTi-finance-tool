@@ -238,7 +238,6 @@
                 "industry",
                 "s1s2_emissions",
                 "s3_emissions",
-                "portfolio_weight",
                 "market_cap",
                 "investment_value",
                 "company_enterprise_value",
@@ -300,10 +299,6 @@
           "company_id": {
             "type": "string",
             "format": "string"
-          },
-          "portfolio_weight": {
-            "type": "number",
-            "format": "number"
           },
           "investment_value": {
             "type": "number",

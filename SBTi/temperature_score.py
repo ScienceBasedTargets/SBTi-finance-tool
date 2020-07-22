@@ -175,8 +175,6 @@ class TemperatureScore(PortfolioAggregation):
             it will be converted to "Others" (or whichever value is set in the config as the default
         * s1s2_emissions: Total company emissions in the S1 + S2 scope
         * s3_emissions: Total company emissions in the S3 scope
-        * portfolio_weight: The weight of the company in the portfolio. Only required to use the WATS portfolio
-            aggregation.
         * market_cap: Market capitalization of the company. Only required to use the MOTS portfolio aggregation.
         * investment_value: The investment value of the investment in this company. Only required to use the MOTS, EOTS,
             ECOTS and AOTS portfolio aggregation.
@@ -316,8 +314,6 @@ class TemperatureScore(PortfolioAggregation):
             it will be converted to "Others" (or whichever value is set in the config as the default
         * s1s2_emissions: Total company emissions in the S1 + S2 scope
         * s3_emissions: Total company emissions in the S3 scope
-        * portfolio_weight: The weight of the company in the portfolio. Only required to use the WATS portfolio
-            aggregation.
         * market_cap: Market capitalization of the company. Only required to use the MOTS portfolio aggregation.
         * investment_value: The investment value of the investment in this company. Only required to use the MOTS, EOTS,
             ECOTS, AOTS and ROTS portfolio aggregation.
@@ -404,14 +400,9 @@ class TemperatureScore(PortfolioAggregation):
                         scope_weight = ds_s3
 
                     if aggregation_method == 'WATS':
-                        portfolio_weight_storage = []
-                        for company in data[self.c.COLS.COMPANY_NAME].unique():
-                            portfolio_weight_storage.append(
-                                data[data[self.c.COLS.COMPANY_NAME] == company].iloc[1][self.c.PORTFOLIO_WEIGHT])
-                        portfolio_weight_total = sum(portfolio_weight_storage)
-                        data[self.c.PORTFOLIO_WEIGHT] = data[self.c.PORTFOLIO_WEIGHT] / portfolio_weight_total
-
-                        portfolio_weight = company_data.iloc[1][self.c.PORTFOLIO_WEIGHT]
+                        number_of_records_per_company = data.shape[0] / data[self.c.COLS.COMPANY_NAME].nunique()
+                        investment_weight_total = data[self.c.COLS.INVESTMENT_VALUE].sum() / number_of_records_per_company
+                        portfolio_weight = company_data.iloc[1][self.c.INVESTMENT_VALUE] / investment_weight_total
                         value = portfolio_weight * scope_weight
 
                     elif aggregation_method == 'TETS':

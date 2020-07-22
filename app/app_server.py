@@ -181,7 +181,7 @@ class temp_score(BaseEndpoint):
         aggregations = temperature_score.merge_percentage_coverage_to_aggregations(aggregations, temperature_percentage_coverage)
 
         # Dump raw data to compute the scores
-        anonymize_data_dump = json_data.get("anonymize_data_dump", True)
+        anonymize_data_dump = json_data.get("anonymize_data_dump", False)
         if anonymize_data_dump:
             scores = temperature_score.anonymize_data_dump(scores)
 
@@ -285,8 +285,6 @@ class portfolio_coverage(BaseEndpoint):
             portfolio_data.loc[index, 'ISIN'] = company_ISIN[company_id]
 
         for company in json_data["companies"]:
-            portfolio_data.loc[portfolio_data['company_name'] == company["company_name"], "portfolio_weight"] = company[
-                "portfolio_weight"]
             portfolio_data.loc[portfolio_data['company_name'] == company["company_name"], "investment_value"] = company[
                 "investment_value"]
 
