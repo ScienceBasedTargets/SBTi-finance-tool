@@ -124,7 +124,7 @@
         <div class="card">
             <div class="card-header">
               <h5 class="mb-0 btn btn-link" (click)="toggleAccordion('DataProvider-container')">
-                Data providers (default CSV sample data)
+                Data providers (default Excel sample data "InputFormat.xlsx")
               </h5>
             </div>
             <div id="DataProvider-container" class="collapse show" style="display:none">
@@ -137,7 +137,7 @@
                       <option *ngFor="let dataProvider of dataProviders">{{dataProvider.name}}</option>
                   </select>
                   <label for="input-dataProviders-1-file"></label>
-                  <input type="file" class="form-control-file" id="input-dataProviders-1-file"
+                  <input (change)="onFileChangeDataProvider1($event)" type="file" class="form-control-file" id="input-dataProviders-1-file"
                       name="input-dataProviders-1-file" aria-describedby="dataProvider1File">
                   <small id="dataProvider1File" class="form-text text-muted">Use this file upload to provide your own dataprovider.</small>
               </div>
@@ -148,7 +148,7 @@
                       <option *ngFor="let dataProvider of dataProviders">{{dataProvider.name}}</option>
                   </select>
                 <label for="input-dataProviders-2-file"></label>
-                <input type="file" class="form-control-file" id="input-dataProviders-2-file"
+                <input (change)="onFileChangeDataProvider2($event)" type="file" class="form-control-file" id="input-dataProviders-2-file"
                       name="input-dataProviders-2-file" aria-describedby="dataProvider2File">
                   <small id="dataProvider2File" class="form-text text-muted">Use this file upload to provide your own dataprovider.</small>
               </div>
