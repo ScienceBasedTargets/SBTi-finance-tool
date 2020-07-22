@@ -405,11 +405,16 @@ class TemperatureScore(PortfolioAggregation):
 
                     if aggregation_method == 'WATS':
                         portfolio_weight_storage = []
+                        investment_weight_storage = []
                         for company in data[self.c.COLS.COMPANY_NAME].unique():
                             portfolio_weight_storage.append(
                                 data[data[self.c.COLS.COMPANY_NAME] == company].iloc[1][self.c.PORTFOLIO_WEIGHT])
+                            investment_weight_storage.append(
+                                data[data[self.c.COLS.COMPANY_NAME] == company].iloc[1][self.c.INVESTMENT_VALUE])
                         portfolio_weight_total = sum(portfolio_weight_storage)
+                        investment_weight_total = sum(investment_weight_storage)
                         data[self.c.PORTFOLIO_WEIGHT] = data[self.c.PORTFOLIO_WEIGHT] / portfolio_weight_total
+                        # data[self.c.PORTFOLIO_WEIGHT+'_2'] = data[self.c.INVESTMENT_VALUE] / investment_weight_total
 
                         portfolio_weight = company_data.iloc[1][self.c.PORTFOLIO_WEIGHT]
                         value = portfolio_weight * scope_weight
