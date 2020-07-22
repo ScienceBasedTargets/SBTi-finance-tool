@@ -223,6 +223,9 @@ def convert_nan_to_none(nested_dictionary):
                                                 clean_v.append(clean_company)
                                                 scores_el[k] = clean_v
 
+                                    if str(v) == 'nan':
+                                        scores_el[k] = None
+
     return nested_dictionary
 
 
