@@ -44,8 +44,6 @@ class ISS(DataProvider):
             it will be converted to "Others" (or whichever value is set in the config as the default
         * s1s2_emissions: Total company emissions in the S1 + S2 scope
         * s3_emissions: Total company emissions in the S3 scope
-        * portfolio_weight: The weight of the company in the portfolio. Only required to use the WATS portfolio
-            aggregation.
         * market_cap: Market capitalization of the company. Only required to use the MOTS portfolio aggregation.
         * investment_value: The investment value of the investment in this company. Only required to use the MOTS, EOTS,
             ECOTS and AOTS portfolio aggregation.

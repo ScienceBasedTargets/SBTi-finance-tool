@@ -7,7 +7,7 @@ import { environment } from 'src/environments/environment';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 const AVAILABLE_GROUPING_COLUMNS: string[] = ['Country', 'Region', 'Industry_lvl1', 'Industry_lvl2', 'Industry_lvl3',  'Industry_lvl4'];
-const AVAILABLE_COLUMNS: string[] = ['company_id', 'industry', 's1s2_emissions', 's3_emissions', 'portfolio_weight',
+const AVAILABLE_COLUMNS: string[] = ['company_id', 'industry', 's1s2_emissions', 's3_emissions',
 'market_cap', 'investment_value', 'company_enterprise_value', 'company_ev_plus_cash', 'company_total_assets',
 'target_reference_number', 'scope', 'base_year', 'start_year', 'target_year', 'reduction_from_base_year',
 'emissions_in_scope', 'achieved_reduction'];
@@ -21,7 +21,7 @@ export class AppComponent implements OnInit {
     title = 'SBTi Temperature Scoring';
     excelSkiprows = 0;
     isNavbarCollapsed = true;
-    availableTargetColumns: string[] = ['company_id', 'company_name', 'portfolio_weight', 'investment_value', 'ISIN'];
+    availableTargetColumns: string[] = ['company_id', 'company_name', 'investment_value', 'ISIN'];
     availableTimeFrames: string[] = ['short', 'mid', 'long'];
     availableScopeCategories: string[] = ['s1s2', 's3', 's1s2s3'];
     availableAggregationMethods: string[] = ['WATS', 'TETS', 'MOTS', 'EOTS', 'ECOTS', 'AOTS', 'ROTS'];
@@ -29,12 +29,15 @@ export class AppComponent implements OnInit {
     availableGroupingColumns: string[] = AVAILABLE_GROUPING_COLUMNS;
     groupingColumns: string[] = [];
     selectedAggregationMethod = 'WATS';
+    availableScenarios: string[] = [{'label':'scenario_1', 'description': 'Scenario 0: real life situation'}, {'label':'scenario_2', 'description': 'Scenario 1: "What-if" - all companies set targets (default scores go to 2.0)'}, {'value': {"number": 2}, 'label':'scenario_3', 'description': 'Scenario 2: "What-if" - all companies with targets get SBTs (scores from targets are capped at 1.75)'}, {'value': {"number": 1}, 'label':'scenario_4', 'description': 'Scenario 3a: "What-if" - the 10 highest contributors to the portfolio set targets (scores of 10 highest contributors are capped at 2.0)'}, {'value': {"number": 1}, 'label':'scenario_5', 'description': 'Scenario 3b: "What-if" - the 10 highest contributors to the portfolio set SBTs (scores of 10 highest contributors are capped at 1.75)'}];
     filterTimeFrames: string[] = ['mid'];
     filterScopeCategory: string[] = ['s1s2', 's1s2s3'];
     includeColumns: string[] = [];
     availableDefaultScores: number[] = [3.2, 3.9, 4.5];
     defaultScore = 3.2;
     uploadedFiles: Array<File>;
+    selectedScenario: { [key: string]: number } = {'number': 0};
+    selectedDumpOption: { [key: string]: number } = {'anonymized': true};
     selectedDataProviders: string[] = [];
     selectedDataProviders1 = '';
     selectedDataProvider1Path = '';
@@ -49,8 +52,10 @@ export class AppComponent implements OnInit {
     columnMapping: { [key: string]: string } = {};
     resultTimeFrames: string[] = [];
     resultColumns: string[] = [];
+    resultDumpColumns: string[] = [];
     resultGroups: string[] = [];
     resultTargets: any[] = [];
+    dataDump: any[] = []
     resultItems: any[] = [];
     resultDistribution:  { [key: string]: string } = {};
     resultScores: { [key: string]: number } = {};
@@ -95,6 +100,24 @@ export class AppComponent implements OnInit {
     onFileChangeDataProvider2(element) {
         this.dataProviderFile2 = element.target.files;
     }
+
+
+    /**
+     * Select Scenario
+     */
+    addScenario(element) {
+      const dicts = {'scenario_1': {'number': 0}, 'scenario_2': {'number': 1}, 'scenario_3': {'number': 2}, 'scenario_4': {'number': 3, 'engagement_type': 'set_targets'}, 'scenario_5': {'number': 3, 'engagement_type': 'set_SBTi_targets'}};
+      this.selectedScenario = dicts[element.target.value];
+    }
+
+    /**
+     * Select Data Dump option
+     */
+    addDumpOption(element) {
+        const dump = {"false": false, "true": true}
+      this.selectedDumpOption = {'anonimyzed': dump[element.target.value]};
+    }
+
 
     openContributors(group: string, timeFrame: string, item: string, template) {
         console.log('contributions to group \'' + group + '\' and timeFrame \'' + timeFrame + '\' and item \'' + item + '\'.');
@@ -222,6 +245,15 @@ export class AppComponent implements OnInit {
         csv.unshift(this.resultColumns);
         this.exportToCsv('temperature_scores.csv', csv);
     }
+    /**
+     * Data dump csv
+     */
+    dumpCSV() {
+        const dump = this.dataDump.map(row => Object.values(row));
+        dump.unshift(this.resultDumpColumns);
+        this.exportToCsv('data_dump.csv', dump);
+    }
+
 
     /**
      * Gets the temperature score
@@ -262,6 +294,8 @@ export class AppComponent implements OnInit {
             grouping_columns: this.groupingColumns,
             default_score: this.defaultScore,
             companies: portfolioData,
+            scenario: this.selectedScenario,
+            data_dump: this.selectedDumpOption
         })
             .subscribe((response) => {
                 this.loading = false;
@@ -270,6 +304,7 @@ export class AppComponent implements OnInit {
                     console.log(response);
                     this.resultScores = response.aggregated_scores;
                     this.resultTargets = response.companies;
+                    this.dataDump = response.scores;
                     this.coverage = response.coverage;
                     this.resultTimeFrames = Object.keys(response.aggregated_scores);
                     const firstTimeFrame = this.resultTimeFrames[0];
@@ -278,6 +313,9 @@ export class AppComponent implements OnInit {
                     this.resultDistribution = response["feature_distribution"];
                     if (this.resultTargets.length > 0) {
                         this.resultColumns = Object.keys(this.resultTargets[0]);
+                    }
+                    if (this.dataDump.length > 0) {
+                        this.resultDumpColumns = Object.keys(this.dataDump[0]);
                     }
                 }
             });
