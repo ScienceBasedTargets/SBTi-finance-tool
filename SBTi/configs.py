@@ -9,7 +9,6 @@ class ColumnsConfig:
     # Define a constant for each column used in the
     COMPANY_ID = "company_id"
     COMPANY_ISIC = "ISIC"
-    INDUSTRY = "industry"
     REGRESSION_PARAM = "regression_param"
     REGRESSION_INTERCEPT = "regression_intercept"
     S1S2_EMISSIONS = "s1s2_emissions"
