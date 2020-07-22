@@ -547,8 +547,8 @@ class TemperatureScore(PortfolioAggregation):
             for scope in self.c.VALUE_SCOPE_CATEGORIES:
                 if aggregations.get(time_frame) and aggregations[time_frame].get(scope):
                     aggregations[time_frame][scope]['influence_percentage'] = {
-                        'default': temperature_percentage_coverage['default'][time_frame][scope],
-                        'target': temperature_percentage_coverage['target'][time_frame][scope]
+                        'default': temperature_percentage_coverage['default'][time_frame][scope]*100,
+                        'target': temperature_percentage_coverage['target'][time_frame][scope]*100
                     }
         return aggregations
 
