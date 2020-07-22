@@ -22,16 +22,19 @@
 
     <form>
         <div class="form-group">
-            <label for="input-excel_file">Excel file</label>
+            <label for="input-excel_file">
+              Select portfolio excel file:
+            </label>
             <input (change)="onFileChange($event)" type="file" class="form-control-file" id="input-excel_file"
                 name="input-excel_file" aria-describedby="input-excel_file">
+          <small class="form-text text-muted">Should include company name, company ID, ISIN and investment value.</small>
         </div>
         <div class="form-group">
             <label for="input-excel_skiprows">Skip rows</label>
             <input type="number" class="form-control" id="input-excel_skiprows" name="input-excel_skiprows"
                 [(ngModel)]="excelSkiprows">
         </div>
-        <button class="btn btn-primary" (click)="parseExcel()">Parse Excel</button>
+        <button class="btn btn-primary" (click)="parseExcel()">Upload</button>
         <span *ngIf="columns.length > 0">
             <hr />
             <h6>Map your columns to input fields</h6>
@@ -124,14 +127,15 @@
         <div class="card">
             <div class="card-header">
               <h5 class="mb-0 btn btn-link" (click)="toggleAccordion('DataProvider-container')">
-                Data providers (default Excel sample data "InputFormat.xlsx")
+                Select data provider (without selection, dummy sample data is used)
               </h5>
             </div>
             <div id="DataProvider-container" class="collapse show" style="display:none">
               <div class="card-body" >
 
                 <div class="form-group">
-                  <label for="input-dataProviders-1">First Dataprovider</label>
+                  <label for="input-dataProviders-1">Select data provider</label>
+                  <small class="form-text text-muted">For BETA-release only use Excel.</small>
                   <select class="form-control" id="input-dataProviders-1" name="dataProviders-1"
                       [(ngModel)]="selectedDataProviders1">
                       <option *ngFor="let dataProvider of dataProviders">{{dataProvider.name}}</option>
@@ -141,18 +145,45 @@
                       name="input-dataProviders-1-file" aria-describedby="dataProvider1File">
                   <small id="dataProvider1File" class="form-text text-muted">Use this file upload to provide your own dataprovider.</small>
               </div>
-              <div class="form-group">
-                  <label for="input-dataProviders-2">Second Dataprovider</label>
-                  <select class="form-control" id="input-dataProviders-2" name="dataProviders-2"
-                      [(ngModel)]="selectedDataProviders2">
-                      <option *ngFor="let dataProvider of dataProviders">{{dataProvider.name}}</option>
-                  </select>
-                <label for="input-dataProviders-2-file"></label>
-                <input (change)="onFileChangeDataProvider2($event)" type="file" class="form-control-file" id="input-dataProviders-2-file"
-                      name="input-dataProviders-2-file" aria-describedby="dataProvider2File">
-                  <small id="dataProvider2File" class="form-text text-muted">Use this file upload to provide your own dataprovider.</small>
-              </div>
 
+              </div>
+            </div>
+        </div>
+
+        <!-- Columns -->
+        <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0 btn btn-link" (click)="toggleAccordion('Column-container')">
+                Select additional columns to display
+              </h5>
+            </div>
+            <div id="Column-container" class="collapse show" style="display:none">
+              <div class="card-body" >
+                <div class="form-group">
+                    <label for="columns">Choose the desired columns:</label>
+                    <select class="form-control" id="columns" name="columns" [(ngModel)]="includeColumns" multiple>
+                        <option *ngFor="let availableColumn of availableColumns">{{availableColumn}}</option>
+                    </select>
+                </div>
+              </div>
+            </div>
+        </div>
+
+        <!-- Groupby -->
+        <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0 btn btn-link" (click)="toggleAccordion('Groupby-container')">
+                Choose categories to group the output by
+              </h5>
+            </div>
+            <div id="Groupby-container" class="collapse show" style="display:none">
+              <div class="card-body" >
+                <div class="form-group">
+                    <label for="grouping">Group the data by category:</label>
+                    <select class="form-control" id="grouping" name="grouping" [(ngModel)]="groupingColumns" multiple>
+                        <option *ngFor="let column of availableGroupingColumns">{{column}}</option>
+                    </select>
+                </div>
               </div>
             </div>
         </div>
@@ -181,70 +212,34 @@
             </div>
         </div>
 
-        <!-- Columns -->
-        <div class="card">
-            <div class="card-header">
-              <h5 class="mb-0 btn btn-link" (click)="toggleAccordion('Column-container')">
-                Columns
-              </h5>
-            </div>
-            <div id="Column-container" class="collapse show" style="display:none">
-              <div class="card-body" >
-                <div class="form-group">
-                    <label for="columns">Choose the desired columns:</label>
-                    <select class="form-control" id="columns" name="columns" [(ngModel)]="includeColumns" multiple>
-                        <option *ngFor="let availableColumn of availableColumns">{{availableColumn}}</option>
-                    </select>
-                </div>
-              </div>
-            </div>
-        </div>
-
-        <!-- Groupby -->
-        <div class="card">
-            <div class="card-header">
-              <h5 class="mb-0 btn btn-link" (click)="toggleAccordion('Groupby-container')">
-                Group by
-              </h5>
-            </div>
-            <div id="Groupby-container" class="collapse show" style="display:none">
-              <div class="card-body" >
-                <div class="form-group">
-                    <label for="grouping">Group the data by category:</label>
-                    <select class="form-control" id="grouping" name="grouping" [(ngModel)]="groupingColumns" multiple>
-                        <option *ngFor="let column of availableGroupingColumns">{{column}}</option>
-                    </select>
-                </div>
-              </div>
-            </div>
-        </div>
 
       <div>
-        <p for="inlineRadio1">Data dump options</p>
+        <p for="inlineRadio1" style="margin-top: 1em;">Download options</p>
         <div class="form-check form-check-inline">
-          <input (click)="addDumpOption($event)" class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="true" checked>
-          <label class="form-check-label" for="inlineRadio2">Anonimyzed</label>
+          <input (click)="addDumpOption($event)"class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="false" checked>
+          <label class="form-check-label" for="inlineRadio1">Non-anonymized</label>
         </div>
         <div class="form-check form-check-inline">
-          <input (click)="addDumpOption($event)"class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="false">
-          <label class="form-check-label" for="inlineRadio1">Non-anonimyzed</label>
+          <input (click)="addDumpOption($event)" class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="true">
+          <label class="form-check-label" for="inlineRadio2">Anonymized</label>
         </div>
       </div>
+      <small class="form-text text-muted">Choose whether to anonymize the downloadable data.</small>
 
       <div class="form-group" style="margin-top: 1em;">
-          <button class="btn btn-success">Get temperature score</button>
+          <button class="btn btn-success">Calculate scores</button>
       </div>
     </form>
 
     <div id="div-results" class="container-results" *ngIf="resultTargets.length > 0">
-      <h5>Aggregated temperature scores</h5>
+      <h5>Portfolio temperature scores</h5>
         <table class="table table-striped">
             <thead>
                 <tr>
                     <td>Group</td>
                     <td>Time frame</td>
                     <td>Temperature score</td>
-                    <td>Target/Default</td>
+                    <td>Companies with vs.<br> without targets</td>
                     <td></td>
                 </tr>
             </thead>
@@ -297,6 +292,7 @@
 
         <hr />
 
+      <h5>Portfolio coverage</h5>
         <div class="row" style="margin-bottom: 1em;">
             <div class="col">
                 <div class="card text-center">
@@ -313,15 +309,15 @@
         </div>
 
       <ng-container *ngIf="this.groupingColumns.length > 0 && resultItems.length > 2">
-        <h5>Group by temperature scores</h5>
+        <h5>Temperature scores grouped by categories</h5>
           <table class="table table-striped">
               <thead>
                   <tr>
                       <td>Group</td>
                       <td>Time frame</td>
-                      <td>Groupby</td>
+                      <td>Category</td>
                       <td>Temperature score</td>
-                      <td>Feature distribution</td>
+                      <td>Category contribution</td>
                       <td></td>
                   </tr>
               </thead>
@@ -347,9 +343,9 @@
 
 
         <div class="container-results">
-            <h5>Temperature score targets
-              <button class="btn btn-outline-primary" (click)="exportCSV()">Download</button>
-              <button class="btn btn-outline-primary" (click)="dumpCSV()">Data dump</button>
+            <h5>Temperature scores per company
+              <button class="btn btn-outline-primary" (click)="exportCSV()" style="margin-right: 1em;">Download selection</button>
+              <button class="btn btn-outline-primary" (click)="dumpCSV()">Download all</button>
             </h5>
             <table class="table table-striped">
                 <thead>

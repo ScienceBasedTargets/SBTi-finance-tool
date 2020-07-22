@@ -5,17 +5,46 @@
   "data_providers": [
     {
       "type": "excel",
-      "name": "Excel file 1",
+      "name": "Excel",
       "parameters": {
         "path": "data/InputFormat.xlsx"
       }
     },
     {
       "type": "excel",
-      "name": "Excel file 2",
+      "name": "Bloomberg (Coming soon)",
+      "parameters": {
+        "path": "data/InputFormat.xlsx"
+      }
+    },
+    {
+      "type": "excel",
+      "name": "Urgentem (Coming soon)",
+      "parameters": {
+        "path": "data/InputFormat.xlsx"
+      }
+    },
+    {
+      "type": "excel",
+      "name": "Trucost (Coming soon)",
+      "parameters": {
+        "path": "data/InputFormat.xlsx"
+      }
+    },
+    {
+      "type": "excel",
+      "name": "CDP (Coming soon)",
+      "parameters": {
+        "path": "data/InputFormat.xlsx"
+      }
+    },
+    {
+      "type": "excel",
+      "name": "ISS (Coming soon)",
       "parameters": {
         "path": "data/InputFormat.xlsx"
       }
     }
+
   ]
 }
