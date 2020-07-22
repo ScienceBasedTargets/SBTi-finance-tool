@@ -348,7 +348,9 @@ class TemperatureScore(PortfolioAggregation):
             if aggregation_method == "EOTS":
                 value_column = self.c.COLS.COMPANY_ENTERPRISE_VALUE
             elif aggregation_method == "ECOTS":
-                value_column = self.c.COLS.CASH_EQUIVALENTS
+                value_column = self.c.COLS.COMPANY_EV_PLUS_CASH
+                data[self.c.COLS.COMPANY_EV_PLUS_CASH] = data[self.c.COLS.COMPANY_ENTERPRISE_VALUE] + data[
+                    self.c.COLS.CASH_EQUIVALENTS]
             elif aggregation_method == "AOTS":
                 value_column = self.c.COLS.COMPANY_TOTAL_ASSETS
             elif aggregation_method == "ROTS":
@@ -518,19 +520,14 @@ class TemperatureScore(PortfolioAggregation):
                                    (scores[self.c.COLS.TIME_FRAME] == time_frame)), self.c.COLS.TEMPERATURE_SCORE] = self.score_cap
         return scores
     
-    def dump_data(self, scores, anonymize):
+    def anonymize_data_dump(self, scores):
         '''
-        Saves scores and raw data required to compute scores for each company-target combination
+        Anonymizes scores for raw data output
         '''
-        scores.sort_values(by=[self.c.COLS.COMPANY_NAME, self.c.COLS.SCOPE_CATEGORY], inplace=True)
-        scores.rename(columns={self.c.COLS.COMPANY_ID+'_x': self.c.COLS.COMPANY_ID}, inplace=True)
-        scores.drop(columns=[self.c.COLS.COMPANY_ID+'_y'])
-        if anonymize:
-            scores.drop(columns=[self.c.COLS.COMPANY_ISIN, self.c.COLS.COMPANY_ID], inplace=True)
-            for index, company_name in enumerate(scores[self.c.COLS.COMPANY_NAME].unique()):
-                scores[self.c.COLS.COMPANY_NAME][scores[self.c.COLS.COMPANY_NAME] == company_name] = 'Company' + str(index + 1)
-
-        scores.to_csv(self.c.FILE_RAW_DATA_DUMP, index=False)
+        scores.drop(columns=[self.c.COLS.COMPANY_ISIC, self.c.COLS.COMPANY_ID], inplace=True)
+        for index, company_name in enumerate(scores[self.c.COLS.COMPANY_NAME].unique()):
+            scores.loc[scores[self.c.COLS.COMPANY_NAME] == company_name, self.c.COLS.COMPANY_NAME] = 'Company' + str(index + 1)
+        return scores
 
     def merge_percentage_coverage_to_aggregations(self, aggregations: Dict, temperature_percentage_coverage: Dict):
         """Iterates over two dictionaries and ads keys from second dictionary to the first.
@@ -545,8 +542,8 @@ class TemperatureScore(PortfolioAggregation):
             for scope in self.c.VALUE_SCOPE_CATEGORIES:
                 if aggregations.get(time_frame) and aggregations[time_frame].get(scope):
                     aggregations[time_frame][scope]['influence_percentage'] = {
-                        'default': temperature_percentage_coverage['default'][time_frame][scope],
-                        'target': temperature_percentage_coverage['target'][time_frame][scope]
+                        'default': temperature_percentage_coverage['default'][time_frame][scope]*100,
+                        'target': temperature_percentage_coverage['target'][time_frame][scope]*100
                     }
         return aggregations
 

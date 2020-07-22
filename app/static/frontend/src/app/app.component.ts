@@ -21,10 +21,10 @@ export class AppComponent implements OnInit {
     title = 'SBTi Temperature Scoring';
     excelSkiprows = 0;
     isNavbarCollapsed = true;
-    availableTargetColumns: string[] = ['company_id', 'company_name', 'portfolio_weight', 'investment_value'];
+    availableTargetColumns: string[] = ['company_id', 'company_name', 'portfolio_weight', 'investment_value', 'ISIN'];
     availableTimeFrames: string[] = ['short', 'mid', 'long'];
     availableScopeCategories: string[] = ['s1s2', 's3', 's1s2s3'];
-    availableAggregationMethods: string[] = ['WATS', 'TETS', 'MOTS', 'EOTS', 'ECOTS', 'AOTS'];
+    availableAggregationMethods: string[] = ['WATS', 'TETS', 'MOTS', 'EOTS', 'ECOTS', 'AOTS', 'ROTS'];
     availableColumns: string[] = AVAILABLE_COLUMNS;
     availableGroupingColumns: string[] = AVAILABLE_GROUPING_COLUMNS;
     groupingColumns: string[] = [];
@@ -32,16 +32,18 @@ export class AppComponent implements OnInit {
     filterTimeFrames: string[] = ['mid'];
     filterScopeCategory: string[] = ['s1s2', 's1s2s3'];
     includeColumns: string[] = [];
+    availableDefaultScores: number[] = [3.2, 3.9, 4.5];
+    defaultScore = 3.2;
+    uploadedFiles: Array<File>;
     selectedDataProviders: string[] = [];
     selectedDataProviders1 = '';
     selectedDataProvider1Path = '';
     selectedDataProviders2 = '';
     selectedDataProvider2Path = '';
     selectedDataProviderPaths: string[] = [];
-    availableDefaultScores: number[] = [3.2, 3.9, 4.5];
-    defaultScore = 3.2;
-    uploadedFiles: Array<File>;
     dataProviders: DataProvider[];
+    dataProviderFile1: Array<File>;
+    dataProviderFile2: Array<File>;
     portfolio: any[] = [];
     columns: string[] = [];
     columnMapping: { [key: string]: string } = {};
@@ -50,6 +52,7 @@ export class AppComponent implements OnInit {
     resultGroups: string[] = [];
     resultTargets: any[] = [];
     resultItems: any[] = [];
+    resultDistribution:  { [key: string]: string } = {};
     resultScores: { [key: string]: number } = {};
     selectedContributions: { [key: string]: number }[] = [];
     alerts: Alert[] = [];
@@ -85,6 +88,12 @@ export class AppComponent implements OnInit {
      */
     onFileChange(element) {
         this.uploadedFiles = element.target.files;
+    }
+    onFileChangeDataProvider1(element) {
+        this.dataProviderFile1 = element.target.files;
+    }
+    onFileChangeDataProvider2(element) {
+        this.dataProviderFile2 = element.target.files;
     }
 
     openContributors(group: string, timeFrame: string, item: string, template) {
@@ -231,11 +240,22 @@ export class AppComponent implements OnInit {
             }
             return newObj;
         });
+
         this.selectedDataProviders = [this.selectedDataProviders1, this.selectedDataProviders2];
         this.selectedDataProviderPaths = [this.selectedDataProvider1Path, this.selectedDataProvider2Path];
+
+        const formData1 = new FormData();
+        if (this.dataProviderFile1) {
+            formData1.append('file', this.dataProviderFile1[0], this.dataProviderFile1[0].name);
+        }
+        const formData2 = new FormData();
+        if (this.dataProviderFile2) {
+            formData2.append('file', this.dataProviderFile2[0], this.dataProviderFile2[0].name);
+        }
+
         this.appService.getTemperatureScore({
             aggregation_method: this.selectedAggregationMethod,
-            data_providers: this.selectedDataProviders,
+            data_providers: [],
             filter_scope_category: this.filterScopeCategory,
             filter_time_frame: this.filterTimeFrames,
             include_columns: this.includeColumns,
@@ -255,7 +275,7 @@ export class AppComponent implements OnInit {
                     const firstTimeFrame = this.resultTimeFrames[0];
                     this.resultGroups = Object.keys(response.aggregated_scores[firstTimeFrame]);
                     this.resultItems = Object.keys(response.aggregated_scores[firstTimeFrame][this.resultGroups[0]]);
-
+                    this.resultDistribution = response["feature_distribution"];
                     if (this.resultTargets.length > 0) {
                         this.resultColumns = Object.keys(this.resultTargets[0]);
                     }
