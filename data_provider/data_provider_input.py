@@ -47,7 +47,7 @@ class DataProvider:
         data = data['Company data']
 
 
-        required_columns = [self.c.COMPANY_NAME, self.c.COMPANY_ID, self.c.CDP_ACS_INDUSTRY, self.c.COUNTRY,
+        required_columns = [self.c.COMPANY_NAME, self.c.COMPANY_ID, self.c.COUNTRY,
                             self.c.SECTOR, self.c.GHG_SCOPE12, self.c.GHG_SCOPE3, self.c.REVENU,
                             self.c.MARKET_CAP, self.c.ENTERPRISE_VALUE, self.c.TOTAL_ASSETS, self.c.CASH_EQUIVALENTS]
 
@@ -81,9 +81,9 @@ class DataProvider:
         data = data['Target data']
 
         required_columns = [self.c.COMPANY_NAME, self.c.COMPANY_ID, self.c.TARGET_CLASSIFICATION, self.c.SCOPE,
-                            self.c.COVERAGE, self.c.REDUCTION_AMBITION, self.c.BASE_YEAR, self.c.END_YEAR,
+                            self.c.REDUCTION_AMBITION, self.c.BASE_YEAR, self.c.END_YEAR,
                             self.c.START_YEAR,self.c.TARGET_REFERENCE_NUMBER, self.c.PERCENTAGE_REDUCTION_FROM_BASE_YEAR,
-                            self.c.PERCENTAGE_EMISSION_IN_SCOPE, self.c.PERCENTAGE_ACHIEVED_EMISSIONS, self.c.TARGET_YEAR]
+                            self.c.PERCENTAGE_EMISSION_IN_SCOPE, self.c.PERCENTAGE_ACHIEVED_EMISSIONS]
 
         data_frame = pd.DataFrame(columns=required_columns)
 
@@ -151,14 +151,14 @@ class DataProvider:
         for sheet in sheets:
             if sheet =='Company data':
                 # True: string, False: integer
-                required_columns = {self.c.COMPANY_NAME: True, self.c.COMPANY_ID: True, self.c.CDP_ACS_INDUSTRY: True,
+                required_columns = {self.c.COMPANY_NAME: True, self.c.COMPANY_ID: True,
                                     self.c.COUNTRY: True, self.c.SECTOR: True, self.c.GHG_SCOPE12: False, self.c.GHG_SCOPE3: False,
                                     self.c.REVENU: False, self.c.MARKET_CAP: False, self.c.ENTERPRISE_VALUE: False, self.c.TOTAL_ASSETS: False,
                                     self.c.CASH_EQUIVALENTS: False}
             else:
                 # True: string, False: integer
                 required_columns = {self.c.COMPANY_NAME: True, self.c.COMPANY_ID: True, self.c.TARGET_CLASSIFICATION : True,
-                                    self.c.SCOPE : True, self.c.COVERAGE : False, self.c.REDUCTION_AMBITION : False, self.c.BASE_YEAR: False,
+                                    self.c.SCOPE : True, self.c.REDUCTION_AMBITION : False, self.c.BASE_YEAR: False,
                                     self.c.END_YEAR : False, self.c.START_YEAR: False, self.c.SBTI_STATUS: False}
             for column in required_columns.keys():
                 if column not in data[sheet].columns:
