@@ -183,13 +183,46 @@ class temp_score(BaseEndpoint):
         temperature_percentage_coverage = pd.DataFrame.from_dict(temperature_percentage_coverage).replace({np.nan: None}).to_dict()
         aggregations = temperature_score.merge_percentage_coverage_to_aggregations(aggregations, temperature_percentage_coverage)
 
-        return {
+        return_dic = {
             "aggregated_scores": aggregations,
             "coverage": coverage,
             "companies": scores[include_columns].replace({np.nan: None}).to_dict(
                 orient="records"),
             "feature_distribution": column_distribution
         }
+
+        return_dic = convert_nan_to_none(return_dic)
+
+        return return_dic
+
+
+def convert_nan_to_none(nested_dictionary):
+    """Convert NaN values to None in a list in a nested dictionary.
+
+    :param nested_dictionary: dictionary to return that possible contains NaN values
+    :type nested_dictionary: dict
+
+    :rtype: dict
+    :return: cleaned dictionary where all NaN values are converted to None
+    """
+    for parent, dictionary in nested_dictionary.items():
+        if isinstance(dictionary, dict):
+            for key, value in dictionary.items():
+                for time_frame, values in value.items():
+                    for scope, scores_el in values.items():
+                        for k, v in scores_el.items():
+                            if isinstance(v, list):
+                                clean_v = []
+                                for company in v:
+                                    clean_company = company
+                                    for identifier, number in company.items():
+                                        if str(number) == 'nan':
+                                            clean_company[identifier] = None
+                                    clean_v.append(clean_company)
+                                    scores_el[k] = clean_v
+
+    return nested_dictionary
+
 
 class DataProviders(BaseEndpoint):
     """
