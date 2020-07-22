@@ -77,7 +77,7 @@ class ExcelProvider(DataProvider):
         :return: A dataframe containing the company data
         """
 
-        data_company = self.data['Fundemental data']
+        data_company = self.data['Fundamental data']
         if "company_id" not in data_company:
             data_company["company_id"] = None
 
