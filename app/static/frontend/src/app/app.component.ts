@@ -17,7 +17,7 @@ const AVAILABLE_COLUMNS: string[] = ['company_id', 'Country', 'Region', 'Industr
     styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-    title = 'SBTi Temperature Scoring';
+    title = 'SBTi-FI Temperature Scoring';
     excelSkiprows = 0;
     isNavbarCollapsed = true;
     availableTargetColumns: string[] = ['company_id', 'company_name', 'investment_value', 'ISIN'];
@@ -36,7 +36,7 @@ export class AppComponent implements OnInit {
     defaultScore = 3.2;
     uploadedFiles: Array<File>;
     selectedScenario: { [key: string]: number } = {'number': 0};
-    selectedDumpOption: { [key: string]: boolean } = {'anonymized': true};
+    selectedDumpOption: { [key: string]: boolean } = {'anonymized': false};
     selectedDataProviders: string[] = [];
     selectedDataProviders1 = '';
     selectedDataProvider1Path = '';
