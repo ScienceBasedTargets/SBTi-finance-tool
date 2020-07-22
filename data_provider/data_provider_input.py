@@ -48,7 +48,7 @@ class DataProvider:
 
 
         required_columns = [self.c.COMPANY_NAME, self.c.COMPANY_ID, self.c.CDP_ACS_INDUSTRY, self.c.COUNTRY,
-                            self.c.INDUSTRY, self.c.SECTOR, self.c.GHG_SCOPE12, self.c.GHG_SCOPE3, self.c.REVENU,
+                            self.c.SECTOR, self.c.GHG_SCOPE12, self.c.GHG_SCOPE3, self.c.REVENU,
                             self.c.MARKET_CAP, self.c.ENTERPRISE_VALUE, self.c.TOTAL_ASSETS, self.c.CASH_EQUIVALENTS]
 
         data_frame = pd.DataFrame(columns=required_columns)
@@ -152,7 +152,7 @@ class DataProvider:
             if sheet =='Company data':
                 # True: string, False: integer
                 required_columns = {self.c.COMPANY_NAME: True, self.c.COMPANY_ID: True, self.c.CDP_ACS_INDUSTRY: True,
-                                    self.c.COUNTRY: True, self.c.INDUSTRY: True, self.c.SECTOR: True, self.c.GHG_SCOPE12: False, self.c.GHG_SCOPE3: False,
+                                    self.c.COUNTRY: True, self.c.SECTOR: True, self.c.GHG_SCOPE12: False, self.c.GHG_SCOPE3: False,
                                     self.c.REVENU: False, self.c.MARKET_CAP: False, self.c.ENTERPRISE_VALUE: False, self.c.TOTAL_ASSETS: False,
                                     self.c.CASH_EQUIVALENTS: False}
             else:
