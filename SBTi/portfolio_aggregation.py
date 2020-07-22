@@ -44,9 +44,9 @@ class PortfolioAggregation(ABC):
         :return: The aggregates score
         """
         if portfolio_aggregation_method == PortfolioAggregationMethod.WATS:
-            total_portfolio_weight = data[self.c.COLS.PORTFOLIO_WEIGHT].sum()
+            total_investment_weight = data[self.c.COLS.INVESTMENT_VALUE].sum()
             data[output_column] = data.apply(
-                lambda row: (row[self.c.COLS.PORTFOLIO_WEIGHT] * row[input_column]) / total_portfolio_weight, axis=1)
+                lambda row: (row[self.c.COLS.INVESTMENT_VALUE] * row[input_column]) / total_investment_weight, axis=1)
 
             # We're dividing by the portfolio weight. This is not done in the methodology, but we need it to account
             # for rounding errors.
