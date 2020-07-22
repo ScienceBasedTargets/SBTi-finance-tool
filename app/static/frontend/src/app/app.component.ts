@@ -21,10 +21,10 @@ export class AppComponent implements OnInit {
     title = 'SBTi Temperature Scoring';
     excelSkiprows = 0;
     isNavbarCollapsed = true;
-    availableTargetColumns: string[] = ['company_id', 'company_name', 'portfolio_weight', 'investment_value'];
+    availableTargetColumns: string[] = ['company_id', 'company_name', 'portfolio_weight', 'investment_value', 'ISIN'];
     availableTimeFrames: string[] = ['short', 'mid', 'long'];
     availableScopeCategories: string[] = ['s1s2', 's3', 's1s2s3'];
-    availableAggregationMethods: string[] = ['WATS', 'TETS', 'MOTS', 'EOTS', 'ECOTS', 'AOTS'];
+    availableAggregationMethods: string[] = ['WATS', 'TETS', 'MOTS', 'EOTS', 'ECOTS', 'AOTS', 'ROTS'];
     availableColumns: string[] = AVAILABLE_COLUMNS;
     availableGroupingColumns: string[] = AVAILABLE_GROUPING_COLUMNS;
     groupingColumns: string[] = [];
@@ -32,16 +32,12 @@ export class AppComponent implements OnInit {
     filterTimeFrames: string[] = ['mid'];
     filterScopeCategory: string[] = ['s1s2', 's1s2s3'];
     includeColumns: string[] = [];
-    selectedDataProviders: string[] = [];
-    selectedDataProviders1 = '';
-    selectedDataProvider1Path = '';
-    selectedDataProviders2 = '';
-    selectedDataProvider2Path = '';
-    selectedDataProviderPaths: string[] = [];
     availableDefaultScores: number[] = [3.2, 3.9, 4.5];
     defaultScore = 3.2;
     uploadedFiles: Array<File>;
     dataProviders: DataProvider[];
+    dataProviderFile1: Array<File>;
+    dataProviderFile2: Array<File>;
     portfolio: any[] = [];
     columns: string[] = [];
     columnMapping: { [key: string]: string } = {};
@@ -85,6 +81,12 @@ export class AppComponent implements OnInit {
      */
     onFileChange(element) {
         this.uploadedFiles = element.target.files;
+    }
+    onFileChangeDataProvider1(element) {
+        this.dataProviderFile1 = element.target.files;
+    }
+    onFileChangeDataProvider2(element) {
+        this.dataProviderFile2 = element.target.files;
     }
 
     openContributors(group: string, timeFrame: string, item: string, template) {
@@ -231,11 +233,22 @@ export class AppComponent implements OnInit {
             }
             return newObj;
         });
-        this.selectedDataProviders = [this.selectedDataProviders1, this.selectedDataProviders2];
-        this.selectedDataProviderPaths = [this.selectedDataProvider1Path, this.selectedDataProvider2Path];
+
+        var formData1 = '';
+        if (this.dataProviderFile1) {
+            var formData1 = new FormData();
+            formData1.append('file', this.dataProviderFile1[0], this.dataProviderFile1[0].name);
+        }
+
+        var formData2 = '';
+        if (this.dataProviderFile2) {
+            var formData2 = new FormData();
+            formData2.append('file', this.dataProviderFile2[0], this.dataProviderFile2[0].name);
+        }
+
         this.appService.getTemperatureScore({
             aggregation_method: this.selectedAggregationMethod,
-            data_providers: this.selectedDataProviders,
+            data_providers: [formData1, formData2],
             filter_scope_category: this.filterScopeCategory,
             filter_time_frame: this.filterTimeFrames,
             include_columns: this.includeColumns,
