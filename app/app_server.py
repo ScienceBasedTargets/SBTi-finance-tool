@@ -180,8 +180,14 @@ class temp_score(BaseEndpoint):
         temperature_percentage_coverage = pd.DataFrame.from_dict(temperature_percentage_coverage).replace({np.nan: None}).to_dict()
         aggregations = temperature_score.merge_percentage_coverage_to_aggregations(aggregations, temperature_percentage_coverage)
 
+        # Dump raw data to compute the scores
+        anonymize_data_dump = json_data.get("anonymize_data_dump", True)
+        if anonymize_data_dump:
+            scores = temperature_score.anonymize_data_dump(scores)
+
         return {
             "aggregated_scores": aggregations,
+            "scores": scores.to_dict(),
             "coverage": coverage,
             "companies": scores[include_columns].replace({np.nan: None}).to_dict(
                 orient="records"),
