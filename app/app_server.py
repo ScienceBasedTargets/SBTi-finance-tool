@@ -208,18 +208,21 @@ def convert_nan_to_none(nested_dictionary):
     for parent, dictionary in nested_dictionary.items():
         if isinstance(dictionary, dict):
             for key, value in dictionary.items():
-                for time_frame, values in value.items():
-                    for scope, scores_el in values.items():
-                        for k, v in scores_el.items():
-                            if isinstance(v, list):
-                                clean_v = []
-                                for company in v:
-                                    clean_company = company
-                                    for identifier, number in company.items():
-                                        if str(number) == 'nan':
-                                            clean_company[identifier] = None
-                                    clean_v.append(clean_company)
-                                    scores_el[k] = clean_v
+                if isinstance(value, dict):
+                    for time_frame, values in value.items():
+                        if isinstance(values, dict):
+                            for scope, scores_el in values.items():
+                                for k, v in scores_el.items():
+                                    if isinstance(v, list):
+                                        clean_v = []
+                                        for company in v:
+                                            clean_company = company
+                                            if isinstance(company, dict):
+                                                for identifier, number in company.items():
+                                                    if str(number) == 'nan':
+                                                        clean_company[identifier] = None
+                                                clean_v.append(clean_company)
+                                                scores_el[k] = clean_v
 
     return nested_dictionary
 
