@@ -8,5 +8,5 @@ export interface TemperatureScoreSettings {
   default_score: number;
   companies: any[];
   scenario: { [key: string]: number };
-  data_dump: { [key: string]: boolean };
+  anonymize_data_dump: boolean;
 }
