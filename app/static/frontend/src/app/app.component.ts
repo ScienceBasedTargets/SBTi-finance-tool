@@ -35,6 +35,12 @@ export class AppComponent implements OnInit {
     availableDefaultScores: number[] = [3.2, 3.9, 4.5];
     defaultScore = 3.2;
     uploadedFiles: Array<File>;
+    selectedDataProviders: string[] = [];
+    selectedDataProviders1 = '';
+    selectedDataProvider1Path = '';
+    selectedDataProviders2 = '';
+    selectedDataProvider2Path = '';
+    selectedDataProviderPaths: string[] = [];
     dataProviders: DataProvider[];
     dataProviderFile1: Array<File>;
     dataProviderFile2: Array<File>;
@@ -234,6 +240,9 @@ export class AppComponent implements OnInit {
             return newObj;
         });
 
+        this.selectedDataProviders = [this.selectedDataProviders1, this.selectedDataProviders2];
+        this.selectedDataProviderPaths = [this.selectedDataProvider1Path, this.selectedDataProvider2Path];
+
         const formData1 = new FormData();
         if (this.dataProviderFile1) {
             formData1.append('file', this.dataProviderFile1[0], this.dataProviderFile1[0].name);
@@ -245,7 +254,7 @@ export class AppComponent implements OnInit {
 
         this.appService.getTemperatureScore({
             aggregation_method: this.selectedAggregationMethod,
-            data_providers: [formData1, formData2],
+            data_providers: [],
             filter_scope_category: this.filterScopeCategory,
             filter_time_frame: this.filterTimeFrames,
             include_columns: this.includeColumns,
