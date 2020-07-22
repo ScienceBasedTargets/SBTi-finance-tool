@@ -103,6 +103,8 @@ class temp_score(BaseEndpoint):
 
         json_data = request.get_json(force=True)
 
+        print(json_data)
+
         data_providers = self._get_data_providers(json_data)
 
         default_score = self.config["default_score"]

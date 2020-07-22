@@ -234,15 +234,12 @@ export class AppComponent implements OnInit {
             return newObj;
         });
 
-        var formData1 = '';
+        const formData1 = new FormData();
         if (this.dataProviderFile1) {
-            var formData1 = new FormData();
             formData1.append('file', this.dataProviderFile1[0], this.dataProviderFile1[0].name);
         }
-
-        var formData2 = '';
+        const formData2 = new FormData();
         if (this.dataProviderFile2) {
-            var formData2 = new FormData();
             formData2.append('file', this.dataProviderFile2[0], this.dataProviderFile2[0].name);
         }
 
