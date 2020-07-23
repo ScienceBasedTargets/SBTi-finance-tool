@@ -249,8 +249,10 @@
                     <td>{{timeFrame}}</td>
                     <td>{{resultScores[timeFrame][group]["all"]["score"] | number:'1.2-2'}}&#176;C</td>
                     <td>
-                      {{resultScores[timeFrame][group]["influence_percentage"]["target"] | number:'1.0-2'}}/{{resultScores[timeFrame][group]["influence_percentage"]["default"] | number:'1.0-2'}}
-                      %
+                      <ng-container *ngIf="resultScores[timeFrame][group]['influence_percentage']['target'] + resultScores[timeFrame][group]['influence_percentage']['default'] === 100">
+                        {{resultScores[timeFrame][group]["influence_percentage"]["target"] | number:'1.0-2'}}/{{resultScores[timeFrame][group]["influence_percentage"]["default"] | number:'1.0-2'}}
+                        %
+                      </ng-container>
                     </td>
                     <td><button (click)="openContributors(group, timeFrame, 'all', templateContributions)" class="btn btn-sm btn-outline-primary">Contributors</button></td>
                 </tr>
