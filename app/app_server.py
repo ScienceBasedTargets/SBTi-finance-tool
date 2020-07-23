@@ -158,6 +158,7 @@ class temp_score(BaseEndpoint):
             scores = scores[scores["time_frame"].isin(json_data["filter_time_frame"])]
 
         scores = scores.copy()
+        scores = scores.round(2)
 
         aggregations = temperature_score.aggregate_scores(scores, aggregation_method, grouping)
 
