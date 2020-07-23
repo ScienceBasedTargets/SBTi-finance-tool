@@ -37,15 +37,9 @@ export class AppComponent implements OnInit {
     uploadedFiles: Array<File>;
     selectedScenario: { [key: string]: number } = {'number': 0};
     selectedDumpOption: boolean = false;
-    selectedDataProviders: string[] = [];
-    selectedDataProviders1 = '';
-    selectedDataProvider1Path = '';
-    selectedDataProviders2 = '';
-    selectedDataProvider2Path = '';
-    selectedDataProviderPaths: string[] = [];
+    selectedDataProvider = '';
     dataProviders: DataProvider[];
     dataProviderFile1: Array<File>;
-    dataProviderFile2: Array<File>;
     portfolio: any[] = [];
     columns: string[] = [];
     columnMapping: { [key: string]: string } = {};
@@ -61,6 +55,7 @@ export class AppComponent implements OnInit {
     selectedContributions: { [key: string]: number }[] = [];
     alerts: Alert[] = [];
     loading = false;
+    uploadSuccess = false;
     coverage: number;
 
     constructor(private appService: AppService, private modalService: NgbModal) { }
@@ -96,9 +91,6 @@ export class AppComponent implements OnInit {
     onFileChangeDataProvider1(element) {
         this.dataProviderFile1 = element.target.files;
     }
-    onFileChangeDataProvider2(element) {
-        this.dataProviderFile2 = element.target.files;
-    }
 
 
     /**
@@ -113,7 +105,7 @@ export class AppComponent implements OnInit {
      * Select Data Dump option
      */
     addDumpOption(element) {
-        const dump = {"false": false, "true": true}
+      const dump = {"false": false, "true": true}
       this.selectedDumpOption = dump[element.target.value];
     }
 
@@ -253,6 +245,20 @@ export class AppComponent implements OnInit {
         this.exportToCsv('data_dump.csv', dump);
     }
 
+    /**
+     * Upload Dataprovider
+     */
+    doParseDataProvider(f) {
+        const formData1 = new FormData();
+        if (this.dataProviderFile1) {
+            formData1.append('file', this.dataProviderFile1[0], this.dataProviderFile1[0].name);
+            this.appService.doParseDataProvider(formData1).subscribe((response) => {
+                if (response['POST Request']['Response']['Status Code'] == 200) {
+                  this.uploadSuccess = true;
+                }
+            });
+        }
+    }
 
     /**
      * Gets the temperature score
@@ -271,18 +277,6 @@ export class AppComponent implements OnInit {
             }
             return newObj;
         });
-
-        this.selectedDataProviders = [this.selectedDataProviders1, this.selectedDataProviders2];
-        this.selectedDataProviderPaths = [this.selectedDataProvider1Path, this.selectedDataProvider2Path];
-
-        const formData1 = new FormData();
-        if (this.dataProviderFile1) {
-            formData1.append('file', this.dataProviderFile1[0], this.dataProviderFile1[0].name);
-        }
-        const formData2 = new FormData();
-        if (this.dataProviderFile2) {
-            formData2.append('file', this.dataProviderFile2[0], this.dataProviderFile2[0].name);
-        }
 
         this.appService.getTemperatureScore({
             aggregation_method: this.selectedAggregationMethod,
