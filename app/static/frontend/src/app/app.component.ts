@@ -37,7 +37,7 @@ export class AppComponent implements OnInit {
     uploadedFiles: Array<File>;
     selectedScenario: { [key: string]: number } = {'number': 0};
     selectedDumpOption: boolean = false;
-    selectedDataProvider = '';
+    selectedDataProvider = 'Excel';
     dataProviders: DataProvider[];
     dataProviderFile1: Array<File>;
     portfolio: any[] = [];
@@ -56,6 +56,7 @@ export class AppComponent implements OnInit {
     alerts: Alert[] = [];
     loading = false;
     uploadSuccess = false;
+    uploadCount = 0;
     coverage: number;
 
     constructor(private appService: AppService, private modalService: NgbModal) { }
@@ -254,6 +255,7 @@ export class AppComponent implements OnInit {
             formData1.append('file', this.dataProviderFile1[0], this.dataProviderFile1[0].name);
             this.appService.doParseDataProvider(formData1).subscribe((response) => {
                 if (response['POST Request']['Response']['Status Code'] == 200) {
+                  this.uploadCount++;
                   this.uploadSuccess = true;
                 }
             });

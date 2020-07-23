@@ -1,5 +1,4 @@
 import json
-import time
 import os
 
 from typing import List, Dict
@@ -481,9 +480,9 @@ class import_data_provider(Resource):
         file = request.files['file']
         file_name = file.filename
         file_type = file_name.split('.')[-1]
+        print(file, file_name, file_type)
         if (int(file.tell()) < 10000000) & (file_type == 'xlsx'):
-            file_path = os.path.join(app.config['UPLOAD_FOLDER'], 'InputFormat.xlsx')
-            file.save(file_path)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], 'InputFormat.xlsx'))
             return {'POST Request': {'Response': {'Status Code': 200, 'Message': 'Data Provider Imported'}}}
         else:
             return {'POST Request': {'Response': {'Status Code': 400, 'Message': 'Error. File did not save.'}}}
