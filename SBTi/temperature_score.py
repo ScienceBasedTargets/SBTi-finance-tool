@@ -121,7 +121,7 @@ class TemperatureScore(PortfolioAggregation):
         if pd.isnull(target[self.c.COLS.REGRESSION_PARAM]) or pd.isnull(target[self.c.COLS.REGRESSION_INTERCEPT]) \
                 or pd.isnull(target[self.c.COLS.ANNUAL_REDUCTION_RATE]):
             return self.fallback_score
-        return target[self.c.COLS.REGRESSION_PARAM] * target[self.c.COLS.ANNUAL_REDUCTION_RATE] + target[
+        return target[self.c.COLS.REGRESSION_PARAM] * target[self.c.COLS.ANNUAL_REDUCTION_RATE] * 100 + target[
             self.c.COLS.REGRESSION_INTERCEPT]
 
     def get_ghc_temperature_score(self, data: pd.DataFrame, company: str, time_frame: str):
