@@ -1,7 +1,5 @@
-import itertools
 import json
 import os
-import mimetypes
 
 from typing import List, Dict
 
@@ -10,7 +8,6 @@ import numpy as np
 from flask import Flask, request, send_from_directory
 from flask_restful import Resource, Api
 from flask_swagger_ui import get_swaggerui_blueprint
-from flask_uploads import UploadSet, ALL, configure_uploads
 
 import mimetypes
 mimetypes.init()
@@ -23,11 +20,9 @@ from SBTi.portfolio_coverage_tvp import PortfolioCoverageTVP
 from SBTi.temperature_score import TemperatureScore
 from SBTi.target_valuation_protocol import TargetValuationProtocol
 
-PATH = "uploads"
+UPLOAD_FOLDER = 'C:/Projects/SBTi/app/data'
 app = Flask(__name__)
-files = UploadSet('files', ALL)
-app.config['UPLOADS_DEFAULT_DEST'] = PATH
-configure_uploads(app, files)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 api = Api(app)
 
 DATA_PROVIDER_MAP = {
@@ -475,25 +470,21 @@ class data_provider(BaseEndpoint):
         }
 
 
-def test_file(file,target_type):
-    """
-    This supporting function determines if the file size is not above a predetermine threshold, and if the target type
-    matchs the file that is being imported.
 
-    :param file: file that is being imported through HTTP Protocol
-    :param target_type: <excel|json>
+class import_data_provider(Resource):
+    '''
+    Allows the user to replace the "inputFormat" with a new "data provider".
+    '''
 
-    :rtype: Boolean
-    :return: <True|False>
-    """
-    file.seek(0, 2)
-    file_name = file.filename
-    file_type = file_name.split('.')[-1]
-    file_dictionary = {'excel':'xlsx'}
-    if (int(file.tell())<10000000) & (file_type==file_dictionary[target_type]):
-        return True
-    else:
-        return False
+    def post(self):
+        file = request.files['file']
+        file_name = file.filename
+        file_type = file_name.split('.')[-1]
+        if (int(file.tell()) < 10000000) & (file_type == 'xlsx'):
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], 'InputFormat.xlsx'))
+            return {'POST Request': {'Response': {'Status Code': 200, 'Message': 'Data Provider Imported'}}}
+        else:
+            return {'POST Request': {'Response': {'Status Code': 400, 'Message': 'Error. File did not save.'}}}
 
 
 SWAGGER_URL = '/docs'
@@ -518,6 +509,8 @@ api.add_resource(import_portfolio, '/import_portfolio/')
 api.add_resource(ParsePortfolio, '/parse_portfolio/')
 api.add_resource(data_provider, '/data_provider')
 api.add_resource(Frontend, '/<path:path>', '/')
+api.add_resource(import_data_provider, '/import_data_provider/')
+
 
 if __name__ == '__main__':
     app.run(debug=True)  # important to mention debug=True
