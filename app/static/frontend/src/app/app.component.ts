@@ -255,7 +255,6 @@ export class AppComponent implements OnInit {
             this.appService.doParseDataProvider(formData1).subscribe((response) => {
                 if (response['POST Request']['Response']['Status Code'] == 200) {
                   this.uploadSuccess = true;
-                  console.log("Upload Data provider succeeded:);
                 }
             });
         }
