@@ -267,7 +267,7 @@ class TemperatureScore(PortfolioAggregation):
                                                                   portfolio_aggregation_method)
                 portfolio_scores[time_frame][scope]["all"] = {}
                 portfolio_scores[time_frame][scope]["all"]["score"] = round(weighted_scores.sum(),4)
-                filtered_data[self.c.COLS.CONTRIBUTION_RELATIVE] = weighted_scores / (weighted_scores.sum() / 100)
+                filtered_data[self.c.COLS.CONTRIBUTION_RELATIVE] = weighted_scores / (weighted_scores.sum() / 100).round(2)
                 filtered_data[self.c.COLS.CONTRIBUTION] = weighted_scores
                 portfolio_scores[time_frame][scope]["all"]["contributions"] = filtered_data \
                     .sort_values(self.c.COLS.CONTRIBUTION_RELATIVE, ascending=False)[
@@ -285,7 +285,7 @@ class TemperatureScore(PortfolioAggregation):
                         group_data[self.c.COLS.CONTRIBUTION_RELATIVE] = weighted_scores / (weighted_scores.sum() / 100)
                         group_data[self.c.COLS.CONTRIBUTION] = weighted_scores
                         portfolio_scores[time_frame][scope][group_name_joined] = {}
-                        portfolio_scores[time_frame][scope][group_name_joined]["score"] = weighted_scores.sum()
+                        portfolio_scores[time_frame][scope][group_name_joined]["score"] = weighted_scores.sum().round(2)
                         portfolio_scores[time_frame][scope][group_name_joined]["contributions"] = \
                             group_data.sort_values(self.c.COLS.CONTRIBUTION_RELATIVE, ascending=False)[
                                 self.c.CONTRIBUTION_COLUMNS].to_dict(orient="records")
@@ -473,11 +473,19 @@ class TemperatureScore(PortfolioAggregation):
         if columns==None:
             return None
         elif len(columns) == 1:
-            percentage_distribution = (data.groupby(columns[0]).size() / data[columns[0]].count()) * 100
+            percentage_distribution = round((data.groupby(columns[0]).size() / data[columns[0]].count()) * 100, 2)
             return percentage_distribution.to_dict()
         elif len(columns) > 1:
-            percentage_distribution = (data.groupby(columns).size() / data[columns[0]].count()) * 100
-            return percentage_distribution.to_dict()
+            percentage_distribution = round((data.groupby(columns).size() / data[columns[0]].count()) * 100, 2)
+            percentage_distribution = percentage_distribution.to_dict()
+
+            percentage_distribution_copy = percentage_distribution.copy()
+            # Modifies the original key name (tuple) into string representation
+            for key,value in percentage_distribution_copy.items():
+                key_combined = key if type(key) == str else "-".join(key)
+                percentage_distribution[key_combined] = percentage_distribution[key]
+                del percentage_distribution[key]
+            return percentage_distribution
 
     def set_scenario(self, scenario: Dict):
         self.scenario = scenario
