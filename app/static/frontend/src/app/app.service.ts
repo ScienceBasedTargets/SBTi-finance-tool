@@ -56,9 +56,21 @@ export class AppService {
         return this.http.post<Portfolio>(`${environment.host}/parse_portfolio/`, data)
             .pipe(
                 tap(_ => console.log('Parsed portfolio')),
-                catchError(this.handleError<Portfolio>('doParsePortfolio', {portfolio: []}))
+                catchError(this.handleError<Portfolio>('c', {portfolio: []}))
             );
     }
+    /**
+     * Send a Dataprovider file file.
+     * @returns ??
+     */
+    public doParseDataProvider(data: FormData): Observable<Portfolio> {
+        return this.http.post<Portfolio>(`${environment.host}/import_data_provider/`, data)
+            .pipe(
+                tap(_ => console.log('Dataprovider file sent.')),
+                catchError(this.handleError<Portfolio>('doParseDataProvider', {portfolio: []}))
+            );
+    }
+
 
     /**
      * Calculate the temperature score

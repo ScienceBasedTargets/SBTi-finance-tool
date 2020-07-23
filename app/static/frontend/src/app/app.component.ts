@@ -114,7 +114,7 @@ export class AppComponent implements OnInit {
      * Select Data Dump option
      */
     addDumpOption(element) {
-        const dump = {"false": false, "true": true}
+      const dump = {"false": false, "true": true}
       this.selectedDumpOption = dump[element.target.value];
     }
 
@@ -279,11 +279,16 @@ export class AppComponent implements OnInit {
         const formData1 = new FormData();
         if (this.dataProviderFile1) {
             formData1.append('file', this.dataProviderFile1[0], this.dataProviderFile1[0].name);
+            this.appService.doParseDataProvider(formData1).subscribe((response) => {
+                // import_data_provider
+                console.log('DataproviderFile sent');
+            });
         }
         const formData2 = new FormData();
         if (this.dataProviderFile2) {
             formData2.append('file', this.dataProviderFile2[0], this.dataProviderFile2[0].name);
         }
+
 
         this.appService.getTemperatureScore({
             aggregation_method: this.selectedAggregationMethod,
