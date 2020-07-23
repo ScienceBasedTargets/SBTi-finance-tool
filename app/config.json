@@ -19,7 +19,14 @@
     },
     {
       "type": "excel",
-      "name": "Urgentem (Coming soon)",
+      "name": "CDP (Coming soon)",
+      "parameters": {
+        "path": "data/InputFormat.xlsx"
+      }
+    },
+    {
+      "type": "excel",
+      "name": "ISS (Coming soon)",
       "parameters": {
         "path": "data/InputFormat.xlsx"
       }
@@ -33,18 +40,10 @@
     },
     {
       "type": "excel",
-      "name": "CDP (Coming soon)",
-      "parameters": {
-        "path": "data/InputFormat.xlsx"
-      }
-    },
-    {
-      "type": "excel",
-      "name": "ISS (Coming soon)",
+      "name": "Urgentem (Coming soon)",
       "parameters": {
         "path": "data/InputFormat.xlsx"
       }
     }
-
   ]
 }

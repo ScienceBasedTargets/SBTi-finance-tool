@@ -1,4 +1,5 @@
 import json
+import time
 import os
 
 from typing import List, Dict
@@ -20,7 +21,7 @@ from SBTi.portfolio_coverage_tvp import PortfolioCoverageTVP
 from SBTi.temperature_score import TemperatureScore
 from SBTi.target_valuation_protocol import TargetValuationProtocol
 
-UPLOAD_FOLDER = 'C:/Projects/SBTi/app/data'
+UPLOAD_FOLDER = 'data'
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 api = Api(app)
@@ -481,7 +482,8 @@ class import_data_provider(Resource):
         file_name = file.filename
         file_type = file_name.split('.')[-1]
         if (int(file.tell()) < 10000000) & (file_type == 'xlsx'):
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], 'InputFormat.xlsx'))
+            file_path = os.path.join(app.config['UPLOAD_FOLDER'], 'InputFormat.xlsx')
+            file.save(file_path)
             return {'POST Request': {'Response': {'Status Code': 200, 'Message': 'Data Provider Imported'}}}
         else:
             return {'POST Request': {'Response': {'Status Code': 400, 'Message': 'Error. File did not save.'}}}
