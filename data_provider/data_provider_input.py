@@ -48,8 +48,8 @@ class DataProvider:
 
 
         required_columns = [self.c.COMPANY_NAME, self.c.COMPANY_ID, self.c.COUNTRY,
-                            self.c.SECTOR, self.c.GHG_SCOPE12, self.c.GHG_SCOPE3, self.c.REVENU,
-                            self.c.MARKET_CAP, self.c.ENTERPRISE_VALUE, self.c.TOTAL_ASSETS, self.c.CASH_EQUIVALENTS]
+                            self.c.SECTOR, self.c.GHG_SCOPE12, self.c.GHG_SCOPE3, self.c.COMPANY_REVENUE,
+                            self.c.MARKET_CAP, self.c.COMPANY_ENTERPRISE_VALUE, self.c.COMPANY_TOTAL_ASSETS, self.c.CASH_EQUIVALENTS]
 
         data_frame = pd.DataFrame(columns=required_columns)
 
@@ -153,11 +153,11 @@ class DataProvider:
                 # True: string, False: integer
                 required_columns = {self.c.COMPANY_NAME: True, self.c.COMPANY_ID: True,
                                     self.c.COUNTRY: True, self.c.SECTOR: True, self.c.GHG_SCOPE12: False, self.c.GHG_SCOPE3: False,
-                                    self.c.REVENU: False, self.c.MARKET_CAP: False, self.c.ENTERPRISE_VALUE: False, self.c.TOTAL_ASSETS: False,
+                                    self.c.COMPANY_REVENUE: False, self.c.MARKET_CAP: False, self.c.COMPANY_ENTERPRISE_VALUE: False, self.c.COMPANY_TOTAL_ASSETS: False,
                                     self.c.CASH_EQUIVALENTS: False}
             else:
                 # True: string, False: integer
-                required_columns = {self.c.COMPANY_NAME: True, self.c.COMPANY_ID: True, self.c.TARGET_CLASSIFICATION : True,
+                required_columns = {self.c.COMPANY_NAME: True, self.c.COMPANY_ID: True, self.c.TARGET_REFERENCE_NUMBER : True,
                                     self.c.SCOPE : True, self.c.REDUCTION_AMBITION : False, self.c.BASE_YEAR: False,
                                     self.c.END_YEAR : False, self.c.START_YEAR: False, self.c.SBTI_STATUS: False}
             for column in required_columns.keys():

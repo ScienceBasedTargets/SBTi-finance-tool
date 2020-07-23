@@ -36,8 +36,6 @@ class ColumnsConfig:
     GHG_SCOPE12 = 'GHG_scope1+2'
     GHG_SCOPE3 = 'GHG_scope3'
     COMPANY_REVENUE = 'Revenue'
-    ENTERPRISE_VALUE = 'enterprise_value'
-    TOTAL_ASSETS = 'total_assets'
     CASH_EQUIVALENTS = 'cash_equivalents'
     TARGET_CLASSIFICATION = 'Target_classification'
     REDUCTION_AMBITION = 'reduction_ambition'
@@ -57,7 +55,6 @@ class ColumnsConfig:
     INTENSITY_METRIC_SR15 = 'Intensity_metric'
     TARGET_TYPE_SR15 = "Target_type"
     SR15_VARIABLE = "SR15_variable"
-    ENTERPRISE_VALUE = 'enterprise_value'
     REGRESSION_MODEL = 'Regression_model'
     BASEYEAR_GHG_S1 = 'BaseYear_GHG_S1'
     BASEYEAR_GHG_S2 = 'BaseYear_GHG_S2'
