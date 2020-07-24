@@ -27,6 +27,8 @@ class TargetValuationProtocol:
             self.data[self.c.COLS.SCOPE] = self.data[self.c.COLS.SCOPE].str.lower()
             self.data[self.c.COLS.SCOPE_CATEGORY] = self.data.apply(
                 lambda row: self.c.SCOPE_MAP[row[self.c.COLS.SCOPE]], axis=1)
+            self.split_s1s2s3()
+            self.convert_s1_s2_into_s1s2()
             self.test_boundary_coverage()
             self.test_target_process()
             self.test_end_year()
@@ -37,10 +39,6 @@ class TargetValuationProtocol:
             return self.data
         else:
             return self.single_record_edgecase()
-
-
-
-
 
     def single_record_edgecase(self):
         '''
@@ -144,6 +142,21 @@ class TargetValuationProtocol:
                     if record[1][self.c.COLS.ACHIEVED_EMISSIONS] != 100:
                         index.append(record[0])
             self.data = self.data.loc[index]
+
+    def convert_s1_s2_into_s1s2(self):
+        s1_mask = self.data[self.c.COLS.SCOPE] == 's1'
+        s1 = self.data[s1_mask]
+        s1_delete_mask = (s1_mask & (self.data[self.c.COLS.COVERAGE_S1].isna() | self.data[self.c.COLS.BASEYEAR_GHG_S1].isna() | self.data[self.c.COLS.BASEYEAR_GHG_S2].isna()))
+        coverage_percentage = s1[self.c.COLS.COVERAGE_S1] * s1[self.c.COLS.BASEYEAR_GHG_S1] / (s1[self.c.COLS.BASEYEAR_GHG_S1] + s1[self.c.COLS.BASEYEAR_GHG_S2])
+        self.data.loc[s1_mask, [self.c.COLS.COVERAGE_S1, self.c.COLS.COVERAGE_S2]] = coverage_percentage
+        self.data = self.data[~s1_delete_mask]
+
+        s2_mask = self.data[self.c.COLS.SCOPE] == 's2'
+        s2 = self.data[s2_mask]
+        s2_delete_mask = (s2_mask & (self.data[self.c.COLS.COVERAGE_S2].isna() | self.data[self.c.COLS.BASEYEAR_GHG_S1].isna() | self.data[self.c.COLS.BASEYEAR_GHG_S2].isna()))
+        coverage_percentage = s2[self.c.COLS.COVERAGE_S2] * s2[self.c.COLS.BASEYEAR_GHG_S2] / (s2[self.c.COLS.BASEYEAR_GHG_S1] + s2[self.c.COLS.BASEYEAR_GHG_S2])
+        self.data.loc[s2_mask, [self.c.COLS.COVERAGE_S1, self.c.COLS.COVERAGE_S2]] = coverage_percentage
+        self.data = self.data[~s2_delete_mask]
 
     def split_s1s2s3(self):
         '''
