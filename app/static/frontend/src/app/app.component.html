@@ -80,8 +80,11 @@
         <div class="form-group" style="margin-top: 1em;">
           <button class="btn btn-primary">Upload Dataprovider</button>
         </div>
-        <div *ngIf="uploadSuccess" class="alert alert-success" style="display:inline-block;" role="alert">
+        <div *ngIf="uploadSuccess && uploadCount > 0" class="alert alert-success" style="display:inline-block;" role="alert">
            Upload {{uploadCount}} succeeded
+        </div>
+        <div *ngIf="!uploadSuccess && uploadCount > 0" class="alert alert-danger" style="display:inline-block;" role="alert">
+           Upload {{uploadCount}} not succeeded
         </div>
 
 
@@ -205,11 +208,12 @@
                       <div class="">
                         <p>Choose the preferred scenario for calculation of the temperature scores.</p>
                         <div *ngFor="let scenario of availableScenarios" class="form-check" id="{{scenario.label}}">
-                          <input (click)="addScenario($event)" class="form-check-input" type="radio" name="gridRadios" value="{{scenario.label}}">
+                          <input (click)="addScenario($event)" class="form-check-input" type="radio" name="gridRadios" value="{{scenario.label}}" checked="{{scenario.checked}}">
                           <label class="form-check-label" for="{{scenario.label}}">
                             {{ scenario.description }}
                           </label>
                         </div>
+                        <small class="form-text text-muted"><b>Please note:</b> in order to use scenario 4a and 4b, you should specify which companies you'd like to target for engagement by adding a column to the portfolio import file and marking the relevant companies with TRUE.</small>
                       </div>
                     </div>
                   </div>

@@ -20,7 +20,7 @@ export class AppComponent implements OnInit {
     title = 'SBTi-FI Temperature Scoring';
     excelSkiprows = 0;
     isNavbarCollapsed = true;
-    availableTargetColumns: string[] = ['company_id', 'company_name', 'investment_value', 'ISIN'];
+    availableTargetColumns: string[] = ['company_id', 'company_name', 'investment_value', 'ISIN', 'engagement_target'];
     availableTimeFrames: string[] = ['short', 'mid', 'long'];
     availableScopeCategories: string[] = ['s1s2', 's3', 's1s2s3'];
     availableAggregationMethods: string[] = ['WATS', 'TETS', 'MOTS', 'EOTS', 'ECOTS', 'AOTS', 'ROTS'];
@@ -28,7 +28,7 @@ export class AppComponent implements OnInit {
     availableGroupingColumns: string[] = AVAILABLE_GROUPING_COLUMNS;
     groupingColumns: string[] = [];
     selectedAggregationMethod = 'WATS';
-    availableScenarios: any[] = [{'label':'scenario_1', 'description': 'With current targets, rest of portfolio business as usual'}, {'label':'scenario_2', 'description': 'Scenario 1: "What-if" - all companies set targets (default scores go to 2.0)'}, {'value': {"number": 2}, 'label':'scenario_3', 'description': 'Scenario 2: "What-if" - all companies with targets get SBTs (scores from targets are capped at 1.75)'}, {'value': {"number": 1}, 'label':'scenario_4', 'description': 'Scenario 3a: "What-if" - the 10 highest contributors to the portfolio set targets (scores of 10 highest contributors are capped at 2.0)'}, {'value': {"number": 1}, 'label':'scenario_5', 'description': 'Scenario 3b: "What-if" - the 10 highest contributors to the portfolio set SBTs (scores of 10 highest contributors are capped at 1.75)'}];
+    availableScenarios: any[] = [{'checked': 'checked', 'label':'scenario_1', 'description': 'With current targets, rest of portfolio business as usual'}, {'checked': '', 'label':'scenario_2', 'description': 'Scenario 1: "What-if" - all companies set targets (default scores go to 2.0)'}, {'checked': '', 'label':'scenario_3', 'description': 'Scenario 2: "What-if" - all companies with targets get SBTs (scores from targets are capped at 1.75)'}, {'checked': '', 'label':'scenario_4', 'description': 'Scenario 3a: "What-if" - the 10 highest contributors to the portfolio set targets (scores of 10 highest contributors are capped at 2.0)'}, {'checked': '', 'label':'scenario_5', 'description': 'Scenario 3b: "What-if" - the 10 highest contributors to the portfolio set SBTs (scores of 10 highest contributors are capped at 1.75)'}, {'checked': '', 'label':'scenario_6', 'description': 'Scenario 4a: "What-if" all selected companies set targets (scores for these companies get capped at 2.0)'}, {'checked': '', 'label':'scenario_7', 'description': 'Scenario 4b: "What-if" all selected companies set SBTs (scores for these companies get capped at 1.75)'}];
     filterTimeFrames: string[] = ['mid'];
     filterScopeCategory: string[] = ['s1s2', 's1s2s3'];
     includeColumns: string[] = [];
@@ -98,7 +98,7 @@ export class AppComponent implements OnInit {
      * Select Scenario
      */
     addScenario(element) {
-      const dicts = {'scenario_1': {'number': 0}, 'scenario_2': {'number': 1}, 'scenario_3': {'number': 2}, 'scenario_4': {'number': 3, 'engagement_type': 'set_targets'}, 'scenario_5': {'number': 3, 'engagement_type': 'set_SBTi_targets'}};
+      const dicts = {'scenario_1': {'number': 0}, 'scenario_2': {'number': 1}, 'scenario_3': {'number': 2}, 'scenario_4': {'number': 3, 'engagement_type': 'set_targets'}, 'scenario_5': {'number': 3, 'engagement_type': 'set_SBTi_targets'}, 'scenario_6': {'number': 4, 'engagement_type': 'set_targets'}, 'scenario_7': {'number': 4, 'engagement_type': 'set_SBTi_targets'}};
       this.selectedScenario = dicts[element.target.value];
     }
 
@@ -254,9 +254,11 @@ export class AppComponent implements OnInit {
         if (this.dataProviderFile1) {
             formData1.append('file', this.dataProviderFile1[0], this.dataProviderFile1[0].name);
             this.appService.doParseDataProvider(formData1).subscribe((response) => {
+                this.uploadCount++;
                 if (response['POST Request']['Response']['Status Code'] == 200) {
-                  this.uploadCount++;
                   this.uploadSuccess = true;
+                } else {
+                  this.uploadSuccess = false;
                 }
             });
         }
