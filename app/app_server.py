@@ -1,7 +1,5 @@
-import itertools
 import json
 import os
-import mimetypes
 
 from typing import List, Dict
 
@@ -10,9 +8,9 @@ import numpy as np
 from flask import Flask, request, send_from_directory
 from flask_restful import Resource, Api
 from flask_swagger_ui import get_swaggerui_blueprint
-from flask_uploads import UploadSet, ALL, configure_uploads
 
 import mimetypes
+
 mimetypes.init()
 
 import SBTi
@@ -23,11 +21,9 @@ from SBTi.portfolio_coverage_tvp import PortfolioCoverageTVP
 from SBTi.temperature_score import TemperatureScore
 from SBTi.target_valuation_protocol import TargetValuationProtocol
 
-PATH = "uploads"
+UPLOAD_FOLDER = 'data'
 app = Flask(__name__)
-files = UploadSet('files', ALL)
-app.config['UPLOADS_DEFAULT_DEST'] = PATH
-configure_uploads(app, files)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 api = Api(app)
 
 DATA_PROVIDER_MAP = {
@@ -64,7 +60,8 @@ class BaseEndpoint(Resource):
             "MOTS": PortfolioAggregationMethod.MOTS,
             "EOTS": PortfolioAggregationMethod.EOTS,
             "ECOTS": PortfolioAggregationMethod.ECOTS,
-            "AOTS": PortfolioAggregationMethod.AOTS
+            "AOTS": PortfolioAggregationMethod.AOTS,
+            "ROTS": PortfolioAggregationMethod.ROTS
         }
 
     def _get_data_providers(self, json_data: Dict):
@@ -77,18 +74,15 @@ class BaseEndpoint(Resource):
         '''
         data_providers = []
         if "data_providers" in json_data:
-            for data_provider_name in json_data["data_providers"]:
-                for data_provider in self.data_providers:
-                    if data_provider["name"] == data_provider_name:
-                        data_providers.append(data_provider["class"])
-                        break
+            for path in json_data["data_providers"]:
+                data_provider = DATA_PROVIDER_MAP['excel'](path)
+                data_providers.append(data_provider)
 
         # TODO: When the user did give us data providers, but we can't match them this fails silently, maybe we should
         # fail louder
         if len(data_providers) == 0:
             data_providers = [data_provider["class"] for data_provider in self.data_providers]
         return data_providers
-
 
 
 class temp_score(BaseEndpoint):
@@ -105,6 +99,7 @@ class temp_score(BaseEndpoint):
     def post(self):
 
         json_data = request.get_json(force=True)
+
         data_providers = self._get_data_providers(json_data)
 
         default_score = self.config["default_score"]
@@ -114,10 +109,25 @@ class temp_score(BaseEndpoint):
 
         company_data = SBTi.data.get_company_data(data_providers, json_data["companies"])
         targets = SBTi.data.get_targets(data_providers, json_data["companies"])
-        portfolio_data = pd.merge(left=company_data, right=targets, left_on='company_name', right_on='company_name')
+
+        portfolio_data = pd.merge(left=company_data, right=targets, how='outer', on=['company_name', 'company_id'])
+
+        aggregation_method = self.aggregation_map[self.config["aggregation_method"]]
+        if "aggregation_method" in json_data and json_data["aggregation_method"] in self.aggregation_map:
+            aggregation_method = self.aggregation_map[json_data["aggregation_method"]]
+
+        # Group aggregates by certain column names
+        grouping = json_data.get("grouping_columns", None)
+
+        scenario = json_data.get('scenario', None)
+        if scenario is not None:
+            scenario['aggregation_method'] = aggregation_method
+            scenario['grouping'] = grouping
+            temperature_score.set_scenario(scenario)
 
         # Target_Valuation_Protocol
-        target_valuation_protocol = TargetValuationProtocol(portfolio_data)
+        target_valuation_protocol = TargetValuationProtocol(portfolio_data, company_data)
+
         portfolio_data = target_valuation_protocol.target_valuation_protocol()
 
         # Add the user-defined columns to the data set for grouping later on
@@ -144,14 +154,9 @@ class temp_score(BaseEndpoint):
         if "filter_time_frame" in json_data and len(json_data["filter_time_frame"]) > 0:
             scores = scores[scores["time_frame"].isin(json_data["filter_time_frame"])]
 
-        # Group by certain column names
-        grouping = json_data.get("grouping_columns", None)
-
         scores = scores.copy()
+        scores = scores.round(2)
 
-        aggregation_method = self.aggregation_map[self.config["aggregation_method"]]
-        if "aggregation_method" in json_data and json_data["aggregation_method"] in self.aggregation_map:
-            aggregation_method = self.aggregation_map[json_data["aggregation_method"]]
         aggregations = temperature_score.aggregate_scores(scores, aggregation_method, grouping)
 
         # Include columns
@@ -163,19 +168,87 @@ class temp_score(BaseEndpoint):
         coverage = portfolio_coverage_tvp.get_portfolio_coverage(portfolio_data, aggregation_method)
 
         # Temperature score percentage breakdown by default score and target score
-        temperature_percentage_coverage = temperature_score.temperature_score_influence_percentage(portfolio_data, json_data['aggregation_method'])
+        temperature_percentage_coverage = temperature_score.temperature_score_influence_percentage(portfolio_data,
+                                                                                                   json_data[
+                                                                                                       'aggregation_method'])
 
-        # Distribution of columns
-        column_distribution = temperature_score.columns_percentage_distribution(portfolio_data,json_data['feature_distribution'])
+        if grouping:
+            column_distribution = temperature_score.columns_percentage_distribution(portfolio_data,
+                                                                                    json_data['grouping_columns'])
+        else:
+            column_distribution = None
 
-        return {
+        temperature_percentage_coverage = pd.DataFrame.from_dict(temperature_percentage_coverage).replace(
+            {np.nan: None}).to_dict()
+        aggregations = temperature_score.merge_percentage_coverage_to_aggregations(aggregations,
+                                                                                   temperature_percentage_coverage)
+
+        # Dump raw data to compute the scores
+        anonymize_data_dump = json_data.get("anonymize_data_dump", False)
+        if anonymize_data_dump:
+            scores = temperature_score.anonymize_data_dump(scores)
+
+        return_dic = {
             "aggregated_scores": aggregations,
+            "scores": scores.to_dict(orient="records"),
             "coverage": coverage,
             "companies": scores[include_columns].replace({np.nan: None}).to_dict(
                 orient="records"),
-            "temp_score_percent_coverage": temperature_percentage_coverage,
-            "feature_distribution": str(column_distribution)
+            "feature_distribution": column_distribution
         }
+
+        return_dic = convert_nan_to_none(return_dic)
+
+        return return_dic
+
+
+def convert_nan_to_none(nested_dictionary):
+    """Convert NaN values to None in a list in a nested dictionary.
+    TODO: Temporary fix for front-end not supporting nan, will be deleted after Beta testing
+
+    :param nested_dictionary: dictionary to return that possible contains NaN values
+    :type nested_dictionary: dict
+
+    :rtype: dict
+    :return: cleaned dictionary where all NaN values are converted to None
+    """
+    for parent, dictionary in nested_dictionary.items():
+        if isinstance(dictionary, list):
+            clean_list = []
+            for element in dictionary:
+                clean_element = element
+                if isinstance(element, dict):
+                    for x, y in element.items():
+                        if str(y) == 'nan':
+                            clean_element[x] = None
+                clean_list.append(clean_element)
+            nested_dictionary[parent] = clean_list
+
+        elif isinstance(dictionary, dict):
+            for key, value in dictionary.items():
+                if isinstance(value, dict):
+                    for time_frame, values in value.items():
+                        if isinstance(values, dict):
+                            for scope, scores_el in values.items():
+                                for k, v in scores_el.items():
+                                    if isinstance(v, list):
+                                        clean_v = []
+                                        for company in v:
+                                            clean_company = company
+                                            if isinstance(company, dict):
+                                                for identifier, number in company.items():
+                                                    if str(number) == 'nan':
+                                                        clean_company[identifier] = None
+                                                clean_v.append(clean_company)
+                                                scores_el[k] = clean_v
+
+                                    if str(v) == 'nan':
+                                        scores_el[k] = None
+                        if str(values) == 'nan':
+                            value[time_frame] = None
+
+    return nested_dictionary
+
 
 class DataProviders(BaseEndpoint):
     """
@@ -214,11 +287,27 @@ class portfolio_coverage(BaseEndpoint):
         data_providers = self._get_data_providers(json_data)
         company_data = SBTi.data.get_company_data(data_providers, json_data["companies"])
         targets = SBTi.data.get_targets(data_providers, json_data["companies"])
-        portfolio_data = pd.merge(left=company_data, right=targets, left_on='company_name', right_on='company_name')
+        portfolio_data = pd.merge(left=company_data, right=targets, how='outer', on=['company_name', 'company_id'])
+
+        # Adding ISIN to Portfolio_data
+        companies = json_data['companies']
+
+        try:
+            company_ISIN = {
+                company['company_id']: company['ISIN'] for company in companies
+            }
+        except:
+            return {'Response': {
+                'Error_Code': 404,
+                'Message': 'Invalid body. ISIN is required.'
+            }}
+
+        portfolio_data['ISIN'] = None
+        for company_id in company_ISIN.keys():
+            index = portfolio_data[portfolio_data['company_id'] == company_id].index
+            portfolio_data.loc[index, 'ISIN'] = company_ISIN[company_id]
 
         for company in json_data["companies"]:
-            portfolio_data.loc[portfolio_data['company_name'] == company["company_name"], "portfolio_weight"] = company[
-                "portfolio_weight"]
             portfolio_data.loc[portfolio_data['company_name'] == company["company_name"], "investment_value"] = company[
                 "investment_value"]
 
@@ -272,6 +361,7 @@ class documentation_endpoint(Resource):
     '''
     Supports flask_swagger documentation endpoint
     '''
+
     def get(self, path):
         return send_from_directory('static', path)
 
@@ -300,66 +390,11 @@ class ParsePortfolio(Resource):
         return {'portfolio': df.replace({np.nan: None}).to_dict(orient="records")}
 
 
-class import_portfolio(Resource):
-    """
-    This class allows the client to import and replace portfolios. Multiple HTTP Protocols are available for
-    this resource.
-
-    :param BaseEndpoint: inherites from a different class
-
-    :rtype: Dictionary
-    :return: HTTP Request Information.
-    """
-
-    def get(self):
-        return {'GET Request': 'Hello World'}
-
-    def post(self):
-        doc_type = request.args.get('document_type')
-        if doc_type=='excel':
-            file = request.files['file']
-            if test_file(file,'excel'):
-                files.save(request.files['file'])
-                return {'POST Request': {'Response': {'Status Code': 200, 'Message': 'File Saved', 'File': file.filename}}}
-            else:
-                return {'POST Request': {'Response': {'Status Code': 400, 'Message': 'Error. File did not save.'}}}
-
-        elif doc_type=='json':
-            json_data = request.get_json(force=True)
-            df = pd.DataFrame(data=json_data['companies'], index=[0])
-            # Todo: Name of document needs to be adjusted.
-            df.to_excel('json_example.xlsx')
-
-            # Todo: Modify the return response.
-            return {'POST Request': {'Response': {'Status Code': 200, 'Message': 'File Saved', 'File':''}}}
-
-    def put(self):
-        doc_type = request.args.get('document_type')
-        remove_doc = request.args.get('document_replace')
-        for root, dirs, file in os.walk(PATH):
-            for f in file:
-                if remove_doc == f.split('.')[0]:
-                    if doc_type=='excel':
-                        os.remove(os.path.join(root, f))
-                        files.save(request.files['file'])
-                    elif doc_type=='json':
-                        os.remove(os.path.join(root, f))
-                        json_data = request.get_json(force=True)
-                        df = pd.DataFrame(data=json_data['companies'], index=[0])
-
-                        # Todo: Name of document needs to be adjusted.
-                        df.to_excel('json_example.xlsx')
-                    return {'PUT Request': {
-                        'Response': {'Status Code': 200, 'Message': 'File Replaced', 'Replaced File': remove_doc}}}
-        return {'PUT Request': {'Response': {'Status Code': 400, 'Error Message': 'File Not Found', 'File': remove_doc}}}
-
-
-
 class data_provider(BaseEndpoint):
     """
     This class allows the client to receive information from the data provider.
 
-    :param BaseEndpoint: inherites from a different class
+    :param BaseEndpoint: inherits from a different class
 
     :rtype: Dictionary
     :return: HTTP Request.
@@ -387,25 +422,20 @@ class data_provider(BaseEndpoint):
         }
 
 
-def test_file(file,target_type):
-    """
-    This supporting function determines if the file size is not above a predetermine threshold, and if the target type
-    matchs the file that is being imported.
+class import_data_provider(Resource):
+    '''
+    Allows the user to replace the "inputFormat" with a new "data provider".
+    '''
 
-    :param file: file that is being imported through HTTP Protocol
-    :param target_type: <excel|json>
-
-    :rtype: Boolean
-    :return: <True|False>
-    """
-    file.seek(0, 2)
-    file_name = file.filename
-    file_type = file_name.split('.')[-1]
-    file_dictionary = {'excel':'xlsx'}
-    if (int(file.tell())<10000000) & (file_type==file_dictionary[target_type]):
-        return True
-    else:
-        return False
+    def post(self):
+        file = request.files['file']
+        file_name = file.filename
+        file_type = file_name.split('.')[-1]
+        if (int(file.tell()) < 10000000) & (file_type == 'xlsx'):
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], 'InputFormat.xlsx'))
+            return {'POST Request': {'Response': {'Status Code': 200, 'Message': 'Data Provider Imported'}}}
+        else:
+            return {'POST Request': {'Response': {'Status Code': 400, 'Message': 'Error. File did not save.'}}}
 
 
 SWAGGER_URL = '/docs'
@@ -426,10 +456,10 @@ api.add_resource(DataProviders, '/data_providers/')
 api.add_resource(data, '/data/')
 api.add_resource(report, '/report/')
 api.add_resource(documentation_endpoint, '/static/<path:path>')
-api.add_resource(import_portfolio, '/import_portfolio/')
 api.add_resource(ParsePortfolio, '/parse_portfolio/')
 api.add_resource(data_provider, '/data_provider')
 api.add_resource(Frontend, '/<path:path>', '/')
+api.add_resource(import_data_provider, '/import_data_provider/')
 
 if __name__ == '__main__':
     app.run(debug=True)  # important to mention debug=True

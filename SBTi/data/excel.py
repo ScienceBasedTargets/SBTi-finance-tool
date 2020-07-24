@@ -15,10 +15,11 @@ class ExcelProvider(DataProvider):
     def __init__(self, path: str, config: Type[ColumnsConfig] = ColumnsConfig):
         super().__init__()
         # self.data = pd.read_excel(config["path"], sheet_name=None, skiprows=1)
-        self.data = pd.read_excel(path, sheet_name=None, skiprows=1)
+        self.data = pd.read_excel(path, sheet_name=None,skiprows=1)
         self.c = config
 
-    def get_targets(self, companies: pd.DataFrame) -> pd.DataFrame:
+
+    def get_targets(self, companies: list) -> pd.DataFrame:
         """
         Get all the targets for the whole portfolio of companies. This should return a dataframe, containing at least
         the following columns:
@@ -39,26 +40,17 @@ class ExcelProvider(DataProvider):
                             field.
         :return: A dataframe containing the targets
         """
+        data_targets = self.data['Target data']
 
-        data_target = self.data['Target data']
+        if "company_id" not in data_targets:
+            data_targets["company_id"] = None
+        return data_targets[
+            (data_targets["company_id"].isin([company["company_id"] for company in companies]) &
+             data_targets["company_id"].notnull())].copy()
 
-        required_columns = [self.c.COMPANY_NAME, self.c.COMPANY_ID, self.c.TARGET_CLASSIFICATION, self.c.SCOPE,
-                            self.c.COVERAGE, self.c.REDUCTION_AMBITION, self.c.BASE_YEAR, self.c.END_YEAR,
-                            self.c.START_YEAR, self.c.TARGET_REFERENCE_NUMBER,
-                            self.c.REDUCTION_FROM_BASE_YEAR,
-                            self.c.EMISSIONS_IN_SCOPE, self.c.ACHIEVED_EMISSIONS, self.c.TARGET_YEAR]
 
-        data_frame = pd.DataFrame(columns=required_columns)
 
-        for company in companies:
-            data_frame = data_frame.append(
-                data_target[(data_target[self.c.COMPANY_NAME] == company[self.c.COMPANY_NAME]) &
-                            (data_target[self.c.COMPANY_ID] == company[self.c.COMPANY_ID])][required_columns],
-                ignore_index=True)
-
-        return data_frame
-
-    def get_company_data(self, companies: pd.DataFrame) -> pd.DataFrame:
+    def get_company_data(self, companies: list) -> pd.DataFrame:
         """
         Get all relevant data for a certain company. Should return a dataframe, containing at least the following
         columns:
@@ -69,8 +61,6 @@ class ExcelProvider(DataProvider):
             it will be converted to "Others" (or whichever value is set in the config as the default
         * s1s2_emissions: Total company emissions in the S1 + S2 scope
         * s3_emissions: Total company emissions in the S3 scope
-        * portfolio_weight: The weight of the company in the portfolio. Only required to use the WATS portfolio
-            aggregation.
         * market_cap: Market capitalization of the company. Only required to use the MOTS portfolio aggregation.
         * investment_value: The investment value of the investment in this company. Only required to use the MOTS, EOTS,
             ECOTS and AOTS portfolio aggregation.
@@ -85,21 +75,14 @@ class ExcelProvider(DataProvider):
         :return: A dataframe containing the company data
         """
 
-        data_company = self.data['Company data']
+        data_company = self.data['Fundamental data']
+        if "company_id" not in data_company:
+            data_company["company_id"] = None
 
-        required_columns = [self.c.COMPANY_NAME, self.c.COMPANY_ID, self.c.CDP_ACS_INDUSTRY, self.c.COUNTRY,
-                            self.c.INDUSTRY, self.c.SECTOR, self.c.GHG_SCOPE12, self.c.GHG_SCOPE3, self.c.REVENU,
-                            self.c.MARKET_CAP, self.c.ENTERPRISE_VALUE, self.c.TOTAL_ASSETS, self.c.CASH_EQUIVALENTS]
+        return data_company[
+            (data_company["company_id"].isin([company["company_id"] for company in companies]) &
+             data_company["company_id"].notnull())].copy()
 
-        data_frame = pd.DataFrame(columns=required_columns)
-
-        for company in companies:
-            data_frame = data_frame.append(
-                data_company[(data_company[self.c.COMPANY_NAME] == company[self.c.COMPANY_NAME]) &
-                             (data_company[self.c.COMPANY_ID] == company[self.c.COMPANY_ID])][required_columns],
-                ignore_index=True)
-
-        return data_frame
 
     def get_sbti_targets(self, companies: list) -> list:
         """
@@ -111,9 +94,3 @@ class ExcelProvider(DataProvider):
         :return: The original list, enriched with a field called "sbti_target_status"
         """
         raise NotImplementedError
-
-# Testing
-# input_data = pd.read_excel("C:/Projects/SBTi/connector/InputFormat.xlsx", sheet_name='User input')[['company_name','company_id']]
-# x = ExcelProvider()
-# x.get_company_data(input_data)
-# x.get_targets(input_data)

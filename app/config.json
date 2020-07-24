@@ -4,16 +4,43 @@
   "frontend_path": "static/frontend/dist/frontend/",
   "data_providers": [
     {
-      "type": "csv",
-      "name": "csv-a",
+      "type": "excel",
+      "name": "Excel",
       "parameters": {
-        "path": "data/data_test_temperature_score.csv",
-        "path_targets": "data/data_test_temperature_score_targets.csv"
+        "path": "data/InputFormat.xlsx"
       }
     },
     {
       "type": "excel",
-      "name": "excel-test-123",
+      "name": "Bloomberg (Coming soon)",
+      "parameters": {
+        "path": "data/InputFormat.xlsx"
+      }
+    },
+    {
+      "type": "excel",
+      "name": "CDP (Coming soon)",
+      "parameters": {
+        "path": "data/InputFormat.xlsx"
+      }
+    },
+    {
+      "type": "excel",
+      "name": "ISS (Coming soon)",
+      "parameters": {
+        "path": "data/InputFormat.xlsx"
+      }
+    },
+    {
+      "type": "excel",
+      "name": "Trucost (Coming soon)",
+      "parameters": {
+        "path": "data/InputFormat.xlsx"
+      }
+    },
+    {
+      "type": "excel",
+      "name": "Urgentem (Coming soon)",
       "parameters": {
         "path": "data/InputFormat.xlsx"
       }

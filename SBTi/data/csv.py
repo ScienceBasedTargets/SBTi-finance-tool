@@ -38,10 +38,8 @@ class CSVProvider(DataProvider):
             self.data_targets["company_id"] = None
         return self.data_targets[
             (self.data_targets["company_id"].isin([company["company_id"] for company in companies]) &
-             self.data_targets["company_id"].notnull()) |
-            (self.data_targets["company_name"].isin([company["company_name"] for company in companies]) &
-             self.data_targets["company_name"].notnull())
-        ].copy()
+             self.data_targets["company_id"].notnull())].copy()
+
 
     def get_company_data(self, companies: list) -> pd.DataFrame:
         """
@@ -54,8 +52,6 @@ class CSVProvider(DataProvider):
             it will be converted to "Others" (or whichever value is set in the config as the default
         * s1s2_emissions: Total company emissions in the S1 + S2 scope
         * s3_emissions: Total company emissions in the S3 scope
-        * portfolio_weight: The weight of the company in the portfolio. Only required to use the WATS portfolio
-            aggregation.
         * market_cap: Market capitalization of the company. Only required to use the MOTS portfolio aggregation.
         * investment_value: The investment value of the investment in this company. Only required to use the MOTS, EOTS,
             ECOTS and AOTS portfolio aggregation.
@@ -74,10 +70,8 @@ class CSVProvider(DataProvider):
 
         return self.data[
             (self.data["company_id"].isin([company["company_id"] for company in companies]) &
-             self.data["company_id"].notnull()) |
-            (self.data["company_name"].isin([company["company_name"] for company in companies]) &
-             self.data["company_name"].notnull())
-        ].copy()
+             self.data["company_id"].notnull())].copy()
+
 
     def get_sbti_targets(self, companies: list) -> list:
         """
@@ -90,7 +84,4 @@ class CSVProvider(DataProvider):
         """
         return self.data[
             (self.data["company_id"].isin([company["company_id"] for company in companies]) &
-             self.data["company_id"].notnull()) |
-            (self.data["company_name"].isin([company["company_name"] for company in companies]) &
-             self.data["company_name"].notnull())
-        ].copy()
+             self.data["company_id"].notnull())].copy()

@@ -17,7 +17,7 @@ The folder structure for this project is as follows:
     └── test                    # Automated unit tests for the SBTi package (Nose2 tests)
 
 ## Installation
-The SBTi package may be installed using PIP. If you'd like to install it locally use the following command:
+The SBTi package may be installed using PIP. If you'd like to install it locally use the following command. For testing or production please see the deployment section for further instructions
 
 ```bash
 pip install -e .
@@ -37,16 +37,27 @@ nose2 -v
 ```
 
 ## Deployment
-The alignment tool can be used either as an standalone Python package or as an API.
+The alignment tool can be used either as an standalone Python package or as an REST API.
 The API can be deployed as a Docker container. To do this a Docker file is provided.
-To start the docker container locally use the following command:
+
+In order to run the docker container locally on none linux machines one needs to install [Docker Desktop](https://www.docker.com/products/docker-desktop) available for Mac and Windows
+
+
+Both the master and DEV branch have public images at docker hub. 
+
+```bash
+docker run -d -p 5000:8080 sbti/sbti_tool:latest # to run  the latest stable release
+```
+or 
+```bash
+docker run -d -p 5000:8080 sbti/sbti_tool:DEV # to run the latest DEV version
+```
+The UI should now be available at [http://localhost:5000/](http://localhost:5000/) and check [http://localhost:5000/docs/](http://localhost:5000/docs/) for the API documentation
+
+To build an run the docker container locally use the following command:
 ```bash
 docker-compose up -d --build
 ```
-The API should now be available at localhost on port 5000.
-
-### Google Cloud Platform
-TODO: document/link to documentation on how to deploy on GCP
 
 ### Amazon Web Services
 These instructions assume that you've installed and configured the Amazon [AWS CLI tools](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html) and the [ECS CLI tools](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ECS_CLI_Configuration.html) with an IAM account that has at least write access to ECS and EC2 and the capability of creating AIM roles.
@@ -119,6 +130,3 @@ ecs-cli compose -f docker-compose_aws.yml up --cluster-config sbti-ecs-conf --fo
 17. You should now be able to access the API.
 
 > :warning: This will make the API publicly available on the world wide web! Please note that this API is not protected in any way. Therefore it's recommended to run your instance in a private subnet and only access it through there. Alternatively you can change the security group settings to only allow incoming connections from your local IP or company VPN.  
-
-### Microsoft Azure
-TODO: document/link to documentation on how to deploy on Azure

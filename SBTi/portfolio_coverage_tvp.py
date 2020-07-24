@@ -1,7 +1,5 @@
 from typing import Type, Optional
-
 import pandas as pd
-
 from SBTi.configs import PortfolioCoverageTVPConfig
 from SBTi.portfolio_aggregation import PortfolioAggregation, PortfolioAggregationMethod
 
@@ -28,7 +26,9 @@ class PortfolioCoverageTVP(PortfolioAggregation):
         :param company: The company data
         :return: The SBTi status of the target
         """
-        if self.c.COLS.COMPANY_ID in company and company[self.c.COLS.COMPANY_ID] is not None:
+        if self.c.COL_COMPANY_ID in company and company[self.c.COL_COMPANY_ID] is not None:
+            targets = self.targets[self.targets[self.c.COL_COMPANY_ID] == company[self.c.COL_COMPANY_ID]]
+        elif self.c.COLS.COMPANY_ID in company and company[self.c.COLS.COMPANY_ID] is not None:
             targets = self.targets[self.targets[self.c.COL_COMPANY_ID] == company[self.c.COLS.COMPANY_ID]]
         else:
             targets = []
@@ -57,7 +57,6 @@ class PortfolioCoverageTVP(PortfolioAggregation):
         if self.c.OUTPUT_TARGET_STATUS not in company_data.columns:
             company_data[self.c.OUTPUT_TARGET_STATUS] = company_data.apply(lambda row: self._get_target_status(row),
                                                                            axis=1)
-
         company_data[self.c.OUTPUT_TARGET_STATUS] = company_data.apply(
             lambda row: self.c.TARGET_SCORE_MAP[row[self.c.OUTPUT_TARGET_STATUS]], axis=1
         )
