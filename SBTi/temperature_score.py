@@ -513,6 +513,7 @@ class TemperatureScore(PortfolioAggregation):
                         scores.loc[company_mask, self.c.COLS.TEMPERATURE_SCORE] = \
                             scores.loc[company_mask, self.c.COLS.TEMPERATURE_SCORE].apply(lambda x: min(x, self.score_cap))
         elif self.scenario['number'] == 4:
+            scores[self.c.COLS.ENGAGEMENT_TARGET] = scores[self.c.COLS.ENGAGEMENT_TARGET] == True
             score_based_on_target = scores[self.c.COLS.ENGAGEMENT_TARGET]
             scores.loc[score_based_on_target, self.c.COLS.TEMPERATURE_SCORE] = \
                 scores.loc[score_based_on_target, self.c.COLS.TEMPERATURE_SCORE].apply(lambda x: min(x, self.score_cap))
