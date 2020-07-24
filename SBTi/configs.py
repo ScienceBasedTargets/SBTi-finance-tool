@@ -60,6 +60,7 @@ class ColumnsConfig:
     BASEYEAR_GHG_S2 = 'BaseYear_GHG_S2'
     BASEYEAR_GHG_S3 = 'BaseYear_GHG_S3'
     REGION = 'Region'
+    ENGAGEMENT_TARGET = 'engagement_target'
 
 
 
