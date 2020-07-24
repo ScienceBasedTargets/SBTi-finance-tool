@@ -197,7 +197,7 @@ class TemperatureScore(PortfolioAggregation):
             *data.apply(lambda row: self.get_regression(row), axis=1)
         )
         data[self.c.COLS.TEMPERATURE_SCORE] = data.apply(lambda row: self.get_score(row), axis=1)
-        if (self.scenario['number'] == 2) or (self.scenario['number'] == 3):
+        if (self.scenario['number'] == 2) or (self.scenario['number'] == 3) or (self.scenario['number'] == 4):
             data = self.cap_scores(data)
         combined_data = []
         # company_columns = [column for column in self.c.COLS.COMPANY_COLUMNS + extra_columns if column in data.columns]
@@ -496,7 +496,7 @@ class TemperatureScore(PortfolioAggregation):
         if self.scenario['number'] == 2:
             self.score_cap = 1.75
         # Scenario 3: Engaging the highest contributors (top 10) to set (better) targets
-        if self.scenario['number'] == 3:
+        if (self.scenario['number'] == 3) or (self.scenario['number'] == 4):
             if self.scenario['engagement_type'] == 'set_targets':
                 self.score_cap = 2.0
             elif self.scenario['engagement_type'] == 'set_SBTi_targets':
@@ -505,7 +505,8 @@ class TemperatureScore(PortfolioAggregation):
     def cap_scores(self, scores: pd.DataFrame):
         if self.scenario['number'] == 2:
             score_based_on_target = ~pd.isnull(scores[self.c.COLS.TARGET_REFERENCE_NUMBER])
-            scores.loc[score_based_on_target, self.c.COLS.TEMPERATURE_SCORE] = self.score_cap
+            scores.loc[score_based_on_target, self.c.COLS.TEMPERATURE_SCORE] = \
+                scores.loc[score_based_on_target, self.c.COLS.TEMPERATURE_SCORE].apply(lambda x: min(x, self.score_cap))
         elif self.scenario['number'] == 3:
             # Cap scores of 10 highest contributors per time frame-scope combination
             aggregations = self.aggregate_scores(scores, self.scenario['aggregation_method'], self.scenario['grouping'])
@@ -514,9 +515,15 @@ class TemperatureScore(PortfolioAggregation):
                     number_top_contributors = min(10, len(aggregations[time_frame][scope]['all']['contributions']))
                     for contributor in range(number_top_contributors):
                         company_name = aggregations[time_frame][scope]['all']['contributions'][contributor][self.c.COLS.COMPANY_NAME]
-                        scores.loc[((scores[self.c.COLS.COMPANY_NAME] == company_name) &
-                                   (scores[self.c.COLS.SCOPE_CATEGORY] == scope) &
-                                   (scores[self.c.COLS.TIME_FRAME] == time_frame)), self.c.COLS.TEMPERATURE_SCORE] = self.score_cap
+                        company_mask = ((scores[self.c.COLS.COMPANY_NAME] == company_name) &
+                                        (scores[self.c.COLS.SCOPE_CATEGORY] == scope) &
+                                        (scores[self.c.COLS.TIME_FRAME] == time_frame))
+                        scores.loc[company_mask, self.c.COLS.TEMPERATURE_SCORE] = \
+                            scores.loc[company_mask, self.c.COLS.TEMPERATURE_SCORE].apply(lambda x: min(x, self.score_cap))
+        elif self.scenario['number'] == 4:
+            score_based_on_target = scores[self.c.COLS.ENGAGEMENT_TARGET]
+            scores.loc[score_based_on_target, self.c.COLS.TEMPERATURE_SCORE] = \
+                scores.loc[score_based_on_target, self.c.COLS.TEMPERATURE_SCORE].apply(lambda x: min(x, self.score_cap))
         return scores
     
     def anonymize_data_dump(self, scores):
