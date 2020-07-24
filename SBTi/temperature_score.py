@@ -197,7 +197,7 @@ class TemperatureScore(PortfolioAggregation):
             *data.apply(lambda row: self.get_regression(row), axis=1)
         )
         data[self.c.COLS.TEMPERATURE_SCORE] = data.apply(lambda row: self.get_score(row), axis=1)
-        if (self.scenario['number'] == 2) or (self.scenario['number'] == 3):
+        if (self.scenario['number'] == 2) or (self.scenario['number'] == 3) or (self.scenario['number'] == 4):
             data = self.cap_scores(data)
         combined_data = []
         # company_columns = [column for column in self.c.COLS.COMPANY_COLUMNS + extra_columns if column in data.columns]
@@ -488,7 +488,7 @@ class TemperatureScore(PortfolioAggregation):
         if self.scenario['number'] == 2:
             self.score_cap = 1.75
         # Scenario 3: Engaging the highest contributors (top 10) to set (better) targets
-        if self.scenario['number'] == 3:
+        if (self.scenario['number'] == 3) or (self.scenario['number'] == 4):
             if self.scenario['engagement_type'] == 'set_targets':
                 self.score_cap = 2.0
             elif self.scenario['engagement_type'] == 'set_SBTi_targets':
