@@ -1,6 +1,5 @@
 import datetime
 import itertools
-
 import pandas as pd
 from typing import Type
 from SBTi.configs import PortfolioAggregationConfig
@@ -23,7 +22,7 @@ class TargetValuationProtocol:
         :return: a list of six columns containing dataframes in each one
         '''
         self.test_target_type()
-        if len(self.data)>0:
+        if len(self.data) > 0:
             self.data[self.c.COLS.SCOPE] = self.data[self.c.COLS.SCOPE].str.lower()
             self.data[self.c.COLS.SCOPE_CATEGORY] = self.data.apply(
                 lambda row: self.c.SCOPE_MAP[row[self.c.COLS.SCOPE]], axis=1)
@@ -50,7 +49,6 @@ class TargetValuationProtocol:
         new_dataframe['scope_category'] = ['s1s2', 's1s2', 's1s2', 's3', 's3', 's3']
         new_dataframe['time_frame'] = ['short', 'mid', 'long', 'short', 'mid', 'long']
         return new_dataframe
-
 
     def test_end_year(self):
         '''
@@ -146,15 +144,21 @@ class TargetValuationProtocol:
     def convert_s1_s2_into_s1s2(self):
         s1_mask = self.data[self.c.COLS.SCOPE] == 's1'
         s1 = self.data[s1_mask]
-        s1_delete_mask = (s1_mask & (self.data[self.c.COLS.COVERAGE_S1].isna() | self.data[self.c.COLS.BASEYEAR_GHG_S1].isna() | self.data[self.c.COLS.BASEYEAR_GHG_S2].isna()))
-        coverage_percentage = s1[self.c.COLS.COVERAGE_S1] * s1[self.c.COLS.BASEYEAR_GHG_S1] / (s1[self.c.COLS.BASEYEAR_GHG_S1] + s1[self.c.COLS.BASEYEAR_GHG_S2])
+        s1_delete_mask = (s1_mask & (
+                self.data[self.c.COLS.COVERAGE_S1].isna() | self.data[self.c.COLS.BASEYEAR_GHG_S1].isna() |
+                self.data[self.c.COLS.BASEYEAR_GHG_S2].isna()))
+        coverage_percentage = s1[self.c.COLS.COVERAGE_S1] * s1[self.c.COLS.BASEYEAR_GHG_S1] / (
+                s1[self.c.COLS.BASEYEAR_GHG_S1] + s1[self.c.COLS.BASEYEAR_GHG_S2])
         self.data.loc[s1_mask, [self.c.COLS.COVERAGE_S1, self.c.COLS.COVERAGE_S2]] = coverage_percentage
         self.data = self.data[~s1_delete_mask]
 
         s2_mask = self.data[self.c.COLS.SCOPE] == 's2'
         s2 = self.data[s2_mask]
-        s2_delete_mask = (s2_mask & (self.data[self.c.COLS.COVERAGE_S2].isna() | self.data[self.c.COLS.BASEYEAR_GHG_S1].isna() | self.data[self.c.COLS.BASEYEAR_GHG_S2].isna()))
-        coverage_percentage = s2[self.c.COLS.COVERAGE_S2] * s2[self.c.COLS.BASEYEAR_GHG_S2] / (s2[self.c.COLS.BASEYEAR_GHG_S1] + s2[self.c.COLS.BASEYEAR_GHG_S2])
+        s2_delete_mask = (s2_mask & (
+                self.data[self.c.COLS.COVERAGE_S2].isna() | self.data[self.c.COLS.BASEYEAR_GHG_S1].isna() |
+                self.data[self.c.COLS.BASEYEAR_GHG_S2].isna()))
+        coverage_percentage = s2[self.c.COLS.COVERAGE_S2] * s2[self.c.COLS.BASEYEAR_GHG_S2] / (
+                s2[self.c.COLS.BASEYEAR_GHG_S1] + s2[self.c.COLS.BASEYEAR_GHG_S2])
         self.data.loc[s2_mask, [self.c.COLS.COVERAGE_S1, self.c.COLS.COVERAGE_S2]] = coverage_percentage
         self.data = self.data[~s2_delete_mask]
 
@@ -291,9 +295,6 @@ class TargetValuationProtocol:
                     for index in extended_data.loc[extended_data[self.c.COLS.COMPANY_ID] == company, column].index:
                         extended_data.loc[index, column] = mode_value.values[0]
 
-
-
-
         extended_data = extended_data.apply(lambda row: self._find_target(row), axis=1)
         self.data = extended_data
 
@@ -322,8 +323,9 @@ class TargetValuationProtocol:
         timeframe_data_mid[self.c.COLS.TIME_FRAME] = 'mid'
         timeframe_data_long[self.c.COLS.TIME_FRAME] = 'long'
 
-        self.data = pd.concat([self.data, scopeless_data_s1s2, scopeless_data_3,timeframe_data_short,timeframe_data_mid,
-                               timeframe_data_long])
+        self.data = pd.concat(
+            [self.data, scopeless_data_s1s2, scopeless_data_3, timeframe_data_short, timeframe_data_mid,
+             timeframe_data_long])
 
         self.data.reset_index(drop=True, inplace=True)
         self.data.drop(self.data[pd.isna(self.data[self.c.COLS.TIME_FRAME])].index, inplace=True)
@@ -338,30 +340,3 @@ class TargetValuationProtocol:
                                    inplace=True)
         # self.data = pd.merge(left=self.company_data, right=self.data, how='outer', on=['company_name'])
         self.data = pd.concat([self.company_data, self.data], ignore_index=True, sort=False)
-
-
-
-# Testing
-# data = pd.read_excel('C:/Projects/SBTi/portfolio_1.xlsx')
-# company_data = pd.read_excel('C:/Projects/SBTi/company_data_1.xlsx')
-# data.drop(columns='Unnamed: 0',inplace=True)
-# company_data.drop(columns='Unnamed: 0',inplace=True)
-# x = TargetValuationProtocol(data,company_data)
-# x.test_target_type()
-# x.data[c.COLS.SCOPE] = x.data[c.COLS.SCOPE].str.lower()
-# x.data[c.COLS.SCOPE_CATEGORY] = x.data.apply(
-#     lambda row: c.SCOPE_MAP[row[c.COLS.SCOPE]], axis=1)#
-# x.test_boundary_coverage()
-# x.test_target_process()
-# x.test_end_year()
-# x.time_frame()
-# x.group_targets()
-# x.combining_records()
-# x.creating_records_scope_timeframe()
-
-# data = pd.read_excel('C:/Projects/SBTi/portfolio_data_test.xlsx')
-# company_data = pd.read_excel('C:/Projects/SBTi/company_data_test.xlsx')
-# data.drop(columns='Unnamed: 0',inplace=True)
-# company_data.drop(columns='Unnamed: 0',inplace=True)
-# target_valuation_protocol = TargetValuationProtocol(data, company_data)
-# portfolio_data = target_valuation_protocol.target_valuation_protocol()

@@ -10,6 +10,7 @@ from flask_restful import Resource, Api
 from flask_swagger_ui import get_swaggerui_blueprint
 
 import mimetypes
+
 mimetypes.init()
 
 import SBTi
@@ -167,15 +168,20 @@ class temp_score(BaseEndpoint):
         coverage = portfolio_coverage_tvp.get_portfolio_coverage(portfolio_data, aggregation_method)
 
         # Temperature score percentage breakdown by default score and target score
-        temperature_percentage_coverage = temperature_score.temperature_score_influence_percentage(portfolio_data, json_data['aggregation_method'])
+        temperature_percentage_coverage = temperature_score.temperature_score_influence_percentage(portfolio_data,
+                                                                                                   json_data[
+                                                                                                       'aggregation_method'])
 
         if grouping:
-            column_distribution = temperature_score.columns_percentage_distribution(portfolio_data, json_data['grouping_columns'])
+            column_distribution = temperature_score.columns_percentage_distribution(portfolio_data,
+                                                                                    json_data['grouping_columns'])
         else:
             column_distribution = None
 
-        temperature_percentage_coverage = pd.DataFrame.from_dict(temperature_percentage_coverage).replace({np.nan: None}).to_dict()
-        aggregations = temperature_score.merge_percentage_coverage_to_aggregations(aggregations, temperature_percentage_coverage)
+        temperature_percentage_coverage = pd.DataFrame.from_dict(temperature_percentage_coverage).replace(
+            {np.nan: None}).to_dict()
+        aggregations = temperature_score.merge_percentage_coverage_to_aggregations(aggregations,
+                                                                                   temperature_percentage_coverage)
 
         # Dump raw data to compute the scores
         anonymize_data_dump = json_data.get("anonymize_data_dump", False)
@@ -198,6 +204,7 @@ class temp_score(BaseEndpoint):
 
 def convert_nan_to_none(nested_dictionary):
     """Convert NaN values to None in a list in a nested dictionary.
+    TODO: Temporary fix for front-end not supporting nan, will be deleted after Beta testing
 
     :param nested_dictionary: dictionary to return that possible contains NaN values
     :type nested_dictionary: dict
@@ -280,21 +287,20 @@ class portfolio_coverage(BaseEndpoint):
         data_providers = self._get_data_providers(json_data)
         company_data = SBTi.data.get_company_data(data_providers, json_data["companies"])
         targets = SBTi.data.get_targets(data_providers, json_data["companies"])
-        portfolio_data = pd.merge(left=company_data, right = targets, how='outer', on = ['company_name','company_id'])
+        portfolio_data = pd.merge(left=company_data, right=targets, how='outer', on=['company_name', 'company_id'])
 
         # Adding ISIN to Portfolio_data
         companies = json_data['companies']
 
         try:
             company_ISIN = {
-                company['company_id']: company['ISIN']  for company in companies
+                company['company_id']: company['ISIN'] for company in companies
             }
         except:
-            return {'Response':{
-                'Error_Code':404,
-                'Message':'Invalid body. ISIN is required.'
+            return {'Response': {
+                'Error_Code': 404,
+                'Message': 'Invalid body. ISIN is required.'
             }}
-
 
         portfolio_data['ISIN'] = None
         for company_id in company_ISIN.keys():
@@ -355,6 +361,7 @@ class documentation_endpoint(Resource):
     '''
     Supports flask_swagger documentation endpoint
     '''
+
     def get(self, path):
         return send_from_directory('static', path)
 
@@ -381,61 +388,6 @@ class ParsePortfolio(Resource):
         df = pd.read_excel(request.files.get('file'), skiprows=int(skiprows))
 
         return {'portfolio': df.replace({np.nan: None}).to_dict(orient="records")}
-
-
-class import_portfolio(Resource):
-    """
-    This class allows the client to import and replace portfolios. Multiple HTTP Protocols are available for
-    this resource.
-
-    :param BaseEndpoint: inherites from a different class
-
-    :rtype: Dictionary
-    :return: HTTP Request Information.
-    """
-
-    def get(self):
-        return {'GET Request': 'Hello World'}
-
-    def post(self):
-        doc_type = request.args.get('document_type')
-        if doc_type=='excel':
-            file = request.files['file']
-            if test_file(file,'excel'):
-                files.save(request.files['file'])
-                return {'POST Request': {'Response': {'Status Code': 200, 'Message': 'File Saved', 'File': file.filename}}}
-            else:
-                return {'POST Request': {'Response': {'Status Code': 400, 'Message': 'Error. File did not save.'}}}
-
-        elif doc_type=='json':
-            json_data = request.get_json(force=True)
-            df = pd.DataFrame(data=json_data['companies'], index=[0])
-            # Todo: Name of document needs to be adjusted.
-            df.to_excel('json_example.xlsx')
-
-            # Todo: Modify the return response.
-            return {'POST Request': {'Response': {'Status Code': 200, 'Message': 'File Saved', 'File':''}}}
-
-    def put(self):
-        doc_type = request.args.get('document_type')
-        remove_doc = request.args.get('document_replace')
-        for root, dirs, file in os.walk(PATH):
-            for f in file:
-                if remove_doc == f.split('.')[0]:
-                    if doc_type=='excel':
-                        os.remove(os.path.join(root, f))
-                        files.save(request.files['file'])
-                    elif doc_type=='json':
-                        os.remove(os.path.join(root, f))
-                        json_data = request.get_json(force=True)
-                        df = pd.DataFrame(data=json_data['companies'], index=[0])
-
-                        # Todo: Name of document needs to be adjusted.
-                        df.to_excel('json_example.xlsx')
-                    return {'PUT Request': {
-                        'Response': {'Status Code': 200, 'Message': 'File Replaced', 'Replaced File': remove_doc}}}
-        return {'PUT Request': {'Response': {'Status Code': 400, 'Error Message': 'File Not Found', 'File': remove_doc}}}
-
 
 
 class data_provider(BaseEndpoint):
@@ -468,7 +420,6 @@ class data_provider(BaseEndpoint):
                 'Data': portfolio_data.to_json(orient='records')
             }
         }
-
 
 
 class import_data_provider(Resource):
@@ -506,12 +457,10 @@ api.add_resource(DataProviders, '/data_providers/')
 api.add_resource(data, '/data/')
 api.add_resource(report, '/report/')
 api.add_resource(documentation_endpoint, '/static/<path:path>')
-api.add_resource(import_portfolio, '/import_portfolio/')
 api.add_resource(ParsePortfolio, '/parse_portfolio/')
 api.add_resource(data_provider, '/data_provider')
 api.add_resource(Frontend, '/<path:path>', '/')
 api.add_resource(import_data_provider, '/import_data_provider/')
-
 
 if __name__ == '__main__':
     app.run(debug=True)  # important to mention debug=True

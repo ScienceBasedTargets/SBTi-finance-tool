@@ -62,8 +62,6 @@ class ColumnsConfig:
     REGION = 'Region'
     ENGAGEMENT_TARGET = 'engagement_target'
 
-
-
     # SR15 mapping columns
     PARAM = "param"
     INTERCEPT = "intercept"
@@ -74,12 +72,11 @@ class ColumnsConfig:
     CONTRIBUTION = "contribution"
 
     # This defines which columns contain company specific, instead of target specific data
-    COMPANY_COLUMNS = [COMPANY_NAME, INDUSTRY_LVL1,INDUSTRY_LVL2,INDUSTRY_LVL3,INDUSTRY_LVL4,INTENSITY_METRIC, REGRESSION_PARAM,
-                      REGRESSION_INTERCEPT, GHG_SCOPE12, GHG_SCOPE3, MARKET_CAP, INVESTMENT_VALUE,
-                       COMPANY_ENTERPRISE_VALUE, CASH_EQUIVALENTS, COMPANY_TOTAL_ASSETS, REGION, COUNTRY, COMPANY_REVENUE]
-
-
-
+    COMPANY_COLUMNS = [COMPANY_NAME, INDUSTRY_LVL1, INDUSTRY_LVL2, INDUSTRY_LVL3, INDUSTRY_LVL4, INTENSITY_METRIC,
+                       REGRESSION_PARAM,
+                       REGRESSION_INTERCEPT, GHG_SCOPE12, GHG_SCOPE3, MARKET_CAP, INVESTMENT_VALUE,
+                       COMPANY_ENTERPRISE_VALUE, CASH_EQUIVALENTS, COMPANY_TOTAL_ASSETS, REGION, COUNTRY,
+                       COMPANY_REVENUE]
 
 
 class PortfolioAggregationConfig:
@@ -95,8 +92,9 @@ class PortfolioAggregationConfig:
     VALUE_SCOPE_CATEGORY_S1S2S3 = "s1s2s3"
     VALUE_SCOPE_CATEGORIES = [VALUE_SCOPE_CATEGORY_S1S2, VALUE_SCOPE_CATEGORY_S1S2S3, VALUE_SCOPE_CATEGORY_S3]
 
-    SCOPE_MAP = {"s1+s2": "s1s2", "s3": "s3", "s1+s2+s3": "s1s2s3",'s2':'s1s2','s1':'s1s2','s3_up':'s3','s3_down':'s3',
-                 's3_total':'s3'}
+    SCOPE_MAP = {"s1+s2": "s1s2", "s3": "s3", "s1+s2+s3": "s1s2s3", 's2': 's1s2', 's1': 's1s2', 's3_up': 's3',
+                 's3_down': 's3',
+                 's3_total': 's3'}
 
 
 class TemperatureScoreConfig(PortfolioAggregationConfig):

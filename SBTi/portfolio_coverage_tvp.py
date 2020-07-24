@@ -1,7 +1,5 @@
 from typing import Type, Optional
-
 import pandas as pd
-
 from SBTi.configs import PortfolioCoverageTVPConfig
 from SBTi.portfolio_aggregation import PortfolioAggregation, PortfolioAggregationMethod
 
@@ -65,11 +63,3 @@ class PortfolioCoverageTVP(PortfolioAggregation):
 
         return self._calculate_aggregate_score(company_data, self.c.OUTPUT_TARGET_STATUS,
                                                self.c.OUTPUT_WEIGHTED_TARGET_STATUS, portfolio_aggregation_method).sum()
-
-
-# Testing
-# from SBTi.portfolio_aggregation import PortfolioAggregationMethod
-# portfolio_data = pd.read_excel('C:/Projects/SBTi/testing.xlsx')
-# portfolio_data.drop(columns='Unnamed: 0',inplace=True)
-# x = PortfolioCoverageTVP()
-# coverage = x.get_portfolio_coverage(portfolio_data,PortfolioAggregationMethod.WATS)
