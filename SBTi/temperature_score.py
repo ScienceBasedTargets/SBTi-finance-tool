@@ -50,6 +50,7 @@ class TemperatureScore(PortfolioAggregation):
         #                         (self.mapping[self.c.COLS.SCOPE] == target[self.c.COLS.SCOPE_CATEGORY])]
 
         # Todo: Talk with Daan, after Beta testing, to see how to address this. I do believe this is only for the testing
+        mappings = []
         target_type = self.c.VALUE_TARGET_REFERENCE_INTENSITY \
             if type(target[self.c.COLS.TARGET_REFERENCE_NUMBER]) == str and \
                target[self.c.COLS.TARGET_REFERENCE_NUMBER].strip().startswith(
@@ -197,10 +198,12 @@ class TemperatureScore(PortfolioAggregation):
             *data.apply(lambda row: self.get_regression(row), axis=1)
         )
         data[self.c.COLS.TEMPERATURE_SCORE] = data.apply(lambda row: self.get_score(row), axis=1)
+        # TODO: Enums, constants, parentheses
         if (self.scenario['number'] == 2) or (self.scenario['number'] == 3) or (self.scenario['number'] == 4):
             data = self.cap_scores(data)
         combined_data = []
         # company_columns = [column for column in self.c.COLS.COMPANY_COLUMNS + extra_columns if column in data.columns]
+        # TODO: What is happening here?
         company_columns = extra_columns + list(data.columns)
         for company in data[self.c.COLS.COMPANY_NAME].unique():
             for time_frame in self.c.VALUE_TIME_FRAMES:
@@ -298,6 +301,7 @@ class TemperatureScore(PortfolioAggregation):
 
         return portfolio_scores
 
+    # TODO: Type hinting
     def temperature_score_influence_percentage(self, data, aggregation_method):
         """
         Determines the percentage of the temperature score is covered by target and default score
@@ -338,6 +342,7 @@ class TemperatureScore(PortfolioAggregation):
 
         data[self.c.TEMPERATURE_RESULTS] = data.apply(lambda row: self.get_default_score(row), axis=1)
 
+        # TODO: Why doesn't this use an enum
         if aggregation_method == "MOTS" or \
                 aggregation_method == "EOTS" or \
                 aggregation_method == "ECOTS" or \
@@ -489,7 +494,7 @@ class TemperatureScore(PortfolioAggregation):
         '''
 
         data = data[columns].fillna('unknown')
-        if columns == None:
+        if columns is None:
             return None
         elif len(columns) == 1:
             percentage_distribution = round((data.groupby(columns[0]).size() / data[columns[0]].count()) * 100, 2)
@@ -507,6 +512,7 @@ class TemperatureScore(PortfolioAggregation):
             return percentage_distribution
 
     def set_scenario(self, scenario: Dict):
+        # TODO: Enums, docstrings, constants
         self.scenario = scenario
         # Scenario 1: Engage companies to set targets
         if self.scenario['number'] == 1:
@@ -515,13 +521,14 @@ class TemperatureScore(PortfolioAggregation):
         if self.scenario['number'] == 2:
             self.score_cap = 1.75
         # Scenario 3: Engaging the highest contributors (top 10) to set (better) targets
-        if (self.scenario['number'] == 3) or (self.scenario['number'] == 4):
+        if self.scenario['number'] == 3 or self.scenario['number'] == 4:
             if self.scenario['engagement_type'] == 'set_targets':
                 self.score_cap = 2.0
             elif self.scenario['engagement_type'] == 'set_SBTi_targets':
                 self.score_cap = 1.75
 
     def cap_scores(self, scores: pd.DataFrame):
+        # TODO: Enums, docstrings, constants
         if self.scenario['number'] == 2:
             score_based_on_target = ~pd.isnull(scores[self.c.COLS.TARGET_REFERENCE_NUMBER])
             scores.loc[score_based_on_target, self.c.COLS.TEMPERATURE_SCORE] = \
