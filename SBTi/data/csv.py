@@ -9,10 +9,10 @@ class CSVProvider(DataProvider):
     :param config: A dictionary containing a "path" field that leads to the path of the CSV file
     """
 
-    def __init__(self, path: str, path_targets: str):
+    def __init__(self, path: str, path_targets: str, encoding: str = "utf-8"):
         super().__init__()
-        self.data = pd.read_csv(path)
-        self.data_targets = pd.read_csv(path_targets)
+        self.data = pd.read_csv(path, encoding=encoding)
+        self.data_targets = pd.read_csv(path_targets, encoding=encoding)
 
     def get_targets(self, companies: list) -> pd.DataFrame:
         """
@@ -39,7 +39,6 @@ class CSVProvider(DataProvider):
         return self.data_targets[
             (self.data_targets["company_id"].isin([company["company_id"] for company in companies]) &
              self.data_targets["company_id"].notnull())].copy()
-
 
     def get_company_data(self, companies: list) -> pd.DataFrame:
         """
@@ -71,7 +70,6 @@ class CSVProvider(DataProvider):
         return self.data[
             (self.data["company_id"].isin([company["company_id"] for company in companies]) &
              self.data["company_id"].notnull())].copy()
-
 
     def get_sbti_targets(self, companies: list) -> list:
         """
