@@ -13,6 +13,7 @@ setup(
         '': ['*.xlsx'],
         'SBTi.inputs': ['*'],
     },
+    include_package_data=True,
     install_requires=[],
     extras_require={
         'dev': [
