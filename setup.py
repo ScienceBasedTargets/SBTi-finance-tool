@@ -10,7 +10,8 @@ setup(
     author_email='sbti@ortec-finance.com',
     packages=find_packages(),
     package_data={
-        'SBTi': ['inputs/sr15_mapping.xlsx'],
+        'SBTi': ['inputs/sr15_mapping.xlsx', 'inputs/regression_model_summary.xlsx',
+                 'inputs/current-Companies-Taking-Action-191.xlsx'],
     },
     include_package_data=True,
     install_requires=[],
