@@ -1,10 +1,66 @@
 import itertools
+from enum import Enum
 from typing import Optional, Tuple, Type, Dict
 
 import pandas as pd
 
 from SBTi.portfolio_aggregation import PortfolioAggregation, PortfolioAggregationMethod
 from .configs import TemperatureScoreConfig
+
+
+class ScenarioType(Enum):
+    TARGETS = 1
+    APPROVED_TARGETS = 2
+    HIGHEST_CONTRIBUTORS = 3
+    HIGHEST_CONTRIBUTORS_APPROVED = 4
+
+    @staticmethod
+    def from_int(value) -> 'ScenarioType':
+        value_map = {
+            1: ScenarioType.TARGETS,
+            2: ScenarioType.APPROVED_TARGETS,
+            3: ScenarioType.HIGHEST_CONTRIBUTORS,
+            4: ScenarioType.HIGHEST_CONTRIBUTORS_APPROVED
+        }
+        return value_map.get(value, ScenarioType.TARGETS)
+
+
+class EngagementType(Enum):
+    SET_TARGETS = 1
+    SET_SBTI_TARGETS = 2
+
+    @staticmethod
+    def from_int(value) -> 'EngagementType':
+        value_map = {
+            0: EngagementType.SET_TARGETS,
+            1: EngagementType.SET_SBTI_TARGETS,
+        }
+        return value_map.get(value, EngagementType.SET_TARGETS)
+
+    @staticmethod
+    def from_string(value: str) -> 'EngagementType':
+        value_map = {
+            'SET_TARGETS': EngagementType.SET_TARGETS,
+            'SET_SBTI_TARGETS': EngagementType.SET_SBTI_TARGETS,
+        }
+        return value_map.get(value.upper(), EngagementType.SET_TARGETS)
+
+
+class Scenario:
+    scenario_type: ScenarioType
+    engagement_type: EngagementType
+    aggregation_method: PortfolioAggregationMethod
+    grouping: Optional[list]
+
+    @staticmethod
+    def from_dict(scenario_values: dict) -> 'Scenario':
+        scenario = Scenario()
+        scenario.scenario_type = ScenarioType.from_int(scenario_values.get("number", -1))
+        scenario.engagement_type = EngagementType.from_string(scenario_values.get("engagement_type", ""))
+        scenario.aggregation_method = PortfolioAggregationMethod.from_string(scenario_values.get("engagement_type", ""))
+        scenario.grouping = scenario_values.get("grouping", None)
+
+        return scenario
 
 
 class TemperatureScore(PortfolioAggregation):
@@ -24,8 +80,8 @@ class TemperatureScore(PortfolioAggregation):
         self.fallback_score = fallback_score
         self.model = model
         self.c: Type[TemperatureScoreConfig] = config
-        self.scenario = dict(number=0)
-        self.score_cap = None
+        self.scenario: Optional[Scenario] = None
+        self.score_cap: Optional[float] = None
 
         # Load the mappings from industry to SR15 goal
         self.mapping = pd.read_excel(self.c.FILE_SR15_MAPPING, header=0)
@@ -50,6 +106,7 @@ class TemperatureScore(PortfolioAggregation):
         #                         (self.mapping[self.c.COLS.SCOPE] == target[self.c.COLS.SCOPE_CATEGORY])]
 
         # Todo: Talk with Daan, after Beta testing, to see how to address this. I do believe this is only for the testing
+        mappings = pd.DataFrame()
         target_type = self.c.VALUE_TARGET_REFERENCE_INTENSITY \
             if type(target[self.c.COLS.TARGET_REFERENCE_NUMBER]) == str and \
                target[self.c.COLS.TARGET_REFERENCE_NUMBER].strip().startswith(
@@ -197,10 +254,11 @@ class TemperatureScore(PortfolioAggregation):
             *data.apply(lambda row: self.get_regression(row), axis=1)
         )
         data[self.c.COLS.TEMPERATURE_SCORE] = data.apply(lambda row: self.get_score(row), axis=1)
-        if (self.scenario['number'] == 2) or (self.scenario['number'] == 3) or (self.scenario['number'] == 4):
-            data = self.cap_scores(data)
+        # TODO: Enums, constants, parentheses
+        data = self.cap_scores(data)
         combined_data = []
         # company_columns = [column for column in self.c.COLS.COMPANY_COLUMNS + extra_columns if column in data.columns]
+        # TODO: What is happening here?
         company_columns = extra_columns + list(data.columns)
         for company in data[self.c.COLS.COMPANY_NAME].unique():
             for time_frame in self.c.VALUE_TIME_FRAMES:
@@ -244,7 +302,7 @@ class TemperatureScore(PortfolioAggregation):
                                                                                   scope_123_emissions)
         return data_score
 
-    def aggregate_scores(self, data: pd.DataFrame, portfolio_aggregation_method: Type[PortfolioAggregationMethod],
+    def aggregate_scores(self, data: pd.DataFrame, portfolio_aggregation_method: PortfolioAggregationMethod,
                          grouping: Optional[list] = None):
         """
         Aggregate scores to create a portfolio score per time_frame (short, mid, long).
@@ -298,6 +356,7 @@ class TemperatureScore(PortfolioAggregation):
 
         return portfolio_scores
 
+    # TODO: Type hinting
     def temperature_score_influence_percentage(self, data, aggregation_method):
         """
         Determines the percentage of the temperature score is covered by target and default score
@@ -338,6 +397,7 @@ class TemperatureScore(PortfolioAggregation):
 
         data[self.c.TEMPERATURE_RESULTS] = data.apply(lambda row: self.get_default_score(row), axis=1)
 
+        # TODO: Why doesn't this use an enum
         if aggregation_method == "MOTS" or \
                 aggregation_method == "EOTS" or \
                 aggregation_method == "ECOTS" or \
@@ -489,7 +549,7 @@ class TemperatureScore(PortfolioAggregation):
         '''
 
         data = data[columns].fillna('unknown')
-        if columns == None:
+        if columns is None:
             return None
         elif len(columns) == 1:
             percentage_distribution = round((data.groupby(columns[0]).size() / data[columns[0]].count()) * 100, 2)
@@ -506,29 +566,35 @@ class TemperatureScore(PortfolioAggregation):
                 del percentage_distribution[key]
             return percentage_distribution
 
-    def set_scenario(self, scenario: Dict):
+    def set_scenario(self, scenario: Scenario):
+        # TODO: Enums, docstrings, constants
         self.scenario = scenario
         # Scenario 1: Engage companies to set targets
-        if self.scenario['number'] == 1:
+        if self.scenario.scenario_type == ScenarioType.TARGETS:
             self.fallback_score = 2.0
         # Scenario 2: Engage companies to validate targets by SBTi
-        if self.scenario['number'] == 2:
+        elif self.scenario.scenario_type == ScenarioType.APPROVED_TARGETS:
             self.score_cap = 1.75
         # Scenario 3: Engaging the highest contributors (top 10) to set (better) targets
-        if (self.scenario['number'] == 3) or (self.scenario['number'] == 4):
-            if self.scenario['engagement_type'] == 'set_targets':
+        elif self.scenario.scenario_type == ScenarioType.HIGHEST_CONTRIBUTORS or \
+                self.scenario.scenario_type == ScenarioType.HIGHEST_CONTRIBUTORS_APPROVED:
+            if self.scenario.engagement_type == EngagementType.SET_TARGETS:
                 self.score_cap = 2.0
-            elif self.scenario['engagement_type'] == 'set_SBTi_targets':
+            elif self.scenario.engagement_type == EngagementType.SET_SBTI_TARGETS:
                 self.score_cap = 1.75
 
     def cap_scores(self, scores: pd.DataFrame):
-        if self.scenario['number'] == 2:
+        # TODO: Enums, docstrings, constants
+        if self.scenario is None:
+            return scores
+        if self.scenario.scenario_type == ScenarioType.APPROVED_TARGETS:
             score_based_on_target = ~pd.isnull(scores[self.c.COLS.TARGET_REFERENCE_NUMBER])
             scores.loc[score_based_on_target, self.c.COLS.TEMPERATURE_SCORE] = \
                 scores.loc[score_based_on_target, self.c.COLS.TEMPERATURE_SCORE].apply(lambda x: min(x, self.score_cap))
-        elif self.scenario['number'] == 3:
+        elif self.scenario.scenario_type == ScenarioType.HIGHEST_CONTRIBUTORS:
             # Cap scores of 10 highest contributors per time frame-scope combination
-            aggregations = self.aggregate_scores(scores, self.scenario['aggregation_method'], self.scenario['grouping'])
+            # TODO: Should this actually be per time-frame/scope combi? Aren't you engaging the company as a whole?
+            aggregations = self.aggregate_scores(scores, self.scenario.aggregation_method, self.scenario.grouping)
             for time_frame in self.c.VALUE_TIME_FRAMES:
                 for scope in scores[self.c.COLS.SCOPE_CATEGORY].unique():
                     number_top_contributors = min(10, len(aggregations[time_frame][scope]['all']['contributions']))
@@ -541,7 +607,7 @@ class TemperatureScore(PortfolioAggregation):
                         scores.loc[company_mask, self.c.COLS.TEMPERATURE_SCORE] = \
                             scores.loc[company_mask, self.c.COLS.TEMPERATURE_SCORE].apply(
                                 lambda x: min(x, self.score_cap))
-        elif self.scenario['number'] == 4:
+        elif self.scenario.scenario_type == ScenarioType.HIGHEST_CONTRIBUTORS_APPROVED:
             scores[self.c.COLS.ENGAGEMENT_TARGET] = scores[self.c.COLS.ENGAGEMENT_TARGET] == True
             score_based_on_target = scores[self.c.COLS.ENGAGEMENT_TARGET]
             scores.loc[score_based_on_target, self.c.COLS.TEMPERATURE_SCORE] = \

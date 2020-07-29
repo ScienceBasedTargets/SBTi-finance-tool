@@ -17,7 +17,7 @@
   "tags": [
     {
       "name": "SBTi Request",
-      "description": "Temperature Score, Portofolio Coverage, and Reporting API Calls for portfolio environmental impact evaluation."
+      "description": "Temperature Score API call for portfolio environmental impact evaluation."
     }
   ],
   "paths": {
@@ -41,117 +41,17 @@
         },
         "produces": [
           "application/json"
-        ]
-      }
-    },
-    "/portfolio_coverage/": {
-      "parameters": [],
-      "post": {
-        "summary": "Retrieve the portfolio coverage score for your portfolio of companies",
-        "tags": [
-          "SBTi Request"
-        ],
-        "requestBody": {
-          "description": "Portfolio coverage",
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/portfolio"
-              }
-            }
-          }
-        },
-        "produces": [
-          "application/json"
         ],
         "responses": {
           "200": {
             "description": "OK",
-            "schema": {
-              "$ref": "#/components/schemas/Port_Coverage"
-            }
-          },
-          "400": {
-            "description": "Failed. Bad post data."
-          }
-        }
-      }
-    },
-    "/import_portfolio": {
-      "parameters":[
-               {
-                  "name":"document_type",
-                  "in":"",
-                  "description":"< excel | json >. For example, document_type=excel",
-                  "required":true,
-                  "type":"string"
-               },{
-                  "name":"document_replace",
-                  "in":"",
-                  "description":"< name of document >. Provide the name of document, excluding the extension. For example, document_replace=doc_A",
-                  "required":true,
-                  "type":"string"
-        }],
-      "post": {
-        "summary": "Client can import portfolios",
-        "tags": [
-          "SBTi Request"
-        ],
-        "requestBody": {
-          "description": "Portfolio coverage",
-          "required": true,
-          "content": {
-            "application/x-www-form-urlencoded": {
-              "schema": {
-                "$ref": "#/components/schemas/import_portfolio"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/temperature_score_response"
+                }
               }
             }
-          }
-        },
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/components/schemas/Port_Coverage"
-            }
-          },
-          "400": {
-            "description": "Failed. Bad post data."
-          }
-        }
-      },
-      "put": {
-        "summary": "Client can import portfolios",
-        "tags": [
-          "SBTi Request"
-        ],
-        "requestBody": {
-          "description": "Portfolio coverage",
-          "required": true,
-          "content": {
-            "application/x-www-form-urlencoded": {
-              "schema": {
-                "$ref": "#/components/schemas/import_portfolio"
-              }
-            }
-          }
-        },
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/components/schemas/Port_Coverage"
-            }
-          },
-          "400": {
-            "description": "Failed. Bad post data."
           }
         }
       }
@@ -168,6 +68,11 @@
             "items": {
               "$ref": "#/components/schemas/company"
             }
+          },
+          "anonymize_data_dump": {
+            "required": false,
+            "description": "Whether or not the resulting data set should be anonymized or not.",
+            "type": "boolean"
           },
           "aggregation_method": {
             "required": true,
@@ -197,6 +102,11 @@
             "description": "The score that should be used when no target is available.",
             "type": "number",
             "format": "number"
+          },
+          "scenario": {
+            "required": false,
+            "description": "The scenario that should be used. This will change (some of the) targets, to simulate a what-if scenario.",
+            "$ref": "#/components/schemas/scenario"
           },
           "filter_time_frame": {
             "required": false,
@@ -253,6 +163,24 @@
                 "achieved_reduction"
               ]
             }
+          },
+          "grouping_columns": {
+            "required": false,
+            "type": "array",
+            "description": "The names of the columns by which the aggregated temperature scores should be grouped. In addition to the column names defined in the enum, you can also specify a custom column name that was included in the uploaded portfolio.",
+            "items": {
+              "type": "string",
+              "format": "string",
+              "enum": [
+                "country",
+                "region",
+                "Industry_lvl1",
+                "Industry_lvl2",
+                "Industry_lvl3",
+                "Industry_lvl4",
+                "sector"
+              ]
+            }
           }
         }
       },
@@ -289,6 +217,31 @@
           }
         }
       },
+      "scenario": {
+        "type": "object",
+        "properties": {
+          "number": {
+            "description": "The ID of the scenario. \n * `1` - In scenario 1 we engage companies to set targets. This means that the default score (i.e. the score when a company didn't set a target) will be set to 2 degrees celcius. \n * `2` - In scenario 2 we engage companies to have their targets validated by the SBTi. This means that the maximum score for all targets will be capped at 1.75 degrees celcius. \n * `3` In scenario 3a we engage the top 10 contributors. How they are engaged depends on the `engagement_type` parameter. \n * `4` In scenario 4 we engage a predefined list of company (those that have the value 'true' in the 'engagement_target' column in the portfolio). How they are engaged depends on the `engagement_type` parameter.",
+            "type": "number",
+            "format": "number",
+            "enum": [
+              1,
+              2,
+              3,
+              4
+            ]
+          },
+          "engagement_type": {
+            "description": "The engagement type, i.e. how the companies should be engaged. This parameter is only used for scenarios 3 and 4. \n * `SET_TARGETS` The companies are engaged to set targets. This means that their temperature scores are capped at 2 degrees celsius.  \n * `SET_SBTI_TARGETS` The companies are engaged to set SBTi approved targets. This means that their temperature scores are capped at 1.75 degrees celsius.",
+            "type": "string",
+            "format": "string",
+            "enum": [
+              "SET_TARGETS",
+              "SET_SBTI_TARGETS"
+            ]
+          }
+        }
+      },
       "company": {
         "type": "object",
         "properties": {
@@ -306,10 +259,38 @@
           }
         }
       },
-      "import_portfolio": {
+      "temperature_score_response": {
         "type": "object",
         "properties": {
-         }
+          "aggregated_scores": {
+            "type": "object",
+            "format": "object",
+            "description": "The aggregated scores, split by time-frame, scope and the grouping column."
+          },
+          "scores": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            },
+            "description": "A dump of the raw target/company data."
+          },
+          "coverage": {
+            "type": "number",
+            "format": "number",
+            "description": "The coverage of the SBTi approved targets (as a percentage)."
+          },
+          "companies": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            },
+            "description": "The raw data used to calculate the aggregated scores. Each company is included 9 times, once for each time-frame/scope combination."
+          },
+          "feature_distribution": {
+            "type": "object",
+            "description": "For each group that can be made using the grouping columns, the number of companies in that group."
+          }
+        }
       }
     }
   }

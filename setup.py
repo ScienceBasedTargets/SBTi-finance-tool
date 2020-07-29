@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(
     name='SBTi-Finance Temperature Alignment Tool',
@@ -8,7 +8,7 @@ setup(
                 'targets for official validation by the SBTi.',
     author='Ortec Finance',
     author_email='sbti@ortec-finance.com',
-    packages=['SBTi'],
+    packages=find_packages(),
     install_requires=[],
     extras_require={
         'dev': [

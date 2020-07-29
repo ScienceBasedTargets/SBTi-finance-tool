@@ -28,7 +28,8 @@ class TestPortfolioCoverageTVP(unittest.TestCase):
         :return:
         """
         coverage = self.portfolio_coverage_tvp.get_portfolio_coverage(self.data, PortfolioAggregationMethod.WATS)
-        assert coverage == 21, "The portfolio coverage was not 21%"
+        self.assertAlmostEqual(coverage, 32.0663, places=4,
+                               msg="The portfolio coverage was not correct")
 
 
 if __name__ == "__main__":

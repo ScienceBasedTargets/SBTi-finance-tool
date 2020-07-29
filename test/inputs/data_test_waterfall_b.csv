@@ -1,5 +1,7 @@
-company_name,company_id,industry,s1s2_emissions,s3_emissions,market_cap,investment_value,portfolio_weight,company_enterprise_value,company_ev_plus_cash,company_total_assets
-Company I,,test,2955000,2955000,76629,7870,0.023571343,63602.07,72031.26,69732.39
-Company K,,test,6651,6651,65143,29551,0.088507847,56674.41,61234.42,59280.13
-Company N,,test,9180000,9180000,83484,8192,0.024535761,98511.12,78474.96,75970.44
-Company F,,test,123,123,132,132,0.123,123,123,132
+company_name,company_id,Target type,Intensity_metric,Scope,Coverage_S1,Coverage_S2,Coverage_S3,reduction_ambition,base_year,end_year,start_year,BaseYear_GHG_S1,BaseYear_GHG_S2,BaseYear_GHG_S3,achieved_reduction
+Company D,SE0000000004,Absolute,,S3,,,0.6,0.3,2018,2030,2019,1542974.817,96876.18261,,0
+Company D,SE0000000004,intensity,Revenue,S1+S2,0.75,0.75,,0.46,2018,2023,2018,2435.07921,16574.11079,,1
+Company D,SE0000000004,absolute,,S1+S2,1,1,,0.69,2015,2020,2015,45289.34848,32682.65152,,0.42
+Capgemini Group,FR0000125338,intensity,Revenue,S1+S2,1,1,,0.9,2011,2021,2018,451204.6911,354273.3089,,0.86
+Capgemini Group,FR0000125338,intensity,Revenue,S1+S2,1,1,,0.39,2016,2019,2017,0,0,,0.5567
+Capgemini Group,FR0000125338,intensity,Revenue,S1+S2,1,1,,0.57,2013,2030,2013,523303.0909,7548.309059,,1
