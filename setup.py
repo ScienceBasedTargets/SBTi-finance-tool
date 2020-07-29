@@ -11,7 +11,7 @@ setup(
     packages=find_packages(),
     package_data={
         '': ['*.xlsx'],
-        'SBTi.inputs': ['*'],
+        'SBTi': ['inputs/sr15_mapping.xlsx'],
     },
     include_package_data=True,
     install_requires=[],
