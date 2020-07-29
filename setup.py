@@ -10,7 +10,6 @@ setup(
     author_email='sbti@ortec-finance.com',
     packages=find_packages(),
     package_data={
-        '': ['*.xlsx'],
         'SBTi': ['inputs/sr15_mapping.xlsx'],
     },
     include_package_data=True,
