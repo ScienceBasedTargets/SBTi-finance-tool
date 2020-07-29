@@ -9,7 +9,10 @@ setup(
     author='Ortec Finance',
     author_email='sbti@ortec-finance.com',
     packages=find_packages(),
-    package_data={'': ['*.xlsx']},
+    package_data={
+        '': ['*.xlsx'],
+        'SBTi.inputs': ['*'],
+    },
     install_requires=[],
     extras_require={
         'dev': [
