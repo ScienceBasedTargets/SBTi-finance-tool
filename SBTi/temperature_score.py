@@ -356,6 +356,17 @@ class TemperatureScore(PortfolioAggregation):
 
         return portfolio_scores
 
+    def _calculate_company_unique_sum(self, data: pd.DataFrame, col: str) -> float:
+        """
+        Given a data set, calculate a sum which is unique at the company level (such that each field is counted once
+        per company).
+
+        :param data: The data set
+        :param col: The column name
+        :return:
+        """
+        return data[[self.c.COLS.COMPANY_NAME, col]].drop_duplicates()[col].sum()
+
     # TODO: Type hinting
     def temperature_score_influence_percentage(self, data, aggregation_method):
         """
@@ -408,9 +419,15 @@ class TemperatureScore(PortfolioAggregation):
         }
 
         value_column = emission_based_methods.get(aggregation_method)
-        if aggregation_method == "ECOTS":
-            data[self.c.COLS.COMPANY_EV_PLUS_CASH] = data[self.c.COLS.COMPANY_ENTERPRISE_VALUE] + data[
-                self.c.COLS.CASH_EQUIVALENTS]
+        total_investment, portfolio_emissions = 0, 0
+        if aggregation_method == "WATS":
+            total_investment = self._calculate_company_unique_sum(data, self.c.COLS.INVESTMENT_VALUE)
+        elif aggregation_method == "TETS":
+            portfolio_emissions = self._calculate_company_unique_sum(data, self.c.COLS.GHG_SCOPE12) + \
+                                  self._calculate_company_unique_sum(data, self.c.COLS.GHG_SCOPE3)
+        elif aggregation_method == "ECOTS":
+            data[self.c.COLS.COMPANY_EV_PLUS_CASH] = data[self.c.COLS.COMPANY_ENTERPRISE_VALUE] + \
+                                                     data[self.c.COLS.CASH_EQUIVALENTS]
 
         # Calculate the total owned emissions of all companies
         owned_emissions = 0
@@ -421,7 +438,7 @@ class TemperatureScore(PortfolioAggregation):
                             row[self.c.COLS.GHG_SCOPE12] + row[self.c.COLS.GHG_SCOPE3])),
                     axis=1
                 )
-                owned_emissions = data[self.c.COLS.OWNED_EMISSIONS].sum()
+                owned_emissions = self._calculate_company_unique_sum(data, self.c.COLS.OWNED_EMISSIONS)
             except ZeroDivisionError:
                 raise ValueError("To calculate the aggregation, the {} column may not be zero".format(value_column))
 
@@ -433,6 +450,7 @@ class TemperatureScore(PortfolioAggregation):
         }
 
         time_frame_dictionary = {time_frame: {} for time_frame in data[self.c.COLS.TIME_FRAME].unique()}
+
         for time_frame, scope, company in itertools.product(*[data[self.c.COLS.TIME_FRAME].unique(),
                                                               self.c.VALUE_SCOPE_CATEGORIES,
                                                               data[self.c.COLS.COMPANY_NAME].unique()]):
@@ -454,14 +472,11 @@ class TemperatureScore(PortfolioAggregation):
                                 ds_s3 * (s3_emissions / (s1s2_emissions + s3_emissions)))
 
             company_emissions = company_data[self.c.COLS.GHG_SCOPE12].iloc[0] + \
-                                company_data[self.c.COLS.GHG_SCOPE3].iloc[0]  # per company
+                company_data[self.c.COLS.GHG_SCOPE3].iloc[0]
 
             if aggregation_method == 'WATS':
-                investment_weight_total = data[self.c.COLS.INVESTMENT_VALUE].sum() / \
-                    data.shape[0] / data[self.c.COLS.COMPANY_NAME].nunique()
-                value = (company_data.iloc[1][self.c.INVESTMENT_VALUE] / investment_weight_total) * scope_weight
+                value = (company_data.iloc[1][self.c.INVESTMENT_VALUE] / total_investment) * scope_weight
             elif aggregation_method == 'TETS':
-                portfolio_emissions = data[self.c.COLS.GHG_SCOPE12].sum() + data[self.c.COLS.GHG_SCOPE3].sum()
                 value = company_emissions / portfolio_emissions * scope_weight
             else:
                 # The other methods only differ in the way the company is valued.
@@ -474,15 +489,6 @@ class TemperatureScore(PortfolioAggregation):
                                                      self.c.VALUE_SCOPE_CATEGORIES]):
             time_frame_dictionary[time_frame][scope] = round(
                 sum(company_temp_contribution[time_frame][scope].values()), 3)
-
-        # dictionary = {
-        #     'target': {
-        #         time_frame: {scope: round(1 - time_frame_dictionary[time_frame][scope], 3) for scope in self.c.VALUE_SCOPE_CATEGORIES} for time_frame in data[self.c.COLS.TIME_FRAME].unique()
-        #     },
-        #     'default': {
-        #         time_frame: {scope: time_frame_dictionary[time_frame][scope] for scope in self.c.VALUE_SCOPE_CATEGORIES} for time_frame in data[self.c.COLS.TIME_FRAME].unique()
-        #     }
-        # }
 
         return time_frame_dictionary
 
@@ -584,5 +590,5 @@ class TemperatureScore(PortfolioAggregation):
             for scope in self.c.VALUE_SCOPE_CATEGORIES:
                 if aggregations.get(time_frame) and aggregations[time_frame].get(scope):
                     aggregations[time_frame][scope]['influence_percentage'] = temperature_percentage_coverage[
-                                                                                  'target'][time_frame][scope] * 100
+                                                                                  time_frame][scope] * 100
         return aggregations
