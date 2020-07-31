@@ -37,7 +37,9 @@ class TargetValuationProtocol:
             self.creating_records_scope_timeframe()
             return self.data
         else:
-            return self.single_record_edgecase()
+            # TODO: Why is this done, is this an edgecase? Shouldn't we just return an empty dataframe?
+            return self.data
+            # return self.single_record_edgecase()
 
     def single_record_edgecase(self):
         '''
