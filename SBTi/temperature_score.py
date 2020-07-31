@@ -259,10 +259,12 @@ class TemperatureScore(PortfolioAggregation):
         combined_data = []
         # company_columns = [column for column in self.c.COLS.COMPANY_COLUMNS + extra_columns if column in data.columns]
         # TODO: What is happening here?
+        print("COMPANY COLUMNS 1")
         company_columns = extra_columns + list(data.columns)
         for company in data[self.c.COLS.COMPANY_NAME].unique():
             for time_frame in self.c.VALUE_TIME_FRAMES:
                 # We always include all company specific data
+                # TODO: Move this to the TVP (create a 9 box grid, instead of a 6 box) and only calculate the GHC score
                 company_values = data[data[self.c.COLS.COMPANY_NAME] == company]
                 company_data = {
                     column: company_values[column].mode().iloc[0] if len(company_values[column].mode()) > 0 else None
@@ -322,7 +324,6 @@ class TemperatureScore(PortfolioAggregation):
                     data[self.c.COLS.SCOPE_CATEGORY] == scope)].copy()
 
             if not filtered_data.empty:
-                # portfolio_scores[time_frame] = {}
                 weighted_scores = self._calculate_aggregate_score(filtered_data, self.c.COLS.TEMPERATURE_SCORE,
                                                                   self.c.COLS.WEIGHTED_TEMPERATURE_SCORE,
                                                                   portfolio_aggregation_method)

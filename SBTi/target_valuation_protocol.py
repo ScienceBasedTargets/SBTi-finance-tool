@@ -297,7 +297,7 @@ class TargetValuationProtocol:
         """
         grid_columns = [self.c.COLS.COMPANY_ID, self.c.COLS.TIME_FRAME, self.c.COLS.SCOPE_CATEGORY]
         companies = self.data[self.c.COLS.COMPANY_ID].unique()
-        scopes = [self.c.VALUE_SCOPE_CATEGORY_S1S2, self.c.VALUE_SCOPE_CATEGORY_S3]
+        scopes = [self.c.VALUE_SCOPE_CATEGORY_S1S2, self.c.VALUE_SCOPE_CATEGORY_S3, self.c.VALUE_SCOPE_CATEGORY_S1S2S3]
         empty_columns = [column for column in self.data.columns if column not in grid_columns]
         extended_data = pd.DataFrame(
             list(itertools.product(*[companies, self.c.VALUE_TIME_FRAMES, scopes] + [[None]] * len(empty_columns))),
