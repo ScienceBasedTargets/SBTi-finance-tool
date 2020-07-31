@@ -78,6 +78,8 @@ class ColumnsConfig:
                        COMPANY_ENTERPRISE_VALUE, CASH_EQUIVALENTS, COMPANY_TOTAL_ASSETS, REGION, COUNTRY,
                        COMPANY_REVENUE]
 
+    REQUIRED = [REDUCTION_AMBITION, GHG_SCOPE12, GHG_SCOPE3, SCOPE]
+
 
 class PortfolioAggregationConfig:
     COLS = ColumnsConfig

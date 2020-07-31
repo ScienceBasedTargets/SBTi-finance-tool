@@ -46,7 +46,6 @@ class PortfolioAggregationMethod(Enum):
         return value_map.get(value, PortfolioAggregationMethod.WATS)
 
 
-
 class PortfolioAggregation(ABC):
     """
     This class is a base class that provides portfolio aggregation calculation.
