@@ -193,7 +193,8 @@ class TargetValuationProtocol:
             else:
                 s1s2 = row.copy()
                 s1s2[self.c.COLS.SCOPE_CATEGORY] = self.c.VALUE_SCOPE_CATEGORY_S1S2
-                if (pd.isnull(s1s2[self.c.COLS.BASEYEAR_GHG_S1]) or pd.isnull(s1s2[self.c.COLS.BASEYEAR_GHG_S2])):
+                if pd.isnull(s1s2[self.c.COLS.BASEYEAR_GHG_S1]) or pd.isnull(s1s2[self.c.COLS.BASEYEAR_GHG_S2]) or \
+                    s1s2[self.c.COLS.BASEYEAR_GHG_S1] + s1s2[self.c.COLS.BASEYEAR_GHG_S2] == 0:
                     pass
                 else:
                     coverage_percentage = (s1s2[self.c.COLS.COVERAGE_S1] * s1s2[self.c.COLS.BASEYEAR_GHG_S1] +
