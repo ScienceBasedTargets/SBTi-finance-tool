@@ -1,4 +1,5 @@
 import json
+import logging
 import os
 
 from typing import List, Dict
@@ -25,6 +26,9 @@ UPLOAD_FOLDER = 'data'
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 api = Api(app)
+
+root_logger = logging.getLogger()
+root_logger.setLevel("INFO")
 
 DATA_PROVIDER_MAP = {
     "excel": ExcelProvider,
@@ -99,7 +103,6 @@ class TemperatureScoreEndpoint(BaseEndpoint):
         super().__init__()
 
     def post(self):
-
         json_data = request.get_json(force=True)
 
         data_providers = self._get_data_providers(json_data)
