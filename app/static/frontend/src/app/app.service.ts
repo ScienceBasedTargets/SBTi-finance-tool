@@ -97,8 +97,12 @@ export class AppService {
             if (error.status === 500) {
                 this.addAlert({type: 'warning', message: 'There was a technical error. Please check your inputs.'});
             } else {
-                this.addAlert({type: 'danger', message: 'An unknown error occured.'});
-                console.error(error); // log to console instead
+                if ("message" in error.error) {
+                    this.addAlert({type: 'warning', message: error.error.message});
+                } else {
+                    this.addAlert({type: 'danger', message: "An unknown error occured"});
+                    console.error(error);
+                }
             }
 
             // Let the app keep running by returning an empty result.
