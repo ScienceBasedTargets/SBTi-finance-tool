@@ -33,6 +33,7 @@ DATA_PROVIDER_MAP = {
 
 
 def get_config():
+    # TODO: Make this path relative to the current directory, instead of the working directory
     with open('config.json') as f_config:
         return json.load(f_config)
 
@@ -125,6 +126,12 @@ class TemperatureScoreEndpoint(BaseEndpoint):
             scenario['grouping'] = grouping
             scenario = Scenario.from_dict(scenario)
             temperature_score.set_scenario(scenario)
+
+        if len(portfolio_data) == 0:
+            return {
+                       "success": False,
+                       "message": "None of the companies in your portfolio could be found by the data provider"
+                   }, 400
 
         # Target_Valuation_Protocol
         target_valuation_protocol = TargetValuationProtocol(portfolio_data, company_data)
@@ -281,14 +288,6 @@ class DocumentationEndpoint(Resource):
         return send_from_directory('static', path)
 
 
-class FrontendEndpoint(Resource):
-    def get(self, path="index.html"):
-        mimetypes.add_type('application/javascript', '.js')
-        mimetypes.add_type('text/css', '.css')
-        config = get_config()
-        return send_from_directory(config["frontend_path"], path)
-
-
 class ParsePortfolioEndpoint(Resource):
     """
     This class allows the client to user to parse his Excel portfolio and transform it into a JSON object.
@@ -296,13 +295,11 @@ class ParsePortfolioEndpoint(Resource):
     """
 
     def post(self):
-        skiprows = request.form.get("skiprows")
-        if skiprows is None:
-            skiprows = 0
-
+        skiprows = request.form.get("skiprows", 0)
         df = pd.read_excel(request.files.get('file'), skiprows=int(skiprows))
 
-        return {'portfolio': df.replace({np.nan: None}).to_dict(orient="records")}
+        return {'portfolio': df.replace(r'^\s*$', np.nan, regex=True).dropna(how='all').replace({np.nan: None}).to_dict(
+            orient="records")}
 
 
 class ImportDataProviderEndpoint(Resource):
@@ -337,7 +334,6 @@ api.add_resource(TemperatureScoreEndpoint, '/temperature_score/')
 api.add_resource(DataProvidersEndpoint, '/data_providers/')
 api.add_resource(DocumentationEndpoint, '/static/<path:path>')
 api.add_resource(ParsePortfolioEndpoint, '/parse_portfolio/')
-api.add_resource(FrontendEndpoint, '/<path:path>', '/')
 api.add_resource(ImportDataProviderEndpoint, '/import_data_provider/')
 
 if __name__ == '__main__':
