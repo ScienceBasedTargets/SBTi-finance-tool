@@ -124,7 +124,7 @@ class TemperatureScoreEndpoint(BaseEndpoint):
         grouping = json_data.get("grouping_columns", None)
 
         scenario = json_data.get('scenario', None)
-        if scenario is not None:
+        if scenario is not None and scenario["number"] > 0:
             scenario['aggregation_method'] = aggregation_method
             scenario['grouping'] = grouping
             scenario = Scenario.from_dict(scenario)
