@@ -288,6 +288,14 @@ class DocumentationEndpoint(Resource):
         return send_from_directory('static', path)
 
 
+class FrontendEndpoint(Resource):
+    def get(self, path="index.html"):
+        mimetypes.add_type('application/javascript', '.js')
+        mimetypes.add_type('text/css', '.css')
+        config = get_config()
+        return send_from_directory(config["frontend_path"], path)
+
+    
 class ParsePortfolioEndpoint(Resource):
     """
     This class allows the client to user to parse his Excel portfolio and transform it into a JSON object.
@@ -334,6 +342,7 @@ api.add_resource(TemperatureScoreEndpoint, '/temperature_score/')
 api.add_resource(DataProvidersEndpoint, '/data_providers/')
 api.add_resource(DocumentationEndpoint, '/static/<path:path>')
 api.add_resource(ParsePortfolioEndpoint, '/parse_portfolio/')
+api.add_resource(FrontendEndpoint, '/<path:path>', '/')
 api.add_resource(ImportDataProviderEndpoint, '/import_data_provider/')
 
 if __name__ == '__main__':
