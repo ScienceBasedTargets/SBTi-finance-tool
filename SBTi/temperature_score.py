@@ -367,6 +367,32 @@ class TemperatureScore(PortfolioAggregation):
         """
         return data[[self.c.COLS.COMPANY_NAME, col]].drop_duplicates()[col].sum()
 
+    def _calculate_scope_weight(self, company_data: pd.DataFrame, scope: str) -> float:
+        """
+        Calculate the weight that a certain scope has in the attribution calculation (which calculate how much of the
+        total score is dependent on the default score).
+
+        :param company_data: A data set which only contains company specific information
+        :param scope: The scope category for which the weight should be calculated.
+        :return:
+        """
+        # TODO: You still have three options here (three time frames), which each have a different target
+        ds_s1s2 = company_data[company_data[self.c.COLS.SCOPE_CATEGORY] == self.c.VALUE_SCOPE_CATEGORY_S1S2][
+            self.c.TEMPERATURE_RESULTS].unique()[0]
+        ds_s3 = company_data[company_data[self.c.COLS.SCOPE_CATEGORY] == self.c.VALUE_SCOPE_CATEGORY_S3][
+            self.c.TEMPERATURE_RESULTS].unique()[0]
+
+        if scope == self.c.VALUE_SCOPE_CATEGORY_S1S2:
+            scope_weight = ds_s1s2
+        elif scope == self.c.VALUE_SCOPE_CATEGORY_S3:
+            scope_weight = ds_s3
+        else:
+            s1s2_emissions = company_data.iloc[1][self.c.COLS.GHG_SCOPE12]
+            s3_emissions = company_data.iloc[1][self.c.COLS.GHG_SCOPE3]
+            scope_weight = (ds_s1s2 * (s1s2_emissions / (s1s2_emissions + s3_emissions)) +
+                            ds_s3 * (s3_emissions / (s1s2_emissions + s3_emissions)))
+        return scope_weight
+
     # TODO: Type hinting
     def temperature_score_influence_percentage(self, data, aggregation_method):
         """
@@ -456,20 +482,7 @@ class TemperatureScore(PortfolioAggregation):
                                                               data[self.c.COLS.COMPANY_NAME].unique()]):
             company_data = data[
                 (data[self.c.COLS.COMPANY_NAME] == company) & (data[self.c.COLS.TIME_FRAME] == time_frame)]
-            ds_s1s2 = company_data[company_data[self.c.COLS.SCOPE_CATEGORY] == self.c.VALUE_SCOPE_CATEGORY_S1S2][
-                self.c.TEMPERATURE_RESULTS].unique()[0]
-            ds_s3 = company_data[company_data[self.c.COLS.SCOPE_CATEGORY] == self.c.VALUE_SCOPE_CATEGORY_S3][
-                self.c.TEMPERATURE_RESULTS].unique()[0]
-
-            if scope == self.c.VALUE_SCOPE_CATEGORY_S1S2:
-                scope_weight = ds_s1s2
-            elif scope == self.c.VALUE_SCOPE_CATEGORY_S3:
-                scope_weight = ds_s3
-            else:
-                s1s2_emissions = company_data.iloc[1][self.c.COLS.GHG_SCOPE12]
-                s3_emissions = company_data.iloc[1][self.c.COLS.GHG_SCOPE3]
-                scope_weight = (ds_s1s2 * (s1s2_emissions / (s1s2_emissions + s3_emissions)) +
-                                ds_s3 * (s3_emissions / (s1s2_emissions + s3_emissions)))
+            scope_weight = self._calculate_scope_weight(company_data, scope)
 
             company_emissions = company_data[self.c.COLS.GHG_SCOPE12].iloc[0] + \
                 company_data[self.c.COLS.GHG_SCOPE3].iloc[0]

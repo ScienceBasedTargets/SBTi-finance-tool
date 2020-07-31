@@ -3,6 +3,7 @@ import itertools
 import pandas as pd
 from typing import Type
 from SBTi.configs import PortfolioAggregationConfig
+import logging
 
 
 class TargetValuationProtocol:
@@ -13,6 +14,7 @@ class TargetValuationProtocol:
         self.data_backup = data
         self.c = config
         self.company_data = company_data
+        self.logger = logging.getLogger(__name__)
 
     def target_valuation_protocol(self):
         '''
@@ -22,6 +24,7 @@ class TargetValuationProtocol:
         :return: a list of six columns containing dataframes in each one
         '''
         self.test_target_type()
+        self.test_missing_fields()
         if len(self.data) > 0:
             self.data[self.c.COLS.SCOPE] = self.data[self.c.COLS.SCOPE].str.lower()
             self.data[self.c.COLS.SCOPE_CATEGORY] = self.data.apply(
@@ -37,7 +40,9 @@ class TargetValuationProtocol:
             self.creating_records_scope_timeframe()
             return self.data
         else:
-            return self.single_record_edgecase()
+            # TODO: Why is this done, is this an edgecase? Shouldn't we just return an empty dataframe?
+            return self.data
+            # return self.single_record_edgecase()
 
     def single_record_edgecase(self):
         '''
@@ -61,6 +66,18 @@ class TargetValuationProtocol:
             if record[self.c.COLS.END_YEAR] > record[self.c.COLS.START_YEAR]:
                 index_list.append(index)
         self.data = self.data.loc[index_list]
+
+    def test_missing_fields(self):
+        """
+        When a required field is missing (that we need to do calculations later on), we'll delete the whole target.
+        :return:
+        """
+        for column in self.c.COLS.REQUIRED:
+            len_old = len(self.data)
+            self.data = self.data[self.data[column].notna()]
+            if len_old != len(self.data):
+                self.logger.warning("One or more targets have been deleted due to null values in column: {}".format(
+                    column))
 
     def test_target_type(self):
         """
@@ -176,7 +193,8 @@ class TargetValuationProtocol:
             else:
                 s1s2 = row.copy()
                 s1s2[self.c.COLS.SCOPE_CATEGORY] = self.c.VALUE_SCOPE_CATEGORY_S1S2
-                if (pd.isnull(s1s2[self.c.COLS.BASEYEAR_GHG_S1]) or pd.isnull(s1s2[self.c.COLS.BASEYEAR_GHG_S2])):
+                if pd.isnull(s1s2[self.c.COLS.BASEYEAR_GHG_S1]) or pd.isnull(s1s2[self.c.COLS.BASEYEAR_GHG_S2]) or \
+                    s1s2[self.c.COLS.BASEYEAR_GHG_S1] + s1s2[self.c.COLS.BASEYEAR_GHG_S2] == 0:
                     pass
                 else:
                     coverage_percentage = (s1s2[self.c.COLS.COVERAGE_S1] * s1s2[self.c.COLS.BASEYEAR_GHG_S1] +
