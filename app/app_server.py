@@ -27,9 +27,6 @@ app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 api = Api(app)
 
-root_logger = logging.getLogger()
-root_logger.setLevel("INFO")
-
 DATA_PROVIDER_MAP = {
     "excel": ExcelProvider,
     "csv": CSVProvider,
@@ -53,6 +50,10 @@ class BaseEndpoint(Resource):
 
     def __init__(self):
         self.config = get_config()
+
+        # Set the logging level based on the config
+        root_logger = logging.getLogger()
+        root_logger.setLevel(self.config["verbosity"])
 
         self.data_providers = []
         for data_provider in self.config["data_providers"]:
