@@ -108,7 +108,7 @@ class TargetValuationProtocol:
         for record in self.data.iterrows():
             if not pd.isna(record[1][self.c.COLS.SCOPE_CATEGORY]):
                 if 's1s2' in record[1][self.c.COLS.SCOPE_CATEGORY]:
-                    if record[1][self.c.COLS.COVERAGE_S1] > 95:
+                    if record[1][self.c.COLS.COVERAGE_S1] > 0.95:
                         index.append(record[0])
                     else:
                         index.append(record[0])
@@ -116,7 +116,7 @@ class TargetValuationProtocol:
                             self.data[self.c.COLS.REDUCTION_AMBITION].loc[record[0]] * \
                             (self.data[self.c.COLS.COVERAGE_S1].loc[record[0]])
                 elif 's3' in record[1][self.c.COLS.SCOPE_CATEGORY]:
-                    if record[1][self.c.COLS.COVERAGE_S3] > 67:
+                    if record[1][self.c.COLS.COVERAGE_S3] > 0.67:
                         index.append(record[0])
                     else:
                         index.append(record[0])
