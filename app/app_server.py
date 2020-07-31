@@ -1,4 +1,5 @@
 import json
+import logging
 import os
 
 from typing import List, Dict
@@ -33,6 +34,7 @@ DATA_PROVIDER_MAP = {
 
 
 def get_config():
+    # TODO: Make this path relative to the current directory, instead of the working directory
     with open('config.json') as f_config:
         return json.load(f_config)
 
@@ -48,6 +50,10 @@ class BaseEndpoint(Resource):
 
     def __init__(self):
         self.config = get_config()
+
+        # Set the logging level based on the config
+        root_logger = logging.getLogger()
+        root_logger.setLevel(self.config["verbosity"])
 
         self.data_providers = []
         for data_provider in self.config["data_providers"]:
@@ -98,7 +104,6 @@ class TemperatureScoreEndpoint(BaseEndpoint):
         super().__init__()
 
     def post(self):
-
         json_data = request.get_json(force=True)
 
         data_providers = self._get_data_providers(json_data)
@@ -120,11 +125,17 @@ class TemperatureScoreEndpoint(BaseEndpoint):
         grouping = json_data.get("grouping_columns", None)
 
         scenario = json_data.get('scenario', None)
-        if scenario is not None:
+        if scenario is not None and scenario["number"] > 0:
             scenario['aggregation_method'] = aggregation_method
             scenario['grouping'] = grouping
             scenario = Scenario.from_dict(scenario)
             temperature_score.set_scenario(scenario)
+
+        if len(portfolio_data) == 0:
+            return {
+                       "success": False,
+                       "message": "None of the companies in your portfolio could be found by the data provider"
+                   }, 400
 
         # Target_Valuation_Protocol
         target_valuation_protocol = TargetValuationProtocol(portfolio_data, company_data)
@@ -288,7 +299,7 @@ class FrontendEndpoint(Resource):
         config = get_config()
         return send_from_directory(config["frontend_path"], path)
 
-
+    
 class ParsePortfolioEndpoint(Resource):
     """
     This class allows the client to user to parse his Excel portfolio and transform it into a JSON object.
@@ -296,13 +307,11 @@ class ParsePortfolioEndpoint(Resource):
     """
 
     def post(self):
-        skiprows = request.form.get("skiprows")
-        if skiprows is None:
-            skiprows = 0
-
+        skiprows = request.form.get("skiprows", 0)
         df = pd.read_excel(request.files.get('file'), skiprows=int(skiprows))
 
-        return {'portfolio': df.replace({np.nan: None}).to_dict(orient="records")}
+        return {'portfolio': df.replace(r'^\s*$', np.nan, regex=True).dropna(how='all').replace({np.nan: None}).to_dict(
+            orient="records")}
 
 
 class ImportDataProviderEndpoint(Resource):
