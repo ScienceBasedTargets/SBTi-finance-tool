@@ -153,7 +153,7 @@ class TemperatureScore(PortfolioAggregation):
         :param target: The target as a row of a dataframe
         :return:The regression parameter and intercept
         """
-        if target[self.c.COLS.SR15] is None:
+        if pd.isnull(target[self.c.COLS.SR15]):
             return None, None
 
         regression = self.regression_model[
@@ -212,7 +212,7 @@ class TemperatureScore(PortfolioAggregation):
             return 1
         return 0
 
-    def calculate(self, data: pd.DataFrame, extra_columns: Optional[list] = None):
+    def calculate(self, data: pd.DataFrame):
         """
         Calculate the temperature for a dataframe of company data.
         Required columns:
@@ -245,9 +245,6 @@ class TemperatureScore(PortfolioAggregation):
         :param data:
         :return: A data frame containing all relevant information for the targets and companies
         """
-        if extra_columns is None:
-            extra_columns = []
-
         data[self.c.COLS.SR15] = data.apply(lambda row: self.get_target_mapping(row), axis=1)
         data[self.c.COLS.ANNUAL_REDUCTION_RATE] = data.apply(lambda row: self.get_annual_reduction_rate(row), axis=1)
         data[self.c.COLS.REGRESSION_PARAM], data[self.c.COLS.REGRESSION_INTERCEPT] = zip(
@@ -257,51 +254,38 @@ class TemperatureScore(PortfolioAggregation):
         # TODO: Enums, constants, parentheses
         data = self.cap_scores(data)
         combined_data = []
-        # company_columns = [column for column in self.c.COLS.COMPANY_COLUMNS + extra_columns if column in data.columns]
-        # TODO: What is happening here?
-        print("COMPANY COLUMNS 1")
-        company_columns = extra_columns + list(data.columns)
-        for company in data[self.c.COLS.COMPANY_NAME].unique():
-            for time_frame in self.c.VALUE_TIME_FRAMES:
-                # We always include all company specific data
-                # TODO: Move this to the TVP (create a 9 box grid, instead of a 6 box) and only calculate the GHC score
-                company_values = data[data[self.c.COLS.COMPANY_NAME] == company]
-                company_data = {
-                    column: company_values[column].mode().iloc[0] if len(company_values[column].mode()) > 0 else None
-                    for column in company_columns}
-                company_data[self.c.COLS.COMPANY_NAME] = company
-                company_data[self.c.COLS.SCOPE] = self.c.VALUE_SCOPE_S1S2S3
-                company_data[self.c.COLS.SCOPE_CATEGORY] = self.c.VALUE_SCOPE_CATEGORY_S1S2S3
-                company_data[self.c.COLS.TIME_FRAME] = time_frame
-                company_data[self.c.COLS.TEMPERATURE_SCORE] = self.get_ghc_temperature_score(data, company, time_frame)
-                combined_data.append(company_data)
+
+        # Calculate the GHC
+        for company, time_frame in itertools.product(data[self.c.COLS.COMPANY_NAME].unique(),
+                                                     self.c.VALUE_TIME_FRAMES):
+            data.loc[(data[self.c.COLS.COMPANY_NAME] == company) & (data[self.c.COLS.TIME_FRAME] == time_frame) &
+                     (data[self.c.COLS.SCOPE_CATEGORY] == self.c.VALUE_SCOPE_S1S2S3),
+                     self.c.COLS.TEMPERATURE_SCORE] = self.get_ghc_temperature_score(data, company, time_frame)
 
         data_score = pd.concat([data, pd.DataFrame(combined_data)])
         data_score.reset_index(inplace=True, drop=True)
-        for time_frame in data_score[self.c.COLS.TIME_FRAME].unique():
-            for company in data_score[self.c.COLS.COMPANY_NAME].unique():
-                company_data = data_score[(data_score[self.c.COLS.COMPANY_NAME] == company)
+        for company, time_frame in itertools.product(data_score[self.c.COLS.COMPANY_NAME].unique(),
+                                                     data_score[self.c.COLS.TIME_FRAME].unique()):
+            company_data = data_score[(data_score[self.c.COLS.COMPANY_NAME] == company)
                                           & (data_score[self.c.COLS.TIME_FRAME] == time_frame)]
-                scope_3_emissions = company_data[self.c.COLS.GHG_SCOPE3].iloc[0]
-                scope_12_emissions = company_data[self.c.COLS.GHG_SCOPE12].iloc[0]
-                scope_123_emissions = scope_12_emissions + scope_3_emissions
-                if not pd.isnull(scope_3_emissions) & pd.isnull(scope_123_emissions):
-                    s1s2_temp_score = \
-                        company_data[company_data[self.c.COLS.SCOPE_CATEGORY] == 's1s2'][
-                            self.c.COLS.TEMPERATURE_SCORE].values[0]
-                    s3_temp_score = company_data[company_data[self.c.COLS.SCOPE_CATEGORY] == 's3'][
+            scope_3_emissions = company_data[self.c.COLS.GHG_SCOPE3].iloc[0]
+            scope_12_emissions = company_data[self.c.COLS.GHG_SCOPE12].iloc[0]
+            scope_123_emissions = scope_12_emissions + scope_3_emissions
+            if not pd.isnull(scope_3_emissions) & pd.isnull(scope_123_emissions):
+                s1s2_temp_score = \
+                    company_data[company_data[self.c.COLS.SCOPE_CATEGORY] == 's1s2'][
                         self.c.COLS.TEMPERATURE_SCORE].values[0]
-                    index = \
-                        data_score[(data_score[self.c.COLS.COMPANY_NAME] == company) & (
-                                data_score[self.c.COLS.TIME_FRAME] == time_frame) &
+                s3_temp_score = company_data[company_data[self.c.COLS.SCOPE_CATEGORY] == 's3'][
+                    self.c.COLS.TEMPERATURE_SCORE].values[0]
+                index = data_score[(data_score[self.c.COLS.COMPANY_NAME] == company) &
+                                   (data_score[self.c.COLS.TIME_FRAME] == time_frame) &
                                    (data_score[self.c.COLS.SCOPE_CATEGORY] == 's1s2s3')].index[0]
-                    if (scope_3_emissions / scope_123_emissions) < 0.4:
-                        data_score.at[index, self.c.COLS.TEMPERATURE_SCORE] = s1s2_temp_score
-
-                    else:
-                        data_score.at[index, self.c.COLS.TEMPERATURE_SCORE] = ((s1s2_temp_score * scope_12_emissions) +
-                                                                               (s3_temp_score * scope_3_emissions)) / (
-                                                                                  scope_123_emissions)
+                if (scope_3_emissions / scope_123_emissions) < 0.4:
+                    data_score.at[index, self.c.COLS.TEMPERATURE_SCORE] = s1s2_temp_score
+                else:
+                    data_score.at[index, self.c.COLS.TEMPERATURE_SCORE] = ((s1s2_temp_score * scope_12_emissions) +
+                                                                           (s3_temp_score * scope_3_emissions)) / \
+                                                                          scope_123_emissions
         return data_score
 
     def aggregate_scores(self, data: pd.DataFrame, portfolio_aggregation_method: PortfolioAggregationMethod,
