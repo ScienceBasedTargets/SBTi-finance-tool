@@ -206,59 +206,7 @@ class TemperatureScoreEndpoint(BaseEndpoint):
                 orient="records"),
             "feature_distribution": column_distribution
         }
-
-        # return_dic = convert_nan_to_none(return_dic)
-
         return return_dic
-
-
-def convert_nan_to_none(nested_dictionary):
-    """Convert NaN values to None in a list in a nested dictionary.
-    TODO: Temporary fix for front-end not supporting nan, will be deleted after Beta testing
-    TODO: Refactor this such that the NaNs are replaced in a data frame, instead of a dictionary
-
-    :param nested_dictionary: dictionary to return that possible contains NaN values
-    :type nested_dictionary: dict
-
-    :rtype: dict
-    :return: cleaned dictionary where all NaN values are converted to None
-    """
-    for parent, dictionary in nested_dictionary.items():
-        if isinstance(dictionary, list):
-            clean_list = []
-            for element in dictionary:
-                clean_element = element
-                if isinstance(element, dict):
-                    for x, y in element.items():
-                        if str(y) == 'nan':
-                            clean_element[x] = None
-                clean_list.append(clean_element)
-            nested_dictionary[parent] = clean_list
-
-        elif isinstance(dictionary, dict):
-            for key, value in dictionary.items():
-                if isinstance(value, dict):
-                    for time_frame, values in value.items():
-                        if isinstance(values, dict):
-                            for scope, scores_el in values.items():
-                                for k, v in scores_el.items():
-                                    if isinstance(v, list):
-                                        clean_v = []
-                                        for company in v:
-                                            clean_company = company
-                                            if isinstance(company, dict):
-                                                for identifier, number in company.items():
-                                                    if str(number) == 'nan':
-                                                        clean_company[identifier] = None
-                                                clean_v.append(clean_company)
-                                                scores_el[k] = clean_v
-
-                                    if str(v) == 'nan':
-                                        scores_el[k] = None
-                        if str(values) == 'nan':
-                            value[time_frame] = None
-
-    return nested_dictionary
 
 
 class DataProvidersEndpoint(BaseEndpoint):
