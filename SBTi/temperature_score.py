@@ -3,6 +3,7 @@ from enum import Enum
 from typing import Optional, Tuple, Type, Dict
 
 import pandas as pd
+import numpy as np
 
 from SBTi.portfolio_aggregation import PortfolioAggregation, PortfolioAggregationMethod
 from .configs import TemperatureScoreConfig
@@ -86,6 +87,7 @@ class TemperatureScore(PortfolioAggregation):
         # Load the mappings from industry to SR15 goal
         self.mapping = pd.read_excel(self.c.FILE_SR15_MAPPING, header=0)
         self.regression_model = pd.read_excel(self.c.FILE_REGRESSION_MODEL_SUMMARY, header=0)
+        self.regression_model = self.regression_model[self.regression_model[self.c.COLS.MODEL] == self.model]
 
     def get_target_mapping(self, target: pd.Series) -> Optional[str]:
         """
@@ -94,40 +96,24 @@ class TemperatureScore(PortfolioAggregation):
         :param target: The target as a row of a dataframe
         :return: The mapped SR15 target
         """
+        # TODO: Use constants
+        mappings = {
+            self.c.VALUE_TARGET_REFERENCE_ABSOLUTE: "Emissions|Kyoto Gases",
+            self.c.VALUE_TARGET_REFERENCE_INTENSITY: {
+                "Revenue": "INT.emKyoto_gdp",
+                "Product": "INT.emKyoto_gdp",
+                "Cement": "INT.emKyoto_gdp",
+                "Oil": "INT.emCO2EI_PE",
+                "Steel": "INT.emKyoto_gdp",
+                "Aluminum": "INT.emKyoto_gdp",
+                "Power": "INT.emCO2EI_elecGen"
+            }
+        }
 
-        # Todo: For beta test, we are using a different SR15 Mapping excel. We are mapping based on Target Type and Intensity Metric
-        # Check if the industry exists, if not use a default
-        # industry = target[self.c.COLS.INDUSTRY] \
-        #     if target[self.c.COLS.INDUSTRY] in self.mapping[self.c.COLS.INDUSTRY] \
-        #     else self.c.DEFAULT_INDUSTRY
-
-        # mappings = self.mapping[(self.mapping[self.c.COLS.INDUSTRY] == industry) &
-        #                         (self.mapping[self.c.COLS.TARGET_TYPE] == target_type) &
-        #                         (self.mapping[self.c.COLS.SCOPE] == target[self.c.COLS.SCOPE_CATEGORY])]
-
-        # Todo: Talk with Daan, after Beta testing, to see how to address this. I do believe this is only for the testing
-        mappings = pd.DataFrame()
-        target_type = self.c.VALUE_TARGET_REFERENCE_INTENSITY \
-            if type(target[self.c.COLS.TARGET_REFERENCE_NUMBER]) == str and \
-               target[self.c.COLS.TARGET_REFERENCE_NUMBER].strip().startswith(
-                   self.c.VALUE_TARGET_REFERENCE_INTENSITY_BASE) \
-            else self.c.VALUE_TARGET_REFERENCE_ABSOLUTE
-
-        if target_type == self.c.VALUE_TARGET_REFERENCE_ABSOLUTE:
-            mappings = self.mapping[(self.mapping[self.c.COLS.TARGET_TYPE_SR15] == target_type)]
-
-        elif target_type == self.c.VALUE_TARGET_REFERENCE_INTENSITY:
-            mappings = self.mapping[(self.mapping[self.c.COLS.TARGET_TYPE_SR15] == target_type) &
-                                    (self.mapping[self.c.COLS.INTENSITY_METRIC_SR15] == target[
-                                        self.c.COLS.INTENSITY_METRIC])]
-
-        if len(mappings) == 0:
-            return None
-        elif len(mappings) > 1:
-            # There should never be more than one potential mapping
-            raise ValueError("There is more than one potential mapping to a SR15 goal.")
+        if target[self.c.COLS.TARGET_REFERENCE_NUMBER].strip().startswith(self.c.VALUE_TARGET_REFERENCE_INTENSITY_BASE):
+            mappings[self.c.VALUE_TARGET_REFERENCE_INTENSITY].get(target[self.c.COLS.INTENSITY_METRIC], None)
         else:
-            return mappings.iloc[0][self.c.COLS.REGRESSION_MODEL]
+            return mappings.get(self.c.VALUE_TARGET_REFERENCE_ABSOLUTE, None)
 
     def get_annual_reduction_rate(self, target: pd.Series) -> Optional[float]:
         """
@@ -158,8 +144,7 @@ class TemperatureScore(PortfolioAggregation):
 
         regression = self.regression_model[
             (self.regression_model[self.c.COLS.VARIABLE] == target[self.c.COLS.SR15]) &
-            (self.regression_model[self.c.COLS.SLOPE] == self.c.SLOPE_MAP[target[self.c.COLS.TIME_FRAME]]) &
-            (self.regression_model[self.c.COLS.MODEL] == self.model)]
+            (self.regression_model[self.c.COLS.SLOPE] == self.c.SLOPE_MAP[target[self.c.COLS.TIME_FRAME]])]
         if len(regression) == 0:
             return None, None
         elif len(regression) > 1:
@@ -167,6 +152,15 @@ class TemperatureScore(PortfolioAggregation):
             raise ValueError("There is more than one potential regression parameter for this SR15 goal.")
         else:
             return regression.iloc[0][self.c.COLS.PARAM], regression.iloc[0][self.c.COLS.INTERCEPT]
+
+    def merge_regression(self, data):
+        data[self.c.COLS.SLOPE] = data.apply(
+            lambda row: self.c.SLOPE_MAP.get(row[self.c.COLS.TIME_FRAME], None),
+            axis=1)
+        return pd.merge(left=data, right=self.regression_model,
+                        left_on=[self.c.COLS.SLOPE, self.c.COLS.SR15],
+                        right_on=[self.c.COLS.SLOPE, self.c.COLS.VARIABLE],
+                        how="left")
 
     def get_score(self, target: pd.Series) -> float:
         """
@@ -245,11 +239,12 @@ class TemperatureScore(PortfolioAggregation):
         :param data:
         :return: A data frame containing all relevant information for the targets and companies
         """
+        data[self.c.COLS.TARGET_REFERENCE_NUMBER] = data[self.c.COLS.TARGET_REFERENCE_NUMBER].replace(
+            {np.nan: self.c.VALUE_TARGET_REFERENCE_ABSOLUTE}
+        )
         data[self.c.COLS.SR15] = data.apply(lambda row: self.get_target_mapping(row), axis=1)
         data[self.c.COLS.ANNUAL_REDUCTION_RATE] = data.apply(lambda row: self.get_annual_reduction_rate(row), axis=1)
-        data[self.c.COLS.REGRESSION_PARAM], data[self.c.COLS.REGRESSION_INTERCEPT] = zip(
-            *data.apply(lambda row: self.get_regression(row), axis=1)
-        )
+        data = self.merge_regression(data)
         data[self.c.COLS.TEMPERATURE_SCORE] = data.apply(lambda row: self.get_score(row), axis=1)
         # TODO: Enums, constants, parentheses
         data = self.cap_scores(data)

@@ -9,8 +9,8 @@ class ColumnsConfig:
     # Define a constant for each column used in the
     COMPANY_ID = "company_id"
     COMPANY_ISIC = "ISIC"
-    REGRESSION_PARAM = "regression_param"
-    REGRESSION_INTERCEPT = "regression_intercept"
+    REGRESSION_PARAM = "param"
+    REGRESSION_INTERCEPT = "intercept"
     MARKET_CAP = "market_cap"
     INVESTMENT_VALUE = "investment_value"
     COMPANY_ENTERPRISE_VALUE = "company_enterprise_value"
