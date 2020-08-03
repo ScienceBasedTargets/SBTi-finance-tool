@@ -175,22 +175,21 @@ class TemperatureScore(PortfolioAggregation):
         return target[self.c.COLS.REGRESSION_PARAM] * target[self.c.COLS.ANNUAL_REDUCTION_RATE] * 100 + target[
             self.c.COLS.REGRESSION_INTERCEPT]
 
-    def get_ghc_temperature_score(self, data: pd.DataFrame, company: str, time_frame: str):
+    def get_ghc_temperature_score(self, company_data: pd.DataFrame, company: str, time_frame: str):
         """
         Get the aggregated temperature score for a certain company based on the emissions of company.
 
-        :param data:
+        :param company_data: The original data, grouped by company, time frame and scope category
         :param company: The company name
         :param time_frame: The time_frame (short, mid, long)
         :return: The aggregated temperature score for a company
         """
-        filtered_data = data[(data[self.c.COLS.COMPANY_NAME] == company) & (data[self.c.COLS.TIME_FRAME] == time_frame)]
-        s1s2 = filtered_data[filtered_data[self.c.COLS.SCOPE_CATEGORY] == self.c.VALUE_SCOPE_CATEGORY_S1S2]
-        s3 = filtered_data[filtered_data[self.c.COLS.SCOPE_CATEGORY] == self.c.VALUE_SCOPE_CATEGORY_S3]
+        s1s2 = company_data.loc[(company, time_frame, self.c.VALUE_SCOPE_CATEGORY_S1S2)]
+        s3 = company_data.loc[(company, time_frame, self.c.VALUE_SCOPE_CATEGORY_S3)]
         try:
-            return (s1s2[self.c.COLS.TEMPERATURE_SCORE].mean() * s1s2[self.c.COLS.GHG_SCOPE12].mean() +
-                    s3[self.c.COLS.TEMPERATURE_SCORE].mean() * s3[self.c.COLS.GHG_SCOPE3].mean()) / \
-                   (s1s2[self.c.COLS.GHG_SCOPE12].mean() + s3[self.c.COLS.GHG_SCOPE3].mean())
+            return (s1s2[self.c.COLS.TEMPERATURE_SCORE] * s1s2[self.c.COLS.GHG_SCOPE12] +
+                    s3[self.c.COLS.TEMPERATURE_SCORE] * s3[self.c.COLS.GHG_SCOPE3]) / \
+                   (s1s2[self.c.COLS.GHG_SCOPE12] + s3[self.c.COLS.GHG_SCOPE3])
         except ZeroDivisionError:
             raise ValueError("The mean of the S1+S2 plus the S3 emissions is zero")
 
@@ -251,11 +250,16 @@ class TemperatureScore(PortfolioAggregation):
         combined_data = []
 
         # Calculate the GHC
-        for company, time_frame in itertools.product(data[self.c.COLS.COMPANY_NAME].unique(),
+        company_data = data[
+            [self.c.COLS.COMPANY_ID, self.c.COLS.TIME_FRAME, self.c.COLS.SCOPE_CATEGORY, self.c.COLS.GHG_SCOPE12,
+             self.c.COLS.GHG_SCOPE3, self.c.COLS.TEMPERATURE_SCORE]
+        ].groupby([self.c.COLS.COMPANY_ID, self.c.COLS.TIME_FRAME, self.c.COLS.SCOPE_CATEGORY]).mean()
+
+        for company, time_frame in itertools.product(data[self.c.COLS.COMPANY_ID].unique(),
                                                      self.c.VALUE_TIME_FRAMES):
             data.loc[(data[self.c.COLS.COMPANY_NAME] == company) & (data[self.c.COLS.TIME_FRAME] == time_frame) &
                      (data[self.c.COLS.SCOPE_CATEGORY] == self.c.VALUE_SCOPE_S1S2S3),
-                     self.c.COLS.TEMPERATURE_SCORE] = self.get_ghc_temperature_score(data, company, time_frame)
+                     self.c.COLS.TEMPERATURE_SCORE] = self.get_ghc_temperature_score(company_data, company, time_frame)
 
         data_score = pd.concat([data, pd.DataFrame(combined_data)])
         data_score.reset_index(inplace=True, drop=True)
