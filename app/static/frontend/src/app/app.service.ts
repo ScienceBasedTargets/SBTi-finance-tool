@@ -41,7 +41,7 @@ export class AppService {
      * @returns data providers
      */
     public getDataProviders(): Observable<DataProvider[]> {
-        return this.http.get<DataProvider[]>(`${environment.host}/data_providers`)
+        return this.http.get<DataProvider[]>(`${environment.host}/data_providers/`)
             .pipe(
                 tap(_ => console.log('fetched data providers')),
                 catchError(this.handleError<DataProvider[]>('getDataProviders', []))
@@ -93,6 +93,7 @@ export class AppService {
      */
     private handleError<T>(operation = 'operation', result?: T) {
         return (error: any): Observable<T> => {
+            console.error(error.error.message); // log to console instead
 
             if (error.status === 500) {
                 this.addAlert({type: 'warning', message: 'There was a technical error. Please check your inputs.'});
