@@ -111,7 +111,7 @@ class TemperatureScore(PortfolioAggregation):
         }
 
         if target[self.c.COLS.TARGET_REFERENCE_NUMBER].strip().startswith(self.c.VALUE_TARGET_REFERENCE_INTENSITY_BASE):
-            mappings[self.c.VALUE_TARGET_REFERENCE_INTENSITY].get(target[self.c.COLS.INTENSITY_METRIC], None)
+            return mappings[self.c.VALUE_TARGET_REFERENCE_INTENSITY].get(target[self.c.COLS.INTENSITY_METRIC], None)
         else:
             return mappings.get(self.c.VALUE_TARGET_REFERENCE_ABSOLUTE, None)
 
