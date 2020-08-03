@@ -111,10 +111,16 @@ class TemperatureScoreEndpoint(BaseEndpoint):
         default_score = json_data.get("default_score", self.config["default_score"])
         temperature_score = TemperatureScore(fallback_score=default_score)
 
+        input_data = pd.DataFrame(json_data["companies"])
         company_data = SBTi.data.get_company_data(data_providers, json_data["companies"])
-        targets = SBTi.data.get_targets(data_providers, json_data["companies"])
-
-        portfolio_data = pd.merge(left=company_data, right=targets, how='outer', on=['company_name', 'company_id'])
+        target_data = SBTi.data.get_targets(data_providers, json_data["companies"])
+        company_data = pd.merge(left=company_data,
+                                right=input_data[
+                                    [column
+                                     for column in input_data.columns
+                                     if column not in ["company_name"]]],
+                                how="left",
+                                on=["company_id"])
 
         aggregation_method = self.aggregation_map[self.config["aggregation_method"]]
         # TODO: Write this as a shorthand and throw an exception if the user defined a non existing aggregation
@@ -131,26 +137,17 @@ class TemperatureScoreEndpoint(BaseEndpoint):
             scenario = Scenario.from_dict(scenario)
             temperature_score.set_scenario(scenario)
 
-        if len(portfolio_data) == 0:
+        if len(target_data) == 0:
             return {
                        "success": False,
                        "message": "None of the companies in your portfolio could be found by the data provider"
                    }, 400
 
         # Target_Valuation_Protocol
-        target_valuation_protocol = TargetValuationProtocol(portfolio_data, company_data)
-
+        target_valuation_protocol = TargetValuationProtocol(target_data, company_data)
         portfolio_data = target_valuation_protocol.target_valuation_protocol()
 
-        # Add the user-defined columns to the data set for grouping later on
-        extra_columns = []
-        for company in json_data["companies"]:
-            for key, value in company.items():
-                if key not in ["company_name", "company_id"]:
-                    portfolio_data.loc[portfolio_data['company_name'] == company["company_name"], key] = value
-                    extra_columns.append(key)
-
-        scores = temperature_score.calculate(portfolio_data, extra_columns)
+        scores = temperature_score.calculate(portfolio_data)
 
         # After calculation we'll re-add the extra columns from the input
         for company in json_data["companies"]:
@@ -210,7 +207,7 @@ class TemperatureScoreEndpoint(BaseEndpoint):
             "feature_distribution": column_distribution
         }
 
-        return_dic = convert_nan_to_none(return_dic)
+        # return_dic = convert_nan_to_none(return_dic)
 
         return return_dic
 
