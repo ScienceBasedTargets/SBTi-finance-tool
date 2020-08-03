@@ -175,21 +175,30 @@ class TemperatureScore(PortfolioAggregation):
         return target[self.c.COLS.REGRESSION_PARAM] * target[self.c.COLS.ANNUAL_REDUCTION_RATE] * 100 + target[
             self.c.COLS.REGRESSION_INTERCEPT]
 
-    def get_ghc_temperature_score(self, company_data: pd.DataFrame, company: str, time_frame: str):
+    def get_ghc_temperature_score(self, row: pd.Series, company_data: pd.DataFrame) -> float:
         """
         Get the aggregated temperature score for a certain company based on the emissions of company.
 
         :param company_data: The original data, grouped by company, time frame and scope category
-        :param company: The company name
-        :param time_frame: The time_frame (short, mid, long)
+        :param row: The row to calculate the temperature score for (if the scope of the row isn't s1s2s3, it will return
+        the original score
         :return: The aggregated temperature score for a company
         """
-        s1s2 = company_data.loc[(company, time_frame, self.c.VALUE_SCOPE_CATEGORY_S1S2)]
-        s3 = company_data.loc[(company, time_frame, self.c.VALUE_SCOPE_CATEGORY_S3)]
+        if row[self.c.COLS.SCOPE_CATEGORY] != self.c.VALUE_SCOPE_CATEGORY_S1S2S3:
+            return row[self.c.COLS.TEMPERATURE_SCORE]
+        s1s2 = company_data.loc[(row[self.c.COLS.COMPANY_ID], row[self.c.COLS.TIME_FRAME],
+                                 self.c.VALUE_SCOPE_CATEGORY_S1S2)]
+        s3 = company_data.loc[(row[self.c.COLS.COMPANY_ID], row[self.c.COLS.TIME_FRAME],
+                               self.c.VALUE_SCOPE_CATEGORY_S3)]
+
         try:
-            return (s1s2[self.c.COLS.TEMPERATURE_SCORE] * s1s2[self.c.COLS.GHG_SCOPE12] +
-                    s3[self.c.COLS.TEMPERATURE_SCORE] * s3[self.c.COLS.GHG_SCOPE3]) / \
-                   (s1s2[self.c.COLS.GHG_SCOPE12] + s3[self.c.COLS.GHG_SCOPE3])
+            # If the s3 emissions are less than 40 percent, we'll ignore them altogether, if not, we'll weigh them
+            if s3[self.c.COLS.GHG_SCOPE3] / (s1s2[self.c.COLS.GHG_SCOPE12] + s3[self.c.COLS.GHG_SCOPE3]) < 0.4:
+                return s1s2[self.c.COLS.TEMPERATURE_SCORE]
+            else:
+                return (s1s2[self.c.COLS.TEMPERATURE_SCORE] * s1s2[self.c.COLS.GHG_SCOPE12] +
+                        s3[self.c.COLS.TEMPERATURE_SCORE] * s3[self.c.COLS.GHG_SCOPE3]) / \
+                       (s1s2[self.c.COLS.GHG_SCOPE12] + s3[self.c.COLS.GHG_SCOPE3])
         except ZeroDivisionError:
             raise ValueError("The mean of the S1+S2 plus the S3 emissions is zero")
 
@@ -204,6 +213,41 @@ class TemperatureScore(PortfolioAggregation):
                 or pd.isnull(target[self.c.COLS.ANNUAL_REDUCTION_RATE]):
             return 1
         return 0
+
+    def _prepare_data(self, data: pd.DataFrame):
+        """
+        Prepare the data such that it can be used to calculate the temperature score.
+
+        :param data: The original data set as a pandas data frame
+        :return: The extended data frame
+        """
+        data[self.c.COLS.TARGET_REFERENCE_NUMBER] = data[self.c.COLS.TARGET_REFERENCE_NUMBER].replace(
+            {np.nan: self.c.VALUE_TARGET_REFERENCE_ABSOLUTE}
+        )
+        data[self.c.COLS.SR15] = data.apply(lambda row: self.get_target_mapping(row), axis=1)
+        data[self.c.COLS.ANNUAL_REDUCTION_RATE] = data.apply(lambda row: self.get_annual_reduction_rate(row), axis=1)
+        data = self.merge_regression(data)
+        data[self.c.COLS.TEMPERATURE_SCORE] = data.apply(lambda row: self.get_score(row), axis=1)
+        data = self.cap_scores(data)
+        return data
+
+    def _calculate_company_score(self, data):
+        """
+        Calculate the combined s1s2s3 scores for all companies.
+
+        :param data: The original data set as a pandas data frame
+        :return: The data frame, with an updated s1s2s3 temperature score
+        """
+        # Calculate the GHC
+        company_data = data[
+            [self.c.COLS.COMPANY_ID, self.c.COLS.TIME_FRAME, self.c.COLS.SCOPE_CATEGORY, self.c.COLS.GHG_SCOPE12,
+             self.c.COLS.GHG_SCOPE3, self.c.COLS.TEMPERATURE_SCORE]
+        ].groupby([self.c.COLS.COMPANY_ID, self.c.COLS.TIME_FRAME, self.c.COLS.SCOPE_CATEGORY]).mean()
+
+        data[self.c.COLS.TEMPERATURE_SCORE] = data.apply(
+            lambda row: self.get_ghc_temperature_score(row, company_data), axis=1
+        )
+        return data
 
     def calculate(self, data: pd.DataFrame):
         """
@@ -238,54 +282,9 @@ class TemperatureScore(PortfolioAggregation):
         :param data:
         :return: A data frame containing all relevant information for the targets and companies
         """
-        data[self.c.COLS.TARGET_REFERENCE_NUMBER] = data[self.c.COLS.TARGET_REFERENCE_NUMBER].replace(
-            {np.nan: self.c.VALUE_TARGET_REFERENCE_ABSOLUTE}
-        )
-        data[self.c.COLS.SR15] = data.apply(lambda row: self.get_target_mapping(row), axis=1)
-        data[self.c.COLS.ANNUAL_REDUCTION_RATE] = data.apply(lambda row: self.get_annual_reduction_rate(row), axis=1)
-        data = self.merge_regression(data)
-        data[self.c.COLS.TEMPERATURE_SCORE] = data.apply(lambda row: self.get_score(row), axis=1)
-        # TODO: Enums, constants, parentheses
-        data = self.cap_scores(data)
-        combined_data = []
-
-        # Calculate the GHC
-        company_data = data[
-            [self.c.COLS.COMPANY_ID, self.c.COLS.TIME_FRAME, self.c.COLS.SCOPE_CATEGORY, self.c.COLS.GHG_SCOPE12,
-             self.c.COLS.GHG_SCOPE3, self.c.COLS.TEMPERATURE_SCORE]
-        ].groupby([self.c.COLS.COMPANY_ID, self.c.COLS.TIME_FRAME, self.c.COLS.SCOPE_CATEGORY]).mean()
-
-        for company, time_frame in itertools.product(data[self.c.COLS.COMPANY_ID].unique(),
-                                                     self.c.VALUE_TIME_FRAMES):
-            data.loc[(data[self.c.COLS.COMPANY_NAME] == company) & (data[self.c.COLS.TIME_FRAME] == time_frame) &
-                     (data[self.c.COLS.SCOPE_CATEGORY] == self.c.VALUE_SCOPE_S1S2S3),
-                     self.c.COLS.TEMPERATURE_SCORE] = self.get_ghc_temperature_score(company_data, company, time_frame)
-
-        data_score = pd.concat([data, pd.DataFrame(combined_data)])
-        data_score.reset_index(inplace=True, drop=True)
-        for company, time_frame in itertools.product(data_score[self.c.COLS.COMPANY_NAME].unique(),
-                                                     data_score[self.c.COLS.TIME_FRAME].unique()):
-            company_data = data_score[(data_score[self.c.COLS.COMPANY_NAME] == company)
-                                          & (data_score[self.c.COLS.TIME_FRAME] == time_frame)]
-            scope_3_emissions = company_data[self.c.COLS.GHG_SCOPE3].iloc[0]
-            scope_12_emissions = company_data[self.c.COLS.GHG_SCOPE12].iloc[0]
-            scope_123_emissions = scope_12_emissions + scope_3_emissions
-            if not pd.isnull(scope_3_emissions) & pd.isnull(scope_123_emissions):
-                s1s2_temp_score = \
-                    company_data[company_data[self.c.COLS.SCOPE_CATEGORY] == 's1s2'][
-                        self.c.COLS.TEMPERATURE_SCORE].values[0]
-                s3_temp_score = company_data[company_data[self.c.COLS.SCOPE_CATEGORY] == 's3'][
-                    self.c.COLS.TEMPERATURE_SCORE].values[0]
-                index = data_score[(data_score[self.c.COLS.COMPANY_NAME] == company) &
-                                   (data_score[self.c.COLS.TIME_FRAME] == time_frame) &
-                                   (data_score[self.c.COLS.SCOPE_CATEGORY] == 's1s2s3')].index[0]
-                if (scope_3_emissions / scope_123_emissions) < 0.4:
-                    data_score.at[index, self.c.COLS.TEMPERATURE_SCORE] = s1s2_temp_score
-                else:
-                    data_score.at[index, self.c.COLS.TEMPERATURE_SCORE] = ((s1s2_temp_score * scope_12_emissions) +
-                                                                           (s3_temp_score * scope_3_emissions)) / \
-                                                                          scope_123_emissions
-        return data_score
+        data = self._prepare_data(data)
+        data = self._calculate_company_score(data)
+        return data
 
     def aggregate_scores(self, data: pd.DataFrame, portfolio_aggregation_method: PortfolioAggregationMethod,
                          grouping: Optional[list] = None):
@@ -469,7 +468,7 @@ class TemperatureScore(PortfolioAggregation):
             scope_weight = self._calculate_scope_weight(company_data, scope)
 
             company_emissions = company_data[self.c.COLS.GHG_SCOPE12].iloc[0] + \
-                company_data[self.c.COLS.GHG_SCOPE3].iloc[0]
+                                company_data[self.c.COLS.GHG_SCOPE3].iloc[0]
 
             if aggregation_method == 'WATS':
                 value = (company_data.iloc[1][self.c.INVESTMENT_VALUE] / total_investment) * scope_weight
