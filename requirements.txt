@@ -6,4 +6,4 @@ flask-restful==0.3.8
 pandas==1.0.3
 xlrd==1.2.0
 git+https://github.com/maxcountryman/flask-uploads.git
-git+git://github.com/OFBDABV/SBTi@DEV_split
+git+git://github.com/OFBDABV/SBTi
