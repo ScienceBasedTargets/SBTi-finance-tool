@@ -56,15 +56,15 @@ Company Q,,,,,,,,,,,,,,s1s2,long
 Company Q,,,,,,,,,,,,,,s3,short
 Company Q,,,,,,,,,,,,,,s3,mid
 Company Q,,,,,,,,,,,,,,s3,long
-Company T,,,public, Abs 1,Scope 1+2,100,41.6,2009,2009,14400000,2020,68, Underway,s1s2,short
-Company T,,,,,,,,,,,,,,s1s2,mid
-Company T,,,,,,,,,,,,,,s1s2,long
-Company T,,,,,,,,,,,,,,s3,short
-Company T,,,,,,,,,,,,,,s3,mid
-Company T,,,,,,,,,,,,,,s3,long
-Company V,,,,,,,,,,,,,,s1s2,short
-Company V,,,,,,,,,,,,,,s1s2,mid
-Company V,,,,,,,,,,,,,,s1s2,long
-Company V,,,,,,,,,,,,,,s3,short
-Company V,,,,,,,,,,,,,,s3,mid
-Company V,,,,,,,,,,,,,,s3,long
+Company T,CA0000000020,,public, Abs 1,Scope 1+2,100,41.6,2009,2009,14400000,2020,68, Underway,s1s2,short
+Company T,CA0000000021,,,,,,,,,,,,,s1s2,mid
+Company T,CA0000000022,,,,,,,,,,,,,s1s2,long
+Company T,CA0000000023,,,,,,,,,,,,,s3,short
+Company T,CA0000000024,,,,,,,,,,,,,s3,mid
+Company T,CA0000000025,,,,,,,,,,,,,s3,long
+Company V,US0000000022,,,,,,,,,,,,,s1s2,short
+Company V,US0000000023,,,,,,,,,,,,,s1s2,mid
+Company V,US0000000024,,,,,,,,,,,,,s1s2,long
+Company V,US0000000025,,,,,,,,,,,,,s3,short
+Company V,US0000000026,,,,,,,,,,,,,s3,mid
+Company V,US0000000027,,,,,,,,,,,,,s3,long

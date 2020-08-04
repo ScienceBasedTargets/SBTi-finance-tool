@@ -3,8 +3,9 @@ import itertools
 import logging
 
 import pandas as pd
-from typing import Type
+from typing import Type, List
 from SBTi.configs import PortfolioAggregationConfig
+import logging
 
 
 class TargetValuationProtocol:
@@ -12,12 +13,12 @@ class TargetValuationProtocol:
     def __init__(self, data: pd.DataFrame, company_data: pd.DataFrame,
                  config: Type[PortfolioAggregationConfig] = PortfolioAggregationConfig):
         self.data = data
-        self.data_backup = data
+        self.data_backup = data.copy()
         self.c = config
         self.company_data = company_data
         self.logger = logging.getLogger(__name__)
 
-    def target_valuation_protocol(self):
+    def target_valuation_protocol(self) -> pd.DataFrame:
         '''
         Runs the target valuation protcol by calling on the four required steps
 
@@ -25,34 +26,22 @@ class TargetValuationProtocol:
         :return: a list of six columns containing dataframes in each one
         '''
         self.test_target_type()
-        self.test_missing_fields()
-        if len(self.data) > 0:
-            self.data[self.c.COLS.SCOPE] = self.data[self.c.COLS.SCOPE].str.lower()
-            self.data[self.c.COLS.SCOPE_CATEGORY] = self.data.apply(
-                lambda row: self.c.SCOPE_MAP[row[self.c.COLS.SCOPE]], axis=1)
-            self.split_s1s2s3()
-            self.convert_s1_s2_into_s1s2()
-            self.test_boundary_coverage()
-            self.test_target_process()
-            self.test_end_year()
-            self.time_frame()
-            self.group_targets()
-            self.combining_records()
-            self.creating_records_scope_timeframe()
-            return self.data
-        else:
-            return self.single_record_edgecase()
+        self.data[self.c.COLS.ACHIEVED_EMISSIONS] = self.data[self.c.COLS.ACHIEVED_EMISSIONS].fillna(0)
 
-    def single_record_edgecase(self):
-        '''
-        Creates six categories for when there is a singular record with no target value.
-        :return:
-        '''
-        new_dataframe = pd.DataFrame()
-        new_dataframe = new_dataframe.append([self.data_backup] * 6, ignore_index=True)
-        new_dataframe['scope_category'] = ['s1s2', 's1s2', 's1s2', 's3', 's3', 's3']
-        new_dataframe['time_frame'] = ['short', 'mid', 'long', 'short', 'mid', 'long']
-        return new_dataframe
+        self.test_missing_fields(self.data, self.c.COLS.REQUIRED_TARGETS)
+        self.test_missing_fields(self.company_data, self.c.COLS.REQUIRED_COMPANY)
+        self.data[self.c.COLS.SCOPE] = self.data[self.c.COLS.SCOPE].str.lower()
+        self.data[self.c.COLS.SCOPE_CATEGORY] = self.data.apply(
+            lambda row: self.c.SCOPE_MAP[row[self.c.COLS.SCOPE]], axis=1)
+        self.split_s1s2s3()
+        self.convert_s1_s2_into_s1s2()
+        self.test_boundary_coverage()
+        self.test_target_process()
+        self.test_end_year()
+        self.time_frame()
+        self.group_targets()
+        self.data = self.combine_records()
+        return self.data
 
     def test_end_year(self):
         '''
@@ -66,16 +55,15 @@ class TargetValuationProtocol:
                 index_list.append(index)
         self.data = self.data.loc[index_list]
 
-    def test_missing_fields(self):
+    def test_missing_fields(self, data_set, required_columns):
         """
         When a required field is missing (that we need to do calculations later on), we'll delete the whole target.
-
         :return:
         """
-        for column in self.c.COLS.REQUIRED:
-            len_old = len(self.data)
-            self.data = self.data[self.data[column].notna()]
-            if len_old != len(self.data):
+        for column in required_columns:
+            len_old = len(data_set)
+            data_set = data_set[data_set[column].notna()]
+            if len_old != len(data_set):
                 self.logger.warning("One or more targets have been deleted due to null values in column: {}".format(
                     column))
 
@@ -101,8 +89,8 @@ class TargetValuationProtocol:
                 if 'abs' in record[self.c.COLS.TARGET_REFERENCE_NUMBER]:
                     index_list.append(index)
                 elif 'int' in record[self.c.COLS.TARGET_REFERENCE_NUMBER]:
-                    if (not pd.isna(record[self.c.COLS.INTENSITY_METRIC])):
-                        if ('other' not in record[self.c.COLS.INTENSITY_METRIC]):
+                    if not pd.isna(record[self.c.COLS.INTENSITY_METRIC]):
+                        if 'other' not in record[self.c.COLS.INTENSITY_METRIC]:
                             index_list.append(index)
         self.data = self.data.loc[index_list]
 
@@ -232,7 +220,7 @@ class TargetValuationProtocol:
                 time_frame_list.append(None)
         self.data[self.c.COLS.TIME_FRAME] = time_frame_list
 
-    def _find_target(self, row: pd.Series) -> pd.DataFrame:
+    def _find_target(self, row: pd.Series, target_columns: List[str]) -> pd.Series:
         """
         Find the target that corresponds to a given row. If there are multiple targets available, filter them.
 
@@ -249,7 +237,7 @@ class TargetValuationProtocol:
             return row
         elif len(target_data) == 1:
             # If there's exactly one target, we'll return that target
-            return target_data.iloc[0]
+            return target_data[target_columns].iloc[0]
         else:
             # We prefer targets with higher emissions in scope
             if target_data.iloc[0][self.c.COLS.SCOPE_CATEGORY] == self.c.VALUE_SCOPE_CATEGORY_S1S2:
@@ -261,24 +249,24 @@ class TargetValuationProtocol:
                     target_data[self.c.COLS.GHG_SCOPE3] == target_data[
                         self.c.COLS.GHG_SCOPE3].max()].copy()
             if len(target_data) == 1:
-                return target_data.iloc[0]
+                return target_data[target_columns].iloc[0]
 
             # We prefer targets with higher base years
             target_data = target_data[
                 target_data[self.c.COLS.BASE_YEAR] == target_data[self.c.COLS.BASE_YEAR].max()].copy()
             if len(target_data) == 1:
-                return target_data.iloc[0]
+                return target_data[target_columns].iloc[0]
 
             # We pick abs over int
             if len(target_data[target_data[self.c.COLS.TARGET_REFERENCE_NUMBER].str.lower().str.startswith("abs")]) > 0:
                 target_data = target_data[
                     target_data[self.c.COLS.TARGET_REFERENCE_NUMBER].str.lower().str.startswith("abs")].copy()
             if len(target_data) == 1:
-                return target_data.iloc[0]
+                return target_data[target_columns].iloc[0]
 
             # There are more than 1 targets, so we'll average them out
             target_data[self.c.COLS.REDUCTION_AMBITION] = target_data[self.c.COLS.REDUCTION_AMBITION].mean()
-            return target_data.iloc[0]
+            return target_data[target_columns].iloc[0]
 
     def group_targets(self):
         """
@@ -296,65 +284,23 @@ class TargetValuationProtocol:
         -- If all else is equal: average the ambition of targets
         """
         grid_columns = [self.c.COLS.COMPANY_ID, self.c.COLS.TIME_FRAME, self.c.COLS.SCOPE_CATEGORY]
-        companies = self.data[self.c.COLS.COMPANY_ID].unique()
-        scopes = [self.c.VALUE_SCOPE_CATEGORY_S1S2, self.c.VALUE_SCOPE_CATEGORY_S3]
-        empty_columns = [column for column in self.data.columns if column not in grid_columns]
+        # These are columns that do apear in the target data, but should be exclusive to the company data
+        # TODO: Check if we can remove this earlier on/make sure it's never in there
+        company_columns = [self.c.COLS.COMPANY_NAME]
+        companies = self.company_data[self.c.COLS.COMPANY_ID].unique()
+        scopes = [self.c.VALUE_SCOPE_CATEGORY_S1S2, self.c.VALUE_SCOPE_CATEGORY_S3, self.c.VALUE_SCOPE_CATEGORY_S1S2S3]
+        empty_columns = [column for column in self.data.columns if column not in grid_columns + company_columns]
         extended_data = pd.DataFrame(
             list(itertools.product(*[companies, self.c.VALUE_TIME_FRAMES, scopes] + [[None]] * len(empty_columns))),
             columns=grid_columns + empty_columns)
-        # We always include all company specific data
-        company_columns = [column for column in self.c.COLS.COMPANY_COLUMNS if column in extended_data.columns]
-        for company in companies:
-            for column in company_columns:
-                # extended_data.loc[extended_data[self.c.COLS.COMPANY_ID] == company, column] = \
-                #     self.data[self.data[self.c.COLS.COMPANY_ID] == company][column].mode()
-                mode_value = self.data[self.data[self.c.COLS.COMPANY_ID] == company][column].mode()
-                if not mode_value.empty:
-                    for index in extended_data.loc[extended_data[self.c.COLS.COMPANY_ID] == company, column].index:
-                        extended_data.loc[index, column] = mode_value.values[0]
 
-        extended_data = extended_data.apply(lambda row: self._find_target(row), axis=1)
-        self.data = extended_data
+        target_columns = extended_data.columns
+        self.data = self.combine_records()
+        self.data = extended_data.apply(lambda row: self._find_target(row, target_columns), axis=1)
 
-    def creating_records_scope_timeframe(self):
-        '''
-        Create S1+S2 and S3 scopes for records that have an empty scope
-        '''
-        scopeless_data_s1s2 = self.data[pd.isna(self.data[self.c.COLS.SCOPE_CATEGORY])].copy()
-        scopeless_data_3 = self.data[pd.isna(self.data[self.c.COLS.SCOPE_CATEGORY])].copy()
-
-        index_to_drop = self.data[pd.isna(self.data[self.c.COLS.SCOPE_CATEGORY])].index
-        self.data.drop(index_to_drop, inplace=True)
-
-        scopeless_data_s1s2[self.c.COLS.SCOPE_CATEGORY] = 's1s2'
-        scopeless_data_3[self.c.COLS.SCOPE_CATEGORY] = 's3'
-        self.data = pd.concat([self.data, scopeless_data_s1s2, scopeless_data_3])
-
-        timeframe_data_short = self.data[pd.isna(self.data[self.c.COLS.TIME_FRAME])].copy()
-        timeframe_data_mid = self.data[pd.isna(self.data[self.c.COLS.TIME_FRAME])].copy()
-        timeframe_data_long = self.data[pd.isna(self.data[self.c.COLS.TIME_FRAME])].copy()
-
-        index_to_drop = self.data[pd.isna(self.data[self.c.COLS.TIME_FRAME])].index
-        self.data.drop(index_to_drop, inplace=True)
-
-        timeframe_data_short[self.c.COLS.TIME_FRAME] = 'short'
-        timeframe_data_mid[self.c.COLS.TIME_FRAME] = 'mid'
-        timeframe_data_long[self.c.COLS.TIME_FRAME] = 'long'
-
-        self.data = pd.concat(
-            [self.data, scopeless_data_s1s2, scopeless_data_3, timeframe_data_short, timeframe_data_mid,
-             timeframe_data_long])
-
-        self.data.reset_index(drop=True, inplace=True)
-        self.data.drop(self.data[pd.isna(self.data[self.c.COLS.TIME_FRAME])].index, inplace=True)
-
-    def combining_records(self):
+    def combine_records(self):
         '''
         Combines both dataframes together. The company_data and the portfolio data that filtered out companies.
         :return:
         '''
-        for company_remove in self.data['company_name'].unique():
-            self.company_data.drop(self.company_data[self.company_data['company_name'] == company_remove].index.values,
-                                   inplace=True)
-        # self.data = pd.merge(left=self.company_data, right=self.data, how='outer', on=['company_name'])
-        self.data = pd.concat([self.company_data, self.data], ignore_index=True, sort=False)
+        return pd.merge(left=self.company_data, right=self.data, how='outer', on=['company_id'])

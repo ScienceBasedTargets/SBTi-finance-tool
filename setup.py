@@ -7,8 +7,13 @@ setup(
                 'targets, commitments, and investment and lending portfolios, and to use this information to develop '
                 'targets for official validation by the SBTi.',
     author='Ortec Finance',
-    author_email='sbti@ortec-finance.com',
+    author_email='finance@sciencebasedtargets.org',
     packages=find_packages(),
+    package_data={
+        'SBTi': ['inputs/sr15_mapping.xlsx', 'inputs/regression_model_summary.xlsx',
+                 'inputs/current-Companies-Taking-Action-191.xlsx'],
+    },
+    include_package_data=True,
     install_requires=[],
     extras_require={
         'dev': [
