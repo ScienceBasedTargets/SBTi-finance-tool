@@ -346,7 +346,8 @@ class TemperatureScore(PortfolioAggregation):
         :param col: The column name
         :return:
         """
-        return data[[self.c.COLS.COMPANY_NAME, col]].drop_duplicates()[col].sum()
+        # return data[[self.c.COLS.COMPANY_NAME, col]].drop_duplicates()[col].sum()
+        return data[col].sum()
 
     def _calculate_scope_weight(self, company_data: pd.DataFrame, company_id: int, time_frame: str,
                                 scope: str) -> float:
@@ -386,10 +387,10 @@ class TemperatureScore(PortfolioAggregation):
             .groupby([self.c.COLS.COMPANY_ID]).mode()
         total_investment, portfolio_emissions = 0, 0
         if aggregation_method == PortfolioAggregationMethod.WATS:
-            total_investment = self._calculate_company_unique_sum(data, self.c.COLS.INVESTMENT_VALUE)
+            total_investment = self._calculate_company_unique_sum(company_unique, self.c.COLS.INVESTMENT_VALUE)
         elif aggregation_method == PortfolioAggregationMethod.TETS:
-            portfolio_emissions = self._calculate_company_unique_sum(data, self.c.COLS.GHG_SCOPE12) + \
-                                  self._calculate_company_unique_sum(data, self.c.COLS.GHG_SCOPE3)
+            portfolio_emissions = self._calculate_company_unique_sum(company_unique, self.c.COLS.GHG_SCOPE12) + \
+                                  self._calculate_company_unique_sum(company_unique, self.c.COLS.GHG_SCOPE3)
         elif aggregation_method == PortfolioAggregationMethod.ECOTS:
             data[self.c.COLS.COMPANY_EV_PLUS_CASH] = data[self.c.COLS.COMPANY_ENTERPRISE_VALUE] + \
                                                      data[self.c.COLS.CASH_EQUIVALENTS]
@@ -410,7 +411,7 @@ class TemperatureScore(PortfolioAggregation):
                             row[self.c.COLS.GHG_SCOPE12] + row[self.c.COLS.GHG_SCOPE3])),
                     axis=1
                 )
-                owned_emissions = self._calculate_company_unique_sum(data, self.c.COLS.OWNED_EMISSIONS)
+                owned_emissions = self._calculate_company_unique_sum(company_unique, self.c.COLS.OWNED_EMISSIONS)
             except ZeroDivisionError:
                 raise ValueError("To calculate the aggregation, the {} column may not be zero".format(value_column))
 
