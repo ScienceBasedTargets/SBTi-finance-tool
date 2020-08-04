@@ -1,0 +1,294 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>SBTi.data.trucost &mdash; SBTi Temperature Alignment tool  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script src="../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> SBTi Temperature Alignment tool
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../rest_api.html">REST API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html">API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">SBTi Temperature Alignment tool</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html">Docs</a> &raquo;</li>
+        
+      <li><code class="xref py py-mod docutils literal notranslate"><span class="pre">SBTi.data.trucost</span></code></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../../_sources/autoapi/SBTi/data/trucost/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-SBTi.data.trucost">
+<span id="sbti-data-trucost"></span><h1><a class="reference internal" href="#module-SBTi.data.trucost" title="SBTi.data.trucost"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SBTi.data.trucost</span></code></a><a class="headerlink" href="#module-SBTi.data.trucost" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="SBTi.data.trucost.Trucost">
+<em class="property">class </em><code class="sig-prename descclassname">SBTi.data.trucost.</code><code class="sig-name descname">Trucost</code><a class="headerlink" href="#SBTi.data.trucost.Trucost" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../data_provider/index.html#SBTi.data.data_provider.DataProvider" title="SBTi.data.data_provider.DataProvider"><code class="xref py py-class docutils literal notranslate"><span class="pre">SBTi.data.data_provider.DataProvider</span></code></a></p>
+<p>Data provider skeleton for Trucost.</p>
+<dl class="py method">
+<dt id="SBTi.data.trucost.Trucost.get_targets">
+<em class="property">abstract </em><code class="sig-name descname">get_targets</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">companies</span><span class="p">:</span> <span class="n">list</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.data.trucost.Trucost.get_targets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all the targets for the whole portfolio of companies. This should return a dataframe, containing at least
+the following columns:</p>
+<ul class="simple">
+<li><p>company_name: The name of the company</p></li>
+<li><p>company_id: The ID of the company</p></li>
+<li><p>target_reference_number: Int <em>x</em> of Abs <em>x</em></p></li>
+<li><p>target_reference_number: Int <em>x</em> of Abs <em>x</em></p></li>
+<li><p>scope: The scope of the target. This should be a valid scope in the SR15 mapping</p></li>
+<li><p>base_year: The base year of the target</p></li>
+<li><p>start_year: The start year of the target</p></li>
+<li><p>target_year: The year when the target should be achieved</p></li>
+<li><p>reduction_from_base_year: Targeted reduction in emissions from the base year</p></li>
+<li><p>emissions_in_scope: Company emissions in the target’s scope at start of the base year</p></li>
+<li><p>achieved_reduction: The emission reduction that has already been achieved</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>companies</strong> – A list of companies. Each company should be a dict with a “company_name” and “company_id”
+field.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A dataframe containing the targets</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SBTi.data.trucost.Trucost.get_company_data">
+<em class="property">abstract </em><code class="sig-name descname">get_company_data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">companies</span><span class="p">:</span> <span class="n">list</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.data.trucost.Trucost.get_company_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all relevant data for a certain company. Should return a dataframe, containing at least the following
+columns:</p>
+<ul class="simple">
+<li><p>company_name: The name of the company</p></li>
+<li><p>company_id: The ID of the company</p></li>
+<li><dl class="simple">
+<dt>industry: The industry the company is working in. This should be a valid industry in the SR15 mapping. If not</dt><dd><p>it will be converted to “Others” (or whichever value is set in the config as the default</p>
+</dd>
+</dl>
+</li>
+<li><p>s1s2_emissions: Total company emissions in the S1 + S2 scope</p></li>
+<li><p>s3_emissions: Total company emissions in the S3 scope</p></li>
+<li><p>market_cap: Market capitalization of the company. Only required to use the MOTS portfolio aggregation.</p></li>
+<li><dl class="simple">
+<dt>investment_value: The investment value of the investment in this company. Only required to use the MOTS, EOTS,</dt><dd><p>ECOTS and AOTS portfolio aggregation.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>company_enterprise_value: The enterprise value of the company. Only required to use the EOTS portfolio</dt><dd><p>aggregation.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>company_ev_plus_cash: The enterprise value of the company plus cash. Only required to use the ECOTS portfolio</dt><dd><p>aggregation.</p>
+</dd>
+</dl>
+</li>
+<li><p>company_total_assets: The total assets of the company. Only required to use the AOTS portfolio aggregation.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>companies</strong> – A list of companies. Each company should be a dict with a “company_name” and “company_id”
+field.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A dataframe containing the company data</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SBTi.data.trucost.Trucost.get_sbti_targets">
+<em class="property">abstract </em><code class="sig-name descname">get_sbti_targets</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">companies</span><span class="p">:</span> <span class="n">list</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.data.trucost.Trucost.get_sbti_targets" title="Permalink to this definition">¶</a></dt>
+<dd><p>For each of the companies, get the status of their target (Target set, Committed or No target) as it’s known to
+the SBTi.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>companies</strong> – A list of companies. Each company should be a dict with a “company_name” and “company_id”
+field.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The original list, enriched with a field called “sbti_target_status”</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Science Based Targets
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,100 @@
+:mod:`SBTi.portfolio_aggregation`
+=================================
+
+.. py:module:: SBTi.portfolio_aggregation
+
+
+Module Contents
+---------------
+
+
+.. py:class:: PortfolioAggregationMethod
+
+   Bases: :class:`enum.Enum`
+
+   The portfolio aggregation method determines how the temperature scores for the individual companies are aggregated
+   into a single portfolio score.
+
+   .. attribute:: WATS
+      :annotation: = 1
+
+      
+
+   .. attribute:: TETS
+      :annotation: = 2
+
+      
+
+   .. attribute:: MOTS
+      :annotation: = 3
+
+      
+
+   .. attribute:: EOTS
+      :annotation: = 4
+
+      
+
+   .. attribute:: ECOTS
+      :annotation: = 5
+
+      
+
+   .. attribute:: AOTS
+      :annotation: = 6
+
+      
+
+   .. attribute:: ROTS
+      :annotation: = 7
+
+      
+
+   .. method:: from_int(value: int)
+      :staticmethod:
+
+
+
+   .. method:: from_string(value: str)
+      :staticmethod:
+
+
+
+   .. method:: is_emissions_based(method: PortfolioAggregationMethod)
+      :staticmethod:
+
+
+      Check whether a given method is emissions-based (i.e. it uses the emissions to calculate the aggregation).
+
+      :param method: The method to check
+      :return:
+
+
+   .. method:: get_value_column(method: PortfolioAggregationMethod, column_config: ColumnsConfig)
+      :staticmethod:
+
+
+
+
+.. py:class:: PortfolioAggregation(config: Type[PortfolioAggregationConfig] = PortfolioAggregationConfig)
+
+   Bases: :class:`abc.ABC`
+
+   This class is a base class that provides portfolio aggregation calculation.
+
+   :param config: A class defining the constants that are used throughout this class. This parameter is only required
+                   if you'd like to overwrite a constant. This can be done by extending the PortfolioAggregationConfig
+                   class and overwriting one of the parameters.
+
+   .. method:: _calculate_aggregate_score(self, data: pd.DataFrame, input_column: str, portfolio_aggregation_method: PortfolioAggregationMethod)
+
+
+      Aggregate the scores in a given column based on a certain portfolio aggregation method.
+
+      :param data: The data to run the calculations on
+      :param input_column: The input column (containing the scores)
+      :param portfolio_aggregation_method: The method to use
+      :return: The aggregates score
+
+
+

@@ -1,0 +1,368 @@
+:mod:`SBTi.data`
+================
+
+.. py:module:: SBTi.data
+
+.. autoapi-nested-parse::
+
+   This module contains classes that create connections to data providers.
+
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   bloomberg/index.rst
+   csv/index.rst
+   data_provider/index.rst
+   excel/index.rst
+   iss/index.rst
+   msci/index.rst
+   trucost/index.rst
+   urgentum/index.rst
+
+
+Package Contents
+----------------
+
+
+.. py:class:: ColumnsConfig
+
+   .. attribute:: COMPANY_ID
+      :annotation: = company_id
+
+      
+
+   .. attribute:: COMPANY_ISIC
+      :annotation: = ISIC
+
+      
+
+   .. attribute:: REGRESSION_PARAM
+      :annotation: = param
+
+      
+
+   .. attribute:: REGRESSION_INTERCEPT
+      :annotation: = intercept
+
+      
+
+   .. attribute:: MARKET_CAP
+      :annotation: = market_cap
+
+      
+
+   .. attribute:: INVESTMENT_VALUE
+      :annotation: = investment_value
+
+      
+
+   .. attribute:: COMPANY_ENTERPRISE_VALUE
+      :annotation: = company_enterprise_value
+
+      
+
+   .. attribute:: COMPANY_EV_PLUS_CASH
+      :annotation: = company_ev_plus_cash
+
+      
+
+   .. attribute:: COMPANY_TOTAL_ASSETS
+      :annotation: = company_total_assets
+
+      
+
+   .. attribute:: TARGET_REFERENCE_NUMBER
+      :annotation: = Target type
+
+      
+
+   .. attribute:: SCOPE
+      :annotation: = Scope
+
+      
+
+   .. attribute:: SCOPE_CATEGORY
+      :annotation: = scope_category
+
+      
+
+   .. attribute:: SR15
+      :annotation: = SR15
+
+      
+
+   .. attribute:: REDUCTION_FROM_BASE_YEAR
+      :annotation: = reduction_from_base_year
+
+      
+
+   .. attribute:: START_YEAR
+      :annotation: = start_year
+
+      
+
+   .. attribute:: VARIABLE
+      :annotation: = variable
+
+      
+
+   .. attribute:: SLOPE
+      :annotation: = slope
+
+      
+
+   .. attribute:: TIME_FRAME
+      :annotation: = time_frame
+
+      
+
+   .. attribute:: MODEL
+      :annotation: = model
+
+      
+
+   .. attribute:: ANNUAL_REDUCTION_RATE
+      :annotation: = annual_reduction_rate
+
+      
+
+   .. attribute:: EMISSIONS_IN_SCOPE
+      :annotation: = emissions_in_scope
+
+      
+
+   .. attribute:: TEMPERATURE_SCORE
+      :annotation: = temperature_score
+
+      
+
+   .. attribute:: COMPANY_NAME
+      :annotation: = company_name
+
+      
+
+   .. attribute:: OWNED_EMISSIONS
+      :annotation: = owned_emissions
+
+      
+
+   .. attribute:: COUNTRY
+      :annotation: = Country
+
+      
+
+   .. attribute:: SECTOR
+      :annotation: = sector
+
+      
+
+   .. attribute:: GHG_SCOPE12
+      :annotation: = GHG_scope1+2
+
+      
+
+   .. attribute:: GHG_SCOPE3
+      :annotation: = GHG_scope3
+
+      
+
+   .. attribute:: COMPANY_REVENUE
+      :annotation: = Revenue
+
+      
+
+   .. attribute:: CASH_EQUIVALENTS
+      :annotation: = cash_equivalents
+
+      
+
+   .. attribute:: TARGET_CLASSIFICATION
+      :annotation: = Target_classification
+
+      
+
+   .. attribute:: REDUCTION_AMBITION
+      :annotation: = reduction_ambition
+
+      
+
+   .. attribute:: BASE_YEAR
+      :annotation: = base_year
+
+      
+
+   .. attribute:: END_YEAR
+      :annotation: = end_year
+
+      
+
+   .. attribute:: SBTI_STATUS
+      :annotation: = SBTi_status
+
+      
+
+   .. attribute:: ACHIEVED_EMISSIONS
+      :annotation: = achieved_reduction
+
+      
+
+   .. attribute:: ISIC
+      :annotation: = ISIC
+
+      
+
+   .. attribute:: INDUSTRY_LVL1
+      :annotation: = Industry_lvl1
+
+      
+
+   .. attribute:: INDUSTRY_LVL2
+      :annotation: = Industry_lvl2
+
+      
+
+   .. attribute:: INDUSTRY_LVL3
+      :annotation: = Industry_lvl3
+
+      
+
+   .. attribute:: INDUSTRY_LVL4
+      :annotation: = Industry_lvl4
+
+      
+
+   .. attribute:: COVERAGE_S1
+      :annotation: = Coverage_S1
+
+      
+
+   .. attribute:: COVERAGE_S2
+      :annotation: = Coverage_S2
+
+      
+
+   .. attribute:: COVERAGE_S3
+      :annotation: = Coverage_S3
+
+      
+
+   .. attribute:: INTENSITY_METRIC
+      :annotation: = Intensity_metric
+
+      
+
+   .. attribute:: INTENSITY_METRIC_SR15
+      :annotation: = Intensity_metric
+
+      
+
+   .. attribute:: TARGET_TYPE_SR15
+      :annotation: = Target_type
+
+      
+
+   .. attribute:: SR15_VARIABLE
+      :annotation: = SR15_variable
+
+      
+
+   .. attribute:: REGRESSION_MODEL
+      :annotation: = Regression_model
+
+      
+
+   .. attribute:: BASEYEAR_GHG_S1
+      :annotation: = BaseYear_GHG_S1
+
+      
+
+   .. attribute:: BASEYEAR_GHG_S2
+      :annotation: = BaseYear_GHG_S2
+
+      
+
+   .. attribute:: BASEYEAR_GHG_S3
+      :annotation: = BaseYear_GHG_S3
+
+      
+
+   .. attribute:: REGION
+      :annotation: = Region
+
+      
+
+   .. attribute:: ENGAGEMENT_TARGET
+      :annotation: = engagement_target
+
+      
+
+   .. attribute:: PARAM
+      :annotation: = param
+
+      
+
+   .. attribute:: INTERCEPT
+      :annotation: = intercept
+
+      
+
+   .. attribute:: WEIGHTED_TEMPERATURE_SCORE
+      :annotation: = weighted_temperature_score
+
+      
+
+   .. attribute:: CONTRIBUTION_RELATIVE
+      :annotation: = contribution_relative
+
+      
+
+   .. attribute:: CONTRIBUTION
+      :annotation: = contribution
+
+      
+
+   .. attribute:: COMPANY_COLUMNS
+      
+
+      
+
+   .. attribute:: REQUIRED_TARGETS
+      
+
+      
+
+   .. attribute:: REQUIRED_COMPANY
+      
+
+      
+
+
+.. function:: get_company_data(data_providers: list, companies: list, config: Type[ColumnsConfig] = ColumnsConfig) -> pd.DataFrame
+
+   Get the company data in a waterfall method, given a list of companies and a list of data providers. This will go
+   through the list of data providers and retrieve the required info until either there are no companies left or there
+   are no data providers left.
+
+   :param data_providers: A list of data providers instances
+   :param companies: A list of companies. Each company should be a dict and contain a company_name and company_id field
+   :param config: A config containing the column names
+   :return: A data frame containing the company data
+
+
+.. function:: get_targets(data_providers: list, companies: list, config: Type[ColumnsConfig] = ColumnsConfig) -> pd.DataFrame
+
+   Get the targets in a waterfall method, given a list of companies and a list of data providers. This will go through
+   the list of data providers and retrieve the required info until either there are no companies left or there are no
+   data providers left.
+
+   :param data_providers: A list of data providers instances
+   :param companies: A list of companies. Each company should be a dict and contain a company_name and company_id field
+   :param config: A config containing the column names
+   :return: A data frame containing the targets
+
+

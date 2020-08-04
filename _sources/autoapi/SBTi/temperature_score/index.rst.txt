@@ -1,0 +1,302 @@
+:mod:`SBTi.temperature_score`
+=============================
+
+.. py:module:: SBTi.temperature_score
+
+
+Module Contents
+---------------
+
+
+.. py:class:: ScenarioType
+
+   Bases: :class:`enum.Enum`
+
+   .. attribute:: TARGETS
+      :annotation: = 1
+
+      
+
+   .. attribute:: APPROVED_TARGETS
+      :annotation: = 2
+
+      
+
+   .. attribute:: HIGHEST_CONTRIBUTORS
+      :annotation: = 3
+
+      
+
+   .. attribute:: HIGHEST_CONTRIBUTORS_APPROVED
+      :annotation: = 4
+
+      
+
+   .. method:: from_int(value)
+      :staticmethod:
+
+
+
+
+.. py:class:: EngagementType
+
+   Bases: :class:`enum.Enum`
+
+   .. attribute:: SET_TARGETS
+      :annotation: = 1
+
+      
+
+   .. attribute:: SET_SBTI_TARGETS
+      :annotation: = 2
+
+      
+
+   .. method:: from_int(value)
+      :staticmethod:
+
+
+
+   .. method:: from_string(value: str)
+      :staticmethod:
+
+
+
+
+.. py:class:: Scenario
+
+   .. attribute:: scenario_type
+      :annotation: :ScenarioType
+
+      
+
+   .. attribute:: engagement_type
+      :annotation: :EngagementType
+
+      
+
+   .. attribute:: aggregation_method
+      :annotation: :PortfolioAggregationMethod
+
+      
+
+   .. attribute:: grouping
+      :annotation: :Optional[list]
+
+      
+
+   .. method:: from_dict(scenario_values: dict)
+      :staticmethod:
+
+
+
+
+.. py:class:: TemperatureScore(fallback_score: float = 3.2, model: int = 4, config: Type[TemperatureScoreConfig] = TemperatureScoreConfig)
+
+   Bases: :class:`SBTi.portfolio_aggregation.PortfolioAggregation`
+
+   This class is provides a temperature score based on the climate goals.
+
+   :param fallback_score: The temp score if a company is not found
+   :param model: The regression model to use
+   :param config: A class defining the constants that are used throughout this class. This parameter is only required
+                   if you'd like to overwrite a constant. This can be done by extending the TemperatureScoreConfig
+                   class and overwriting one of the parameters.
+
+   .. method:: get_target_mapping(self, target: pd.Series)
+
+
+      Map the target onto an SR15 target (None if not available).
+
+      :param target: The target as a row of a dataframe
+      :return: The mapped SR15 target
+
+
+   .. method:: get_annual_reduction_rate(self, target: pd.Series)
+
+
+      Get the annual reduction rate (or None if not available).
+
+      :param target: The target as a row of a dataframe
+      :return: The annual reduction
+
+
+   .. method:: get_regression(self, target: pd.Series)
+
+
+      Get the regression parameter and intercept from the model's output.
+
+      :param target: The target as a row of a dataframe
+      :return:The regression parameter and intercept
+
+
+   .. method:: merge_regression(self, data)
+
+
+
+   .. method:: get_score(self, target: pd.Series)
+
+
+      Get the temperature score for a certain target based on the annual reduction rate and the regression parameters.
+
+      :param target: The target as a row of a dataframe
+      :return: The temperature score
+
+
+   .. method:: get_ghc_temperature_score(self, row: pd.Series, company_data: pd.DataFrame)
+
+
+      Get the aggregated temperature score for a certain company based on the emissions of company.
+
+      :param company_data: The original data, grouped by company, time frame and scope category
+      :param row: The row to calculate the temperature score for (if the scope of the row isn't s1s2s3, it will return
+      the original score
+      :return: The aggregated temperature score for a company
+
+
+   .. method:: get_default_score(self, target: pd.Series)
+
+
+      Get the temperature score for a certain target based on the annual reduction rate and the regression parameters.
+
+      :param target: The target as a row of a dataframe
+      :return: The temperature score
+
+
+   .. method:: _prepare_data(self, data: pd.DataFrame)
+
+
+      Prepare the data such that it can be used to calculate the temperature score.
+
+      :param data: The original data set as a pandas data frame
+      :return: The extended data frame
+
+
+   .. method:: _calculate_company_score(self, data)
+
+
+      Calculate the combined s1s2s3 scores for all companies.
+
+      :param data: The original data set as a pandas data frame
+      :return: The data frame, with an updated s1s2s3 temperature score
+
+
+   .. method:: calculate(self, data: pd.DataFrame)
+
+
+      Calculate the temperature for a dataframe of company data.
+      Required columns:
+      * target_reference_number: Int *x* of Abs *x*
+      * scope: The scope of the target. This should be a valid scope in the SR15 mapping
+      * scope_category: The scope category, options: "s1s2", "s3", "s1s2s3"
+      * base_year: The base year of the target
+      * start_year: The start year of the target
+      * target_year: The year when the target should be achieved
+      * time_frame: The time frame of the target (short, mid, long) -> This field is calculated by the target
+          valuation protocol.
+      * reduction_from_base_year: Targeted reduction in emissions from the base year
+      * emissions_in_scope: Company emissions in the target's scope at start of the base year
+      * achieved_reduction: The emission reduction that has already been achieved
+      * industry: The industry the company is working in. This should be a valid industry in the SR15 mapping. If not
+          it will be converted to "Others" (or whichever value is set in the config as the default
+      * s1s2_emissions: Total company emissions in the S1 + S2 scope
+      * s3_emissions: Total company emissions in the S3 scope
+      * market_cap: Market capitalization of the company. Only required to use the MOTS portfolio aggregation.
+      * investment_value: The investment value of the investment in this company. Only required to use the MOTS, EOTS,
+          ECOTS and AOTS portfolio aggregation.
+      * company_enterprise_value: The enterprise value of the company. Only required to use the EOTS portfolio
+          aggregation.
+      * company_ev_plus_cash: The enterprise value of the company plus cash. Only required to use the ECOTS portfolio
+          aggregation.
+      * company_total_assets: The total assets of the company. Only required to use the AOTS portfolio aggregation.
+      * company_revenue: The revenue of the company. Only required to use the ROTS portfolio aggregation.
+
+      :param extra_columns: A list of user defined extra, company related, columns
+      :param data:
+      :return: A data frame containing all relevant information for the targets and companies
+
+
+   .. method:: aggregate_scores(self, data: pd.DataFrame, portfolio_aggregation_method: PortfolioAggregationMethod, grouping: Optional[list] = None)
+
+
+      Aggregate scores to create a portfolio score per time_frame (short, mid, long).
+
+      :param data: The results of the calculate method
+      :param portfolio_aggregation_method: PortfolioAggregationMethod: The aggregation method to use
+      :param grouping: The grouping to use
+      :return: A weighted temperature score for the portfolio
+
+
+   .. method:: _calculate_company_unique_sum(self, data: pd.DataFrame, col: str)
+
+
+      Given a data set, calculate a sum which is unique at the company level (such that each field is counted once
+      per company).
+
+      :param data: The data set
+      :param col: The column name
+      :return:
+
+
+   .. method:: _calculate_scope_weight(self, company_data: pd.DataFrame, company_id: int, time_frame: str, scope: str)
+
+
+      Calculate the weight that a certain scope has in the attribution calculation (which calculate how much of the
+      total score is dependent on the default score).
+
+      :param company_data: The original data, grouped by company, time frame and scope category
+      :param company_id: A ID of the company to look for
+      :param time_frame: A time frame that's being processed
+      :param scope: The scope category for which the weight should be calculated.
+      :return:
+
+
+   .. method:: temperature_score_influence_percentage(self, data: pd.DataFrame, aggregation_method: PortfolioAggregationMethod)
+
+
+      Determines the percentage of the temperature score is covered by target and default score
+
+      :param data: output of the temperature score method
+      :param aggregation_method: The aggregation method that should be used to calculate the importance of each
+      temperature score
+
+      :return: A dataframe containing the percentage contributed by the default and target score for all three timeframes
+
+
+   .. method:: columns_percentage_distribution(self, data, columns)
+
+
+      Percentage distribution of specific column or columns
+
+      :param data: output from the target_valuation_protocol
+      :param columns: specified column names the client would like to have a percentage distribution
+      :return: percentage distribution of specified columns
+
+
+   .. method:: set_scenario(self, scenario: Scenario)
+
+
+
+   .. method:: cap_scores(self, scores: pd.DataFrame)
+
+
+
+   .. method:: anonymize_data_dump(self, scores)
+
+
+      Anonymizes scores for raw data output
+
+
+   .. method:: merge_percentage_coverage_to_aggregations(self, aggregations: Dict, temperature_percentage_coverage: Dict)
+
+
+      Iterates over two dictionaries and ads keys from second dictionary to the first.
+      :param temperature_percentage_coverage: first 'main' dictionary where keys should be added
+      :type temperature_percentage_coverage: dict
+      :param aggregations: second dictionary wherefrom key-value pairs are added to first dictionary
+      :type aggregations: dict
+      :rtype: aggregations, dict
+      :return: aggregations
+
+
+
