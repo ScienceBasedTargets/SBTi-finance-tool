@@ -1,5 +1,4 @@
 import json
-import logging
 import os
 
 from typing import List, Dict
@@ -51,10 +50,6 @@ class BaseEndpoint(Resource):
     def __init__(self):
         self.config = get_config()
 
-        # Set the logging level based on the config
-        root_logger = logging.getLogger()
-        root_logger.setLevel(self.config["verbosity"])
-
         self.data_providers = []
         for data_provider in self.config["data_providers"]:
             data_provider["class"] = DATA_PROVIDER_MAP[data_provider["type"]](**data_provider["parameters"])
@@ -105,9 +100,7 @@ class TemperatureScoreEndpoint(BaseEndpoint):
 
     def post(self):
         json_data = request.get_json(force=True)
-
         data_providers = self._get_data_providers(json_data)
-
         default_score = json_data.get("default_score", self.config["default_score"])
         temperature_score = TemperatureScore(fallback_score=default_score)
 
@@ -137,7 +130,7 @@ class TemperatureScoreEndpoint(BaseEndpoint):
             scenario = Scenario.from_dict(scenario)
             temperature_score.set_scenario(scenario)
 
-        if len(target_data) == 0:
+        if len(company_data) == 0:
             return {
                        "success": False,
                        "message": "None of the companies in your portfolio could be found by the data provider"
@@ -148,6 +141,10 @@ class TemperatureScoreEndpoint(BaseEndpoint):
         portfolio_data = target_valuation_protocol.target_valuation_protocol()
 
         scores = temperature_score.calculate(portfolio_data)
+
+        # Temperature score percentage breakdown by default score and target score
+        temperature_percentage_coverage = temperature_score.temperature_score_influence_percentage(
+            scores.copy(), aggregation_method)
 
         # After calculation we'll re-add the extra columns from the input
         for company in json_data["companies"]:
@@ -176,11 +173,6 @@ class TemperatureScoreEndpoint(BaseEndpoint):
         portfolio_coverage_tvp = PortfolioCoverageTVP()
         coverage = portfolio_coverage_tvp.get_portfolio_coverage(portfolio_data, aggregation_method)
 
-        # Temperature score percentage breakdown by default score and target score
-        temperature_percentage_coverage = temperature_score.temperature_score_influence_percentage(portfolio_data,
-                                                                                                   json_data[
-                                                                                                       'aggregation_method'])
-
         if grouping:
             column_distribution = temperature_score.columns_percentage_distribution(portfolio_data,
                                                                                     json_data['grouping_columns'])
@@ -200,12 +192,13 @@ class TemperatureScoreEndpoint(BaseEndpoint):
         return_dic = {
             "aggregated_scores": aggregations,
             # TODO: The scores are included twice now, once with all columns, and once with only a subset of the columns
-            "scores": scores.replace({np.nan: None}).to_dict(orient="records"),
+            "scores": scores.where(pd.notnull(scores), None).to_dict(orient="records"),
             "coverage": coverage,
             "companies": scores[include_columns].replace({np.nan: None}).to_dict(
                 orient="records"),
             "feature_distribution": column_distribution
         }
+
         return return_dic
 
 
@@ -237,14 +230,6 @@ class DocumentationEndpoint(Resource):
         return send_from_directory('static', path)
 
 
-class FrontendEndpoint(Resource):
-    def get(self, path="index.html"):
-        mimetypes.add_type('application/javascript', '.js')
-        mimetypes.add_type('text/css', '.css')
-        config = get_config()
-        return send_from_directory(config["frontend_path"], path)
-
-    
 class ParsePortfolioEndpoint(Resource):
     """
     This class allows the client to user to parse his Excel portfolio and transform it into a JSON object.
@@ -291,7 +276,6 @@ api.add_resource(TemperatureScoreEndpoint, '/temperature_score/')
 api.add_resource(DataProvidersEndpoint, '/data_providers/')
 api.add_resource(DocumentationEndpoint, '/static/<path:path>')
 api.add_resource(ParsePortfolioEndpoint, '/parse_portfolio/')
-api.add_resource(FrontendEndpoint, '/<path:path>', '/')
 api.add_resource(ImportDataProviderEndpoint, '/import_data_provider/')
 
 if __name__ == '__main__':
