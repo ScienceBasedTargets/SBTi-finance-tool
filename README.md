@@ -9,18 +9,18 @@ So, the SBTi toolkit caters for three types of usage:
 - The tool can be included as a Microservice (containerised REST API) in any IT infrastructure (in the cloud or on premise)
 - As an webapp, exposing the functionality with a simple user interface.
 
+To following diagram provides an overview of the different parts of the toolkit:
 
     +-------------------------------------------------+
     |   UI     : Simple user interface on top of API  |
-    |   Source : github.com/OFBDABV/SBTi_ui           |
-    |   Install: via source or dockerhub              |
+    |   Install: via dockerhub              |
     |            docker.io/sbti/ui:latest             |
     |                                                 |
     | +-----------------------------------------+     |
     | | REST API: Dockerized Flask/NGINX        |     |
     | | Source : github.com/OFBDABV/SBTi_api    |     |
     | | Install: via source or dockerhub        |     |
-    | |          dcoker.io/sbti/sbti/api:latest |     |
+    | |          docker.io/sbti/sbti/api:latest |     |
     | |                                         |     |
     | | +---------------------------------+     |     |
     | | |                                 |     |     |
@@ -33,6 +33,9 @@ So, the SBTi toolkit caters for three types of usage:
     +-------------------------------------------------+
 
 As shown above the API is dependent on the Python Repo, in the same way the UI requires the API backend. These dependencies are scripted in the Docker files
+
+> This repository only contains the Python module. If you'd like to use the REST API, please refer to [this repository](https://github.com/OFBDABV/SBTi_api) or the same repository on [Dockerhub](https://docker.io/sbti/sbti/api:latest).
+
 ## Structure
 The folder structure for this project is as follows:
 
