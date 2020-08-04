@@ -18,7 +18,6 @@ class ExcelProvider(DataProvider):
         self.data = pd.read_excel(path, sheet_name=None,skiprows=1)
         self.c = config
 
-
     def get_targets(self, companies: list) -> pd.DataFrame:
         """
         Get all the targets for the whole portfolio of companies. This should return a dataframe, containing at least
@@ -82,7 +81,6 @@ class ExcelProvider(DataProvider):
         return data_company[
             (data_company["company_id"].isin([company["company_id"] for company in companies]) &
              data_company["company_id"].notnull())].copy()
-
 
     def get_sbti_targets(self, companies: list) -> list:
         """
