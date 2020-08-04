@@ -244,6 +244,14 @@ class ParsePortfolioEndpoint(Resource):
             orient="records")}
 
 
+class FrontendEndpoint(Resource):
+    def get(self, path="index.html"):
+        mimetypes.add_type('application/javascript', '.js')
+        mimetypes.add_type('text/css', '.css')
+        config = get_config()
+        return send_from_directory(config["frontend_path"], path)
+
+
 class ImportDataProviderEndpoint(Resource):
     """
     Allows the user to replace the "inputFormat" with a new "data provider".
@@ -276,6 +284,7 @@ api.add_resource(TemperatureScoreEndpoint, '/temperature_score/')
 api.add_resource(DataProvidersEndpoint, '/data_providers/')
 api.add_resource(DocumentationEndpoint, '/static/<path:path>')
 api.add_resource(ParsePortfolioEndpoint, '/parse_portfolio/')
+api.add_resource(FrontendEndpoint, '/<path:path>', '/')
 api.add_resource(ImportDataProviderEndpoint, '/import_data_provider/')
 
 if __name__ == '__main__':
