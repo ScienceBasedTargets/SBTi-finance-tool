@@ -259,7 +259,7 @@
                     <td>{{resultScores[timeFrame][group]["all"]["score"] | number:'1.2-2'}}&#176;C</td>
                     <td>
 <!--                      <ng-container *ngIf="resultScores[timeFrame][group]['influence_percentage']['target'] + resultScores[timeFrame][group]['influence_percentage']['default'] === 100">-->
-                        {{resultScores[timeFrame][group]["influence_percentage"] | number:'1.0-2'}}% / {{ (100 - resultScores[timeFrame][group]["influence_percentage"]) | number:'1.0-2'}}%
+                        {{ (100 - resultScores[timeFrame][group]["influence_percentage"]) | number:'1.0-2'}}% / {{resultScores[timeFrame][group]["influence_percentage"] | number:'1.0-2'}}%
 
 <!--                      </ng-container>-->
                     </td>
