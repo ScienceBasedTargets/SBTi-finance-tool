@@ -13,7 +13,7 @@ To following diagram provides an overview of the different parts of the toolkit:
 
     +-------------------------------------------------+
     |   UI     : Simple user interface on top of API  |
-    |   Install: via dockerhub              |
+    |   Install: via dockerhub                        |
     |            docker.io/sbti/ui:latest             |
     |                                                 |
     | +-----------------------------------------+     |
