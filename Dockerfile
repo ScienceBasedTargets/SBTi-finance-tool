@@ -17,7 +17,7 @@ RUN npm run build
 
 ### STAGE 2: Setup ###
 
-FROM python:3.6
+FROM python:3.7
 
 COPY requirements.txt config/config.yaml setup.py /project/
 COPY --from=builder /ng-app/dist /project/app/static/frontend/dist
@@ -45,7 +45,6 @@ RUN rm /etc/nginx/sites-enabled/default /etc/nginx/sites-available/default \
  && ln -s /vol/log/nginx /var/log/nginx
 
 COPY app /project/app
-COPY SBTi /project/SBTi
 COPY config/nginx.conf /etc/nginx/nginx.conf
 COPY config/flask-site-nginx.conf /etc/nginx/sites-available/flask-site-nginx.conf
 COPY config/uwsgi.ini /etc/uwsgi/uwsgi.ini
