@@ -383,7 +383,7 @@ class TemperatureScore(PortfolioAggregation):
         :return: A dataframe containing the percentage contributed by the default and target score for all three timeframes
         """
         # TODO: Why doesn't this use an enum
-        total_investment, portfolio_emissions = 0, 0
+        total_investment, portfolio_emissions = 0.0, 0.0
         if aggregation_method == PortfolioAggregationMethod.WATS:
             total_investment = self._calculate_company_unique_sum(data, self.c.COLS.INVESTMENT_VALUE)
         elif aggregation_method == PortfolioAggregationMethod.TETS:
@@ -394,7 +394,7 @@ class TemperatureScore(PortfolioAggregation):
                                                      data[self.c.COLS.CASH_EQUIVALENTS]
 
         # Calculate the total owned emissions of all companies
-        owned_emissions = 0
+        owned_emissions = 0.0
         value_column = ""
         # These are company-related columns that are required later on for calculations
         relevant_columns = [self.c.COLS.COMPANY_ID, self.c.COLS.TIME_FRAME, self.c.COLS.SCOPE_CATEGORY,
@@ -420,7 +420,7 @@ class TemperatureScore(PortfolioAggregation):
             } for time_frame in data[self.c.COLS.TIME_FRAME].unique()
         }
 
-        time_frame_dictionary = {time_frame: {} for time_frame in data[self.c.COLS.TIME_FRAME].unique()}
+        time_frame_dictionary: dict = {time_frame: {} for time_frame in data[self.c.COLS.TIME_FRAME].unique()}
         company_data = data[relevant_columns].groupby(
             [self.c.COLS.COMPANY_ID, self.c.COLS.TIME_FRAME, self.c.COLS.SCOPE_CATEGORY]).mean()
 
