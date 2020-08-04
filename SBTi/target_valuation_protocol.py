@@ -24,6 +24,8 @@ class TargetValuationProtocol:
         :return: a list of six columns containing dataframes in each one
         '''
         self.test_target_type()
+        self.data[self.c.COLS.ACHIEVED_EMISSIONS] = self.data[self.c.COLS.ACHIEVED_EMISSIONS].fillna(0)
+
         self.test_missing_fields(self.data, self.c.COLS.REQUIRED_TARGETS)
         self.test_missing_fields(self.company_data, self.c.COLS.REQUIRED_COMPANY)
         self.data[self.c.COLS.SCOPE] = self.data[self.c.COLS.SCOPE].str.lower()
