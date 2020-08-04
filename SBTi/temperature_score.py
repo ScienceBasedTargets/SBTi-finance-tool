@@ -97,23 +97,20 @@ class TemperatureScore(PortfolioAggregation):
         :return: The mapped SR15 target
         """
         # TODO: Use constants
-        mappings = {
-            self.c.VALUE_TARGET_REFERENCE_ABSOLUTE: "Emissions|Kyoto Gases",
-            self.c.VALUE_TARGET_REFERENCE_INTENSITY: {
-                "Revenue": "INT.emKyoto_gdp",
-                "Product": "INT.emKyoto_gdp",
-                "Cement": "INT.emKyoto_gdp",
-                "Oil": "INT.emCO2EI_PE",
-                "Steel": "INT.emKyoto_gdp",
-                "Aluminum": "INT.emKyoto_gdp",
-                "Power": "INT.emCO2EI_elecGen"
-            }
+        intensity_mappings = {
+            "Revenue": "INT.emKyoto_gdp",
+            "Product": "INT.emKyoto_gdp",
+            "Cement": "INT.emKyoto_gdp",
+            "Oil": "INT.emCO2EI_PE",
+            "Steel": "INT.emKyoto_gdp",
+            "Aluminum": "INT.emKyoto_gdp",
+            "Power": "INT.emCO2EI_elecGen"
         }
 
         if target[self.c.COLS.TARGET_REFERENCE_NUMBER].strip().startswith(self.c.VALUE_TARGET_REFERENCE_INTENSITY_BASE):
-            mappings[self.c.VALUE_TARGET_REFERENCE_INTENSITY].get(target[self.c.COLS.INTENSITY_METRIC], None)
+            return intensity_mappings.get(target[self.c.COLS.INTENSITY_METRIC], None)
         else:
-            return mappings.get(self.c.VALUE_TARGET_REFERENCE_ABSOLUTE, None)
+            return "Emissions|Kyoto Gases"
 
     def get_annual_reduction_rate(self, target: pd.Series) -> Optional[float]:
         """
