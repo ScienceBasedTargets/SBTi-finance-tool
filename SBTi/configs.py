@@ -78,8 +78,12 @@ class ColumnsConfig:
                        COMPANY_ENTERPRISE_VALUE, CASH_EQUIVALENTS, COMPANY_TOTAL_ASSETS, REGION, COUNTRY,
                        COMPANY_REVENUE]
 
+<<<<<<< HEAD
     REQUIRED_TARGETS = [REDUCTION_AMBITION, SCOPE]
     REQUIRED_COMPANY = [GHG_SCOPE12, GHG_SCOPE3]
+=======
+    REQUIRED = [REDUCTION_AMBITION, GHG_SCOPE12, GHG_SCOPE3, SCOPE]
+>>>>>>> master
 
 
 class PortfolioAggregationConfig:
