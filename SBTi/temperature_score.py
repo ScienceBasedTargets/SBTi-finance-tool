@@ -371,7 +371,6 @@ class TemperatureScore(PortfolioAggregation):
             scope_weight = company_data.loc[(company_id, time_frame, scope)][self.c.TEMPERATURE_RESULTS]
         return scope_weight
 
-    # TODO: Type hinting
     def temperature_score_influence_percentage(self, data: pd.DataFrame, aggregation_method: PortfolioAggregationMethod):
         """
         Determines the percentage of the temperature score is covered by target and default score
@@ -382,7 +381,9 @@ class TemperatureScore(PortfolioAggregation):
 
         :return: A dataframe containing the percentage contributed by the default and target score for all three timeframes
         """
-        # TODO: Why doesn't this use an enum
+        company_unique = data[[self.c.COLS.COMPANY_ID, self.c.COLS.INVESTMENT_VALUE, self.c.COLS.GHG_SCOPE12,
+                               self.c.COLS.GHG_SCOPE3, self.c.COLS.OWNED_EMISSIONS]]\
+            .groupby([self.c.COLS.COMPANY_ID]).mode()
         total_investment, portfolio_emissions = 0, 0
         if aggregation_method == PortfolioAggregationMethod.WATS:
             total_investment = self._calculate_company_unique_sum(data, self.c.COLS.INVESTMENT_VALUE)
@@ -413,14 +414,10 @@ class TemperatureScore(PortfolioAggregation):
             except ZeroDivisionError:
                 raise ValueError("To calculate the aggregation, the {} column may not be zero".format(value_column))
 
-        company_temp_contribution = {
+        time_frame_dictionary = {
             time_frame: {
-                scope: {company: 0 for company in data[self.c.COLS.COMPANY_NAME].unique()} for scope in
-                self.c.VALUE_SCOPE_CATEGORIES
-            } for time_frame in data[self.c.COLS.TIME_FRAME].unique()
-        }
-
-        time_frame_dictionary = {time_frame: {} for time_frame in data[self.c.COLS.TIME_FRAME].unique()}
+                scope: 0 for scope in self.c.VALUE_SCOPE_CATEGORIES
+            } for time_frame in data[self.c.COLS.TIME_FRAME].unique()}
         company_data = data[relevant_columns].groupby(
             [self.c.COLS.COMPANY_ID, self.c.COLS.TIME_FRAME, self.c.COLS.SCOPE_CATEGORY]).mean()
 
@@ -444,12 +441,7 @@ class TemperatureScore(PortfolioAggregation):
             else:
                 raise ValueError("The specified portfolio aggregation method is invalid")
 
-            company_temp_contribution[time_frame][scope][company] = value
-
-        for time_frame, scope in itertools.product(*[data[self.c.COLS.TIME_FRAME].unique(),
-                                                     self.c.VALUE_SCOPE_CATEGORIES]):
-            time_frame_dictionary[time_frame][scope] = round(
-                sum(company_temp_contribution[time_frame][scope].values()), 3)
+            time_frame_dictionary[time_frame][scope] += value
 
         return time_frame_dictionary
 
