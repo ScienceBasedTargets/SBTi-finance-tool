@@ -4,8 +4,8 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setup(
-    name='SBTi-Finance Temperature Alignment Tool',
-    version='0.2',
+    name='SBTi',
+    version='0.3',
     description='This package helps companies and financial institutions to assess the temperature alignment of current'
                 'targets, commitments, and investment and lending portfolios, and to use this information to develop '
                 'targets for official validation by the SBTi.',
@@ -14,8 +14,13 @@ setup(
     author='Ortec Finance',
     author_email='finance@sciencebasedtargets.org',
     packages=find_packages(),
-    url = 'https://github.com/OFBDABV/SBTi',
-    download_url = 'https://github.com/OFBDABV/SBTi/archive/v_02.tar.gz',
+    download_url = "https://pypi.org/project/SBTi-Finance-Temperature-Alignment-Tool/",
+    url="https://ofbdabv.github.io/SBTi/",
+    project_urls={
+        "Bug Tracker": "https://github.com/OFBDABV/SBTi/issues",
+        "Documentation": 'https://ofbdabv.github.io/SBTi/',
+        "Source Code": "https://github.com/OFBDABV/SBTi/",
+    },
     keywords = ['Climate', 'SBTi', 'Finance'],
     package_data={
         'SBTi': ['inputs/sr15_mapping.xlsx', 'inputs/regression_model_summary.xlsx',
@@ -33,7 +38,20 @@ setup(
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
-        "Operating System :: OS Independent",
+        "Operating System :: Microsoft :: Windows",
+        "Operating System :: Unix",
+        "Operating System :: MacOS",
+        "Intended Audience :: Science/Research",
+        "Intended Audience :: Developers",
+        "Programming Language :: Python",
+        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3 :: Only",
+        "Topic :: Software Development",
+        "Topic :: Scientific/Engineering"
+
     ],
     test_suite='nose2.collector.collector',
 )

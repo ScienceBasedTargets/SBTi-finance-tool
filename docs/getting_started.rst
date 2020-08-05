@@ -33,6 +33,10 @@ If you're starting from scratch you can install the latest version of the packag
 
     pip install git+git://github.com/OFBDABV/SBTi
 
+Or you can install the latest stable release from PyPi
+
+    pip install sbti
+
 The `API reference <https://ofbdabv.github.io/SBTi/autoapi/index.html>`_ should provide a clear overview of the module's API and its usage.
 
 .. toctree::

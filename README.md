@@ -57,7 +57,7 @@ pip install -e .
 For installing the latest stable release in PyPi run:
 
 ```bash
-pip install SBTi-Finance-Temperature-Alignment-Tool
+pip install sbti
 ```
 
 ## Development
