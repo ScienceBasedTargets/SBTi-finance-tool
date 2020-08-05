@@ -1,5 +1,5 @@
 ********************
-REST API
+REST API & UI
 ********************
 The provided REST API makes it easy to integrate the SBTi temperature alignment tool as a microservice in your current IT infrastructure.
 Optionally you can also run the REST API with a small frontend, that makes testing substantially easier.
@@ -25,7 +25,10 @@ instructions for `Windows <https://docs.docker.com/docker-for-windows/install/>`
 with step 2.
 
 * **Step 2**: Download and run the SBTi container.
-The beta-test version of the SBTi app is available here https://hub.docker.com/r/sbti/sbti_tool. To spin up the latest version on your local machine you need to run a single command in the terminal (for mac and Linux) or the command prompt (for windows users)
+The project consists of two containers, the `API <https://hub.docker.com/r/sbti/api>`_ and the `UI <https://hub.docker.com/r/sbti/ui>`_, both of which can be found on Docker Hub.
+You can choose whether you only want to run the API or also the UI. To run them, you need to download a compose file. If you only want to run the API, you need to use `this file <https://raw.githubusercontent.com/OFBDABV/SBTi_api/master/docker-compose.yml>`_, if you also want the UI, you should use `this file <https://raw.githubusercontent.com/OFBDABV/SBTi_api/master/docker-compose-ui.yml>`_.
+
+Now download the file of your choose and store it as `docker-compose.yml` in your home directory.
 
 *For Windows users*
 
@@ -40,15 +43,17 @@ The beta-test version of the SBTi app is available here https://hub.docker.com/r
 
 3. Enter the following command and hit enter::
 
-    docker run -d -p 5000:8080 sbti/sbti_tool:latest
+    docker-compose up
 
 .. image:: restapi-deploy-windows-2.png
     :width: 500px
     :align: center
     :alt: alternate text
 
+.. note:: This command assumes that your command prompt is currently in the same directory as the docker-compose.yml file that you downloaded earlier.
+
 4. This commando starts retrieving the latest version of the tool and will expose it at localhost:5000
-5. Open your browser and go to http://localhost:5000 to access the tool
+5. Open your browser and go to http://localhost:5000 to access the tool. If you're running the UI, the UI will be on http://localhost:5000 and the API on http://localhost:5001
 
 .. image:: restapi-deploy-windows-3.png
     :width: 500px
@@ -70,10 +75,12 @@ The beta-test version of the SBTi app is available here https://hub.docker.com/r
 
 5. Enter the following command and hit enter::
 
-    docker run -d -p 5000:8080 sbti/sbti_tool:latest
+    docker-compose up
+
+.. note:: This command assumes that your command prompt is currently in the same directory as the docker-compose.yml file that you downloaded earlier.
 
 4. This commando starts retrieving the latest version of the tool and will expose it at localhost:5000
-5. Open your browser and go to http://localhost:5000 to access the tool
+5. Open your browser and go to http://localhost:5000 to access the tool. If you're running the UI, the UI will be on http://localhost:5000 and the API on http://localhost:5001
 
 Amazon AWS
 *********************
