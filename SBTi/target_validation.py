@@ -9,6 +9,13 @@ import logging
 
 
 class TargetValidation:
+    """
+    This class validates the targets, to make sure that only active, useful targets are considered.
+
+    :param data: The target related data
+    :param company_data: The company related data
+    :param config: A Portfolio aggregation config
+    """
 
     def __init__(self, data: pd.DataFrame, company_data: pd.DataFrame,
                  config: Type[PortfolioAggregationConfig] = PortfolioAggregationConfig):
@@ -19,17 +26,18 @@ class TargetValidation:
         self.logger = logging.getLogger(__name__)
 
     def target_validation(self) -> pd.DataFrame:
-        '''
-        Runs the target validation protocol by calling on the four required steps
+        """
+        Runs the target validation protocol.
 
-        :rtype: list
-        :return: a list of six columns containing dataframes in each one
-        '''
+        :return: A data frame with only valid targets, combined with the company-specific data. This will return a 9-box
+        grid for all companies (i.e. one row for the three time-frame (short, mid, long) and the three scopes (s1s2, s3,
+        s1s2s3). These rows might have empty targets.
+        """
         self.test_target_type()
         self.data[self.c.COLS.ACHIEVED_EMISSIONS] = self.data[self.c.COLS.ACHIEVED_EMISSIONS].fillna(0)
 
-        self.test_missing_fields(self.data, self.c.COLS.REQUIRED_TARGETS)
-        self.test_missing_fields(self.company_data, self.c.COLS.REQUIRED_COMPANY)
+        self.data = self.test_missing_fields(self.data, self.c.COLS.REQUIRED_TARGETS)
+        self.company_data = self.test_missing_fields(self.company_data, self.c.COLS.REQUIRED_COMPANY)
         self.data[self.c.COLS.SCOPE] = self.data[self.c.COLS.SCOPE].str.lower()
         self.data[self.c.COLS.SCOPE_CATEGORY] = self.data.apply(
             lambda row: self.c.SCOPE_MAP[row[self.c.COLS.SCOPE]], axis=1)
@@ -44,21 +52,25 @@ class TargetValidation:
         return self.data
 
     def test_end_year(self):
-        '''
+        """
         Records that have a valid end_year will be returned. A valid end_year is defined as a year that is greater then
         the start_year.
+
         :return: a dataframe containing records that have correct end_year feature.
-        '''
+        """
         index_list = []
         for index, record in self.data.iterrows():
             if record[self.c.COLS.END_YEAR] > record[self.c.COLS.START_YEAR]:
                 index_list.append(index)
         self.data = self.data.loc[index_list]
 
-    def test_missing_fields(self, data_set, required_columns):
+    def test_missing_fields(self, data_set, required_columns: List[str]) -> pd.DataFrame:
         """
-        When a required field is missing (that we need to do calculations later on), we'll delete the whole target.
-        :return:
+        When a required field is missing (that we need to do calculations later on), we'll delete the whole row.
+
+        :param data_set: The data set that should be tested for missing columns.
+        :param required_columns: The columns that should be in the input data
+        :return: The input data set, without the invalid rows
         """
         for column in required_columns:
             len_old = len(data_set)
@@ -66,6 +78,7 @@ class TargetValidation:
             if len_old != len(data_set):
                 self.logger.warning("One or more targets have been deleted due to null values in column: {}".format(
                     column))
+        return data_set
 
     def test_target_type(self):
         """
@@ -95,7 +108,7 @@ class TargetValidation:
         self.data = self.data.loc[index_list]
 
     def test_boundary_coverage(self):
-        '''
+        """
         Test on boundary coverage:
 
         Option 1: minimal coverage threshold
@@ -108,7 +121,7 @@ class TargetValidation:
 
         Option 3: default coverage
         Target is always valid, % uncovered is given default score in temperature score module.
-        '''
+        """
         index = []
         for record in self.data.iterrows():
             if not pd.isna(record[1][self.c.COLS.SCOPE_CATEGORY]):
@@ -131,13 +144,13 @@ class TargetValidation:
         self.data = self.data.loc[index]
 
     def test_target_process(self):
-        '''
+        """
         Test on target process
         If target process is 100%, the target is invalid (only forward looking targets allowed)
         Output: a list of valid targets per company
 
         Target progress: the percentage of the target already achieved
-        '''
+        """
         if self.c.COLS.ACHIEVED_EMISSIONS in self.data.columns:
             index = []
             for record in self.data.iterrows():
@@ -168,9 +181,9 @@ class TargetValidation:
         self.data = self.data[~s2_delete_mask]
 
     def split_s1s2s3(self):
-        '''
+        """
         If there is a s1s2s3 scope, split it into two targets with s1s2 and s3
-        '''
+        """
         s1s2s3_mask = self.data[self.c.COLS.SCOPE_CATEGORY] == self.c.VALUE_SCOPE_CATEGORY_S1S2S3
         s1s2s3 = self.data[s1s2s3_mask]
         self.data = self.data[~s1s2s3_mask]
@@ -200,9 +213,9 @@ class TargetValidation:
                 self.data = self.data.append(s3).reset_index(drop=True)
 
     def time_frame(self):
-        '''
+        """
         Time frame is forward looking: target year - current year. Less than 5y = short, between 5 and 15 is mid, 15 to 30 is long
-        '''
+        """
         now = datetime.datetime.now()
         time_frame_list = []
         for index, record in self.data.iterrows():
@@ -224,6 +237,8 @@ class TargetValidation:
         """
         Find the target that corresponds to a given row. If there are multiple targets available, filter them.
 
+        :param row: The row from the data set that should be looked for
+        :param target_columns: The columns that need to be returned
         :return: returns records from the input data, which contains company and target information, that meet specific
         criteria. For example, record of greatest emissions_in_scope
         """
@@ -299,8 +314,8 @@ class TargetValidation:
         self.data = extended_data.apply(lambda row: self._find_target(row, target_columns), axis=1)
 
     def combine_records(self):
-        '''
+        """
         Combines both dataframes together. The company_data and the portfolio data that filtered out companies.
         :return:
-        '''
+        """
         return pd.merge(left=self.company_data, right=self.data, how='outer', on=['company_id'])
