@@ -238,16 +238,13 @@ Module Contents
       :return:
 
 
-   .. method:: _calculate_scope_weight(self, company_data: pd.DataFrame, company_id: int, time_frame: str, scope: str)
+   .. method:: _calculate_scope_weight(self, company_data: pd.DataFrame)
 
 
       Calculate the weight that a certain scope has in the attribution calculation (which calculate how much of the
       total score is dependent on the default score).
 
-      :param company_data: The original data, grouped by company, time frame and scope category
-      :param company_id: A ID of the company to look for
-      :param time_frame: A time frame that's being processed
-      :param scope: The scope category for which the weight should be calculated.
+      :param company_data: The original data, for a specific company and time frame, indexed by scope category
       :return:
 
 

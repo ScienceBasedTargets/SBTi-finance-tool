@@ -70,7 +70,7 @@ Module Contents
       :return:
 
 
-   .. method:: get_value_column(method: PortfolioAggregationMethod, column_config: ColumnsConfig)
+   .. method:: get_value_column(method: PortfolioAggregationMethod, column_config: Type[ColumnsConfig])
       :staticmethod:
 
 

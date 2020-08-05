@@ -468,17 +468,12 @@ per company).</p>
 
 <dl class="py method">
 <dt id="SBTi.temperature_score.TemperatureScore._calculate_scope_weight">
-<code class="sig-name descname">_calculate_scope_weight</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">company_data</span><span class="p">:</span> <span class="n">pd.DataFrame</span></em>, <em class="sig-param"><span class="n">company_id</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">time_frame</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">scope</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.temperature_score.TemperatureScore._calculate_scope_weight" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">_calculate_scope_weight</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">company_data</span><span class="p">:</span> <span class="n">pd.DataFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.temperature_score.TemperatureScore._calculate_scope_weight" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the weight that a certain scope has in the attribution calculation (which calculate how much of the
 total score is dependent on the default score).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>company_data</strong> – The original data, grouped by company, time frame and scope category</p></li>
-<li><p><strong>company_id</strong> – A ID of the company to look for</p></li>
-<li><p><strong>time_frame</strong> – A time frame that’s being processed</p></li>
-<li><p><strong>scope</strong> – The scope category for which the weight should be calculated.</p></li>
-</ul>
+<dd class="field-odd"><p><strong>company_data</strong> – The original data, for a specific company and time frame, indexed by scope category</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p></p>
