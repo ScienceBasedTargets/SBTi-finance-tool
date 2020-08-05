@@ -167,7 +167,7 @@ class TemperatureScore(PortfolioAggregation):
         Get the regression parameter and intercept from the model's output.
 
         :param target: The target as a row of a dataframe
-        :return:The regression parameter and intercept
+        :return: The regression parameter and intercept
         """
         if pd.isnull(target[self.c.COLS.SR15]):
             return None, None
@@ -216,8 +216,7 @@ class TemperatureScore(PortfolioAggregation):
         Get the aggregated temperature score for a certain company based on the emissions of company.
 
         :param company_data: The original data, grouped by company, time frame and scope category
-        :param row: The row to calculate the temperature score for (if the scope of the row isn't s1s2s3, it will return
-        the original score
+        :param row: The row to calculate the temperature score for (if the scope of the row isn't s1s2s3, it will return the original score
         :return: The aggregated temperature score for a company
         """
         if row[self.c.COLS.SCOPE_CATEGORY] != self.c.VALUE_SCOPE_CATEGORY_S1S2S3:
@@ -291,29 +290,26 @@ class TemperatureScore(PortfolioAggregation):
     def calculate(self, data: pd.DataFrame):
         """
         Calculate the temperature for a dataframe of company data.
+
         Required columns:
+
         * target_reference_number: Int *x* of Abs *x*
         * scope: The scope of the target. This should be a valid scope in the SR15 mapping
         * scope_category: The scope category, options: "s1s2", "s3", "s1s2s3"
         * base_year: The base year of the target
         * start_year: The start year of the target
         * target_year: The year when the target should be achieved
-        * time_frame: The time frame of the target (short, mid, long) -> This field is calculated by the target
-            valuation protocol.
+        * time_frame: The time frame of the target (short, mid, long) -> This field is calculated by the target valuation protocol.
         * reduction_from_base_year: Targeted reduction in emissions from the base year
         * emissions_in_scope: Company emissions in the target's scope at start of the base year
         * achieved_reduction: The emission reduction that has already been achieved
-        * industry: The industry the company is working in. This should be a valid industry in the SR15 mapping. If not
-            it will be converted to "Others" (or whichever value is set in the config as the default
+        * industry: The industry the company is working in. This should be a valid industry in the SR15 mapping. If not it will be converted to "Others" (or whichever value is set in the config as the default).
         * s1s2_emissions: Total company emissions in the S1 + S2 scope
         * s3_emissions: Total company emissions in the S3 scope
         * market_cap: Market capitalization of the company. Only required to use the MOTS portfolio aggregation.
-        * investment_value: The investment value of the investment in this company. Only required to use the MOTS, EOTS,
-            ECOTS and AOTS portfolio aggregation.
-        * company_enterprise_value: The enterprise value of the company. Only required to use the EOTS portfolio
-            aggregation.
-        * company_ev_plus_cash: The enterprise value of the company plus cash. Only required to use the ECOTS portfolio
-            aggregation.
+        * investment_value: The investment value of the investment in this company. Only required to use the MOTS, EOTS, ECOTS and AOTS portfolio aggregation.
+        * company_enterprise_value: The enterprise value of the company. Only required to use the EOTS portfolio aggregation.
+        * company_ev_plus_cash: The enterprise value of the company plus cash. Only required to use the ECOTS portfolio aggregation.
         * company_total_assets: The total assets of the company. Only required to use the AOTS portfolio aggregation.
         * company_revenue: The revenue of the company. Only required to use the ROTS portfolio aggregation.
 
@@ -382,19 +378,16 @@ class TemperatureScore(PortfolioAggregation):
 
         :param data: The data set
         :param col: The column name
-        :return:
+        :return: The sum of the given column, with each company being counted once
         """
         return data[[self.c.COLS.COMPANY_NAME, col]].drop_duplicates()[col].sum()
 
     def _calculate_scope_weight(self, company_data: pd.DataFrame) -> Tuple[float, float, float]:
         """
-        Calculate the weight that a certain scope has in the attribution calculation (which calculates how much of the
-        total score is dependent on the default score). This will return a scope weight for all three scopes (s1s2, s3
-        and s1s2s3). The first two are either 0 (does not use the default score) or 1 (uses the default score). The
-        s1s2s3 is a combination of the other two, weighted by emissions.
+        Calculate the weight that a certain scope has in the attribution calculation (which calculates how much of the total score is dependent on the default score).
 
         :param company_data: The original data, for a specific company and time frame, indexed by scope category
-        :return:
+        :return: A scope weight for all three scopes (s1s2, s3 and s1s2s3). The first two are either 0 (does not use the default score) or 1 (uses the default score). The s1s2s3 is a combination of the other two, weighted by emissions.
         """
         s1s2 = company_data.loc[self.c.VALUE_SCOPE_CATEGORY_S1S2]
         s3 = company_data.loc[self.c.VALUE_SCOPE_CATEGORY_S3]
@@ -413,10 +406,8 @@ class TemperatureScore(PortfolioAggregation):
         targets.
 
         :param data: The output of the temperature score method
-        :param aggregation_method: The aggregation method that should be used to calculate the importance of each
-        temperature score
-        :return: A dictionary containing for each time-frame and scope, the percentage that can be attributed to the
-        default score.
+        :param aggregation_method: The aggregation method that should be used to calculate the importance of each temperature score
+        :return: A dictionary containing for each time-frame and scope, the percentage that can be attributed to the default score.
         """
         total_investment, portfolio_emissions = 0.0, 0.0
         if aggregation_method == PortfolioAggregationMethod.WATS:
@@ -508,7 +499,6 @@ class TemperatureScore(PortfolioAggregation):
         Set the scenario that should be used to calculate the temperature score.
 
         :param scenario: The scenario that should be used
-        :return: void
         """
         self.scenario = scenario
         # Scenario 1: Engage companies to set targets

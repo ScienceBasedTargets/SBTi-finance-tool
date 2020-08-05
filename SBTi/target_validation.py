@@ -29,9 +29,7 @@ class TargetValidation:
         """
         Runs the target validation protocol.
 
-        :return: A data frame with only valid targets, combined with the company-specific data. This will return a 9-box
-        grid for all companies (i.e. one row for the three time-frame (short, mid, long) and the three scopes (s1s2, s3,
-        s1s2s3). These rows might have empty targets.
+        :return: A data frame with only valid targets, combined with the company-specific data. This will return a 9-box grid for all companies (i.e. one row for the three time-frame (short, mid, long) and the three scopes (s1s2, s3, s1s2s3). These rows might have empty targets.
         """
         self.test_target_type()
         self.data[self.c.COLS.ACHIEVED_EMISSIONS] = self.data[self.c.COLS.ACHIEVED_EMISSIONS].fillna(0)
@@ -160,6 +158,11 @@ class TargetValidation:
             self.data = self.data.loc[index]
 
     def convert_s1_s2_into_s1s2(self):
+        """
+        Combine all s1 and a s2 targets into one s1s2 target.
+
+        :return:
+        """
         s1_mask = self.data[self.c.COLS.SCOPE] == 's1'
         s1 = self.data[s1_mask]
         s1_delete_mask = (s1_mask & (
@@ -239,8 +242,7 @@ class TargetValidation:
 
         :param row: The row from the data set that should be looked for
         :param target_columns: The columns that need to be returned
-        :return: returns records from the input data, which contains company and target information, that meet specific
-        criteria. For example, record of greatest emissions_in_scope
+        :return: returns records from the input data, which contains company and target information, that meet specific criteria. For example, record of greatest emissions_in_scope
         """
 
         # Find all targets that correspond to the given row
@@ -313,9 +315,10 @@ class TargetValidation:
         self.data = self.combine_records()
         self.data = extended_data.apply(lambda row: self._find_target(row, target_columns), axis=1)
 
-    def combine_records(self):
+    def combine_records(self) -> pd.DataFrame:
         """
-        Combines both dataframes together. The company_data and the portfolio data that filtered out companies.
-        :return:
+        Combines both data frames together. The company_data and the portfolio data that filtered out companies.
+
+        :return: The combined data frame
         """
         return pd.merge(left=self.company_data, right=self.data, how='outer', on=['company_id'])
