@@ -69,7 +69,6 @@ class PortfolioAggregationMethod(Enum):
 
         return map_value_column.get(method, column_config.MARKET_CAP)
 
-
 class PortfolioAggregation(ABC):
     """
     This class is a base class that provides portfolio aggregation calculation.

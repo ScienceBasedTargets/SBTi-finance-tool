@@ -1,5 +1,7 @@
 import datetime
 import itertools
+import logging
+
 import pandas as pd
 from typing import Type, List
 from SBTi.configs import PortfolioAggregationConfig
