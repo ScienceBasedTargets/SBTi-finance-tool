@@ -54,6 +54,12 @@ The SBTi package may be installed using PIP. If you'd like to install it locally
 pip install -e .
 ```
 
+For installing the latest stable release in PyPi run:
+
+```bash
+pip install SBTi-Finance-Temperature-Alignment-Tool
+```
+
 ## Development
 For development purposes, install the SBTi package using the following command:
 ```bash
