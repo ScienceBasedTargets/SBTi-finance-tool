@@ -348,30 +348,24 @@ class TemperatureScore(PortfolioAggregation):
         """
         return data[[self.c.COLS.COMPANY_NAME, col]].drop_duplicates()[col].sum()
 
-    def _calculate_scope_weight(self, company_data: pd.DataFrame, company_id: int, time_frame: str,
-                                scope: str) -> float:
+    def _calculate_scope_weight(self, company_data: pd.DataFrame) -> Tuple[float, float, float]:
         """
         Calculate the weight that a certain scope has in the attribution calculation (which calculate how much of the
         total score is dependent on the default score).
 
-        :param company_data: The original data, grouped by company, time frame and scope category
-        :param company_id: A ID of the company to look for
-        :param time_frame: A time frame that's being processed
-        :param scope: The scope category for which the weight should be calculated.
+        :param company_data: The original data, for a specific company and time frame, indexed by scope category
         :return:
         """
-        if scope == self.c.VALUE_SCOPE_CATEGORY_S1S2S3:
-            s1s2 = company_data.loc[(company_id, time_frame, self.c.VALUE_SCOPE_CATEGORY_S1S2)]
-            s3 = company_data.loc[(company_id, time_frame, self.c.VALUE_SCOPE_CATEGORY_S3)]
-            s1s2_emissions = s1s2[self.c.COLS.GHG_SCOPE12]
-            s3_emissions = s1s2[self.c.COLS.GHG_SCOPE3]
-            scope_weight = (s1s2[self.c.TEMPERATURE_RESULTS] * (s1s2_emissions / (s1s2_emissions + s3_emissions)) +
-                            s3[self.c.TEMPERATURE_RESULTS] * (s3_emissions / (s1s2_emissions + s3_emissions)))
-        else:
-            scope_weight = company_data.loc[(company_id, time_frame, scope)][self.c.TEMPERATURE_RESULTS]
-        return scope_weight
+        s1s2 = company_data.loc[self.c.VALUE_SCOPE_CATEGORY_S1S2]
+        s3 = company_data.loc[self.c.VALUE_SCOPE_CATEGORY_S3]
+        ds_s1s2 = s1s2[self.c.TEMPERATURE_RESULTS]
+        ds_s3 = s3[self.c.TEMPERATURE_RESULTS]
+        s1s2_emissions = s1s2[self.c.COLS.GHG_SCOPE12]
+        s3_emissions = s1s2[self.c.COLS.GHG_SCOPE3]
+        sw_s1s2s3 = (ds_s1s2 * (s1s2_emissions / (s1s2_emissions + s3_emissions)) +
+                     ds_s3 * (s3_emissions / (s1s2_emissions + s3_emissions)))
+        return ds_s1s2, ds_s3, sw_s1s2s3
 
-    # TODO: Type hinting
     def temperature_score_influence_percentage(self, data: pd.DataFrame, aggregation_method: PortfolioAggregationMethod):
         """
         Determines the percentage of the temperature score is covered by target and default score
@@ -382,7 +376,6 @@ class TemperatureScore(PortfolioAggregation):
 
         :return: A dataframe containing the percentage contributed by the default and target score for all three timeframes
         """
-        # TODO: Why doesn't this use an enum
         total_investment, portfolio_emissions = 0.0, 0.0
         if aggregation_method == PortfolioAggregationMethod.WATS:
             total_investment = self._calculate_company_unique_sum(data, self.c.COLS.INVESTMENT_VALUE)
@@ -413,43 +406,32 @@ class TemperatureScore(PortfolioAggregation):
             except ZeroDivisionError:
                 raise ValueError("To calculate the aggregation, the {} column may not be zero".format(value_column))
 
-        company_temp_contribution = {
+        time_frame_dictionary = {
             time_frame: {
-                scope: {company: 0 for company in data[self.c.COLS.COMPANY_NAME].unique()} for scope in
-                self.c.VALUE_SCOPE_CATEGORIES
-            } for time_frame in data[self.c.COLS.TIME_FRAME].unique()
-        }
+                scope: 0 for scope in self.c.VALUE_SCOPE_CATEGORIES
+            } for time_frame in data[self.c.COLS.TIME_FRAME].unique()}
+        grouped_data = data[relevant_columns].groupby([self.c.COLS.COMPANY_ID, self.c.COLS.TIME_FRAME,
+                                                       self.c.COLS.SCOPE_CATEGORY]).mean()
 
-        time_frame_dictionary: dict = {time_frame: {} for time_frame in data[self.c.COLS.TIME_FRAME].unique()}
-        company_data = data[relevant_columns].groupby(
-            [self.c.COLS.COMPANY_ID, self.c.COLS.TIME_FRAME, self.c.COLS.SCOPE_CATEGORY]).mean()
-
-        for time_frame, scope, company in itertools.product(*[data[self.c.COLS.TIME_FRAME].unique(),
-                                                              self.c.VALUE_SCOPE_CATEGORIES,
-                                                              data[self.c.COLS.COMPANY_ID].unique()]):
-            scope_weight = self._calculate_scope_weight(company_data, company, time_frame, scope)
-
-            s1s2s3 = company_data.loc[(company, time_frame, self.c.VALUE_SCOPE_CATEGORY_S1S2S3)]
-
+        for time_frame, company in itertools.product(*[data[self.c.COLS.TIME_FRAME].unique(),
+                                                       data[self.c.COLS.COMPANY_ID].unique()]):
+            company_data = grouped_data.loc[(company, time_frame)]
+            scope_weights = self._calculate_scope_weight(company_data)
+            s1s2s3 = company_data.loc[self.c.VALUE_SCOPE_CATEGORY_S1S2S3]
             company_emissions = s1s2s3[self.c.COLS.GHG_SCOPE12] + s1s2s3[self.c.COLS.GHG_SCOPE3]
-
             if aggregation_method == PortfolioAggregationMethod.WATS:
-                value = (s1s2s3[self.c.INVESTMENT_VALUE] / total_investment) * scope_weight
+                value = (s1s2s3[self.c.INVESTMENT_VALUE] / total_investment)
             elif aggregation_method == PortfolioAggregationMethod.TETS:
-                value = company_emissions / portfolio_emissions * scope_weight
+                value = company_emissions / portfolio_emissions
             elif PortfolioAggregationMethod.is_emissions_based(aggregation_method):
                 # The other methods only differ in the way the company is valued.
                 value = s1s2s3[self.c.COLS.INVESTMENT_VALUE] / s1s2s3[value_column] * \
-                        company_emissions / owned_emissions * scope_weight
+                        company_emissions / owned_emissions
             else:
                 raise ValueError("The specified portfolio aggregation method is invalid")
 
-            company_temp_contribution[time_frame][scope][company] = value
-
-        for time_frame, scope in itertools.product(*[data[self.c.COLS.TIME_FRAME].unique(),
-                                                     self.c.VALUE_SCOPE_CATEGORIES]):
-            time_frame_dictionary[time_frame][scope] = round(
-                sum(company_temp_contribution[time_frame][scope].values()), 3)
+            for i, scope in enumerate(self.c.VALUE_SCOPE_CATEGORIES):
+                time_frame_dictionary[time_frame][scope] += value * scope_weights[i]
 
         return time_frame_dictionary
 
