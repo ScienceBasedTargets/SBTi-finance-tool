@@ -169,8 +169,8 @@ class TemperatureScore(PortfolioAggregation):
         if pd.isnull(target[self.c.COLS.REGRESSION_PARAM]) or pd.isnull(target[self.c.COLS.REGRESSION_INTERCEPT]) \
                 or pd.isnull(target[self.c.COLS.ANNUAL_REDUCTION_RATE]):
             return self.fallback_score, 1
-        return target[self.c.COLS.REGRESSION_PARAM] * target[self.c.COLS.ANNUAL_REDUCTION_RATE] * 100 + target[
-            self.c.COLS.REGRESSION_INTERCEPT], 0
+        return max(target[self.c.COLS.REGRESSION_PARAM] * target[self.c.COLS.ANNUAL_REDUCTION_RATE] * 100 + target[
+            self.c.COLS.REGRESSION_INTERCEPT], 0), 0
 
     def get_ghc_temperature_score(self, row: pd.Series, company_data: pd.DataFrame) -> float:
         """
@@ -439,7 +439,7 @@ class TemperatureScore(PortfolioAggregation):
         '''
         Percentage distribution of specific column or columns
 
-        :param data: output from the target_valuation_protocol
+        :param data: output from the target_validation
         :param columns: specified column names the client would like to have a percentage distribution
         :return: percentage distribution of specified columns
         '''

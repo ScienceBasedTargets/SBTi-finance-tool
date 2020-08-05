@@ -8,7 +8,7 @@ from SBTi.configs import PortfolioAggregationConfig
 import logging
 
 
-class TargetValuationProtocol:
+class TargetValidation:
 
     def __init__(self, data: pd.DataFrame, company_data: pd.DataFrame,
                  config: Type[PortfolioAggregationConfig] = PortfolioAggregationConfig):
@@ -18,9 +18,9 @@ class TargetValuationProtocol:
         self.company_data = company_data
         self.logger = logging.getLogger(__name__)
 
-    def target_valuation_protocol(self) -> pd.DataFrame:
+    def target_validation(self) -> pd.DataFrame:
         '''
-        Runs the target valuation protcol by calling on the four required steps
+        Runs the target validation protocol by calling on the four required steps
 
         :rtype: list
         :return: a list of six columns containing dataframes in each one
