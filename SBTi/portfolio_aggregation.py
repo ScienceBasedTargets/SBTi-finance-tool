@@ -21,6 +21,12 @@ class PortfolioAggregationMethod(Enum):
 
     @staticmethod
     def from_int(value: int) -> 'PortfolioAggregationMethod':
+        """
+        Convert an integer to a portfolio aggregation method.
+
+        :param value: The value to convert
+        :return: The matching portfolio aggregation method
+        """
         value_map = {
             1: PortfolioAggregationMethod.WATS,
             2: PortfolioAggregationMethod.TETS,
@@ -34,6 +40,12 @@ class PortfolioAggregationMethod(Enum):
 
     @staticmethod
     def from_string(value: str) -> 'PortfolioAggregationMethod':
+        """
+        Convert a string to a portfolio aggregation method.
+
+        :param value: The value to convert
+        :return: The matching portfolio aggregation method
+        """
         value_map = {
             "WATS": PortfolioAggregationMethod.WATS,
             "TETS": PortfolioAggregationMethod.TETS,
@@ -68,6 +80,7 @@ class PortfolioAggregationMethod(Enum):
         }
 
         return map_value_column.get(method, column_config.MARKET_CAP)
+
 
 class PortfolioAggregation(ABC):
     """

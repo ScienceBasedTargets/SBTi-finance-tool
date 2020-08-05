@@ -1,6 +1,6 @@
 import itertools
 from enum import Enum
-from typing import Optional, Tuple, Type, Dict
+from typing import Optional, Tuple, Type, Dict, List
 
 import pandas as pd
 import numpy as np
@@ -10,6 +10,9 @@ from .configs import TemperatureScoreConfig
 
 
 class ScenarioType(Enum):
+    """
+    A scenario defines which scenario should be run.
+    """
     TARGETS = 1
     APPROVED_TARGETS = 2
     HIGHEST_CONTRIBUTORS = 3
@@ -27,11 +30,21 @@ class ScenarioType(Enum):
 
 
 class EngagementType(Enum):
+    """
+    An engagement type defines how the companies will be engaged.
+    """
+
     SET_TARGETS = 1
     SET_SBTI_TARGETS = 2
 
     @staticmethod
     def from_int(value) -> 'EngagementType':
+        """
+        Convert an integer to an engagement type.
+
+        :param value: The value to convert
+        :return:
+        """
         value_map = {
             0: EngagementType.SET_TARGETS,
             1: EngagementType.SET_SBTI_TARGETS,
@@ -40,6 +53,12 @@ class EngagementType(Enum):
 
     @staticmethod
     def from_string(value: str) -> 'EngagementType':
+        """
+        Convert a string to an engagement type.
+
+        :param value: The value to convert
+        :return:
+        """
         value_map = {
             'SET_TARGETS': EngagementType.SET_TARGETS,
             'SET_SBTI_TARGETS': EngagementType.SET_SBTI_TARGETS,
@@ -48,6 +67,9 @@ class EngagementType(Enum):
 
 
 class Scenario:
+    """
+    A scenario defines the action the portfolio holder will take to improve its temperature score.
+    """
     scenario_type: ScenarioType
     engagement_type: EngagementType
     aggregation_method: PortfolioAggregationMethod
@@ -55,10 +77,21 @@ class Scenario:
 
     @staticmethod
     def from_dict(scenario_values: dict) -> 'Scenario':
+        """
+        Convert a dictionary to a scenario. The dictionary should have the following keys:
+
+        * number: The scenario type as an integer
+        * engagement_type: The engagement type as a string
+        * aggregation_method: The aggregation method as a string
+        * grouping: The grouping columns as a list of strings
+
+        :param scenario_values: The dictionary to convert
+        :return: A scenario object matching the input values
+        """
         scenario = Scenario()
         scenario.scenario_type = ScenarioType.from_int(scenario_values.get("number", -1))
         scenario.engagement_type = EngagementType.from_string(scenario_values.get("engagement_type", ""))
-        scenario.aggregation_method = PortfolioAggregationMethod.from_string(scenario_values.get("engagement_type", ""))
+        scenario.aggregation_method = PortfolioAggregationMethod.from_string(scenario_values.get("aggregation_method", ""))
         scenario.grouping = scenario_values.get("grouping", None)
 
         return scenario
@@ -134,7 +167,7 @@ class TemperatureScore(PortfolioAggregation):
         Get the regression parameter and intercept from the model's output.
 
         :param target: The target as a row of a dataframe
-        :return:The regression parameter and intercept
+        :return: The regression parameter and intercept
         """
         if pd.isnull(target[self.c.COLS.SR15]):
             return None, None
@@ -150,7 +183,13 @@ class TemperatureScore(PortfolioAggregation):
         else:
             return regression.iloc[0][self.c.COLS.PARAM], regression.iloc[0][self.c.COLS.INTERCEPT]
 
-    def merge_regression(self, data):
+    def _merge_regression(self, data: pd.DataFrame):
+        """
+        Merge the data with the regression parameters from the SBTi model.
+
+        :param data: The data to merge
+        :return: The data set, amended with the regression parameters
+        """
         data[self.c.COLS.SLOPE] = data.apply(
             lambda row: self.c.SLOPE_MAP.get(row[self.c.COLS.TIME_FRAME], None),
             axis=1)
@@ -177,8 +216,7 @@ class TemperatureScore(PortfolioAggregation):
         Get the aggregated temperature score for a certain company based on the emissions of company.
 
         :param company_data: The original data, grouped by company, time frame and scope category
-        :param row: The row to calculate the temperature score for (if the scope of the row isn't s1s2s3, it will return
-        the original score
+        :param row: The row to calculate the temperature score for (if the scope of the row isn't s1s2s3, it will return the original score
         :return: The aggregated temperature score for a company
         """
         if row[self.c.COLS.SCOPE_CATEGORY] != self.c.VALUE_SCOPE_CATEGORY_S1S2S3:
@@ -223,7 +261,7 @@ class TemperatureScore(PortfolioAggregation):
         )
         data[self.c.COLS.SR15] = data.apply(lambda row: self.get_target_mapping(row), axis=1)
         data[self.c.COLS.ANNUAL_REDUCTION_RATE] = data.apply(lambda row: self.get_annual_reduction_rate(row), axis=1)
-        data = self.merge_regression(data)
+        data = self._merge_regression(data)
         # TODO: Move temperature result to cols
         data[self.c.COLS.TEMPERATURE_SCORE], data[self.c.TEMPERATURE_RESULTS] = zip(*data.apply(
             lambda row: self.get_score(row), axis=1))
@@ -252,34 +290,30 @@ class TemperatureScore(PortfolioAggregation):
     def calculate(self, data: pd.DataFrame):
         """
         Calculate the temperature for a dataframe of company data.
+
         Required columns:
+
         * target_reference_number: Int *x* of Abs *x*
         * scope: The scope of the target. This should be a valid scope in the SR15 mapping
         * scope_category: The scope category, options: "s1s2", "s3", "s1s2s3"
         * base_year: The base year of the target
         * start_year: The start year of the target
         * target_year: The year when the target should be achieved
-        * time_frame: The time frame of the target (short, mid, long) -> This field is calculated by the target
-            valuation protocol.
+        * time_frame: The time frame of the target (short, mid, long) -> This field is calculated by the target valuation protocol.
         * reduction_from_base_year: Targeted reduction in emissions from the base year
         * emissions_in_scope: Company emissions in the target's scope at start of the base year
         * achieved_reduction: The emission reduction that has already been achieved
-        * industry: The industry the company is working in. This should be a valid industry in the SR15 mapping. If not
-            it will be converted to "Others" (or whichever value is set in the config as the default
+        * industry: The industry the company is working in. This should be a valid industry in the SR15 mapping. If not it will be converted to "Others" (or whichever value is set in the config as the default).
         * s1s2_emissions: Total company emissions in the S1 + S2 scope
         * s3_emissions: Total company emissions in the S3 scope
         * market_cap: Market capitalization of the company. Only required to use the MOTS portfolio aggregation.
-        * investment_value: The investment value of the investment in this company. Only required to use the MOTS, EOTS,
-            ECOTS and AOTS portfolio aggregation.
-        * company_enterprise_value: The enterprise value of the company. Only required to use the EOTS portfolio
-            aggregation.
-        * company_ev_plus_cash: The enterprise value of the company plus cash. Only required to use the ECOTS portfolio
-            aggregation.
+        * investment_value: The investment value of the investment in this company. Only required to use the MOTS, EOTS, ECOTS and AOTS portfolio aggregation.
+        * company_enterprise_value: The enterprise value of the company. Only required to use the EOTS portfolio aggregation.
+        * company_ev_plus_cash: The enterprise value of the company plus cash. Only required to use the ECOTS portfolio aggregation.
         * company_total_assets: The total assets of the company. Only required to use the AOTS portfolio aggregation.
         * company_revenue: The revenue of the company. Only required to use the ROTS portfolio aggregation.
 
-        :param extra_columns: A list of user defined extra, company related, columns
-        :param data:
+        :param data: The data set
         :return: A data frame containing all relevant information for the targets and companies
         """
         data = self._prepare_data(data)
@@ -344,17 +378,16 @@ class TemperatureScore(PortfolioAggregation):
 
         :param data: The data set
         :param col: The column name
-        :return:
+        :return: The sum of the given column, with each company being counted once
         """
         return data[[self.c.COLS.COMPANY_NAME, col]].drop_duplicates()[col].sum()
 
     def _calculate_scope_weight(self, company_data: pd.DataFrame) -> Tuple[float, float, float]:
         """
-        Calculate the weight that a certain scope has in the attribution calculation (which calculate how much of the
-        total score is dependent on the default score).
+        Calculate the weight that a certain scope has in the attribution calculation (which calculates how much of the total score is dependent on the default score).
 
         :param company_data: The original data, for a specific company and time frame, indexed by scope category
-        :return:
+        :return: A scope weight for all three scopes (s1s2, s3 and s1s2s3). The first two are either 0 (does not use the default score) or 1 (uses the default score). The s1s2s3 is a combination of the other two, weighted by emissions.
         """
         s1s2 = company_data.loc[self.c.VALUE_SCOPE_CATEGORY_S1S2]
         s3 = company_data.loc[self.c.VALUE_SCOPE_CATEGORY_S3]
@@ -366,15 +399,15 @@ class TemperatureScore(PortfolioAggregation):
                      ds_s3 * (s3_emissions / (s1s2_emissions + s3_emissions)))
         return ds_s1s2, ds_s3, sw_s1s2s3
 
-    def temperature_score_influence_percentage(self, data: pd.DataFrame, aggregation_method: PortfolioAggregationMethod):
+    def temperature_score_influence_percentage(self, data: pd.DataFrame,
+                                               aggregation_method: PortfolioAggregationMethod) -> dict:
         """
-        Determines the percentage of the temperature score is covered by target and default score
+        Determines which part of the aggregated temperature can be attributed to the default score, instead of to actual
+        targets.
 
-        :param data: output of the temperature score method
-        :param aggregation_method: The aggregation method that should be used to calculate the importance of each
-        temperature score
-
-        :return: A dataframe containing the percentage contributed by the default and target score for all three timeframes
+        :param data: The output of the temperature score method
+        :param aggregation_method: The aggregation method that should be used to calculate the importance of each temperature score
+        :return: A dictionary containing for each time-frame and scope, the percentage that can be attributed to the default score.
         """
         total_investment, portfolio_emissions = 0.0, 0.0
         if aggregation_method == PortfolioAggregationMethod.WATS:
@@ -435,15 +468,14 @@ class TemperatureScore(PortfolioAggregation):
 
         return time_frame_dictionary
 
-    def columns_percentage_distribution(self, data, columns):
-        '''
+    def columns_percentage_distribution(self, data: pd.DataFrame, columns: List[str]):
+        """
         Percentage distribution of specific column or columns
 
         :param data: output from the target_validation
         :param columns: specified column names the client would like to have a percentage distribution
         :return: percentage distribution of specified columns
-        '''
-
+        """
         data = data[columns].fillna('unknown')
         if columns is None:
             return None
@@ -462,8 +494,12 @@ class TemperatureScore(PortfolioAggregation):
                 del percentage_distribution[key]
             return percentage_distribution
 
-    def set_scenario(self, scenario: Scenario):
-        # TODO: Enums, docstrings, constants
+    def set_scenario(self, scenario: Scenario) -> None:
+        """
+        Set the scenario that should be used to calculate the temperature score.
+
+        :param scenario: The scenario that should be used
+        """
         self.scenario = scenario
         # Scenario 1: Engage companies to set targets
         if self.scenario.scenario_type == ScenarioType.TARGETS:
@@ -479,8 +515,14 @@ class TemperatureScore(PortfolioAggregation):
             elif self.scenario.engagement_type == EngagementType.SET_SBTI_TARGETS:
                 self.score_cap = 1.75
 
-    def cap_scores(self, scores: pd.DataFrame):
-        # TODO: Enums, docstrings, constants
+    def cap_scores(self, scores: pd.DataFrame) -> pd.DataFrame:
+        """
+        Cap the temperature scores in the input data frame to a certain value, based on the scenario that's being used. 
+        This can either be for the whole data set, or only for the top X contributors.
+
+        :param scores: The data set with the temperature scores
+        :return: The input data frame, with capped scores
+        """
         if self.scenario is None:
             return scores
         if self.scenario.scenario_type == ScenarioType.APPROVED_TARGETS:
@@ -510,24 +552,26 @@ class TemperatureScore(PortfolioAggregation):
                 scores.loc[score_based_on_target, self.c.COLS.TEMPERATURE_SCORE].apply(lambda x: min(x, self.score_cap))
         return scores
 
-    def anonymize_data_dump(self, scores):
-        '''
-        Anonymizes scores for raw data output
-        '''
+    def anonymize_data_dump(self, scores: pd.DataFrame) -> pd.DataFrame:
+        """
+        Anonymize the scores by deleting the company IDs (ISIC) and renaming the companies.
+
+        :param scores: The data set with the temperature scores
+        :return: The input data frame, anonymized
+        """
         scores.drop(columns=[self.c.COLS.COMPANY_ISIC, self.c.COLS.COMPANY_ID], inplace=True)
         for index, company_name in enumerate(scores[self.c.COLS.COMPANY_NAME].unique()):
             scores.loc[scores[self.c.COLS.COMPANY_NAME] == company_name, self.c.COLS.COMPANY_NAME] = 'Company' + str(
                 index + 1)
         return scores
 
-    def merge_percentage_coverage_to_aggregations(self, aggregations: Dict, temperature_percentage_coverage: Dict):
-        """Iterates over two dictionaries and ads keys from second dictionary to the first.
+    def merge_percentage_coverage_to_aggregations(self, aggregations: dict, temperature_percentage_coverage: dict):
+        """
+        Iterates over two dictionaries and adds keys from second dictionary to the first.
+
         :param temperature_percentage_coverage: first 'main' dictionary where keys should be added
-        :type temperature_percentage_coverage: dict
-        :param aggregations: second dictionary wherefrom key-value pairs are added to first dictionary
-        :type aggregations: dict
-        :rtype: aggregations, dict
-        :return: aggregations
+        :param aggregations: second dictionary where from key-value pairs are added to first dictionary
+        :return: The merges aggregations
         """
         for time_frame in [self.c.TIME_FRAME_SHORT, self.c.TIME_FRAME_MID, self.c.TIME_FRAME_LONG]:
             for scope in self.c.VALUE_SCOPE_CATEGORIES:
