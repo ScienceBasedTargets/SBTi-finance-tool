@@ -1,0 +1,348 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>SBTi.target_validation &mdash; SBTi Temperature Alignment tool  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> SBTi Temperature Alignment tool
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rest_api.html">REST API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">SBTi Temperature Alignment tool</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+      <li><code class="xref py py-mod docutils literal notranslate"><span class="pre">SBTi.target_validation</span></code></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../_sources/autoapi/SBTi/target_validation/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-SBTi.target_validation">
+<span id="sbti-target-validation"></span><h1><a class="reference internal" href="#module-SBTi.target_validation" title="SBTi.target_validation"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SBTi.target_validation</span></code></a><a class="headerlink" href="#module-SBTi.target_validation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="SBTi.target_validation.TargetValidation">
+<em class="property">class </em><code class="sig-prename descclassname">SBTi.target_validation.</code><code class="sig-name descname">TargetValidation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">pd.DataFrame</span></em>, <em class="sig-param"><span class="n">company_data</span><span class="p">:</span> <span class="n">pd.DataFrame</span></em>, <em class="sig-param"><span class="n">config</span><span class="p">:</span> <span class="n">Type<span class="p">[</span>PortfolioAggregationConfig<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">PortfolioAggregationConfig</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.target_validation.TargetValidation" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class validates the targets, to make sure that only active, useful targets are considered.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – The target related data</p></li>
+<li><p><strong>company_data</strong> – The company related data</p></li>
+<li><p><strong>config</strong> – A Portfolio aggregation config</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="SBTi.target_validation.TargetValidation.target_validation">
+<code class="sig-name descname">target_validation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.target_validation.TargetValidation.target_validation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs the target validation protocol.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A data frame with only valid targets, combined with the company-specific data. This will return a 9-box</p>
+</dd>
+</dl>
+<p>grid for all companies (i.e. one row for the three time-frame (short, mid, long) and the three scopes (s1s2, s3,
+s1s2s3). These rows might have empty targets.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SBTi.target_validation.TargetValidation.test_end_year">
+<code class="sig-name descname">test_end_year</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.target_validation.TargetValidation.test_end_year" title="Permalink to this definition">¶</a></dt>
+<dd><p>Records that have a valid end_year will be returned. A valid end_year is defined as a year that is greater then
+the start_year.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a dataframe containing records that have correct end_year feature.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SBTi.target_validation.TargetValidation.test_missing_fields">
+<code class="sig-name descname">test_missing_fields</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">data_set</span></em>, <em class="sig-param"><span class="n">required_columns</span><span class="p">:</span> <span class="n">List<span class="p">[</span>str<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.target_validation.TargetValidation.test_missing_fields" title="Permalink to this definition">¶</a></dt>
+<dd><p>When a required field is missing (that we need to do calculations later on), we’ll delete the whole row.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data_set</strong> – The data set that should be tested for missing columns.</p></li>
+<li><p><strong>required_columns</strong> – The columns that should be in the input data</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The input data set, without the invalid rows</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SBTi.target_validation.TargetValidation.test_target_type">
+<code class="sig-name descname">test_target_type</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.target_validation.TargetValidation.test_target_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test on target type and only allow only GHG emission reduction targets (absolute or intensity based).</p>
+<p>Target validation step 1: target type #64
+If target type is Absolute =&gt; continue
+If target type is Intensity =&gt;
+– If Intensity_metric is Other (or none is specified) =&gt; Invalid target
+– For all other intensity_metrics =&gt; continue
+If target type is Other (or none is specified) =&gt; Invalid target</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SBTi.target_validation.TargetValidation.test_boundary_coverage">
+<code class="sig-name descname">test_boundary_coverage</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.target_validation.TargetValidation.test_boundary_coverage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test on boundary coverage:</p>
+<p>Option 1: minimal coverage threshold
+For S1+S2 targets: coverage% must be above 95%, for S3 targets coverage must be above 67%</p>
+<p>Option 2: weighted coverage
+Thresholds are still 95% and 67%, target is always valid. Below threshold ambition is scaled.*
+New target ambition = input target ambition * coverage
+<a href="#id1"><span class="problematic" id="id2">*</span></a>either here or in tem score module</p>
+<p>Option 3: default coverage
+Target is always valid, % uncovered is given default score in temperature score module.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SBTi.target_validation.TargetValidation.test_target_process">
+<code class="sig-name descname">test_target_process</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.target_validation.TargetValidation.test_target_process" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test on target process
+If target process is 100%, the target is invalid (only forward looking targets allowed)
+Output: a list of valid targets per company</p>
+<p>Target progress: the percentage of the target already achieved</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SBTi.target_validation.TargetValidation.convert_s1_s2_into_s1s2">
+<code class="sig-name descname">convert_s1_s2_into_s1s2</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.target_validation.TargetValidation.convert_s1_s2_into_s1s2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="SBTi.target_validation.TargetValidation.split_s1s2s3">
+<code class="sig-name descname">split_s1s2s3</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.target_validation.TargetValidation.split_s1s2s3" title="Permalink to this definition">¶</a></dt>
+<dd><p>If there is a s1s2s3 scope, split it into two targets with s1s2 and s3</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SBTi.target_validation.TargetValidation.time_frame">
+<code class="sig-name descname">time_frame</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.target_validation.TargetValidation.time_frame" title="Permalink to this definition">¶</a></dt>
+<dd><p>Time frame is forward looking: target year - current year. Less than 5y = short, between 5 and 15 is mid, 15 to 30 is long</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SBTi.target_validation.TargetValidation._find_target">
+<code class="sig-name descname">_find_target</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">row</span><span class="p">:</span> <span class="n">pd.Series</span></em>, <em class="sig-param"><span class="n">target_columns</span><span class="p">:</span> <span class="n">List<span class="p">[</span>str<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.target_validation.TargetValidation._find_target" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find the target that corresponds to a given row. If there are multiple targets available, filter them.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>row</strong> – The row from the data set that should be looked for</p></li>
+<li><p><strong>target_columns</strong> – The columns that need to be returned</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>returns records from the input data, which contains company and target information, that meet specific</p>
+</dd>
+</dl>
+<p>criteria. For example, record of greatest emissions_in_scope</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SBTi.target_validation.TargetValidation.group_targets">
+<code class="sig-name descname">group_targets</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.target_validation.TargetValidation.group_targets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Group the targets and create the 6 field grid (short, mid, long * s1s2, s3).
+Group valid targets by category &amp; filter multiple targets#
+Input: a list of valid targets for each company:
+For each company:</p>
+<p>Group all valid targets based on scope (S1+S2 / S3) and time frame (short / mid / long-term) into 6 categories.</p>
+<p>For each category: if more than 1 target is available, filter based on the following criteria
+– Highest boundary coverage
+– Latest base year
+– Target type: Absolute over intensity
+– If all else is equal: average the ambition of targets</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SBTi.target_validation.TargetValidation.combine_records">
+<code class="sig-name descname">combine_records</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.target_validation.TargetValidation.combine_records" title="Permalink to this definition">¶</a></dt>
+<dd><p>Combines both dataframes together. The company_data and the portfolio data that filtered out companies.
+:return:</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Science Based Targets
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
