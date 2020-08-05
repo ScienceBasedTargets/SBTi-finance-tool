@@ -19,7 +19,7 @@ from SBTi.data.excel import ExcelProvider
 from SBTi.portfolio_aggregation import PortfolioAggregationMethod
 from SBTi.portfolio_coverage_tvp import PortfolioCoverageTVP
 from SBTi.temperature_score import TemperatureScore, Scenario
-from SBTi.target_valuation_protocol import TargetValuationProtocol
+from SBTi.target_validation import TargetValidation
 
 UPLOAD_FOLDER = 'data'
 app = Flask(__name__)
@@ -136,9 +136,9 @@ class TemperatureScoreEndpoint(BaseEndpoint):
                        "message": "None of the companies in your portfolio could be found by the data provider"
                    }, 400
 
-        # Target_Valuation_Protocol
-        target_valuation_protocol = TargetValuationProtocol(target_data, company_data)
-        portfolio_data = target_valuation_protocol.target_valuation_protocol()
+        # Target validation
+        target_validation = TargetValidation(target_data, company_data)
+        portfolio_data = target_validation.target_validation()
 
         scores = temperature_score.calculate(portfolio_data)
 
