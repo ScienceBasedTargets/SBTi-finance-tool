@@ -1,0 +1,11 @@
+name: sbti_getting_started
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - git=2.28.0=0
+  - pip=20.2.1=py_0
+  - python=3.7.8=h60c2a47_1_cpython
+  - jupyter=1.0.0=py_2
+  - pip:
+    - git+git://github.com/OFBDABV/SBTi
