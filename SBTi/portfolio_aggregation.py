@@ -58,7 +58,7 @@ class PortfolioAggregationMethod(Enum):
                method == PortfolioAggregationMethod.ROTS
 
     @staticmethod
-    def get_value_column(method: 'PortfolioAggregationMethod', column_config: ColumnsConfig) -> str:
+    def get_value_column(method: 'PortfolioAggregationMethod', column_config: Type[ColumnsConfig]) -> str:
         map_value_column = {
             PortfolioAggregationMethod.MOTS: column_config.MARKET_CAP,
             PortfolioAggregationMethod.EOTS: column_config.COMPANY_ENTERPRISE_VALUE,
