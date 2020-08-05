@@ -13,4 +13,3 @@ TODO: Write some examples
 
 .. toctree::
    :maxdepth: 4
-
