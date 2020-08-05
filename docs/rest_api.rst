@@ -1,31 +1,115 @@
 ********************
 REST API
 ********************
-TODO: Rest API
+The provided REST API makes it easy to integrate the SBTi temperature alignment tool as a microservice in your current IT infrastructure.
+Optionally you can also run the REST API with a small frontend, that makes testing substantially easier.
 
-Reference
+Usage
 ====================
-TODO: Link to the Swagger reference
+The complete REST API reference is available `here <https://ofbdabv.github.io/SBTi/swagger/index.html>`_.
 
-Examples
+Installation
 ====================
-TODO: Write some examples
+The tool is containerized in a Docker container. This enables easy cloud and on-premise deployments.
+We'll provide instructions here for installing the REST API either on your local machine or on Amazon AWS.
 
-Deployment
-====================
-TODO: Write general deployment instructions
+Locally
+********************
 
-Google Cloud Platform
-*********************
-TODO: Write GCP instructions
+* **Step 1**: Install Docker desktop
+
+For testing locally on your own Windows or Mac PC we first need to have a Docker engine running.
+For Linux users, this natively available in your OS and you can skip step 1. Docker provides some excellent installation
+instructions for `Windows <https://docs.docker.com/docker-for-windows/install/>`_ and
+`Mac <https://docs.docker.com/docker-for-mac/install/>`_. After you've finished these installation guides, we'll continue
+with step 2.
+
+* **Step 2**: Download and run the SBTi container.
+The beta-test version of the SBTi app is available here https://hub.docker.com/r/sbti/sbti_tool. To spin up the latest version on your local machine you need to run a single command in the terminal (for mac and Linux) or the command prompt (for windows users)
+
+*For Windows users*
+
+1. Open Command Prompt from a Start Menu Search. Select "Run as administrator".
+
+2. You can easily open the Command Prompt by clicking Start and then typing "cmd" into the search box.
+
+.. image:: restapi-deploy-windows-1.png
+    :width: 500px
+    :align: center
+    :alt: alternate text
+
+3. Enter the following command and hit enter::
+
+    docker run -d -p 5000:8080 sbti/sbti_tool:latest
+
+.. image:: restapi-deploy-windows-2.png
+    :width: 500px
+    :align: center
+    :alt: alternate text
+
+4. This commando starts retrieving the latest version of the tool and will expose it at localhost:5000
+5. Open your browser and go to http://localhost:5000 to access the tool
+
+.. image:: restapi-deploy-windows-3.png
+    :width: 500px
+    :align: center
+    :alt: alternate text
+
+
+*For Mac users*
+
+1. One of the quickest and easiest ways to open Terminal on Mac is with Spotlight Search
+2. If you have the Spotlight Search button in your menu bar, click it. Otherwise, you can use the keyboard shortcut Command + Space
+3. Type in "Terminal"
+4. You should see the Terminal application under Top Hit at the top of your results. Double-click it and Terminal will open.
+
+.. image:: restapi-deploy-mac-1.jpg
+    :width: 500px
+    :align: center
+    :alt: alternate text
+
+5. Enter the following command and hit enter::
+
+    docker run -d -p 5000:8080 sbti/sbti_tool:latest
+
+4. This commando starts retrieving the latest version of the tool and will expose it at localhost:5000
+5. Open your browser and go to http://localhost:5000 to access the tool
 
 Amazon AWS
 *********************
-TODO: Write AWS instructions
+These instructions assume that you've installed and configured the Amazon `AWS CLI tools <https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html) and the [ECS CLI tools](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ECS_CLI_Configuration.html>`_ with an IAM account that has at least write access to ECS and EC2 and the capability of creating AIM roles.
 
-Microsoft Azure
-*********************
-TODO: Write Azure instructions
+1. Configure the cluster. You can update the region and names as you see fit::
+
+    ecs-cli configure --cluster sbti-ecs-cluster --region eu-central-1 --config-name sbti-ecs-conf --cfn-stack-name sbti-ecs-stack --default-launch-type ec2
+
+2. Create a new key pair. The result of this command is a key. Store this safely as you can later use it to access your instance through SSH::
+
+    aws ec2 create-key-pair --key-name sbti
+
+3. Create the instance that'll run the image. Here we used 1 server of type t2.medium. Change this as you see fit::
+
+    ecs-cli up --keypair sbti --capability-iam --size 1 --instance-type t2.medium --cluster-config sbti-ecs-conf
+
+4. Update the server and make it run the docker image::
+
+    ecs-cli compose -f docker-compose_aws.yml up --cluster-config sbti-ecs-conf
+
+5. Now that the instance is running we can't access it yet. That's because NGINX only listens to localhost. We need to change this to make sure it's accessible on the WWW.
+6. Login to the Amazon AWS console
+7. Go to the EC2 service
+8. In the instance list find the instance running the Docker image
+9. Copy the public IP address of the instance
+10. In config/flask-site-nginx.conf update the server name to the public IP.
+11. Now we need to rebuild and re-upload the image::
+
+     docker-compose -f docker-compose_aws.yml build --no-cache
+     docker-compose -f docker-compose_aws.yml push
+     ecs-cli compose -f docker-compose_aws.yml up --cluster-config sbti-ecs-conf --force-update
+
+12. You should now be able to access the API.
+
+.. warning:: This will make the API publicly available on the world wide web! Please note that this API is not protected in any way. Therefore it's recommended to run your instance in a private subnet and only access it through there. Alternatively you can change the security group settings to only allow incoming connections from your local IP or company VPN.
 
 .. toctree::
    :maxdepth: 4
