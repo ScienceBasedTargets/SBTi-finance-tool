@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name='SBTi-Finance Temperature Alignment Tool',
-    version='0.1',
+    version='0.2',
     description='This package helps companies and financial institutions to assess the temperature alignment of current'
                 'targets, commitments, and investment and lending portfolios, and to use this information to develop '
                 'targets for official validation by the SBTi.',
@@ -15,7 +15,7 @@ setup(
     author_email='finance@sciencebasedtargets.org',
     packages=find_packages(),
     url = 'https://github.com/OFBDABV/SBTi',
-    download_url = 'https://github.com/OFBDABV/SBTi/archive/v_01.tar.gz',
+    download_url = 'https://github.com/OFBDABV/SBTi/archive/v_02.tar.gz',
     keywords = ['Climate', 'SBTi', 'Finance'],
     package_data={
         'SBTi': ['inputs/sr15_mapping.xlsx', 'inputs/regression_model_summary.xlsx',
