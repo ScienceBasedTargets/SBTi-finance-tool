@@ -1,2 +1,2 @@
 # Contributing
-Any contribution to this project is highly appreciated, to get up and running quickly, please have a look at the [contribution guidelines]() in the documentation.
+Any contribution to this project is highly appreciated, to get up and running quickly, please have a look at the [contribution guidelines](https://ofbdabv.github.io/SBTi/contributing.html) in the documentation.
