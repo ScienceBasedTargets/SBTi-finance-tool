@@ -10,20 +10,13 @@ Module Contents
 
 .. py:class:: TargetValidation(data: pd.DataFrame, company_data: pd.DataFrame, config: Type[PortfolioAggregationConfig] = PortfolioAggregationConfig)
 
-   This class validates the targets, to make sure that only active, useful targets are considered.
-
-   :param data: The target related data
-   :param company_data: The company related data
-   :param config: A Portfolio aggregation config
-
    .. method:: target_validation(self)
 
 
-      Runs the target validation protocol.
+      Runs the target validation protocol by calling on the four required steps
 
-      :return: A data frame with only valid targets, combined with the company-specific data. This will return a 9-box
-      grid for all companies (i.e. one row for the three time-frame (short, mid, long) and the three scopes (s1s2, s3,
-      s1s2s3). These rows might have empty targets.
+      :rtype: list
+      :return: a list of six columns containing dataframes in each one
 
 
    .. method:: test_end_year(self)
@@ -31,18 +24,14 @@ Module Contents
 
       Records that have a valid end_year will be returned. A valid end_year is defined as a year that is greater then
       the start_year.
-
       :return: a dataframe containing records that have correct end_year feature.
 
 
-   .. method:: test_missing_fields(self, data_set, required_columns: List[str])
+   .. method:: test_missing_fields(self, data_set, required_columns)
 
 
-      When a required field is missing (that we need to do calculations later on), we'll delete the whole row.
-
-      :param data_set: The data set that should be tested for missing columns.
-      :param required_columns: The columns that should be in the input data
-      :return: The input data set, without the invalid rows
+      When a required field is missing (that we need to do calculations later on), we'll delete the whole target.
+      :return:
 
 
    .. method:: test_target_type(self)
@@ -106,8 +95,6 @@ Module Contents
 
       Find the target that corresponds to a given row. If there are multiple targets available, filter them.
 
-      :param row: The row from the data set that should be looked for
-      :param target_columns: The columns that need to be returned
       :return: returns records from the input data, which contains company and target information, that meet specific
       criteria. For example, record of greatest emissions_in_scope
 

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>REST API &amp; UI &mdash; SBTi Temperature Alignment tool  documentation</title>
+  <title>REST API &mdash; SBTi Temperature Alignment tool  documentation</title>
   
 
   
@@ -84,7 +84,7 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">REST API &amp; UI</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">REST API</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#locally">Locally</a></li>
@@ -141,7 +141,7 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>REST API &amp; UI</li>
+      <li>REST API</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -160,8 +160,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="rest-api-ui">
-<h1>REST API &amp; UI<a class="headerlink" href="#rest-api-ui" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="rest-api">
+<h1>REST API<a class="headerlink" href="#rest-api" title="Permalink to this headline">¶</a></h1>
 <p>The provided REST API makes it easy to integrate the SBTi temperature alignment tool as a microservice in your current IT infrastructure.
 Optionally you can also run the REST API with a small frontend, that makes testing substantially easier.</p>
 <div class="section" id="usage">
@@ -185,9 +185,7 @@ with step 2.</p>
 <ul class="simple">
 <li><p><strong>Step 2</strong>: Download and run the SBTi container.</p></li>
 </ul>
-<p>The project consists of two containers, the <a class="reference external" href="https://hub.docker.com/r/sbti/api">API</a> and the <a class="reference external" href="https://hub.docker.com/r/sbti/ui">UI</a>, both of which can be found on Docker Hub.
-You can choose whether you only want to run the API or also the UI. To run them, you need to download a compose file. If you only want to run the API, you need to use <a class="reference external" href="https://raw.githubusercontent.com/OFBDABV/SBTi_api/master/docker-compose.yml">this file</a>, if you also want the UI, you should use <a class="reference external" href="https://raw.githubusercontent.com/OFBDABV/SBTi_api/master/docker-compose-ui.yml">this file</a>.</p>
-<p>Now download the file of your choose and store it as <cite>docker-compose.yml</cite> in your home directory.</p>
+<p>The beta-test version of the SBTi app is available here <a class="reference external" href="https://hub.docker.com/r/sbti/sbti_tool">https://hub.docker.com/r/sbti/sbti_tool</a>. To spin up the latest version on your local machine you need to run a single command in the terminal (for mac and Linux) or the command prompt (for windows users)</p>
 <p><em>For Windows users</em></p>
 <ol class="arabic simple">
 <li><p>Open Command Prompt from a Start Menu Search. Select “Run as administrator”.</p></li>
@@ -196,19 +194,15 @@ You can choose whether you only want to run the API or also the UI. To run them,
 <a class="reference internal image-reference" href="_images/restapi-deploy-windows-1.png"><img alt="alternate text" class="align-center" src="_images/restapi-deploy-windows-1.png" style="width: 500px;" /></a>
 <ol class="arabic" start="3">
 <li><p>Enter the following command and hit enter:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="n">up</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">run</span> <span class="o">-</span><span class="n">d</span> <span class="o">-</span><span class="n">p</span> <span class="mi">5000</span><span class="p">:</span><span class="mi">8080</span> <span class="n">sbti</span><span class="o">/</span><span class="n">sbti_tool</span><span class="p">:</span><span class="n">latest</span>
 </pre></div>
 </div>
 </li>
 </ol>
 <a class="reference internal image-reference" href="_images/restapi-deploy-windows-2.png"><img alt="alternate text" class="align-center" src="_images/restapi-deploy-windows-2.png" style="width: 500px;" /></a>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This command assumes that your command prompt is currently in the same directory as the docker-compose.yml file that you downloaded earlier.</p>
-</div>
 <ol class="arabic simple" start="4">
 <li><p>This commando starts retrieving the latest version of the tool and will expose it at localhost:5000</p></li>
-<li><p>Open your browser and go to <a class="reference external" href="http://localhost:5000">http://localhost:5000</a> to access the tool. If you’re running the UI, the UI will be on <a class="reference external" href="http://localhost:5000">http://localhost:5000</a> and the API on <a class="reference external" href="http://localhost:5001">http://localhost:5001</a></p></li>
+<li><p>Open your browser and go to <a class="reference external" href="http://localhost:5000">http://localhost:5000</a> to access the tool</p></li>
 </ol>
 <a class="reference internal image-reference" href="_images/restapi-deploy-windows-3.png"><img alt="alternate text" class="align-center" src="_images/restapi-deploy-windows-3.png" style="width: 500px;" /></a>
 <p><em>For Mac users</em></p>
@@ -221,18 +215,14 @@ You can choose whether you only want to run the API or also the UI. To run them,
 <a class="reference internal image-reference" href="_images/restapi-deploy-mac-1.jpg"><img alt="alternate text" class="align-center" src="_images/restapi-deploy-mac-1.jpg" style="width: 500px;" /></a>
 <ol class="arabic" start="5">
 <li><p>Enter the following command and hit enter:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="n">up</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">run</span> <span class="o">-</span><span class="n">d</span> <span class="o">-</span><span class="n">p</span> <span class="mi">5000</span><span class="p">:</span><span class="mi">8080</span> <span class="n">sbti</span><span class="o">/</span><span class="n">sbti_tool</span><span class="p">:</span><span class="n">latest</span>
 </pre></div>
 </div>
 </li>
 </ol>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This command assumes that your command prompt is currently in the same directory as the docker-compose.yml file that you downloaded earlier.</p>
-</div>
 <ol class="arabic simple" start="4">
 <li><p>This commando starts retrieving the latest version of the tool and will expose it at localhost:5000</p></li>
-<li><p>Open your browser and go to <a class="reference external" href="http://localhost:5000">http://localhost:5000</a> to access the tool. If you’re running the UI, the UI will be on <a class="reference external" href="http://localhost:5000">http://localhost:5000</a> and the API on <a class="reference external" href="http://localhost:5001">http://localhost:5001</a></p></li>
+<li><p>Open your browser and go to <a class="reference external" href="http://localhost:5000">http://localhost:5000</a> to access the tool</p></li>
 </ol>
 </div>
 <div class="section" id="amazon-aws">

@@ -54,20 +54,10 @@ Module Contents
       :staticmethod:
 
 
-      Convert an integer to a portfolio aggregation method.
-
-      :param value: The value to convert
-      :return: The matching portfolio aggregation method
-
 
    .. method:: from_string(value: str)
       :staticmethod:
 
-
-      Convert a string to a portfolio aggregation method.
-
-      :param value: The value to convert
-      :return: The matching portfolio aggregation method
 
 
    .. method:: is_emissions_based(method: PortfolioAggregationMethod)

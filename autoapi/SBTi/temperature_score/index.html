@@ -83,7 +83,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">Contributing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../rest_api.html">REST API &amp; UI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rest_api.html">REST API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../index.html">API Reference</a></li>
 </ul>
 
@@ -157,7 +157,6 @@
 <dt id="SBTi.temperature_score.ScenarioType">
 <em class="property">class </em><code class="sig-prename descclassname">SBTi.temperature_score.</code><code class="sig-name descname">ScenarioType</code><a class="headerlink" href="#SBTi.temperature_score.ScenarioType" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
-<p>A scenario defines which scenario should be run.</p>
 <dl class="py attribute">
 <dt id="SBTi.temperature_score.ScenarioType.TARGETS">
 <code class="sig-name descname">TARGETS</code><em class="property"> = 1</em><a class="headerlink" href="#SBTi.temperature_score.ScenarioType.TARGETS" title="Permalink to this definition">¶</a></dt>
@@ -189,7 +188,6 @@
 <dt id="SBTi.temperature_score.EngagementType">
 <em class="property">class </em><code class="sig-prename descclassname">SBTi.temperature_score.</code><code class="sig-name descname">EngagementType</code><a class="headerlink" href="#SBTi.temperature_score.EngagementType" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
-<p>An engagement type defines how the companies will be engaged.</p>
 <dl class="py attribute">
 <dt id="SBTi.temperature_score.EngagementType.SET_TARGETS">
 <code class="sig-name descname">SET_TARGETS</code><em class="property"> = 1</em><a class="headerlink" href="#SBTi.temperature_score.EngagementType.SET_TARGETS" title="Permalink to this definition">¶</a></dt>
@@ -203,38 +201,19 @@
 <dl class="py method">
 <dt id="SBTi.temperature_score.EngagementType.from_int">
 <em class="property">static </em><code class="sig-name descname">from_int</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.temperature_score.EngagementType.from_int" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convert an integer to an engagement type.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>value</strong> – The value to convert</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p></p>
-</dd>
-</dl>
-</dd></dl>
+<dd></dd></dl>
 
 <dl class="py method">
 <dt id="SBTi.temperature_score.EngagementType.from_string">
 <em class="property">static </em><code class="sig-name descname">from_string</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.temperature_score.EngagementType.from_string" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convert a string to an engagement type.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>value</strong> – The value to convert</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p></p>
-</dd>
-</dl>
-</dd></dl>
+<dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt id="SBTi.temperature_score.Scenario">
 <em class="property">class </em><code class="sig-prename descclassname">SBTi.temperature_score.</code><code class="sig-name descname">Scenario</code><a class="headerlink" href="#SBTi.temperature_score.Scenario" title="Permalink to this definition">¶</a></dt>
-<dd><p>A scenario defines the action the portfolio holder will take to improve its temperature score.</p>
-<dl class="py attribute">
+<dd><dl class="py attribute">
 <dt id="SBTi.temperature_score.Scenario.scenario_type">
 <code class="sig-name descname">scenario_type</code><em class="property"> :ScenarioType</em><a class="headerlink" href="#SBTi.temperature_score.Scenario.scenario_type" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -257,22 +236,7 @@
 <dl class="py method">
 <dt id="SBTi.temperature_score.Scenario.from_dict">
 <em class="property">static </em><code class="sig-name descname">from_dict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">scenario_values</span><span class="p">:</span> <span class="n">dict</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.temperature_score.Scenario.from_dict" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convert a dictionary to a scenario. The dictionary should have the following keys:</p>
-<ul class="simple">
-<li><p>number: The scenario type as an integer</p></li>
-<li><p>engagement_type: The engagement type as a string</p></li>
-<li><p>aggregation_method: The aggregation method as a string</p></li>
-<li><p>grouping: The grouping columns as a list of strings</p></li>
-</ul>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>scenario_values</strong> – The dictionary to convert</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A scenario object matching the input values</p>
-</dd>
-</dl>
-</dd></dl>
+<dd></dd></dl>
 
 </dd></dl>
 
@@ -333,18 +297,9 @@ class and overwriting one of the parameters.</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt id="SBTi.temperature_score.TemperatureScore._merge_regression">
-<code class="sig-name descname">_merge_regression</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">pd.DataFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.temperature_score.TemperatureScore._merge_regression" title="Permalink to this definition">¶</a></dt>
-<dd><p>Merge the data with the regression parameters from the SBTi model.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>data</strong> – The data to merge</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The data set, amended with the regression parameters</p>
-</dd>
-</dl>
-</dd></dl>
+<dt id="SBTi.temperature_score.TemperatureScore.merge_regression">
+<code class="sig-name descname">merge_regression</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">data</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.temperature_score.TemperatureScore.merge_regression" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="py method">
 <dt id="SBTi.temperature_score.TemperatureScore.get_score">
@@ -465,7 +420,10 @@ Required columns:
 </ul>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>data</strong> – The data set</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>extra_columns</strong> – A list of user defined extra, company related, columns</p></li>
+<li><p><strong>data</strong> – </p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>A data frame containing all relevant information for the targets and companies</p>
@@ -512,10 +470,8 @@ per company).</p>
 <dl class="py method">
 <dt id="SBTi.temperature_score.TemperatureScore._calculate_scope_weight">
 <code class="sig-name descname">_calculate_scope_weight</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">company_data</span><span class="p">:</span> <span class="n">pd.DataFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.temperature_score.TemperatureScore._calculate_scope_weight" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate the weight that a certain scope has in the attribution calculation (which calculates how much of the
-total score is dependent on the default score). This will return a scope weight for all three scopes (s1s2, s3
-and s1s2s3). The first two are either 0 (does not use the default score) or 1 (uses the default score). The
-s1s2s3 is a combination of the other two, weighted by emissions.</p>
+<dd><p>Calculate the weight that a certain scope has in the attribution calculation (which calculate how much of the
+total score is dependent on the default score).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>company_data</strong> – The original data, for a specific company and time frame, indexed by scope category</p>
@@ -529,24 +485,26 @@ s1s2s3 is a combination of the other two, weighted by emissions.</p>
 <dl class="py method">
 <dt id="SBTi.temperature_score.TemperatureScore.temperature_score_influence_percentage">
 <code class="sig-name descname">temperature_score_influence_percentage</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">pd.DataFrame</span></em>, <em class="sig-param"><span class="n">aggregation_method</span><span class="p">:</span> <span class="n">PortfolioAggregationMethod</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.temperature_score.TemperatureScore.temperature_score_influence_percentage" title="Permalink to this definition">¶</a></dt>
-<dd><p>Determines which part of the aggregated temperature can be attributed to the default score, instead of to actual
-targets.</p>
+<dd><p>Determines the percentage of the temperature score is covered by target and default score</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> – The output of the temperature score method</p></li>
+<li><p><strong>data</strong> – output of the temperature score method</p></li>
 <li><p><strong>aggregation_method</strong> – The aggregation method that should be used to calculate the importance of each</p></li>
 </ul>
 </dd>
 </dl>
-<p>temperature score
-:return: A dictionary containing for each time-frame and scope, the percentage that can be attributed to the
-default score.</p>
+<p>temperature score</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A dataframe containing the percentage contributed by the default and target score for all three timeframes</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="SBTi.temperature_score.TemperatureScore.columns_percentage_distribution">
-<code class="sig-name descname">columns_percentage_distribution</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">pd.DataFrame</span></em>, <em class="sig-param"><span class="n">columns</span><span class="p">:</span> <span class="n">List<span class="p">[</span>str<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.temperature_score.TemperatureScore.columns_percentage_distribution" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">columns_percentage_distribution</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">columns</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.temperature_score.TemperatureScore.columns_percentage_distribution" title="Permalink to this definition">¶</a></dt>
 <dd><p>Percentage distribution of specific column or columns</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -564,61 +522,29 @@ default score.</p>
 <dl class="py method">
 <dt id="SBTi.temperature_score.TemperatureScore.set_scenario">
 <code class="sig-name descname">set_scenario</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">scenario</span><span class="p">:</span> <span class="n">Scenario</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.temperature_score.TemperatureScore.set_scenario" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set the scenario that should be used to calculate the temperature score.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>scenario</strong> – The scenario that should be used</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>void</p>
-</dd>
-</dl>
-</dd></dl>
+<dd></dd></dl>
 
 <dl class="py method">
 <dt id="SBTi.temperature_score.TemperatureScore.cap_scores">
 <code class="sig-name descname">cap_scores</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">scores</span><span class="p">:</span> <span class="n">pd.DataFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.temperature_score.TemperatureScore.cap_scores" title="Permalink to this definition">¶</a></dt>
-<dd><p>Cap the temperature scores in the input data frame to a certain value, based on the scenario that’s being used.
-This can either be for the whole data set, or only for the top X contributors.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>scores</strong> – The data set with the temperature scores</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The input data frame, with capped scores</p>
-</dd>
-</dl>
-</dd></dl>
+<dd></dd></dl>
 
 <dl class="py method">
 <dt id="SBTi.temperature_score.TemperatureScore.anonymize_data_dump">
-<code class="sig-name descname">anonymize_data_dump</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">scores</span><span class="p">:</span> <span class="n">pd.DataFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.temperature_score.TemperatureScore.anonymize_data_dump" title="Permalink to this definition">¶</a></dt>
-<dd><p>Anonymize the scores by deleting the company IDs (ISIC) and renaming the companies.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>scores</strong> – The data set with the temperature scores</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The input data frame, anonymized</p>
-</dd>
-</dl>
+<code class="sig-name descname">anonymize_data_dump</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">scores</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.temperature_score.TemperatureScore.anonymize_data_dump" title="Permalink to this definition">¶</a></dt>
+<dd><p>Anonymizes scores for raw data output</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="SBTi.temperature_score.TemperatureScore.merge_percentage_coverage_to_aggregations">
-<code class="sig-name descname">merge_percentage_coverage_to_aggregations</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">aggregations</span><span class="p">:</span> <span class="n">dict</span></em>, <em class="sig-param"><span class="n">temperature_percentage_coverage</span><span class="p">:</span> <span class="n">dict</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.temperature_score.TemperatureScore.merge_percentage_coverage_to_aggregations" title="Permalink to this definition">¶</a></dt>
-<dd><p>Iterates over two dictionaries and adds keys from second dictionary to the first.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>temperature_percentage_coverage</strong> – first ‘main’ dictionary where keys should be added</p></li>
-<li><p><strong>aggregations</strong> – second dictionary where from key-value pairs are added to first dictionary</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The merges aggregations</p>
-</dd>
-</dl>
+<code class="sig-name descname">merge_percentage_coverage_to_aggregations</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">aggregations</span><span class="p">:</span> <span class="n">Dict</span></em>, <em class="sig-param"><span class="n">temperature_percentage_coverage</span><span class="p">:</span> <span class="n">Dict</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.temperature_score.TemperatureScore.merge_percentage_coverage_to_aggregations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Iterates over two dictionaries and ads keys from second dictionary to the first.
+:param temperature_percentage_coverage: first ‘main’ dictionary where keys should be added
+:type temperature_percentage_coverage: dict
+:param aggregations: second dictionary wherefrom key-value pairs are added to first dictionary
+:type aggregations: dict
+:rtype: aggregations, dict
+:return: aggregations</p>
 </dd></dl>
 
 </dd></dl>

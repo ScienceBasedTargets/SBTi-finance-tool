@@ -12,8 +12,6 @@ Module Contents
 
    Bases: :class:`enum.Enum`
 
-   A scenario defines which scenario should be run.
-
    .. attribute:: TARGETS
       :annotation: = 1
 
@@ -44,8 +42,6 @@ Module Contents
 
    Bases: :class:`enum.Enum`
 
-   An engagement type defines how the companies will be engaged.
-
    .. attribute:: SET_TARGETS
       :annotation: = 1
 
@@ -60,26 +56,14 @@ Module Contents
       :staticmethod:
 
 
-      Convert an integer to an engagement type.
-
-      :param value: The value to convert
-      :return:
-
 
    .. method:: from_string(value: str)
       :staticmethod:
 
 
-      Convert a string to an engagement type.
-
-      :param value: The value to convert
-      :return:
-
 
 
 .. py:class:: Scenario
-
-   A scenario defines the action the portfolio holder will take to improve its temperature score.
 
    .. attribute:: scenario_type
       :annotation: :ScenarioType
@@ -104,16 +88,6 @@ Module Contents
    .. method:: from_dict(scenario_values: dict)
       :staticmethod:
 
-
-      Convert a dictionary to a scenario. The dictionary should have the following keys:
-
-      * number: The scenario type as an integer
-      * engagement_type: The engagement type as a string
-      * aggregation_method: The aggregation method as a string
-      * grouping: The grouping columns as a list of strings
-
-      :param scenario_values: The dictionary to convert
-      :return: A scenario object matching the input values
 
 
 
@@ -156,13 +130,8 @@ Module Contents
       :return:The regression parameter and intercept
 
 
-   .. method:: _merge_regression(self, data: pd.DataFrame)
+   .. method:: merge_regression(self, data)
 
-
-      Merge the data with the regression parameters from the SBTi model.
-
-      :param data: The data to merge
-      :return: The data set, amended with the regression parameters
 
 
    .. method:: get_score(self, target: pd.Series)
@@ -242,7 +211,8 @@ Module Contents
       * company_total_assets: The total assets of the company. Only required to use the AOTS portfolio aggregation.
       * company_revenue: The revenue of the company. Only required to use the ROTS portfolio aggregation.
 
-      :param data: The data set
+      :param extra_columns: A list of user defined extra, company related, columns
+      :param data:
       :return: A data frame containing all relevant information for the targets and companies
 
 
@@ -271,10 +241,8 @@ Module Contents
    .. method:: _calculate_scope_weight(self, company_data: pd.DataFrame)
 
 
-      Calculate the weight that a certain scope has in the attribution calculation (which calculates how much of the
-      total score is dependent on the default score). This will return a scope weight for all three scopes (s1s2, s3
-      and s1s2s3). The first two are either 0 (does not use the default score) or 1 (uses the default score). The
-      s1s2s3 is a combination of the other two, weighted by emissions.
+      Calculate the weight that a certain scope has in the attribution calculation (which calculate how much of the
+      total score is dependent on the default score).
 
       :param company_data: The original data, for a specific company and time frame, indexed by scope category
       :return:
@@ -283,17 +251,16 @@ Module Contents
    .. method:: temperature_score_influence_percentage(self, data: pd.DataFrame, aggregation_method: PortfolioAggregationMethod)
 
 
-      Determines which part of the aggregated temperature can be attributed to the default score, instead of to actual
-      targets.
+      Determines the percentage of the temperature score is covered by target and default score
 
-      :param data: The output of the temperature score method
+      :param data: output of the temperature score method
       :param aggregation_method: The aggregation method that should be used to calculate the importance of each
       temperature score
-      :return: A dictionary containing for each time-frame and scope, the percentage that can be attributed to the
-      default score.
+
+      :return: A dataframe containing the percentage contributed by the default and target score for all three timeframes
 
 
-   .. method:: columns_percentage_distribution(self, data: pd.DataFrame, columns: List[str])
+   .. method:: columns_percentage_distribution(self, data, columns)
 
 
       Percentage distribution of specific column or columns
@@ -306,39 +273,27 @@ Module Contents
    .. method:: set_scenario(self, scenario: Scenario)
 
 
-      Set the scenario that should be used to calculate the temperature score.
-
-      :param scenario: The scenario that should be used
-      :return: void
-
 
    .. method:: cap_scores(self, scores: pd.DataFrame)
 
 
-      Cap the temperature scores in the input data frame to a certain value, based on the scenario that's being used. 
-      This can either be for the whole data set, or only for the top X contributors.
 
-      :param scores: The data set with the temperature scores
-      :return: The input data frame, with capped scores
+   .. method:: anonymize_data_dump(self, scores)
 
 
-   .. method:: anonymize_data_dump(self, scores: pd.DataFrame)
+      Anonymizes scores for raw data output
 
 
-      Anonymize the scores by deleting the company IDs (ISIC) and renaming the companies.
-
-      :param scores: The data set with the temperature scores
-      :return: The input data frame, anonymized
+   .. method:: merge_percentage_coverage_to_aggregations(self, aggregations: Dict, temperature_percentage_coverage: Dict)
 
 
-   .. method:: merge_percentage_coverage_to_aggregations(self, aggregations: dict, temperature_percentage_coverage: dict)
-
-
-      Iterates over two dictionaries and adds keys from second dictionary to the first.
-
+      Iterates over two dictionaries and ads keys from second dictionary to the first.
       :param temperature_percentage_coverage: first 'main' dictionary where keys should be added
-      :param aggregations: second dictionary where from key-value pairs are added to first dictionary
-      :return: The merges aggregations
+      :type temperature_percentage_coverage: dict
+      :param aggregations: second dictionary wherefrom key-value pairs are added to first dictionary
+      :type aggregations: dict
+      :rtype: aggregations, dict
+      :return: aggregations
 
 
 

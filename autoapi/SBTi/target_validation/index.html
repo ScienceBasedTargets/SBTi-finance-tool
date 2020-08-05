@@ -83,7 +83,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">Contributing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../rest_api.html">REST API &amp; UI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rest_api.html">REST API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../index.html">API Reference</a></li>
 </ul>
 
@@ -156,56 +156,33 @@
 <dl class="py class">
 <dt id="SBTi.target_validation.TargetValidation">
 <em class="property">class </em><code class="sig-prename descclassname">SBTi.target_validation.</code><code class="sig-name descname">TargetValidation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">pd.DataFrame</span></em>, <em class="sig-param"><span class="n">company_data</span><span class="p">:</span> <span class="n">pd.DataFrame</span></em>, <em class="sig-param"><span class="n">config</span><span class="p">:</span> <span class="n">Type<span class="p">[</span>PortfolioAggregationConfig<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">PortfolioAggregationConfig</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.target_validation.TargetValidation" title="Permalink to this definition">¶</a></dt>
-<dd><p>This class validates the targets, to make sure that only active, useful targets are considered.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> – The target related data</p></li>
-<li><p><strong>company_data</strong> – The company related data</p></li>
-<li><p><strong>config</strong> – A Portfolio aggregation config</p></li>
-</ul>
-</dd>
-</dl>
-<dl class="py method">
+<dd><dl class="py method">
 <dt id="SBTi.target_validation.TargetValidation.target_validation">
 <code class="sig-name descname">target_validation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.target_validation.TargetValidation.target_validation" title="Permalink to this definition">¶</a></dt>
-<dd><p>Runs the target validation protocol.</p>
+<dd><p>Runs the target validation protocol by calling on the four required steps</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>A data frame with only valid targets, combined with the company-specific data. This will return a 9-box</p>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a list of six columns containing dataframes in each one</p>
 </dd>
 </dl>
-<p>grid for all companies (i.e. one row for the three time-frame (short, mid, long) and the three scopes (s1s2, s3,
-s1s2s3). These rows might have empty targets.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="SBTi.target_validation.TargetValidation.test_end_year">
 <code class="sig-name descname">test_end_year</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.target_validation.TargetValidation.test_end_year" title="Permalink to this definition">¶</a></dt>
 <dd><p>Records that have a valid end_year will be returned. A valid end_year is defined as a year that is greater then
-the start_year.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>a dataframe containing records that have correct end_year feature.</p>
-</dd>
-</dl>
+the start_year.
+:return: a dataframe containing records that have correct end_year feature.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="SBTi.target_validation.TargetValidation.test_missing_fields">
-<code class="sig-name descname">test_missing_fields</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">data_set</span></em>, <em class="sig-param"><span class="n">required_columns</span><span class="p">:</span> <span class="n">List<span class="p">[</span>str<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.target_validation.TargetValidation.test_missing_fields" title="Permalink to this definition">¶</a></dt>
-<dd><p>When a required field is missing (that we need to do calculations later on), we’ll delete the whole row.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>data_set</strong> – The data set that should be tested for missing columns.</p></li>
-<li><p><strong>required_columns</strong> – The columns that should be in the input data</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The input data set, without the invalid rows</p>
-</dd>
-</dl>
+<code class="sig-name descname">test_missing_fields</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">data_set</span></em>, <em class="sig-param"><span class="n">required_columns</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.target_validation.TargetValidation.test_missing_fields" title="Permalink to this definition">¶</a></dt>
+<dd><p>When a required field is missing (that we need to do calculations later on), we’ll delete the whole target.
+:return:</p>
 </dd></dl>
 
 <dl class="py method">
@@ -265,14 +242,8 @@ Output: a list of valid targets per company</p>
 <code class="sig-name descname">_find_target</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">row</span><span class="p">:</span> <span class="n">pd.Series</span></em>, <em class="sig-param"><span class="n">target_columns</span><span class="p">:</span> <span class="n">List<span class="p">[</span>str<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.target_validation.TargetValidation._find_target" title="Permalink to this definition">¶</a></dt>
 <dd><p>Find the target that corresponds to a given row. If there are multiple targets available, filter them.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>row</strong> – The row from the data set that should be looked for</p></li>
-<li><p><strong>target_columns</strong> – The columns that need to be returned</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>returns records from the input data, which contains company and target information, that meet specific</p>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>returns records from the input data, which contains company and target information, that meet specific</p>
 </dd>
 </dl>
 <p>criteria. For example, record of greatest emissions_in_scope</p>
