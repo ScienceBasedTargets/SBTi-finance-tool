@@ -84,8 +84,9 @@
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Getting Started</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#examples">Examples</a><ul class="simple">
+<li class="toctree-l2"><a class="reference internal" href="#google-colab">Google Colab</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#jupyter-notebooks">Jupyter notebooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#starting-from-scratch">Starting from scratch</a><ul class="simple">
 </ul>
 </li>
 </ul>
@@ -159,14 +160,40 @@
             
   <div class="section" id="getting-started">
 <h1>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
-<p>TODO: Getting started</p>
-<div class="section" id="installation">
-<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
-<p>TODO: Installation instructions</p>
+<p>The most fundamental part of the project is the Python module. This takes care of all the heavy lifting.
+You can install it easily through PIP. There are a couple ways to get started using the module.
+The easiest option is to run our getting started notebook on Google Colab. Alternatively you can also run the <a class="reference external" href="https://github.com/OFBDABV/SBTi/tree/master/examples">getting
+started notebooks</a> locally or start from scratch using the API reference.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This page only concerns itself with the Python module. The getting started documentation for the REST API can be found on its <a class="reference external" href="https://ofbdabv.github.io/SBTi/rest_api.html">dedicated page</a>. For a distinction between the different parts of the project, have a look at <a class="reference external" href="https://ofbdabv.github.io/SBTi/index.html">the homepage</a>.</p>
 </div>
-<div class="section" id="examples">
-<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
-<p>TODO: Write some examples</p>
+<div class="section" id="google-colab">
+<h2>Google Colab<a class="headerlink" href="#google-colab" title="Permalink to this headline">¶</a></h2>
+<p>The easiest way to get started is by using the getting started notebook on Google Colab.
+It goes through all the steps involved in installing the module and calculating a portfolio score.
+The example notebook can be found <a class="reference external" href="https://colab.research.google.com/github/OFBDABV/SBTi/blob/master/examples/1_getting_started-colab.ipynb">here</a>.</p>
+</div>
+<div class="section" id="jupyter-notebooks">
+<h2>Jupyter notebooks<a class="headerlink" href="#jupyter-notebooks" title="Permalink to this headline">¶</a></h2>
+<p>Alternatively you can also run the getting started notebooks locally. To do so, you first need to setup a new environment.
+In the next examples, we’ll assume you use Anaconda to manage your environments:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">examples</span>
+<span class="n">conda</span> <span class="n">env</span> <span class="n">create</span> <span class="o">-</span><span class="n">f</span> <span class="n">environment</span><span class="o">.</span><span class="n">yml</span>
+<span class="n">activate</span> <span class="n">sbti_getting_started</span>
+<span class="n">jupyter</span> <span class="n">notebook</span>
+</pre></div>
+</div>
+<p>A tab should now open in your web browser. In case you use virtual env you can install the required packages using the requirements.txt file in the examples directory.
+Make sure that your Python version is at least 3.6.</p>
+</div>
+<div class="section" id="starting-from-scratch">
+<h2>Starting from scratch<a class="headerlink" href="#starting-from-scratch" title="Permalink to this headline">¶</a></h2>
+<p>If you’re starting from scratch you can install the latest version of the package directly from Github as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">git</span><span class="o">+</span><span class="n">git</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">OFBDABV</span><span class="o">/</span><span class="n">SBTi</span>
+</pre></div>
+</div>
+<p>The <a class="reference external" href="https://ofbdabv.github.io/SBTi/autoapi/index.html">API reference</a> should provide a clear overview of the module’s API and its usage.</p>
 <div class="toctree-wrapper compound">
 </div>
 </div>

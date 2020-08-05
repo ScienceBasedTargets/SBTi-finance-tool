@@ -29,7 +29,7 @@ Submodules
    configs/index.rst
    portfolio_aggregation/index.rst
    portfolio_coverage_tvp/index.rst
-   target_valuation_protocol/index.rst
+   target_validation/index.rst
    temperature_score/index.rst
 
 

@@ -155,12 +155,55 @@
 <p>This package helps companies and financial institutions to assess the temperature alignment of current targets,
 commitments, and investment and lending portfolios, and to use this information to develop targets for official
 validation by the SBTi.</p>
+<div class="section" id="quickstart">
+<h2>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline">¶</a></h2>
+<p>To get up-and-running quickly we’ve got a no-code and a Python option:</p>
+<ul class="simple">
+<li><p><strong>No-code</strong>: Run the project locally as a <a class="reference external" href="rest_api.html#locally">web application using Docker</a></p></li>
+<li><p><strong>Python</strong>: Run a Jupyter notebook, without any installation in <a class="reference external" href="getting_started.html#google-colab">Google Colab</a> or <a class="reference external" href="getting_started.html#jupyter-notebooks">locally</a>.</p></li>
+</ul>
+</div>
+<div class="section" id="project-structure">
+<h2>Project structure<a class="headerlink" href="#project-structure" title="Permalink to this headline">¶</a></h2>
+<p>This package helps companies and financial institutions to assess the temperature alignment of current
+targets, commitments, and investment and lending portfolios, and to use this information to develop
+targets for official validation by the SBTi.</p>
+<p>This tool can be used either as a standalone Python package, a REST API or as a simple webapp which provides a simple skin on the API.
+So, the SBTi toolkit caters for three types of usage:
+- Users can integrate the Python package in their codebase
+- The tool can be included as a Microservice (containerised REST API) in any IT infrastructure (in the cloud or on premise)
+- As an webapp, exposing the functionality with a simple user interface.</p>
+<p>To following diagram provides an overview of the different parts of the toolkit:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">+-------------------------------------------------+</span>
+<span class="o">|</span>   <span class="n">UI</span>     <span class="p">:</span> <span class="n">Simple</span> <span class="n">user</span> <span class="n">interface</span> <span class="n">on</span> <span class="n">top</span> <span class="n">of</span> <span class="n">API</span>  <span class="o">|</span>
+<span class="o">|</span>   <span class="n">Install</span><span class="p">:</span> <span class="n">via</span> <span class="n">dockerhub</span>                        <span class="o">|</span>
+<span class="o">|</span>            <span class="n">docker</span><span class="o">.</span><span class="n">io</span><span class="o">/</span><span class="n">sbti</span><span class="o">/</span><span class="n">ui</span><span class="p">:</span><span class="n">latest</span>             <span class="o">|</span>
+<span class="o">|</span>                                                 <span class="o">|</span>
+<span class="o">|</span> <span class="o">+-----------------------------------------+</span>     <span class="o">|</span>
+<span class="o">|</span> <span class="o">|</span> <span class="n">REST</span> <span class="n">API</span><span class="p">:</span> <span class="n">Dockerized</span> <span class="n">Flask</span><span class="o">/</span><span class="n">NGINX</span>        <span class="o">|</span>     <span class="o">|</span>
+<span class="o">|</span> <span class="o">|</span> <span class="n">Source</span> <span class="p">:</span> <span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">OFBDABV</span><span class="o">/</span><span class="n">SBTi_api</span>    <span class="o">|</span>     <span class="o">|</span>
+<span class="o">|</span> <span class="o">|</span> <span class="n">Install</span><span class="p">:</span> <span class="n">via</span> <span class="n">source</span> <span class="ow">or</span> <span class="n">dockerhub</span>        <span class="o">|</span>     <span class="o">|</span>
+<span class="o">|</span> <span class="o">|</span>          <span class="n">docker</span><span class="o">.</span><span class="n">io</span><span class="o">/</span><span class="n">sbti</span><span class="o">/</span><span class="n">sbti</span><span class="o">/</span><span class="n">api</span><span class="p">:</span><span class="n">latest</span> <span class="o">|</span>     <span class="o">|</span>
+<span class="o">|</span> <span class="o">|</span>                                         <span class="o">|</span>     <span class="o">|</span>
+<span class="o">|</span> <span class="o">|</span> <span class="o">+---------------------------------+</span>     <span class="o">|</span>     <span class="o">|</span>
+<span class="o">|</span> <span class="o">|</span> <span class="o">|</span>                                 <span class="o">|</span>     <span class="o">|</span>     <span class="o">|</span>
+<span class="o">|</span> <span class="o">|</span> <span class="o">|</span><span class="n">Core</span>   <span class="p">:</span> <span class="n">Python</span> <span class="n">Module</span>           <span class="o">|</span>     <span class="o">|</span>     <span class="o">|</span>
+<span class="o">|</span> <span class="o">|</span> <span class="o">|</span><span class="n">Source</span> <span class="p">:</span> <span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">OFBDABV</span><span class="o">/</span><span class="n">SBTi</span> <span class="o">|</span>     <span class="o">|</span>     <span class="o">|</span>
+<span class="o">|</span> <span class="o">|</span> <span class="o">|</span><span class="n">Install</span><span class="p">:</span> <span class="n">via</span> <span class="n">source</span> <span class="ow">or</span> <span class="n">PyPi</span>      <span class="o">|</span>     <span class="o">|</span>     <span class="o">|</span>
+<span class="o">|</span> <span class="o">|</span> <span class="o">|</span>                                 <span class="o">|</span>     <span class="o">|</span>     <span class="o">|</span>
+<span class="o">|</span> <span class="o">|</span> <span class="o">+---------------------------------+</span>     <span class="o">|</span>     <span class="o">|</span>
+<span class="o">|</span> <span class="o">+-----------------------------------------+</span>     <span class="o">|</span>
+<span class="o">+-------------------------------------------------+</span>
+</pre></div>
+</div>
+<p>As shown above the API is dependent on the Python Repo, in the same way the UI requires the API backend. These dependencies are scripted in the Docker files</p>
 <div class="toctree-wrapper compound">
 <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="getting_started.html#installation">Installation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="getting_started.html#examples">Examples</a><ul class="simple">
+<li class="toctree-l2"><a class="reference internal" href="getting_started.html#google-colab">Google Colab</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started.html#jupyter-notebooks">Jupyter notebooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started.html#starting-from-scratch">Starting from scratch</a><ul class="simple">
 </ul>
 </li>
 </ul>
@@ -178,12 +221,10 @@ validation by the SBTi.</p>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="rest_api.html">REST API</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="rest_api.html#reference">Reference</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rest_api.html#examples">Examples</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rest_api.html#deployment">Deployment</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="rest_api.html#google-cloud-platform">Google Cloud Platform</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rest_api.html#amazon-aws">Amazon AWS</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rest_api.html#microsoft-azure">Microsoft Azure</a><ul class="simple">
+<li class="toctree-l2"><a class="reference internal" href="rest_api.html#usage">Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rest_api.html#installation">Installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="rest_api.html#locally">Locally</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rest_api.html#amazon-aws">Amazon AWS</a><ul class="simple">
 </ul>
 </li>
 </ul>
@@ -200,7 +241,7 @@ validation by the SBTi.</p>
 <li class="toctree-l4"><a class="reference internal" href="autoapi/SBTi/configs/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SBTi.configs</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="autoapi/SBTi/portfolio_aggregation/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SBTi.portfolio_aggregation</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="autoapi/SBTi/portfolio_coverage_tvp/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SBTi.portfolio_coverage_tvp</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="autoapi/SBTi/target_valuation_protocol/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SBTi.target_valuation_protocol</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="autoapi/SBTi/target_validation/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SBTi.target_validation</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="autoapi/SBTi/temperature_score/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SBTi.temperature_score</span></code></a></li>
 </ul>
 </li>
@@ -209,6 +250,7 @@ validation by the SBTi.</p>
 </ul>
 </li>
 </ul>
+</div>
 </div>
 </div>
 

@@ -85,12 +85,10 @@
 <li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">REST API</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#reference">Reference</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#examples">Examples</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#deployment">Deployment</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#google-cloud-platform">Google Cloud Platform</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#amazon-aws">Amazon AWS</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#microsoft-azure">Microsoft Azure</a><ul class="simple">
+<li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#locally">Locally</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#amazon-aws">Amazon AWS</a><ul class="simple">
 </ul>
 </li>
 </ul>
@@ -164,29 +162,112 @@
             
   <div class="section" id="rest-api">
 <h1>REST API<a class="headerlink" href="#rest-api" title="Permalink to this headline">¶</a></h1>
-<p>TODO: Rest API</p>
-<div class="section" id="reference">
-<h2>Reference<a class="headerlink" href="#reference" title="Permalink to this headline">¶</a></h2>
-<p>TODO: Link to the Swagger reference</p>
+<p>The provided REST API makes it easy to integrate the SBTi temperature alignment tool as a microservice in your current IT infrastructure.
+Optionally you can also run the REST API with a small frontend, that makes testing substantially easier.</p>
+<div class="section" id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>The complete REST API reference is available <a class="reference external" href="https://ofbdabv.github.io/SBTi/swagger/index.html">here</a>.</p>
 </div>
-<div class="section" id="examples">
-<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
-<p>TODO: Write some examples</p>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p>The tool is containerized in a Docker container. This enables easy cloud and on-premise deployments.
+We’ll provide instructions here for installing the REST API either on your local machine or on Amazon AWS.</p>
+<div class="section" id="locally">
+<h3>Locally<a class="headerlink" href="#locally" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><strong>Step 1</strong>: Install Docker desktop</p></li>
+</ul>
+<p>For testing locally on your own Windows or Mac PC we first need to have a Docker engine running.
+For Linux users, this natively available in your OS and you can skip step 1. Docker provides some excellent installation
+instructions for <a class="reference external" href="https://docs.docker.com/docker-for-windows/install/">Windows</a> and
+<a class="reference external" href="https://docs.docker.com/docker-for-mac/install/">Mac</a>. After you’ve finished these installation guides, we’ll continue
+with step 2.</p>
+<ul class="simple">
+<li><p><strong>Step 2</strong>: Download and run the SBTi container.</p></li>
+</ul>
+<p>The beta-test version of the SBTi app is available here <a class="reference external" href="https://hub.docker.com/r/sbti/sbti_tool">https://hub.docker.com/r/sbti/sbti_tool</a>. To spin up the latest version on your local machine you need to run a single command in the terminal (for mac and Linux) or the command prompt (for windows users)</p>
+<p><em>For Windows users</em></p>
+<ol class="arabic simple">
+<li><p>Open Command Prompt from a Start Menu Search. Select “Run as administrator”.</p></li>
+<li><p>You can easily open the Command Prompt by clicking Start and then typing “cmd” into the search box.</p></li>
+</ol>
+<a class="reference internal image-reference" href="_images/restapi-deploy-windows-1.png"><img alt="alternate text" class="align-center" src="_images/restapi-deploy-windows-1.png" style="width: 500px;" /></a>
+<ol class="arabic" start="3">
+<li><p>Enter the following command and hit enter:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">run</span> <span class="o">-</span><span class="n">d</span> <span class="o">-</span><span class="n">p</span> <span class="mi">5000</span><span class="p">:</span><span class="mi">8080</span> <span class="n">sbti</span><span class="o">/</span><span class="n">sbti_tool</span><span class="p">:</span><span class="n">latest</span>
+</pre></div>
 </div>
-<div class="section" id="deployment">
-<h2>Deployment<a class="headerlink" href="#deployment" title="Permalink to this headline">¶</a></h2>
-<p>TODO: Write general deployment instructions</p>
-<div class="section" id="google-cloud-platform">
-<h3>Google Cloud Platform<a class="headerlink" href="#google-cloud-platform" title="Permalink to this headline">¶</a></h3>
-<p>TODO: Write GCP instructions</p>
+</li>
+</ol>
+<a class="reference internal image-reference" href="_images/restapi-deploy-windows-2.png"><img alt="alternate text" class="align-center" src="_images/restapi-deploy-windows-2.png" style="width: 500px;" /></a>
+<ol class="arabic simple" start="4">
+<li><p>This commando starts retrieving the latest version of the tool and will expose it at localhost:5000</p></li>
+<li><p>Open your browser and go to <a class="reference external" href="http://localhost:5000">http://localhost:5000</a> to access the tool</p></li>
+</ol>
+<a class="reference internal image-reference" href="_images/restapi-deploy-windows-3.png"><img alt="alternate text" class="align-center" src="_images/restapi-deploy-windows-3.png" style="width: 500px;" /></a>
+<p><em>For Mac users</em></p>
+<ol class="arabic simple">
+<li><p>One of the quickest and easiest ways to open Terminal on Mac is with Spotlight Search</p></li>
+<li><p>If you have the Spotlight Search button in your menu bar, click it. Otherwise, you can use the keyboard shortcut Command + Space</p></li>
+<li><p>Type in “Terminal”</p></li>
+<li><p>You should see the Terminal application under Top Hit at the top of your results. Double-click it and Terminal will open.</p></li>
+</ol>
+<a class="reference internal image-reference" href="_images/restapi-deploy-mac-1.jpg"><img alt="alternate text" class="align-center" src="_images/restapi-deploy-mac-1.jpg" style="width: 500px;" /></a>
+<ol class="arabic" start="5">
+<li><p>Enter the following command and hit enter:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">run</span> <span class="o">-</span><span class="n">d</span> <span class="o">-</span><span class="n">p</span> <span class="mi">5000</span><span class="p">:</span><span class="mi">8080</span> <span class="n">sbti</span><span class="o">/</span><span class="n">sbti_tool</span><span class="p">:</span><span class="n">latest</span>
+</pre></div>
+</div>
+</li>
+</ol>
+<ol class="arabic simple" start="4">
+<li><p>This commando starts retrieving the latest version of the tool and will expose it at localhost:5000</p></li>
+<li><p>Open your browser and go to <a class="reference external" href="http://localhost:5000">http://localhost:5000</a> to access the tool</p></li>
+</ol>
 </div>
 <div class="section" id="amazon-aws">
 <h3>Amazon AWS<a class="headerlink" href="#amazon-aws" title="Permalink to this headline">¶</a></h3>
-<p>TODO: Write AWS instructions</p>
+<p>These instructions assume that you’ve installed and configured the Amazon <a class="reference external" href="https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html)andthe[ECSCLItools](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ECS_CLI_Configuration.html">AWS CLI tools</a> with an IAM account that has at least write access to ECS and EC2 and the capability of creating AIM roles.</p>
+<ol class="arabic">
+<li><p>Configure the cluster. You can update the region and names as you see fit:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ecs</span><span class="o">-</span><span class="n">cli</span> <span class="n">configure</span> <span class="o">--</span><span class="n">cluster</span> <span class="n">sbti</span><span class="o">-</span><span class="n">ecs</span><span class="o">-</span><span class="n">cluster</span> <span class="o">--</span><span class="n">region</span> <span class="n">eu</span><span class="o">-</span><span class="n">central</span><span class="o">-</span><span class="mi">1</span> <span class="o">--</span><span class="n">config</span><span class="o">-</span><span class="n">name</span> <span class="n">sbti</span><span class="o">-</span><span class="n">ecs</span><span class="o">-</span><span class="n">conf</span> <span class="o">--</span><span class="n">cfn</span><span class="o">-</span><span class="n">stack</span><span class="o">-</span><span class="n">name</span> <span class="n">sbti</span><span class="o">-</span><span class="n">ecs</span><span class="o">-</span><span class="n">stack</span> <span class="o">--</span><span class="n">default</span><span class="o">-</span><span class="n">launch</span><span class="o">-</span><span class="nb">type</span> <span class="n">ec2</span>
+</pre></div>
 </div>
-<div class="section" id="microsoft-azure">
-<h3>Microsoft Azure<a class="headerlink" href="#microsoft-azure" title="Permalink to this headline">¶</a></h3>
-<p>TODO: Write Azure instructions</p>
+</li>
+<li><p>Create a new key pair. The result of this command is a key. Store this safely as you can later use it to access your instance through SSH:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">aws</span> <span class="n">ec2</span> <span class="n">create</span><span class="o">-</span><span class="n">key</span><span class="o">-</span><span class="n">pair</span> <span class="o">--</span><span class="n">key</span><span class="o">-</span><span class="n">name</span> <span class="n">sbti</span>
+</pre></div>
+</div>
+</li>
+<li><p>Create the instance that’ll run the image. Here we used 1 server of type t2.medium. Change this as you see fit:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ecs</span><span class="o">-</span><span class="n">cli</span> <span class="n">up</span> <span class="o">--</span><span class="n">keypair</span> <span class="n">sbti</span> <span class="o">--</span><span class="n">capability</span><span class="o">-</span><span class="n">iam</span> <span class="o">--</span><span class="n">size</span> <span class="mi">1</span> <span class="o">--</span><span class="n">instance</span><span class="o">-</span><span class="nb">type</span> <span class="n">t2</span><span class="o">.</span><span class="n">medium</span> <span class="o">--</span><span class="n">cluster</span><span class="o">-</span><span class="n">config</span> <span class="n">sbti</span><span class="o">-</span><span class="n">ecs</span><span class="o">-</span><span class="n">conf</span>
+</pre></div>
+</div>
+</li>
+<li><p>Update the server and make it run the docker image:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ecs</span><span class="o">-</span><span class="n">cli</span> <span class="n">compose</span> <span class="o">-</span><span class="n">f</span> <span class="n">docker</span><span class="o">-</span><span class="n">compose_aws</span><span class="o">.</span><span class="n">yml</span> <span class="n">up</span> <span class="o">--</span><span class="n">cluster</span><span class="o">-</span><span class="n">config</span> <span class="n">sbti</span><span class="o">-</span><span class="n">ecs</span><span class="o">-</span><span class="n">conf</span>
+</pre></div>
+</div>
+</li>
+<li><p>Now that the instance is running we can’t access it yet. That’s because NGINX only listens to localhost. We need to change this to make sure it’s accessible on the WWW.</p></li>
+<li><p>Login to the Amazon AWS console</p></li>
+<li><p>Go to the EC2 service</p></li>
+<li><p>In the instance list find the instance running the Docker image</p></li>
+<li><p>Copy the public IP address of the instance</p></li>
+<li><p>In config/flask-site-nginx.conf update the server name to the public IP.</p></li>
+<li><p>Now we need to rebuild and re-upload the image:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="o">-</span><span class="n">f</span> <span class="n">docker</span><span class="o">-</span><span class="n">compose_aws</span><span class="o">.</span><span class="n">yml</span> <span class="n">build</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">cache</span>
+<span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="o">-</span><span class="n">f</span> <span class="n">docker</span><span class="o">-</span><span class="n">compose_aws</span><span class="o">.</span><span class="n">yml</span> <span class="n">push</span>
+<span class="n">ecs</span><span class="o">-</span><span class="n">cli</span> <span class="n">compose</span> <span class="o">-</span><span class="n">f</span> <span class="n">docker</span><span class="o">-</span><span class="n">compose_aws</span><span class="o">.</span><span class="n">yml</span> <span class="n">up</span> <span class="o">--</span><span class="n">cluster</span><span class="o">-</span><span class="n">config</span> <span class="n">sbti</span><span class="o">-</span><span class="n">ecs</span><span class="o">-</span><span class="n">conf</span> <span class="o">--</span><span class="n">force</span><span class="o">-</span><span class="n">update</span>
+</pre></div>
+</div>
+</li>
+<li><p>You should now be able to access the API.</p></li>
+</ol>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This will make the API publicly available on the world wide web! Please note that this API is not protected in any way. Therefore it’s recommended to run your instance in a private subnet and only access it through there. Alternatively you can change the security group settings to only allow incoming connections from your local IP or company VPN.</p>
+</div>
 <div class="toctree-wrapper compound">
 </div>
 </div>
