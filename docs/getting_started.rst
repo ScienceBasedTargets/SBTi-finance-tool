@@ -1,48 +1,12 @@
 ********************
 Getting Started
 ********************
-This package helps companies and financial institutions to assess the temperature alignment of current
-targets, commitments, and investment and lending portfolios, and to use this information to develop
-targets for official validation by the SBTi.
-
-This tool can be used either as a standalone Python package, a REST API or as a simple webapp which provides a simple skin on the API.
-So, the SBTi toolkit caters for three types of usage:
-- Users can integrate the Python package in their codebase
-- The tool can be included as a Microservice (containerised REST API) in any IT infrastructure (in the cloud or on premise)
-- As an webapp, exposing the functionality with a simple user interface.
-
-To following diagram provides an overview of the different parts of the toolkit::
-
-    +-------------------------------------------------+
-    |   UI     : Simple user interface on top of API  |
-    |   Install: via dockerhub                        |
-    |            docker.io/sbti/ui:latest             |
-    |                                                 |
-    | +-----------------------------------------+     |
-    | | REST API: Dockerized Flask/NGINX        |     |
-    | | Source : github.com/OFBDABV/SBTi_api    |     |
-    | | Install: via source or dockerhub        |     |
-    | |          docker.io/sbti/sbti/api:latest |     |
-    | |                                         |     |
-    | | +---------------------------------+     |     |
-    | | |                                 |     |     |
-    | | |Core   : Python Module           |     |     |
-    | | |Source : github.com/OFBDABV/SBTi |     |     |
-    | | |Install: via source or PyPi      |     |     |
-    | | |                                 |     |     |
-    | | +---------------------------------+     |     |
-    | +-----------------------------------------+     |
-    +-------------------------------------------------+
-
-As shown above the API is dependent on the Python Repo, in the same way the UI requires the API backend. These dependencies are scripted in the Docker files
-
-
-Python module
-====================
 The most fundamental part of the project is the Python module. This takes care of all the heavy lifting.
 You can install it easily through PIP. There are a couple ways to get started using the module.
 The easiest option is to run our getting started notebook on Google Colab. Alternatively you can also run the `getting
 started notebooks <https://github.com/OFBDABV/SBTi/tree/master/examples>`_ locally or start from scratch using the API reference.
+
+.. note:: This page only concerns itself with the Python module. The getting started documentation for the REST API can be found on its `dedicated page <https://ofbdabv.github.io/SBTi/rest_api.html>`_. For a distinction between the different parts of the project, have a look at `the homepage <https://ofbdabv.github.io/SBTi/index.html>`_.
 
 Google Colab
 -------------
@@ -57,17 +21,19 @@ In the next examples, we'll assume you use Anaconda to manage your environments:
 
     cd examples
     conda env create -f environment.yml
+    activate sbti_getting_started
     jupyter notebook
 
 A tab should now open in your web browser. In case you use virtual env you can install the required packages using the requirements.txt file in the examples directory.
+Make sure that your Python version is at least 3.6.
 
-Installation
-====================
-TODO: Installation instructions
+Starting from scratch
+---------------------
+If you're starting from scratch you can install the latest version of the package directly from Github as follows::
 
-Examples
-====================
-TODO: Write some examples
+    pip install git+git://github.com/OFBDABV/SBTi
+
+The `API reference <https://ofbdabv.github.io/SBTi/autoapi/index.html>`_ should provide a clear overview of the module's API and its usage.
 
 .. toctree::
    :maxdepth: 4

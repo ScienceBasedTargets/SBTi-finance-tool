@@ -25,6 +25,8 @@ Before a pull request can be approved it needs to be reviewed by two core contri
 
 Getting started
 -----------------
+Before getting started it's important to have a clean Python environment. The recommended Python version is 3.6 or higher.
+An anaconda environment file is provided in the root of the project, as is a PIP requirements.txt file.
 The easiest way to work on the Python module is by installing it in development mode. This can be done using the following command::
 
     pip install -e .[dev]
