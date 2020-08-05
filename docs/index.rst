@@ -9,4 +9,5 @@ validation by the SBTi.
    :caption: Contents:
 
    getting_started
+   contributing
    rest_api
