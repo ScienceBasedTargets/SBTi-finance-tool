@@ -32,8 +32,7 @@ def get_company_data(data_providers: list, companies: list, config: Type[Columns
         else:
             company_data = pd.concat([company_data, company_data_provider])
             companies = [company for company in companies
-                         if company[config.COMPANY_ID] not in company_data[config.COMPANY_ID].unique() and
-                            company[config.COMPANY_NAME] not in company_data[config.COMPANY_NAME].unique()]
+                         if company not in company_data[config.COMPANY_ID].unique()]
         if len(companies) == 0:
             break
 
@@ -63,8 +62,7 @@ def get_targets(data_providers: list, companies: list, config: Type[ColumnsConfi
         else:
             company_data = pd.concat([company_data, targets_data_provider])
             companies = [company for company in companies
-                         if company[config.COMPANY_ID] not in company_data[config.COMPANY_ID].unique() and
-                            company[config.COMPANY_NAME] not in company_data[config.COMPANY_NAME].unique()]
+                         if company not in company_data[config.COMPANY_ID].unique()]
         if len(companies) == 0:
             break
 

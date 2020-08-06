@@ -44,7 +44,7 @@ class ExcelProvider(DataProvider):
         if "company_id" not in data_targets:
             data_targets["company_id"] = None
         return data_targets[
-            (data_targets["company_id"].isin([company["company_id"] for company in companies]) &
+            (data_targets["company_id"].isin(companies) &
              data_targets["company_id"].notnull())].copy()
 
     def get_company_data(self, companies: list) -> pd.DataFrame:
@@ -77,7 +77,7 @@ class ExcelProvider(DataProvider):
             data_company["company_id"] = None
 
         return data_company[
-            (data_company["company_id"].isin([company["company_id"] for company in companies]) &
+            (data_company["company_id"].isin(companies) &
              data_company["company_id"].notnull())].copy()
 
     def get_sbti_targets(self, companies: list) -> list:
