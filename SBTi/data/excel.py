@@ -15,7 +15,7 @@ class ExcelProvider(DataProvider):
     def __init__(self, path: str, config: Type[ColumnsConfig] = ColumnsConfig):
         super().__init__()
         # self.data = pd.read_excel(config["path"], sheet_name=None, skiprows=1)
-        self.data = pd.read_excel(path, sheet_name=None,skiprows=1)
+        self.data = pd.read_excel(path, sheet_name=None, skiprows=1)
         self.c = config
 
     def get_targets(self, companies: list) -> pd.DataFrame:
@@ -46,8 +46,6 @@ class ExcelProvider(DataProvider):
         return data_targets[
             (data_targets["company_id"].isin([company["company_id"] for company in companies]) &
              data_targets["company_id"].notnull())].copy()
-
-
 
     def get_company_data(self, companies: list) -> pd.DataFrame:
         """

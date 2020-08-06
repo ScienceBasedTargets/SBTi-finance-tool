@@ -34,11 +34,11 @@ class TargetValidation:
         self.test_target_type()
         self.data[self.c.COLS.ACHIEVED_EMISSIONS] = self.data[self.c.COLS.ACHIEVED_EMISSIONS].fillna(0)
 
-        self.data = self.test_missing_fields(self.data, self.c.COLS.REQUIRED_TARGETS)
-        self.company_data = self.test_missing_fields(self.company_data, self.c.COLS.REQUIRED_COMPANY)
+        self.data = self.test_missing_fields(self.data, self.c.COLS.REQUIRED_FIELDS_TARGETS)
+        self.company_data = self.test_missing_fields(self.company_data, self.c.COLS.REQUIRED_FIELDS_COMPANY)
         self.data[self.c.COLS.SCOPE] = self.data[self.c.COLS.SCOPE].str.lower()
         self.data[self.c.COLS.SCOPE_CATEGORY] = self.data.apply(
-            lambda row: self.c.SCOPE_MAP[row[self.c.COLS.SCOPE]], axis=1)
+            lambda row: self.c.SCOPE_MAP[row[self.c.COLS.SCOPE]], axis=1, result_type='reduce')
         self.split_s1s2s3()
         self.convert_s1_s2_into_s1s2()
         self.test_boundary_coverage()
@@ -92,17 +92,19 @@ class TargetValidation:
         index_list = []
 
         self.data[self.c.COLS.TARGET_REFERENCE_NUMBER] = self.data[self.c.COLS.TARGET_REFERENCE_NUMBER].astype(str)
-        self.data[self.c.COLS.INTENSITY_METRIC] = self.data[self.c.COLS.INTENSITY_METRIC].astype(str)
         self.data[self.c.COLS.TARGET_REFERENCE_NUMBER] = self.data[self.c.COLS.TARGET_REFERENCE_NUMBER].str.lower()
-        self.data[self.c.COLS.INTENSITY_METRIC] = self.data[self.c.COLS.INTENSITY_METRIC].str.lower()
+        if self.c.COLS.INTENSITY_METRIC in self.data.columns:
+            self.data[self.c.COLS.INTENSITY_METRIC] = self.data[self.c.COLS.INTENSITY_METRIC].astype(str)
+            self.data[self.c.COLS.INTENSITY_METRIC] = self.data[self.c.COLS.INTENSITY_METRIC].str.lower()
         for index, record in self.data.iterrows():
             if not pd.isna(record[self.c.COLS.TARGET_REFERENCE_NUMBER]):
                 if 'abs' in record[self.c.COLS.TARGET_REFERENCE_NUMBER]:
                     index_list.append(index)
                 elif 'int' in record[self.c.COLS.TARGET_REFERENCE_NUMBER]:
-                    if not pd.isna(record[self.c.COLS.INTENSITY_METRIC]):
-                        if 'other' not in record[self.c.COLS.INTENSITY_METRIC]:
-                            index_list.append(index)
+                    if self.c.COLS.INTENSITY_METRIC in record and \
+                            not pd.isna(record[self.c.COLS.INTENSITY_METRIC]) and \
+                            'other' not in record[self.c.COLS.INTENSITY_METRIC]:
+                        index_list.append(index)
         self.data = self.data.loc[index_list]
 
     def test_boundary_coverage(self):
@@ -206,8 +208,8 @@ class TargetValidation:
                                           (s1s2[self.c.COLS.BASEYEAR_GHG_S1] + s1s2[self.c.COLS.BASEYEAR_GHG_S2])
                     s1s2[self.c.COLS.COVERAGE_S1] = coverage_percentage
                     s1s2[self.c.COLS.COVERAGE_S2] = coverage_percentage
-                if not pd.isnull(coverage_percentage):
-                    self.data = self.data.append(s1s2).reset_index(drop=True)
+                    if not pd.isnull(coverage_percentage):
+                        self.data = self.data.append(s1s2).reset_index(drop=True)
             if pd.isnull(row[self.c.COLS.COVERAGE_S3]):
                 pass
             else:
