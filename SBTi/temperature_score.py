@@ -400,7 +400,7 @@ class TemperatureScore(PortfolioAggregation):
 
         return portfolio_scores
 
-    def columns_percentage_distribution(self, data: pd.DataFrame, columns: List[str]):
+    def columns_percentage_distribution(self, data: pd.DataFrame, columns: List[str]) -> Optional[dict]:
         """
         Percentage distribution of specific column or columns
 
