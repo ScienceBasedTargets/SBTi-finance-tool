@@ -19,7 +19,7 @@ RUN npm run build
 
 FROM python:3.7
 
-COPY requirements.txt config/config.yaml setup.py /project/
+COPY requirements.txt config/config.yaml /project/
 COPY --from=builder /ng-app/dist /project/app/static/frontend/dist
 
 RUN apt-get update \
@@ -57,7 +57,7 @@ RUN ln -s /etc/nginx/sites-available/flask-site-nginx.conf /etc/nginx/sites-enab
  && chown -R dock_sbtiapi:dock_sbtiapi /project /vol
 
 WORKDIR /project
-RUN pip install git+git://github.com/OFBDABV/SBTi
+
 
 USER dock_sbtiapi
 EXPOSE 80
