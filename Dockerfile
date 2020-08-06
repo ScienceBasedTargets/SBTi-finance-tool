@@ -57,7 +57,7 @@ RUN ln -s /etc/nginx/sites-available/flask-site-nginx.conf /etc/nginx/sites-enab
  && chown -R dock_sbtiapi:dock_sbtiapi /project /vol
 
 WORKDIR /project
-RUN python /project/setup.py install
+RUN pip install git+git://github.com/OFBDABV/SBTi
 
 USER dock_sbtiapi
 EXPOSE 80
