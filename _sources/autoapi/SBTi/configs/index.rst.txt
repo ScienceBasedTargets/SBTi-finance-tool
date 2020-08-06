@@ -316,12 +316,22 @@ Module Contents
 
       
 
-   .. attribute:: REQUIRED_TARGETS
+   .. attribute:: REQUIRED_FIELDS_TARGETS
       
 
       
 
-   .. attribute:: REQUIRED_COMPANY
+   .. attribute:: REQUIRED_FIELDS_COMPANY
+      
+
+      
+
+   .. attribute:: REQUIRED_COLUMNS_TARGETS
+      
+
+      
+
+   .. attribute:: REQUIRED_COLUMNS_COMPANY
       
 
       
