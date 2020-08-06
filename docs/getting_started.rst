@@ -12,7 +12,11 @@ Google Colab
 -------------
 The easiest way to get started is by using the getting started notebook on Google Colab.
 It goes through all the steps involved in installing the module and calculating a portfolio score.
-The example notebook can be found `here <https://colab.research.google.com/github/OFBDABV/SBTi/blob/master/examples/1_getting_started-colab.ipynb>`_.
+There are three notebooks that go through the process, step-by-step:
+
+1. `Getting started <https://colab.research.google.com/github/OFBDABV/SBTi/blob/master/examples/1_getting_started.ipynb>`_
+2. `Scenarios <https://colab.research.google.com/github/OFBDABV/SBTi/blob/master/examples/2_scenarios.ipynb>`_
+3. `Portfolio aggregations <https://colab.research.google.com/github/OFBDABV/SBTi/blob/master/examples/3_portfolio_aggregations.ipynb>`_
 
 Jupyter notebooks
 -----------------
