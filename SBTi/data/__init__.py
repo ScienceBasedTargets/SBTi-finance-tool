@@ -2,11 +2,58 @@
 This module contains classes that create connections to data providers.
 """
 import logging
-from typing import Type
+from typing import Type, List
 
 import pandas as pd
 
 from SBTi.configs import ColumnsConfig
+
+from .data_provider import DataProvider
+from .csv import CSVProvider
+from .excel import ExcelProvider
+from .bloomberg import Bloomberg
+from .cdp import CDP
+from .iss import ISS
+from .trucost import Trucost
+from .urgentum import Urgentum
+
+
+DATA_PROVIDER_MAP = {
+    "excel": ExcelProvider,
+    "csv": CSVProvider,
+    "bloomberg": Bloomberg,
+    "cdp": CDP,
+    "iss": ISS,
+    "trucost": Trucost,
+    "urgentum": Urgentum,
+}
+
+
+def get_data_providers(data_providers_config: List[dict], data_providers_input: List[str]) -> List[DataProvider]:
+    """
+    Determines which data provider and in which order should be used.
+
+    :param data_providers_config: A list of data provider configurations
+    :param data_providers_input: A list of data provider names
+    :return: a list of data providers in order.
+    """
+    data_providers = []
+    for data_provider_config in data_providers_config:
+        data_provider_config["class"] = DATA_PROVIDER_MAP[data_provider_config["type"]](**data_provider_config["parameters"])
+        data_providers.append(data_provider_config)
+
+    selected_data_providers = []
+    for data_provider_name in data_providers_input:
+        for data_provider_config in data_providers:
+            if data_provider_config["name"] == data_provider_name:
+                selected_data_providers.append(data_provider_config["class"])
+                break
+
+    # TODO: When the user did give us data providers, but we can't match them this fails silently, maybe we should
+    # fail louder
+    if len(selected_data_providers) == 0:
+        data_providers = [data_provider_config["class"] for data_provider_config in data_providers]
+    return data_providers
 
 
 def get_company_data(data_providers: list, companies: list, config: Type[ColumnsConfig] = ColumnsConfig) -> pd.DataFrame:
