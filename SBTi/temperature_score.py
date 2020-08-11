@@ -53,7 +53,7 @@ class EngagementType(Enum):
         return value_map.get(value, EngagementType.SET_TARGETS)
 
     @staticmethod
-    def from_string(value: str) -> 'EngagementType':
+    def from_string(value: Optional[str]) -> 'EngagementType':
         """
         Convert a string to an engagement type.
 
@@ -74,7 +74,7 @@ class Scenario:
     """
     A scenario defines the action the portfolio holder will take to improve its temperature score.
     """
-    scenario_type: ScenarioType
+    scenario_type: Optional[ScenarioType]
     engagement_type: EngagementType
 
     def get_score_cap(self) -> float:
@@ -382,8 +382,8 @@ class TemperatureScore(PortfolioAggregation):
             data[self.c.COLS.CONTRIBUTION_RELATIVE], \
             data[self.c.COLS.CONTRIBUTION]
 
-    def aggregate_scores(self, data: pd.DataFrame, time_frames: Optional[List[str]] = None,
-                         scope_categories: Optional[List[str]] = None):
+    def aggregate_scores(self, data: pd.DataFrame, time_frames_input: Optional[List[str]] = None,
+                         scope_categories_input: Optional[List[str]] = None):
         """
         Aggregate scores to create a portfolio score per time_frame (short, mid, long).
 
@@ -392,10 +392,17 @@ class TemperatureScore(PortfolioAggregation):
         :param scope_categories: A list of scope categories that should be calculated (if None or an empty list is passed, all scopes will be calculated)
         :return: A weighted temperature score for the portfolio
         """
-        if time_frames is None or len(time_frames) == 0:
+        time_frames: List[str]
+        scope_categories: List[str]
+        if time_frames_input is None or len(time_frames_input) == 0:
             time_frames = data[self.c.COLS.TIME_FRAME].unique()
-        if scope_categories is None or len(scope_categories) == 0:
+        else:
+            time_frames = time_frames_input
+
+        if scope_categories_input is None or len(scope_categories_input) == 0:
             scope_categories = data[self.c.COLS.SCOPE_CATEGORY].unique()
+        else:
+            scope_categories = scope_categories_input
 
         portfolio_scores: Dict = {
             time_frame: {scope: {} for scope in scope_categories}
@@ -450,6 +457,7 @@ class TemperatureScore(PortfolioAggregation):
                 percentage_distribution[key_combined] = percentage_distribution[key]
                 del percentage_distribution[key]
             return percentage_distribution
+        return None
 
     def cap_scores(self, scores: pd.DataFrame) -> pd.DataFrame:
         """

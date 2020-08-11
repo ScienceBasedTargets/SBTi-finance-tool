@@ -41,10 +41,10 @@ def pipeline(data_providers: List[DataProvider],
     :param anonymize: Whether to anonymize the resulting data set or not
     :return: The scores, the aggregations, the coverage and the column distribution
     """
-    portfolio = pd.DataFrame.from_records([c.dict() for c in portfolio])
-    company_data = get_company_data(data_providers, portfolio["company_id"].tolist())
-    target_data = get_targets(data_providers, portfolio["company_id"].tolist())
-    company_data = pd.merge(left=company_data, right=portfolio.drop("company_name", axis=1), how="left",
+    df_portfolio = pd.DataFrame.from_records([c.dict() for c in portfolio])
+    company_data = get_company_data(data_providers, df_portfolio["company_id"].tolist())
+    target_data = get_targets(data_providers, df_portfolio["company_id"].tolist())
+    company_data = pd.merge(left=company_data, right=df_portfolio.drop("company_name", axis=1), how="left",
                             on=["company_id"])
     if len(company_data) == 0:
         raise ValueError("None of the companies in your portfolio could be found by the data providers")
@@ -64,7 +64,6 @@ def pipeline(data_providers: List[DataProvider],
     # Filter time frame (short, mid, long)
     if len(filter_time_frame) > 0:
         scores = scores[scores["time_frame"].isin(filter_time_frame)]
-
 
     column_distribution = None
     if grouping:

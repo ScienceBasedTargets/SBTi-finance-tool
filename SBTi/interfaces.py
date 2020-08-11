@@ -51,5 +51,4 @@ class DataProviderTarget(BaseModel):
     base_year_ghg_s3: float
     start_year: Optional[int]
     target_year: int
-    reduction_from_base_year: float
     achieved_reduction: float

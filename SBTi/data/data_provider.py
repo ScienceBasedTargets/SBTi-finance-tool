@@ -7,7 +7,7 @@ class DataProvider(ABC):
     General data provider super class.
     """
 
-    def __init__(self):
+    def __init__(self, **kwargs):
         """
         Create a new data provider instance.
 

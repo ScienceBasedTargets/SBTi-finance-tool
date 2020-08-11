@@ -2,7 +2,7 @@
 This module contains classes that create connections to data providers.
 """
 import logging
-from typing import Type, List
+from typing import Type, List, Dict
 
 import pandas as pd
 
@@ -18,7 +18,7 @@ from .trucost import Trucost
 from .urgentum import Urgentum
 
 
-DATA_PROVIDER_MAP = {
+DATA_PROVIDER_MAP: Dict[str, Type[DataProvider]] = {
     "excel": ExcelProvider,
     "csv": CSVProvider,
     "bloomberg": Bloomberg,
@@ -52,8 +52,8 @@ def get_data_providers(data_providers_config: List[dict], data_providers_input: 
     # TODO: When the user did give us data providers, but we can't match them this fails silently, maybe we should
     # fail louder
     if len(selected_data_providers) == 0:
-        data_providers = [data_provider_config["class"] for data_provider_config in data_providers]
-    return data_providers
+        selected_data_providers = [data_provider_config["class"] for data_provider_config in data_providers]
+    return selected_data_providers
 
 
 def get_company_data(data_providers: list, companies: list, config: Type[ColumnsConfig] = ColumnsConfig) -> pd.DataFrame:
