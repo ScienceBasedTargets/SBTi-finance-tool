@@ -31,7 +31,7 @@ To following diagram provides an overview of the different parts of the toolkit:
     |            docker.io/sbti/ui:latest             |
     |                                                 |
     | +-----------------------------------------+     |
-    | | REST API: Dockerized Flask/NGINX        |     |
+    | | REST API: Dockerized FastAPI/NGINX      |     |
     | | Source : github.com/OFBDABV/SBTi_api    |     |
     | | Install: via source or dockerhub        |     |
     | |          docker.io/sbti/sbti/api:latest |     |
