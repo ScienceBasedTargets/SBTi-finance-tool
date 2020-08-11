@@ -23,18 +23,21 @@ def get_company_data(data_providers: list, companies: list, config: Type[Columns
     company_data = pd.DataFrame(columns=config.REQUIRED_COLUMNS_COMPANY)
     logger = logging.getLogger(__name__)
     for data_provider in data_providers:
-        company_data_provider = data_provider.get_company_data(companies)
-        missing_columns = [column
-                           for column in config.REQUIRED_COLUMNS_COMPANY
-                           if column not in company_data_provider.columns]
-        if len(missing_columns) > 0:
-            logger.error("The following columns were missing in the data set: {}".format(", ".join(missing_columns)))
-        else:
-            company_data = pd.concat([company_data, company_data_provider])
-            companies = [company for company in companies
-                         if company not in company_data[config.COMPANY_ID].unique()]
-        if len(companies) == 0:
-            break
+        try:
+            company_data_provider = data_provider.get_company_data(companies)
+            missing_columns = [column
+                               for column in config.REQUIRED_COLUMNS_COMPANY
+                               if column not in company_data_provider.columns]
+            if len(missing_columns) > 0:
+                logger.error("The following columns were missing in the data set: {}".format(", ".join(missing_columns)))
+            else:
+                company_data = pd.concat([company_data, company_data_provider])
+                companies = [company for company in companies
+                             if company not in company_data[config.COMPANY_ID].unique()]
+            if len(companies) == 0:
+                break
+        except NotImplementedError:
+            logger.warning("{} is not available yet".format(type(data_provider).__name__))
 
     return company_data
 
@@ -53,18 +56,21 @@ def get_targets(data_providers: list, companies: list, config: Type[ColumnsConfi
     company_data = pd.DataFrame(columns=config.REQUIRED_COLUMNS_TARGETS)
     logger = logging.getLogger(__name__)
     for data_provider in data_providers:
-        targets_data_provider = data_provider.get_targets(companies)
-        missing_columns = [column
-                           for column in config.REQUIRED_COLUMNS_TARGETS
-                           if column not in targets_data_provider.columns]
-        if len(missing_columns) > 0:
-            logger.error("The following columns were missing in the data set: {}".format(", ".join(missing_columns)))
-        else:
-            company_data = pd.concat([company_data, targets_data_provider])
-            companies = [company for company in companies
-                         if company not in company_data[config.COMPANY_ID].unique()]
-        if len(companies) == 0:
-            break
+        try:
+            targets_data_provider = data_provider.get_targets(companies)
+            missing_columns = [column
+                               for column in config.REQUIRED_COLUMNS_TARGETS
+                               if column not in targets_data_provider.columns]
+            if len(missing_columns) > 0:
+                logger.error("The following columns were missing in the data set: {}".format(", ".join(missing_columns)))
+            else:
+                company_data = pd.concat([company_data, targets_data_provider])
+                companies = [company for company in companies
+                             if company not in company_data[config.COMPANY_ID].unique()]
+            if len(companies) == 0:
+                break
+        except NotImplementedError:
+            logger.warning("{} is not available yet".format(type(data_provider).__name__))
 
     return company_data
 

@@ -1,22 +1,11 @@
-from typing import Type
-
 import pandas as pd
 from SBTi.data.data_provider import DataProvider
-from SBTi.configs import ColumnsConfig
 
 
-class ExcelProvider(DataProvider):
+class CDP(DataProvider):
     """
-    Data provider skeleton for CSV files. This class serves primarily for testing purposes only!
-
-    :param config: A dictionary containing a "path" field that leads to the path of the CSV file
+    Data provider skeleton for CDP.
     """
-
-    def __init__(self, path: str, config: Type[ColumnsConfig] = ColumnsConfig):
-        super().__init__()
-        # self.data = pd.read_excel(config["path"], sheet_name=None, skiprows=1)
-        self.data = pd.read_excel(path, sheet_name=None, skiprows=1)
-        self.c = config
 
     def get_targets(self, companies: list) -> pd.DataFrame:
         """
@@ -39,14 +28,10 @@ class ExcelProvider(DataProvider):
                             field.
         :return: A dataframe containing the targets
         """
-        data_targets = self.data['Target data']
-        data_targets["company_id"] = data_targets["company_id"].astype(str)
-
-        if "company_id" not in data_targets:
-            data_targets["company_id"] = None
-        return data_targets[
-            (data_targets["company_id"].isin(companies) &
-             data_targets["company_id"].notnull())].copy()
+        # TODO: Make an API request
+        # TODO: Transform the result into a dataframe
+        # TODO: Make sure the columns align with those defined in the docstring
+        raise NotImplementedError
 
     def get_company_data(self, companies: list) -> pd.DataFrame:
         """
@@ -68,19 +53,15 @@ class ExcelProvider(DataProvider):
             aggregation.
         * company_total_assets: The total assets of the company. Only required to use the AOTS portfolio aggregation.
 
+
         :param companies: A list of companies. Each company should be a dict with a "company_name" and "company_id"
                             field.
         :return: A dataframe containing the company data
         """
-
-        data_company = self.data['Fundamental data']
-        data_company["company_id"] = data_company["company_id"].astype(str)
-        if "company_id" not in data_company:
-            data_company["company_id"] = None
-
-        return data_company[
-            (data_company["company_id"].isin(companies) &
-             data_company["company_id"].notnull())].copy()
+        # TODO: Make an API request
+        # TODO: Transform the result into a dataframe
+        # TODO: Make sure the columns align with those defined in the docstring
+        raise NotImplementedError
 
     def get_sbti_targets(self, companies: list) -> list:
         """
@@ -91,4 +72,7 @@ class ExcelProvider(DataProvider):
                             field.
         :return: The original list, enriched with a field called "sbti_target_status"
         """
+        # TODO: Make an API request
+        # TODO: Extract the SBTi target status from the response
+        # TODO: Enrich the original list with this data
         raise NotImplementedError
