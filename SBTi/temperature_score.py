@@ -382,19 +382,23 @@ class TemperatureScore(PortfolioAggregation):
             data[self.c.COLS.CONTRIBUTION_RELATIVE], \
             data[self.c.COLS.CONTRIBUTION]
 
-    def aggregate_scores(self, data: pd.DataFrame):
+    def aggregate_scores(self, data: pd.DataFrame, time_frames, scope_categories):
         """
         Aggregate scores to create a portfolio score per time_frame (short, mid, long).
 
         :param data: The results of the calculate method
         :return: A weighted temperature score for the portfolio
         """
-        portfolio_scores: Dict = {
-            time_frame: {scope: {} for scope in data[self.c.COLS.SCOPE_CATEGORY].unique()}
-            for time_frame in data[self.c.COLS.TIME_FRAME].unique()}
+        if len(time_frames) == 0:
+            time_frames = data[self.c.COLS.TIME_FRAME].unique()
+        if len(scope_categories) == 0:
+            scope_categories = data[self.c.COLS.SCOPE_CATEGORY].unique()
 
-        for time_frame, scope in itertools.product(data[self.c.COLS.TIME_FRAME].unique(),
-                                                   data[self.c.COLS.SCOPE_CATEGORY].unique()):
+        portfolio_scores: Dict = {
+            time_frame: {scope: {} for scope in scope_categories}
+            for time_frame in time_frames}
+
+        for time_frame, scope in itertools.product(time_frames, scope_categories):
             filtered_data = data[(data[self.c.COLS.TIME_FRAME] == time_frame) &
                                  (data[self.c.COLS.SCOPE_CATEGORY] == scope)].copy()
 
