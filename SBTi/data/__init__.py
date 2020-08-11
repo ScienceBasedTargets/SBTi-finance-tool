@@ -2,11 +2,58 @@
 This module contains classes that create connections to data providers.
 """
 import logging
-from typing import Type
+from typing import Type, List
 
 import pandas as pd
 
 from SBTi.configs import ColumnsConfig
+
+from .data_provider import DataProvider
+from .csv import CSVProvider
+from .excel import ExcelProvider
+from .bloomberg import Bloomberg
+from .cdp import CDP
+from .iss import ISS
+from .trucost import Trucost
+from .urgentum import Urgentum
+
+
+DATA_PROVIDER_MAP = {
+    "excel": ExcelProvider,
+    "csv": CSVProvider,
+    "bloomberg": Bloomberg,
+    "cdp": CDP,
+    "iss": ISS,
+    "trucost": Trucost,
+    "urgentum": Urgentum,
+}
+
+
+def get_data_providers(data_providers_config: List[dict], data_providers_input: List[str]) -> List[DataProvider]:
+    """
+    Determines which data provider and in which order should be used.
+
+    :param data_providers_config: A list of data provider configurations
+    :param data_providers_input: A list of data provider names
+    :return: a list of data providers in order.
+    """
+    data_providers = []
+    for data_provider_config in data_providers_config:
+        data_provider_config["class"] = DATA_PROVIDER_MAP[data_provider_config["type"]](**data_provider_config["parameters"])
+        data_providers.append(data_provider_config)
+
+    selected_data_providers = []
+    for data_provider_name in data_providers_input:
+        for data_provider_config in data_providers:
+            if data_provider_config["name"] == data_provider_name:
+                selected_data_providers.append(data_provider_config["class"])
+                break
+
+    # TODO: When the user did give us data providers, but we can't match them this fails silently, maybe we should
+    # fail louder
+    if len(selected_data_providers) == 0:
+        data_providers = [data_provider_config["class"] for data_provider_config in data_providers]
+    return data_providers
 
 
 def get_company_data(data_providers: list, companies: list, config: Type[ColumnsConfig] = ColumnsConfig) -> pd.DataFrame:
@@ -23,19 +70,21 @@ def get_company_data(data_providers: list, companies: list, config: Type[Columns
     company_data = pd.DataFrame(columns=config.REQUIRED_COLUMNS_COMPANY)
     logger = logging.getLogger(__name__)
     for data_provider in data_providers:
-        company_data_provider = data_provider.get_company_data(companies)
-        missing_columns = [column
-                           for column in config.REQUIRED_COLUMNS_COMPANY
-                           if column not in company_data_provider.columns]
-        if len(missing_columns) > 0:
-            logger.error("The following columns were missing in the data set: {}".format(", ".join(missing_columns)))
-        else:
-            company_data = pd.concat([company_data, company_data_provider])
-            companies = [company for company in companies
-                         if company[config.COMPANY_ID] not in company_data[config.COMPANY_ID].unique() and
-                            company[config.COMPANY_NAME] not in company_data[config.COMPANY_NAME].unique()]
-        if len(companies) == 0:
-            break
+        try:
+            company_data_provider = data_provider.get_company_data(companies)
+            missing_columns = [column
+                               for column in config.REQUIRED_COLUMNS_COMPANY
+                               if column not in company_data_provider.columns]
+            if len(missing_columns) > 0:
+                logger.error("The following columns were missing in the data set: {}".format(", ".join(missing_columns)))
+            else:
+                company_data = pd.concat([company_data, company_data_provider])
+                companies = [company for company in companies
+                             if company not in company_data[config.COMPANY_ID].unique()]
+            if len(companies) == 0:
+                break
+        except NotImplementedError:
+            logger.warning("{} is not available yet".format(type(data_provider).__name__))
 
     return company_data
 
@@ -54,19 +103,21 @@ def get_targets(data_providers: list, companies: list, config: Type[ColumnsConfi
     company_data = pd.DataFrame(columns=config.REQUIRED_COLUMNS_TARGETS)
     logger = logging.getLogger(__name__)
     for data_provider in data_providers:
-        targets_data_provider = data_provider.get_targets(companies)
-        missing_columns = [column
-                           for column in config.REQUIRED_COLUMNS_TARGETS
-                           if column not in targets_data_provider.columns]
-        if len(missing_columns) > 0:
-            logger.error("The following columns were missing in the data set: {}".format(", ".join(missing_columns)))
-        else:
-            company_data = pd.concat([company_data, targets_data_provider])
-            companies = [company for company in companies
-                         if company[config.COMPANY_ID] not in company_data[config.COMPANY_ID].unique() and
-                            company[config.COMPANY_NAME] not in company_data[config.COMPANY_NAME].unique()]
-        if len(companies) == 0:
-            break
+        try:
+            targets_data_provider = data_provider.get_targets(companies)
+            missing_columns = [column
+                               for column in config.REQUIRED_COLUMNS_TARGETS
+                               if column not in targets_data_provider.columns]
+            if len(missing_columns) > 0:
+                logger.error("The following columns were missing in the data set: {}".format(", ".join(missing_columns)))
+            else:
+                company_data = pd.concat([company_data, targets_data_provider])
+                companies = [company for company in companies
+                             if company not in company_data[config.COMPANY_ID].unique()]
+            if len(companies) == 0:
+                break
+        except NotImplementedError:
+            logger.warning("{} is not available yet".format(type(data_provider).__name__))
 
     return company_data
 
