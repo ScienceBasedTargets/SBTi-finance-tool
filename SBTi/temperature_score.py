@@ -371,27 +371,30 @@ class TemperatureScore(PortfolioAggregation):
         data = data.copy()
         weighted_scores = self._calculate_aggregate_score(data, self.c.COLS.TEMPERATURE_SCORE,
                                                           self.aggregation_method)
-        data[self.c.COLS.CONTRIBUTION_RELATIVE] = weighted_scores / (weighted_scores.sum() / 100).round(2)
+        data[self.c.COLS.CONTRIBUTION_RELATIVE] = weighted_scores / (weighted_scores.sum() / 100)
         data[self.c.COLS.CONTRIBUTION] = weighted_scores
 
         # TODO: Move this into some kind of class
-        return {"score": weighted_scores.sum().round(2),
+        return {"score": weighted_scores.sum(),
                 "contributions": data.sort_values(
                     self.c.COLS.CONTRIBUTION_RELATIVE, ascending=False)[self.c.CONTRIBUTION_COLUMNS].to_dict(
                     orient="records")}, \
             data[self.c.COLS.CONTRIBUTION_RELATIVE], \
             data[self.c.COLS.CONTRIBUTION]
 
-    def aggregate_scores(self, data: pd.DataFrame, time_frames, scope_categories):
+    def aggregate_scores(self, data: pd.DataFrame, time_frames: Optional[List[str]] = None,
+                         scope_categories: Optional[List[str]] = None):
         """
         Aggregate scores to create a portfolio score per time_frame (short, mid, long).
 
         :param data: The results of the calculate method
+        :param time_frames: A list of time frames that should be calculated (if None or an empty list is passed, all scopes will be calculated)
+        :param scope_categories: A list of scope categories that should be calculated (if None or an empty list is passed, all scopes will be calculated)
         :return: A weighted temperature score for the portfolio
         """
-        if len(time_frames) == 0:
+        if time_frames is None or len(time_frames) == 0:
             time_frames = data[self.c.COLS.TIME_FRAME].unique()
-        if len(scope_categories) == 0:
+        if scope_categories is None or len(scope_categories) == 0:
             scope_categories = data[self.c.COLS.SCOPE_CATEGORY].unique()
 
         portfolio_scores: Dict = {
