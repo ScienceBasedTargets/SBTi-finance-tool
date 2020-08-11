@@ -17,7 +17,7 @@ To following diagram provides an overview of the different parts of the toolkit:
     |            docker.io/sbti/ui:latest             |
     |                                                 |
     | +-----------------------------------------+     |
-    | | REST API: Dockerized Flask/NGINX        |     |
+    | | REST API: Dockerized FastAPI/NGINX      |     |
     | | Source : github.com/OFBDABV/SBTi_api    |     |
     | | Install: via source or dockerhub        |     |
     | |          docker.io/sbti/sbti/api:latest |     |
@@ -41,7 +41,7 @@ The folder structure for this project is as follows:
 
     .
     ├── .github                 # Github specific files (Github Actions workflows)
-    ├── app                     # Flask app files for the API endpoints
+    ├── app                     # FastAPI app files for the API endpoints
     ├── docs                    # Documentation files (Sphinx)
     ├── config                  # Config files for the Docker container
     ├── SBTi                    # The main Python package for the temperature alignment tool
