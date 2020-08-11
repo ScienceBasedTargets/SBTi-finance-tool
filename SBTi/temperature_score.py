@@ -5,7 +5,8 @@ from typing import Optional, Tuple, Type, Dict, List
 import pandas as pd
 import numpy as np
 
-from SBTi.portfolio_aggregation import PortfolioAggregation, PortfolioAggregationMethod
+from .interfaces import ScenarioInterface
+from .portfolio_aggregation import PortfolioAggregation, PortfolioAggregationMethod
 from .configs import TemperatureScoreConfig
 
 
@@ -59,6 +60,9 @@ class EngagementType(Enum):
         :param value: The value to convert
         :return:
         """
+        if value is None:
+            return EngagementType.SET_TARGETS
+
         value_map = {
             'SET_TARGETS': EngagementType.SET_TARGETS,
             'SET_SBTI_TARGETS': EngagementType.SET_SBTI_TARGETS,
@@ -72,8 +76,6 @@ class Scenario:
     """
     scenario_type: ScenarioType
     engagement_type: EngagementType
-    aggregation_method: PortfolioAggregationMethod
-    grouping: Optional[list]
 
     def get_score_cap(self) -> float:
         if self.engagement_type == EngagementType.SET_TARGETS:
@@ -97,8 +99,6 @@ class Scenario:
 
         * number: The scenario type as an integer
         * engagement_type: The engagement type as a string
-        * aggregation_method: The aggregation method as a string
-        * grouping: The grouping columns as a list of strings
 
         :param scenario_values: The dictionary to convert
         :return: A scenario object matching the input values or None, if no scenario could be matched
@@ -106,8 +106,26 @@ class Scenario:
         scenario = Scenario()
         scenario.scenario_type = ScenarioType.from_int(scenario_values.get("number", -1))
         scenario.engagement_type = EngagementType.from_string(scenario_values.get("engagement_type", ""))
-        scenario.aggregation_method = PortfolioAggregationMethod.from_string(scenario_values.get("aggregation_method", ""))
-        scenario.grouping = scenario_values.get("grouping", None)
+
+        if scenario.scenario_type is not None:
+            return scenario
+        else:
+            return None
+
+    @staticmethod
+    def from_interface(scenario_values: Optional[ScenarioInterface]) -> Optional['Scenario']:
+        """
+        Convert a scenario interface to a scenario.
+
+        :param scenario_values: The interface model instance to convert
+        :return: A scenario object matching the input values or None, if no scenario could be matched
+        """
+        if scenario_values is None:
+            return None
+
+        scenario = Scenario()
+        scenario.scenario_type = ScenarioType.from_int(scenario_values.number)
+        scenario.engagement_type = EngagementType.from_string(scenario_values.engagement_type)
 
         if scenario.scenario_type is not None:
             return scenario
