@@ -44,22 +44,23 @@ def pipeline(data_providers: List[DataProvider],
     df_portfolio = pd.DataFrame.from_records([c.dict() for c in portfolio])
     company_data = get_company_data(data_providers, df_portfolio["company_id"].tolist())
     target_data = get_targets(data_providers, df_portfolio["company_id"].tolist())
-    company_data = pd.merge(left=company_data, right=df_portfolio.drop("company_name", axis=1), how="left",
-                            on=["company_id"])
+
+    portfolio_data = TargetValidation(target_data, company_data).target_validation()
+    portfolio_data = pd.merge(left=portfolio_data, right=df_portfolio.drop("company_name", axis=1), how="left",
+                              on=["company_id"])
     if len(company_data) == 0:
         raise ValueError("None of the companies in your portfolio could be found by the data providers")
 
     ts = TemperatureScore(fallback_score=fallback_score, scenario=scenario, grouping=grouping,
                           aggregation_method=aggregation_method)
 
-    portfolio_data = TargetValidation(target_data, company_data).target_validation()
     scores = ts.calculate(portfolio_data)
     aggregations = ts.aggregate_scores(scores, filter_time_frame, filter_scope_category)
     coverage = PortfolioCoverageTVP().get_portfolio_coverage(portfolio_data, aggregation_method)
 
     # Filter scope (s1s2, s3 or s1s2s3)
     if len(filter_scope_category) > 0:
-        scores = scores[scores["scope_category"].isin(filter_scope_category)]
+        scores = scores[scores["scope"].isin(filter_scope_category)]
 
     # Filter time frame (short, mid, long)
     if len(filter_time_frame) > 0:

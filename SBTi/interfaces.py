@@ -15,11 +15,11 @@ class PortfolioCompany(BaseModel):
     engagement_target: Optional[str] = "False"
 
 
-class DataProviderCompany(BaseModel):
+class IDataProviderCompany(BaseModel):
     company_name: str
     company_id: str
-    s1s2_emissions: float
-    s3_emissions: float
+    ghg_s1s2: float
+    ghg_s3: float
 
     country: Optional[str]
     region: Optional[str]
@@ -36,7 +36,7 @@ class DataProviderCompany(BaseModel):
     company_cash_equivalents: Optional[float]
 
 
-class DataProviderTarget(BaseModel):
+class IDataProviderTarget(BaseModel):
     company_id: str
     target_type: str
     intensity_metric: Optional[str]
@@ -44,11 +44,11 @@ class DataProviderTarget(BaseModel):
     coverage_s1: float
     coverage_s2: float
     coverage_s3: float
-    reduction_from_base_year: float
+    reduction_ambition: float
     base_year: int
     base_year_ghg_s1: float
     base_year_ghg_s2: float
     base_year_ghg_s3: float
     start_year: Optional[int]
-    target_year: int
-    achieved_reduction: float
+    end_year: int
+    achieved_reduction: Optional[float] = 0

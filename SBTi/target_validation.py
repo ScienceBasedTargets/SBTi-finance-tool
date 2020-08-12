@@ -7,22 +7,23 @@ from typing import Type, List
 from SBTi.configs import PortfolioAggregationConfig
 import logging
 
+from SBTi.interfaces import IDataProviderTarget, IDataProviderCompany
+
 
 class TargetValidation:
     """
     This class validates the targets, to make sure that only active, useful targets are considered.
 
-    :param data: The target related data
-    :param company_data: The company related data
+    :param targets: The target related data
+    :param companies: The company related data
     :param config: A Portfolio aggregation config
     """
 
-    def __init__(self, data: pd.DataFrame, company_data: pd.DataFrame,
+    def __init__(self, targets: List[IDataProviderTarget], companies: List[IDataProviderCompany],
                  config: Type[PortfolioAggregationConfig] = PortfolioAggregationConfig):
-        self.data = data
-        self.data_backup = data.copy()
+        self.data = pd.DataFrame.from_records([c.dict() for c in targets])
         self.c = config
-        self.company_data = company_data
+        self.company_data = pd.DataFrame.from_records([c.dict() for c in companies])
         self.logger = logging.getLogger(__name__)
 
     def target_validation(self) -> pd.DataFrame:
@@ -32,13 +33,8 @@ class TargetValidation:
         :return: A data frame with only valid targets, combined with the company-specific data. This will return a 9-box grid for all companies (i.e. one row for the three time-frame (short, mid, long) and the three scopes (s1s2, s3, s1s2s3). These rows might have empty targets.
         """
         self.test_target_type()
-        self.data[self.c.COLS.ACHIEVED_EMISSIONS] = self.data[self.c.COLS.ACHIEVED_EMISSIONS].fillna(0)
 
-        self.data = self.test_missing_fields(self.data, self.c.COLS.REQUIRED_FIELDS_TARGETS)
-        self.company_data = self.test_missing_fields(self.company_data, self.c.COLS.REQUIRED_FIELDS_COMPANY)
         self.data[self.c.COLS.SCOPE] = self.data[self.c.COLS.SCOPE].str.lower()
-        self.data[self.c.COLS.SCOPE_CATEGORY] = self.data.apply(
-            lambda row: self.c.SCOPE_MAP[row[self.c.COLS.SCOPE]], axis=1, result_type='reduce')
         self.split_s1s2s3()
         self.convert_s1_s2_into_s1s2()
         self.test_boundary_coverage()
@@ -123,24 +119,24 @@ class TargetValidation:
         Target is always valid, % uncovered is given default score in temperature score module.
         """
         index = []
-        for record in self.data.iterrows():
-            if not pd.isna(record[1][self.c.COLS.SCOPE_CATEGORY]):
-                if 's1s2' in record[1][self.c.COLS.SCOPE_CATEGORY]:
-                    if record[1][self.c.COLS.COVERAGE_S1] > 0.95:
-                        index.append(record[0])
+        for idx, record in self.data.iterrows():
+            if not pd.isna(record[self.c.COLS.SCOPE]):
+                if self.c.COLS.VALUE_SCOPE_S1S2 in record[self.c.COLS.SCOPE]:
+                    if record[self.c.COLS.COVERAGE_S1] > 0.95:
+                        index.append(idx)
                     else:
-                        index.append(record[0])
-                        self.data.at[record[0], self.c.COLS.REDUCTION_AMBITION] = \
-                            self.data[self.c.COLS.REDUCTION_AMBITION].loc[record[0]] * \
-                            (self.data[self.c.COLS.COVERAGE_S1].loc[record[0]])
-                elif 's3' in record[1][self.c.COLS.SCOPE_CATEGORY]:
-                    if record[1][self.c.COLS.COVERAGE_S3] > 0.67:
-                        index.append(record[0])
+                        index.append(idx)
+                        self.data.at[idx, self.c.COLS.REDUCTION_AMBITION] = \
+                            self.data[self.c.COLS.REDUCTION_AMBITION].loc[idx] * \
+                            (self.data[self.c.COLS.COVERAGE_S1].loc[idx])
+                elif self.c.COLS.VALUE_SCOPE_S3 in record[self.c.COLS.SCOPE]:
+                    if record[self.c.COLS.COVERAGE_S3] > 0.67:
+                        index.append(idx)
                     else:
-                        index.append(record[0])
-                        self.data.at[record[0], self.c.COLS.REDUCTION_AMBITION] = \
-                            self.data[self.c.COLS.REDUCTION_AMBITION].loc[record[0]] * \
-                            (self.data[self.c.COLS.COVERAGE_S3].loc[record[0]])
+                        index.append(idx)
+                        self.data.at[idx, self.c.COLS.REDUCTION_AMBITION] = \
+                            self.data[self.c.COLS.REDUCTION_AMBITION].loc[idx] * \
+                            (self.data[self.c.COLS.COVERAGE_S3].loc[idx])
         self.data = self.data.loc[index]
 
     def test_target_process(self):
@@ -153,10 +149,10 @@ class TargetValidation:
         """
         if self.c.COLS.ACHIEVED_EMISSIONS in self.data.columns:
             index = []
-            for record in self.data.iterrows():
-                if not pd.isna(record[1][self.c.COLS.ACHIEVED_EMISSIONS]):
-                    if record[1][self.c.COLS.ACHIEVED_EMISSIONS] != 100:
-                        index.append(record[0])
+            for idx, record in self.data.iterrows():
+                if not pd.isna(record[self.c.COLS.ACHIEVED_EMISSIONS]):
+                    if record[self.c.COLS.ACHIEVED_EMISSIONS] != 100:
+                        index.append(idx)
             self.data = self.data.loc[index]
 
     def convert_s1_s2_into_s1s2(self):
@@ -165,7 +161,7 @@ class TargetValidation:
 
         :return:
         """
-        s1_mask = self.data[self.c.COLS.SCOPE] == 's1'
+        s1_mask = self.data[self.c.COLS.SCOPE] == self.c.COLS.VALUE_SCOPE_S1
         s1 = self.data[s1_mask]
         s1_delete_mask = (s1_mask & (
                 self.data[self.c.COLS.COVERAGE_S1].isna() | self.data[self.c.COLS.BASEYEAR_GHG_S1].isna() |
@@ -175,7 +171,7 @@ class TargetValidation:
         self.data.loc[s1_mask, [self.c.COLS.COVERAGE_S1, self.c.COLS.COVERAGE_S2]] = coverage_percentage
         self.data = self.data[~s1_delete_mask]
 
-        s2_mask = self.data[self.c.COLS.SCOPE] == 's2'
+        s2_mask = self.data[self.c.COLS.SCOPE] == self.c.COLS.VALUE_SCOPE_S2
         s2 = self.data[s2_mask]
         s2_delete_mask = (s2_mask & (
                 self.data[self.c.COLS.COVERAGE_S2].isna() | self.data[self.c.COLS.BASEYEAR_GHG_S1].isna() |
@@ -189,7 +185,7 @@ class TargetValidation:
         """
         If there is a s1s2s3 scope, split it into two targets with s1s2 and s3
         """
-        s1s2s3_mask = self.data[self.c.COLS.SCOPE_CATEGORY] == self.c.VALUE_SCOPE_CATEGORY_S1S2S3
+        s1s2s3_mask = self.data[self.c.COLS.SCOPE] == self.c.COLS.VALUE_SCOPE_S1S2S3
         s1s2s3 = self.data[s1s2s3_mask]
         self.data = self.data[~s1s2s3_mask]
         for _, row in s1s2s3.iterrows():
@@ -198,7 +194,7 @@ class TargetValidation:
                 pass
             else:
                 s1s2 = row.copy()
-                s1s2[self.c.COLS.SCOPE_CATEGORY] = self.c.VALUE_SCOPE_CATEGORY_S1S2
+                s1s2[self.c.COLS.SCOPE] = self.c.COLS.VALUE_SCOPE_S1S2
                 if pd.isnull(s1s2[self.c.COLS.BASEYEAR_GHG_S1]) or pd.isnull(s1s2[self.c.COLS.BASEYEAR_GHG_S2]) or \
                     s1s2[self.c.COLS.BASEYEAR_GHG_S1] + s1s2[self.c.COLS.BASEYEAR_GHG_S2] == 0:
                     pass
@@ -214,7 +210,7 @@ class TargetValidation:
                 pass
             else:
                 s3 = row.copy()
-                s3[self.c.COLS.SCOPE_CATEGORY] = self.c.VALUE_SCOPE_CATEGORY_S3
+                s3[self.c.COLS.SCOPE] = self.c.COLS.VALUE_SCOPE_S3
                 self.data = self.data.append(s3).reset_index(drop=True)
 
     def time_frame(self):
@@ -227,11 +223,11 @@ class TargetValidation:
             if not pd.isna(record[self.c.COLS.END_YEAR]):
                 time_frame = record[self.c.COLS.END_YEAR] - now.year
                 if (time_frame <= 15) & (time_frame > 5):
-                    time_frame_list.append('mid')
+                    time_frame_list.append(self.c.COLS.VALUE_TIME_FRAME_MID)
                 elif (time_frame <= 30) & (time_frame > 15):
-                    time_frame_list.append('long')
+                    time_frame_list.append(self.c.COLS.VALUE_TIME_FRAME_LONG)
                 elif time_frame <= 5:
-                    time_frame_list.append('short')
+                    time_frame_list.append(self.c.COLS.VALUE_TIME_FRAME_SHORT)
                 else:
                     time_frame_list.append(None)
             else:
@@ -250,7 +246,7 @@ class TargetValidation:
         # Find all targets that correspond to the given row
         target_data = self.data[(self.data[self.c.COLS.COMPANY_ID] == row[self.c.COLS.COMPANY_ID]) &
                                 (self.data[self.c.COLS.TIME_FRAME] == row[self.c.COLS.TIME_FRAME]) &
-                                (self.data[self.c.COLS.SCOPE_CATEGORY] == row[self.c.COLS.SCOPE_CATEGORY])].copy()
+                                (self.data[self.c.COLS.SCOPE] == row[self.c.COLS.SCOPE])].copy()
         if len(target_data) == 0:
             # If there are no targets, we'll return the original row
             return row
@@ -259,11 +255,11 @@ class TargetValidation:
             return target_data[target_columns].iloc[0]
         else:
             # We prefer targets with higher emissions in scope
-            if target_data.iloc[0][self.c.COLS.SCOPE_CATEGORY] == self.c.VALUE_SCOPE_CATEGORY_S1S2:
+            if target_data.iloc[0][self.c.COLS.SCOPE] == self.c.COLS.VALUE_SCOPE_S1S2:
                 target_data = target_data[
                     target_data[self.c.COLS.GHG_SCOPE12] == target_data[
                         self.c.COLS.GHG_SCOPE12].max()].copy()
-            elif target_data.iloc[0][self.c.COLS.SCOPE_CATEGORY] == self.c.VALUE_SCOPE_CATEGORY_S3:
+            elif target_data.iloc[0][self.c.COLS.SCOPE] == self.c.COLS.VALUE_SCOPE_S3:
                 target_data = target_data[
                     target_data[self.c.COLS.GHG_SCOPE3] == target_data[
                         self.c.COLS.GHG_SCOPE3].max()].copy()
@@ -302,15 +298,15 @@ class TargetValidation:
         -- Target type: Absolute over intensity
         -- If all else is equal: average the ambition of targets
         """
-        grid_columns = [self.c.COLS.COMPANY_ID, self.c.COLS.TIME_FRAME, self.c.COLS.SCOPE_CATEGORY]
+        grid_columns = [self.c.COLS.COMPANY_ID, self.c.COLS.TIME_FRAME, self.c.COLS.SCOPE]
         # These are columns that do apear in the target data, but should be exclusive to the company data
         # TODO: Check if we can remove this earlier on/make sure it's never in there
         company_columns = [self.c.COLS.COMPANY_NAME]
         companies = self.company_data[self.c.COLS.COMPANY_ID].unique()
-        scopes = [self.c.VALUE_SCOPE_CATEGORY_S1S2, self.c.VALUE_SCOPE_CATEGORY_S3, self.c.VALUE_SCOPE_CATEGORY_S1S2S3]
+        scopes = [self.c.COLS.VALUE_SCOPE_S1S2, self.c.COLS.VALUE_SCOPE_S3, self.c.COLS.VALUE_SCOPE_S1S2S3]
         empty_columns = [column for column in self.data.columns if column not in grid_columns + company_columns]
         extended_data = pd.DataFrame(
-            list(itertools.product(*[companies, self.c.VALUE_TIME_FRAMES, scopes] + [[None]] * len(empty_columns))),
+            list(itertools.product(*[companies, self.c.COLS.VALUE_TIME_FRAMES, scopes] + [[None]] * len(empty_columns))),
             columns=grid_columns + empty_columns)
 
         target_columns = extended_data.columns

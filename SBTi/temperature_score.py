@@ -263,12 +263,12 @@ class TemperatureScore(PortfolioAggregation):
         :param row: The row to calculate the temperature score for (if the scope of the row isn't s1s2s3, it will return the original score
         :return: The aggregated temperature score for a company
         """
-        if row[self.c.COLS.SCOPE_CATEGORY] != self.c.VALUE_SCOPE_CATEGORY_S1S2S3:
+        if row[self.c.COLS.SCOPE] != self.c.COLS.VALUE_SCOPE_S1S2S3:
             return row[self.c.COLS.TEMPERATURE_SCORE], row[self.c.TEMPERATURE_RESULTS]
         s1s2 = company_data.loc[(row[self.c.COLS.COMPANY_ID], row[self.c.COLS.TIME_FRAME],
-                                 self.c.VALUE_SCOPE_CATEGORY_S1S2)]
+                                 self.c.COLS.VALUE_SCOPE_S1S2)]
         s3 = company_data.loc[(row[self.c.COLS.COMPANY_ID], row[self.c.COLS.TIME_FRAME],
-                               self.c.VALUE_SCOPE_CATEGORY_S3)]
+                               self.c.COLS.VALUE_SCOPE_S3)]
 
         try:
             # If the s3 emissions are less than 40 percent, we'll ignore them altogether, if not, we'll weigh them
@@ -325,9 +325,9 @@ class TemperatureScore(PortfolioAggregation):
         """
         # Calculate the GHC
         company_data = data[
-            [self.c.COLS.COMPANY_ID, self.c.COLS.TIME_FRAME, self.c.COLS.SCOPE_CATEGORY, self.c.COLS.GHG_SCOPE12,
+            [self.c.COLS.COMPANY_ID, self.c.COLS.TIME_FRAME, self.c.COLS.SCOPE, self.c.COLS.GHG_SCOPE12,
              self.c.COLS.GHG_SCOPE3, self.c.COLS.TEMPERATURE_SCORE, self.c.TEMPERATURE_RESULTS]
-        ].groupby([self.c.COLS.COMPANY_ID, self.c.COLS.TIME_FRAME, self.c.COLS.SCOPE_CATEGORY]).mean()
+        ].groupby([self.c.COLS.COMPANY_ID, self.c.COLS.TIME_FRAME, self.c.COLS.SCOPE]).mean()
 
         data[self.c.COLS.TEMPERATURE_SCORE], data[self.c.TEMPERATURE_RESULTS] = zip(*data.apply(
             lambda row: self.get_ghc_temperature_score(row, company_data), axis=1
@@ -383,13 +383,13 @@ class TemperatureScore(PortfolioAggregation):
             data[self.c.COLS.CONTRIBUTION]
 
     def aggregate_scores(self, data: pd.DataFrame, time_frames_input: Optional[List[str]] = None,
-                         scope_categories_input: Optional[List[str]] = None):
+                         scopes_input: Optional[List[str]] = None):
         """
         Aggregate scores to create a portfolio score per time_frame (short, mid, long).
 
         :param data: The results of the calculate method
-        :param time_frames: A list of time frames that should be calculated (if None or an empty list is passed, all scopes will be calculated)
-        :param scope_categories: A list of scope categories that should be calculated (if None or an empty list is passed, all scopes will be calculated)
+        :param time_frames_input: A list of time frames that should be calculated (if None or an empty list is passed, all scopes will be calculated)
+        :param scopes_input: A list of scope categories that should be calculated (if None or an empty list is passed, all scopes will be calculated)
         :return: A weighted temperature score for the portfolio
         """
         time_frames: List[str]
@@ -399,18 +399,18 @@ class TemperatureScore(PortfolioAggregation):
         else:
             time_frames = time_frames_input
 
-        if scope_categories_input is None or len(scope_categories_input) == 0:
-            scope_categories = data[self.c.COLS.SCOPE_CATEGORY].unique()
+        if scopes_input is None or len(scopes_input) == 0:
+            scopes = data[self.c.COLS.SCOPE].unique()
         else:
-            scope_categories = scope_categories_input
+            scopes = scopes_input
 
         portfolio_scores: Dict = {
-            time_frame: {scope: {} for scope in scope_categories}
+            time_frame: {scope: {} for scope in scopes}
             for time_frame in time_frames}
 
-        for time_frame, scope in itertools.product(time_frames, scope_categories):
+        for time_frame, scope in itertools.product(time_frames, scopes):
             filtered_data = data[(data[self.c.COLS.TIME_FRAME] == time_frame) &
-                                 (data[self.c.COLS.SCOPE_CATEGORY] == scope)].copy()
+                                 (data[self.c.COLS.SCOPE] == scope)].copy()
 
             if not filtered_data.empty:
                 portfolio_scores[time_frame][scope]["all"],\
@@ -478,14 +478,14 @@ class TemperatureScore(PortfolioAggregation):
             # Cap scores of 10 highest contributors per time frame-scope combination
             # TODO: Should this actually be per time-frame/scope combi? Aren't you engaging the company as a whole?
             aggregations = self.aggregate_scores(scores)
-            for time_frame in self.c.VALUE_TIME_FRAMES:
-                for scope in scores[self.c.COLS.SCOPE_CATEGORY].unique():
+            for time_frame in self.c.COLS.VALUE_TIME_FRAMES:
+                for scope in scores[self.c.COLS.SCOPE].unique():
                     number_top_contributors = min(10, len(aggregations[time_frame][scope]['all']['contributions']))
                     for contributor in range(number_top_contributors):
                         company_name = aggregations[time_frame][scope]['all']['contributions'][contributor][
                             self.c.COLS.COMPANY_NAME]
                         company_mask = ((scores[self.c.COLS.COMPANY_NAME] == company_name) &
-                                        (scores[self.c.COLS.SCOPE_CATEGORY] == scope) &
+                                        (scores[self.c.COLS.SCOPE] == scope) &
                                         (scores[self.c.COLS.TIME_FRAME] == time_frame))
                         scores.loc[company_mask, self.c.COLS.TEMPERATURE_SCORE] = \
                             scores.loc[company_mask, self.c.COLS.TEMPERATURE_SCORE].apply(
