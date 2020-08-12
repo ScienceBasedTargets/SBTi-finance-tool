@@ -12,9 +12,18 @@
     </button>
 </nav>
 
+<div class="navbar fixed-bottom bg-light">
+  <div class="container" role="footer" style="margin-top: 0;">
+    <span>
+      Don't forget to fill out the survey at <a href="http://survey.sbti-tool.org/">http://survey.sbti-tool.org/</a><br/>
+      If you have any additional questions or comments send a mail to: <a href="mailto:finance@sciencebasedtargets.org">finance@sciencebasedtargets.org</a>
+    </span>
+  </div>
+</div>
+
 <div class="loading" *ngIf="loading">Loading&#8230;</div>
 
-<div class="container" role="main">
+<div class="container" role="main" style="margin-bottom: 100px;">
     <h2>{{title}}</h2>
     <p *ngFor="let alert of alerts">
         <ngb-alert [type]="alert.type" (close)="closeAlert(alert)">{{ alert.message }}</ngb-alert>
