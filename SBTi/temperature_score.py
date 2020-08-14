@@ -5,7 +5,8 @@ from typing import Optional, Tuple, Type, Dict, List
 import pandas as pd
 import numpy as np
 
-from .interfaces import ScenarioInterface
+from .interfaces import ScenarioInterface, EScope, ETimeFrames, Aggregation, AggregationContribution, ScoreAggregation, \
+    ScoreAggregationScopes, ScoreAggregations
 from .portfolio_aggregation import PortfolioAggregation, PortfolioAggregationMethod
 from .configs import TemperatureScoreConfig
 
@@ -263,12 +264,10 @@ class TemperatureScore(PortfolioAggregation):
         :param row: The row to calculate the temperature score for (if the scope of the row isn't s1s2s3, it will return the original score
         :return: The aggregated temperature score for a company
         """
-        if row[self.c.COLS.SCOPE] != self.c.COLS.VALUE_SCOPE_S1S2S3:
+        if row[self.c.COLS.SCOPE] != EScope.S1S2S3:
             return row[self.c.COLS.TEMPERATURE_SCORE], row[self.c.TEMPERATURE_RESULTS]
-        s1s2 = company_data.loc[(row[self.c.COLS.COMPANY_ID], row[self.c.COLS.TIME_FRAME],
-                                 self.c.COLS.VALUE_SCOPE_S1S2)]
-        s3 = company_data.loc[(row[self.c.COLS.COMPANY_ID], row[self.c.COLS.TIME_FRAME],
-                               self.c.COLS.VALUE_SCOPE_S3)]
+        s1s2 = company_data.loc[(row[self.c.COLS.COMPANY_ID], row[self.c.COLS.TIME_FRAME], EScope.S1S2)]
+        s3 = company_data.loc[(row[self.c.COLS.COMPANY_ID], row[self.c.COLS.TIME_FRAME], EScope.S3)]
 
         try:
             # If the s3 emissions are less than 40 percent, we'll ignore them altogether, if not, we'll weigh them
@@ -367,23 +366,47 @@ class TemperatureScore(PortfolioAggregation):
         data = self._calculate_company_score(data)
         return data
 
-    def _get_aggregations(self, data: pd.DataFrame):
+    def _get_aggregations(self, data: pd.DataFrame) -> Tuple[Aggregation, pd.Series, pd.Series]:
         data = data.copy()
         weighted_scores = self._calculate_aggregate_score(data, self.c.COLS.TEMPERATURE_SCORE,
                                                           self.aggregation_method)
         data[self.c.COLS.CONTRIBUTION_RELATIVE] = weighted_scores / (weighted_scores.sum() / 100)
         data[self.c.COLS.CONTRIBUTION] = weighted_scores
 
-        # TODO: Move this into some kind of class
-        return {"score": weighted_scores.sum(),
-                "contributions": data.sort_values(
-                    self.c.COLS.CONTRIBUTION_RELATIVE, ascending=False)[self.c.CONTRIBUTION_COLUMNS].to_dict(
-                    orient="records")}, \
+        contributions = data.sort_values(self.c.COLS.CONTRIBUTION_RELATIVE, ascending=False).to_dict(orient="records")
+        return Aggregation(
+                score=weighted_scores.sum(),
+                contributions=[AggregationContribution.parse_obj(contribution) for contribution in contributions]
+            ), \
             data[self.c.COLS.CONTRIBUTION_RELATIVE], \
             data[self.c.COLS.CONTRIBUTION]
 
-    def aggregate_scores(self, data: pd.DataFrame, time_frames_input: Optional[List[str]] = None,
-                         scopes_input: Optional[List[str]] = None):
+    def _get_score_aggregation(self, data: pd.DataFrame, time_frame: ETimeFrames, scope: EScope) -> \
+            Optional[ScoreAggregation]:
+        filtered_data = data[(data[self.c.COLS.TIME_FRAME] == time_frame) &
+                             (data[self.c.COLS.SCOPE] == scope)].copy()
+        if not filtered_data.empty:
+            score_aggregation_all, \
+                filtered_data[self.c.COLS.CONTRIBUTION_RELATIVE], \
+                filtered_data[self.c.COLS.CONTRIBUTION] = self._get_aggregations(filtered_data)
+            score_aggregation = ScoreAggregation(
+                grouped={},
+                all=score_aggregation_all,
+                influence_percentage=self._calculate_aggregate_score(
+                    filtered_data, self.c.TEMPERATURE_RESULTS, self.aggregation_method).sum() * 100)
+
+            # If there are grouping column(s) we'll group in pandas and pass the results to the aggregation
+            if len(self.grouping) > 0:
+                grouped_data = filtered_data.groupby(self.grouping)
+                for group_name, group in grouped_data:
+                    group_name_joined = group_name if type(group_name) == str else "-".join(group_name)
+                    score_aggregation.grouped[group_name_joined], _, _ = self._get_aggregations(group.copy())
+            return score_aggregation
+        else:
+            return None
+
+    def aggregate_scores(self, data: pd.DataFrame, time_frames_input: Optional[List[ETimeFrames]] = None,
+                         scopes_input: Optional[List[EScope]] = None):
         """
         Aggregate scores to create a portfolio score per time_frame (short, mid, long).
 
@@ -392,45 +415,26 @@ class TemperatureScore(PortfolioAggregation):
         :param scopes_input: A list of scope categories that should be calculated (if None or an empty list is passed, all scopes will be calculated)
         :return: A weighted temperature score for the portfolio
         """
-        time_frames: List[str]
-        scope_categories: List[str]
+        time_frames: List[ETimeFrames]
+        scopes: List[EScope]
         if time_frames_input is None or len(time_frames_input) == 0:
-            time_frames = data[self.c.COLS.TIME_FRAME].unique()
+            time_frames = list(ETimeFrames)
         else:
             time_frames = time_frames_input
 
         if scopes_input is None or len(scopes_input) == 0:
-            scopes = data[self.c.COLS.SCOPE].unique()
+            scopes = list(EScope)
         else:
             scopes = scopes_input
 
-        portfolio_scores: Dict = {
-            time_frame: {scope: {} for scope in scopes}
-            for time_frame in time_frames}
+        score_aggregations = ScoreAggregations()
+        for time_frame in time_frames:
+            score_aggregation_scopes = ScoreAggregationScopes()
+            for scope in scopes:
+                score_aggregation_scopes.__setattr__(scope.name, self._get_score_aggregation(data, time_frame, scope))
+            score_aggregations.__setattr__(time_frame.value, score_aggregation_scopes)
 
-        for time_frame, scope in itertools.product(time_frames, scopes):
-            filtered_data = data[(data[self.c.COLS.TIME_FRAME] == time_frame) &
-                                 (data[self.c.COLS.SCOPE] == scope)].copy()
-
-            if not filtered_data.empty:
-                portfolio_scores[time_frame][scope]["all"],\
-                    filtered_data[self.c.COLS.CONTRIBUTION_RELATIVE],\
-                    filtered_data[self.c.COLS.CONTRIBUTION] = self._get_aggregations(filtered_data)
-
-                portfolio_scores[time_frame][scope]["influence_percentage"] = self._calculate_aggregate_score(
-                    filtered_data, self.c.TEMPERATURE_RESULTS, self.aggregation_method).sum() * 100
-
-                # If there are grouping column(s) we'll group in pandas and pass the results to the aggregation
-                if len(self.grouping) > 0:
-                    grouped_data = filtered_data.groupby(self.grouping)
-                    for group_name, group in grouped_data:
-                        group_name_joined = group_name if type(group_name) == str else "-".join(group_name)
-                        portfolio_scores[time_frame][scope][group_name_joined], _, _ = \
-                            self._get_aggregations(group.copy())
-            else:
-                portfolio_scores[time_frame][scope] = None
-
-        return portfolio_scores
+        return score_aggregations
 
     def columns_percentage_distribution(self, data: pd.DataFrame, columns: List[str]) -> Optional[dict]:
         """
@@ -478,11 +482,11 @@ class TemperatureScore(PortfolioAggregation):
             # Cap scores of 10 highest contributors per time frame-scope combination
             # TODO: Should this actually be per time-frame/scope combi? Aren't you engaging the company as a whole?
             aggregations = self.aggregate_scores(scores)
-            for time_frame in self.c.COLS.VALUE_TIME_FRAMES:
+            for time_frame in ETimeFrames:
                 for scope in scores[self.c.COLS.SCOPE].unique():
-                    number_top_contributors = min(10, len(aggregations[time_frame][scope]['all']['contributions']))
+                    number_top_contributors = min(10, len(aggregations[time_frame.value][scope]['all']['contributions']))
                     for contributor in range(number_top_contributors):
-                        company_name = aggregations[time_frame][scope]['all']['contributions'][contributor][
+                        company_name = aggregations[time_frame.value][scope]['all']['contributions'][contributor][
                             self.c.COLS.COMPANY_NAME]
                         company_mask = ((scores[self.c.COLS.COMPANY_NAME] == company_name) &
                                         (scores[self.c.COLS.SCOPE] == scope) &

@@ -1,6 +1,6 @@
 from abc import ABC
 from enum import Enum
-from typing import Type, Optional
+from typing import Type
 
 import pandas as pd
 from .configs import PortfolioAggregationConfig, ColumnsConfig
@@ -11,51 +11,13 @@ class PortfolioAggregationMethod(Enum):
     The portfolio aggregation method determines how the temperature scores for the individual companies are aggregated
     into a single portfolio score.
     """
-    WATS = 1
-    TETS = 2
-    MOTS = 3
-    EOTS = 4
-    ECOTS = 5
-    AOTS = 6
-    ROTS = 7
-
-    @staticmethod
-    def from_int(value: int) -> 'PortfolioAggregationMethod':
-        """
-        Convert an integer to a portfolio aggregation method.
-
-        :param value: The value to convert
-        :return: The matching portfolio aggregation method
-        """
-        value_map = {
-            1: PortfolioAggregationMethod.WATS,
-            2: PortfolioAggregationMethod.TETS,
-            3: PortfolioAggregationMethod.MOTS,
-            4: PortfolioAggregationMethod.EOTS,
-            5: PortfolioAggregationMethod.ECOTS,
-            6: PortfolioAggregationMethod.AOTS,
-            7: PortfolioAggregationMethod.ROTS
-        }
-        return value_map.get(value, PortfolioAggregationMethod.WATS)
-
-    @staticmethod
-    def from_string(value: str) -> 'PortfolioAggregationMethod':
-        """
-        Convert a string to a portfolio aggregation method.
-
-        :param value: The value to convert
-        :return: The matching portfolio aggregation method
-        """
-        value_map = {
-            "WATS": PortfolioAggregationMethod.WATS,
-            "TETS": PortfolioAggregationMethod.TETS,
-            "MOTS": PortfolioAggregationMethod.MOTS,
-            "EOTS": PortfolioAggregationMethod.EOTS,
-            "ECOTS": PortfolioAggregationMethod.ECOTS,
-            "AOTS": PortfolioAggregationMethod.AOTS,
-            "ROTS": PortfolioAggregationMethod.ROTS
-        }
-        return value_map.get(value, PortfolioAggregationMethod.WATS)
+    WATS = 'WATS'
+    TETS = 'TETS'
+    MOTS = 'MOTS'
+    EOTS = 'EOTS'
+    ECOTS = 'ECOTS'
+    AOTS = 'AOTS'
+    ROTS = 'ROTS'
 
     @staticmethod
     def is_emissions_based(method: 'PortfolioAggregationMethod') -> bool:
@@ -66,8 +28,8 @@ class PortfolioAggregationMethod(Enum):
         :return:
         """
         return method == PortfolioAggregationMethod.MOTS or method == PortfolioAggregationMethod.EOTS or \
-               method == PortfolioAggregationMethod.ECOTS or method == PortfolioAggregationMethod.AOTS or \
-               method == PortfolioAggregationMethod.ROTS
+            method == PortfolioAggregationMethod.ECOTS or method == PortfolioAggregationMethod.AOTS or \
+            method == PortfolioAggregationMethod.ROTS
 
     @staticmethod
     def get_value_column(method: 'PortfolioAggregationMethod', column_config: Type[ColumnsConfig]) -> str:

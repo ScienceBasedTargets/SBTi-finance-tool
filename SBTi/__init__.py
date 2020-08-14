@@ -7,7 +7,7 @@ from typing import List, Optional, Tuple
 
 import pandas as pd
 
-from .interfaces import PortfolioCompany
+from .interfaces import PortfolioCompany, EScope, ETimeFrames
 from .portfolio_coverage_tvp import PortfolioCoverageTVP
 from .target_validation import TargetValidation
 
@@ -22,8 +22,8 @@ def pipeline(data_providers: List[DataProvider],
              portfolio: List[PortfolioCompany],
              fallback_score: float,
              aggregation_method: PortfolioAggregationMethod,
-             filter_time_frame: List[str],
-             filter_scope_category: List[str],
+             filter_time_frame: List[ETimeFrames],
+             filter_scope_category: List[EScope],
              grouping: Optional[List[str]],
              scenario: Optional[Scenario],
              anonymize: bool) -> Tuple[pd.DataFrame, dict, Optional[float], Optional[dict]]:

@@ -4,6 +4,8 @@ the module, extend the respective config class and pass it to the class as the "
 """
 import os
 
+from SBTi import ETimeFrames
+
 
 class ColumnsConfig:
     # Define a constant for each column used in the
@@ -70,35 +72,6 @@ class ColumnsConfig:
     CONTRIBUTION_RELATIVE = "contribution_relative"
     CONTRIBUTION = "contribution"
 
-    # This defines which columns contain company specific, instead of target specific data
-    COMPANY_COLUMNS = [COMPANY_NAME, INDUSTRY_LVL1, INDUSTRY_LVL2, INDUSTRY_LVL3, INDUSTRY_LVL4, INTENSITY_METRIC,
-                       REGRESSION_PARAM,
-                       REGRESSION_INTERCEPT, GHG_SCOPE12, GHG_SCOPE3, MARKET_CAP, INVESTMENT_VALUE,
-                       COMPANY_ENTERPRISE_VALUE, CASH_EQUIVALENTS, COMPANY_TOTAL_ASSETS, REGION, COUNTRY,
-                       COMPANY_REVENUE]
-
-    # These columns are not allowed to have null values
-    REQUIRED_FIELDS_TARGETS = [REDUCTION_AMBITION, SCOPE, TARGET_REFERENCE_NUMBER]
-    REQUIRED_FIELDS_COMPANY = [GHG_SCOPE12, GHG_SCOPE3]
-
-    # These column have to be available in the data set
-    REQUIRED_COLUMNS_TARGETS = [COMPANY_ID, TARGET_REFERENCE_NUMBER, INTENSITY_METRIC, SCOPE, COVERAGE_S1, COVERAGE_S2,
-                                COVERAGE_S3, REDUCTION_AMBITION, BASE_YEAR, END_YEAR, BASEYEAR_GHG_S1, BASEYEAR_GHG_S2,
-                                BASEYEAR_GHG_S3, ACHIEVED_EMISSIONS]
-    REQUIRED_COLUMNS_COMPANY = [COMPANY_NAME, COMPANY_ID, GHG_SCOPE12, GHG_SCOPE3]
-
-    VALUE_TIME_FRAME_SHORT = "short"
-    VALUE_TIME_FRAME_MID = "mid"
-    VALUE_TIME_FRAME_LONG = "long"
-    VALUE_TIME_FRAMES = [VALUE_TIME_FRAME_SHORT, VALUE_TIME_FRAME_MID, VALUE_TIME_FRAME_LONG]
-
-    VALUE_SCOPE_S1S2 = "s1+s2"
-    VALUE_SCOPE_S1 = "s1"
-    VALUE_SCOPE_S2 = "s2"
-    VALUE_SCOPE_S3 = "s3"
-    VALUE_SCOPE_S1S2S3 = "s1+s2+s3"
-    VALUE_SCOPE_CATEGORIES = [VALUE_SCOPE_S1S2, VALUE_SCOPE_S3, VALUE_SCOPE_S1S2S3]
-
 
 class PortfolioAggregationConfig:
     COLS = ColumnsConfig
@@ -117,20 +90,15 @@ class TemperatureScoreConfig(PortfolioAggregationConfig):
     VALUE_TARGET_REFERENCE_ABSOLUTE = "Absolute"
     VALUE_TARGET_REFERENCE_INTENSITY = "Intensity"
     VALUE_TARGET_REFERENCE_INTENSITY_BASE = "Int"
-    CONTRIBUTION_COLUMNS = [ColumnsConfig.COMPANY_NAME, ColumnsConfig.TEMPERATURE_SCORE,
-                            ColumnsConfig.CONTRIBUTION_RELATIVE, ColumnsConfig.CONTRIBUTION]
 
     SLOPE_MAP = {
-        "short": "slope5",
-        "mid": "slope15",
-        "long": "slope30",
+        ETimeFrames.SHORT: "slope5",
+        ETimeFrames.MID: "slope15",
+        ETimeFrames.LONG: "slope30",
     }
 
     TEMPERATURE_RESULTS = 'temperature_results'
     INVESTMENT_VALUE = "investment_value"
-    TIME_FRAME_SHORT = 'short'
-    TIME_FRAME_MID = 'mid'
-    TIME_FRAME_LONG = 'long'
 
 
 class PortfolioCoverageTVPConfig(PortfolioAggregationConfig):
