@@ -295,13 +295,21 @@ class TemperatureScore(PortfolioAggregation):
             return 1
         return 0
 
-    def _prepare_data(self, data: pd.DataFrame):
+    def _prepare_data(self, data: pd.DataFrame, time_frames: List[ETimeFrames], scopes: List[EScope]):
         """
         Prepare the data such that it can be used to calculate the temperature score.
 
         :param data: The original data set as a pandas data frame
         :return: The extended data frame
         """
+        # If scope S1S2S3 is in the list of scopes to calculate, we need to calculate the other two as well
+        if EScope.S1S2S3 in scopes and EScope.S1S2 not in scopes:
+            scopes.append(EScope.S1S2)
+        if EScope.S1S2S3 in scopes and EScope.S3 not in scopes:
+            scopes.append(EScope.S3)
+
+        data = data[data[self.c.COLS.SCOPE].isin(scopes) & data[self.c.COLS.TIME_FRAME].isin(time_frames)].copy()
+
         data[self.c.COLS.TARGET_REFERENCE_NUMBER] = data[self.c.COLS.TARGET_REFERENCE_NUMBER].replace(
             {np.nan: self.c.VALUE_TARGET_REFERENCE_ABSOLUTE}
         )
@@ -333,40 +341,27 @@ class TemperatureScore(PortfolioAggregation):
         ))
         return data
 
-    def calculate(self, data: pd.DataFrame):
+    def calculate(self, data: pd.DataFrame, time_frames: List[ETimeFrames], scopes: List[EScope]):
         """
-        Calculate the temperature for a dataframe of company data.
-
-        Required columns:
-
-        * target_reference_number: Int *x* of Abs *x*
-        * scope: The scope of the target. This should be a valid scope in the SR15 mapping
-        * scope_category: The scope category, options: "s1s2", "s3", "s1s2s3"
-        * base_year: The base year of the target
-        * start_year: The start year of the target
-        * target_year: The year when the target should be achieved
-        * time_frame: The time frame of the target (short, mid, long) -> This field is calculated by the target valuation protocol.
-        * reduction_from_base_year: Targeted reduction in emissions from the base year
-        * emissions_in_scope: Company emissions in the target's scope at start of the base year
-        * achieved_reduction: The emission reduction that has already been achieved
-        * industry: The industry the company is working in. This should be a valid industry in the SR15 mapping. If not it will be converted to "Others" (or whichever value is set in the config as the default).
-        * s1s2_emissions: Total company emissions in the S1 + S2 scope
-        * s3_emissions: Total company emissions in the S3 scope
-        * market_cap: Market capitalization of the company. Only required to use the MOTS portfolio aggregation.
-        * investment_value: The investment value of the investment in this company. Only required to use the MOTS, EOTS, ECOTS and AOTS portfolio aggregation.
-        * company_enterprise_value: The enterprise value of the company. Only required to use the EOTS portfolio aggregation.
-        * company_ev_plus_cash: The enterprise value of the company plus cash. Only required to use the ECOTS portfolio aggregation.
-        * company_total_assets: The total assets of the company. Only required to use the AOTS portfolio aggregation.
-        * company_revenue: The revenue of the company. Only required to use the ROTS portfolio aggregation.
+        Calculate the temperature for a dataframe of company data. The columns in the data frame should be a combination
+        of IDataProviderTarget and IDataProviderCompany.
 
         :param data: The data set
         :return: A data frame containing all relevant information for the targets and companies
         """
-        data = self._prepare_data(data)
+        data = self._prepare_data(data, time_frames, scopes.copy())
         data = self._calculate_company_score(data)
+        # We need to filter the scopes again, because we might have had to add a scope in te preparation step
+        data = data[data[self.c.COLS.SCOPE].isin(scopes)]
         return data
 
     def _get_aggregations(self, data: pd.DataFrame) -> Tuple[Aggregation, pd.Series, pd.Series]:
+        """
+        Get the aggregated score over a certain data set. Also calculate the (relative) contribution of each company
+
+        :param data: A data set, containing one row per company
+        :return: An aggregated score and the relative and absolute contribution of each company
+        """
         data = data.copy()
         weighted_scores = self._calculate_aggregate_score(data, self.c.COLS.TEMPERATURE_SCORE,
                                                           self.aggregation_method)
@@ -383,6 +378,15 @@ class TemperatureScore(PortfolioAggregation):
 
     def _get_score_aggregation(self, data: pd.DataFrame, time_frame: ETimeFrames, scope: EScope) -> \
             Optional[ScoreAggregation]:
+        """
+        Get a score aggregation for a certain time frame and scope, for the data set as a whole and for the different
+        groupings.
+
+        :param data: The whole data set
+        :param time_frame: A time frame
+        :param scope: A scope
+        :return: A score aggregation, containing the aggregations for the whole data set and each individual group
+        """
         filtered_data = data[(data[self.c.COLS.TIME_FRAME] == time_frame) &
                              (data[self.c.COLS.SCOPE] == scope)].copy()
         if not filtered_data.empty:
@@ -405,27 +409,16 @@ class TemperatureScore(PortfolioAggregation):
         else:
             return None
 
-    def aggregate_scores(self, data: pd.DataFrame, time_frames_input: Optional[List[ETimeFrames]] = None,
-                         scopes_input: Optional[List[EScope]] = None):
+    def aggregate_scores(self, data: pd.DataFrame, time_frames: List[ETimeFrames],
+                         scopes: List[EScope]):
         """
         Aggregate scores to create a portfolio score per time_frame (short, mid, long).
 
         :param data: The results of the calculate method
-        :param time_frames_input: A list of time frames that should be calculated (if None or an empty list is passed, all scopes will be calculated)
-        :param scopes_input: A list of scope categories that should be calculated (if None or an empty list is passed, all scopes will be calculated)
+        :param time_frames: A list of time frames that should be calculated (if None or an empty list is passed, all scopes will be calculated)
+        :param scopes: A list of scope categories that should be calculated (if None or an empty list is passed, all scopes will be calculated)
         :return: A weighted temperature score for the portfolio
         """
-        time_frames: List[ETimeFrames]
-        scopes: List[EScope]
-        if time_frames_input is None or len(time_frames_input) == 0:
-            time_frames = list(ETimeFrames)
-        else:
-            time_frames = time_frames_input
-
-        if scopes_input is None or len(scopes_input) == 0:
-            scopes = list(EScope)
-        else:
-            scopes = scopes_input
 
         score_aggregations = ScoreAggregations()
         for time_frame in time_frames:
@@ -436,22 +429,24 @@ class TemperatureScore(PortfolioAggregation):
 
         return score_aggregations
 
-    def columns_percentage_distribution(self, data: pd.DataFrame, columns: List[str]) -> Optional[dict]:
+    def columns_percentage_distribution(self, data: pd.DataFrame) -> Optional[dict]:
         """
-        Percentage distribution of specific column or columns
+        Percentage distribution of the grouping columns
 
         :param data: output from the target_validation
-        :param columns: specified column names the client would like to have a percentage distribution
         :return: percentage distribution of specified columns
         """
-        data = data[columns].fillna('unknown')
-        if columns is None:
+        if self.grouping is None or len(self.grouping) == 0:
             return None
-        elif len(columns) == 1:
-            percentage_distribution = round((data.groupby(columns[0]).size() / data[columns[0]].count()) * 100, 2)
+
+        data = data[self.grouping].fillna('unknown')
+        if len(self.grouping) == 1:
+            percentage_distribution = round(
+                (data.groupby(self.grouping[0]).size() / data[self.grouping[0]].count()) * 100, 2)
             return percentage_distribution.to_dict()
-        elif len(columns) > 1:
-            percentage_distribution = round((data.groupby(columns).size() / data[columns[0]].count()) * 100, 2)
+        elif len(self.grouping) > 1:
+            percentage_distribution = round(
+                (data.groupby(self.grouping).size() / data[self.grouping[0]].count()) * 100, 2)
             percentage_distribution = percentage_distribution.to_dict()
 
             percentage_distribution_copy = percentage_distribution.copy()

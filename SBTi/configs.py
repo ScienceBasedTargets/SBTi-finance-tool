@@ -4,7 +4,7 @@ the module, extend the respective config class and pass it to the class as the "
 """
 import os
 
-from SBTi import ETimeFrames
+from SBTi.interfaces import ETimeFrames
 
 
 class ColumnsConfig:

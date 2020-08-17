@@ -104,6 +104,15 @@ class EScope(SortableEnum):
     S1S2 = "S1+S2"
     S1S2S3 = "S1+S2+S3"
 
+    @classmethod
+    def get_result_scopes(cls) -> List['EScope']:
+        """
+        Get a list of scopes that should be calculated if the user leaves it open.
+
+        :return: A list of EScope objects
+        """
+        return [cls.S1S2, cls.S3, cls.S1S2S3]
+
 
 class ETimeFrames(SortableEnum):
     SHORT = "short"
