@@ -145,7 +145,8 @@ class TemperatureScore(PortfolioAggregation):
                     class and overwriting one of the parameters.
     """
 
-    def __init__(self, fallback_score: float = 3.2, model: int = 4, scenario: Optional[Scenario] = None,
+    def __init__(self, time_frames: List[ETimeFrames], scopes: List[EScope], fallback_score: float = 3.2,
+                 model: int = 4, scenario: Optional[Scenario] = None,
                  aggregation_method: PortfolioAggregationMethod = PortfolioAggregationMethod.WATS,
                  grouping: Optional[List] = None, config: Type[TemperatureScoreConfig] = TemperatureScoreConfig):
         super().__init__(config)
@@ -153,6 +154,9 @@ class TemperatureScore(PortfolioAggregation):
         self.c: Type[TemperatureScoreConfig] = config
         self.scenario: Optional[Scenario] = scenario
         self.fallback_score = fallback_score
+
+        self.time_frames = time_frames
+        self.scopes = scopes
 
         if self.scenario is not None:
             self.fallback_score = self.scenario.get_fallback_score(self.fallback_score)
@@ -295,7 +299,7 @@ class TemperatureScore(PortfolioAggregation):
             return 1
         return 0
 
-    def _prepare_data(self, data: pd.DataFrame, time_frames: List[ETimeFrames], scopes: List[EScope]):
+    def _prepare_data(self, data: pd.DataFrame):
         """
         Prepare the data such that it can be used to calculate the temperature score.
 
@@ -303,12 +307,13 @@ class TemperatureScore(PortfolioAggregation):
         :return: The extended data frame
         """
         # If scope S1S2S3 is in the list of scopes to calculate, we need to calculate the other two as well
-        if EScope.S1S2S3 in scopes and EScope.S1S2 not in scopes:
+        scopes = self.scopes.copy()
+        if EScope.S1S2S3 in self.scopes and EScope.S1S2 not in self.scopes:
             scopes.append(EScope.S1S2)
         if EScope.S1S2S3 in scopes and EScope.S3 not in scopes:
             scopes.append(EScope.S3)
 
-        data = data[data[self.c.COLS.SCOPE].isin(scopes) & data[self.c.COLS.TIME_FRAME].isin(time_frames)].copy()
+        data = data[data[self.c.COLS.SCOPE].isin(scopes) & data[self.c.COLS.TIME_FRAME].isin(self.time_frames)].copy()
 
         data[self.c.COLS.TARGET_REFERENCE_NUMBER] = data[self.c.COLS.TARGET_REFERENCE_NUMBER].replace(
             {np.nan: self.c.VALUE_TARGET_REFERENCE_ABSOLUTE}
@@ -341,7 +346,7 @@ class TemperatureScore(PortfolioAggregation):
         ))
         return data
 
-    def calculate(self, data: pd.DataFrame, time_frames: List[ETimeFrames], scopes: List[EScope]):
+    def calculate(self, data: pd.DataFrame):
         """
         Calculate the temperature for a dataframe of company data. The columns in the data frame should be a combination
         of IDataProviderTarget and IDataProviderCompany.
@@ -349,10 +354,10 @@ class TemperatureScore(PortfolioAggregation):
         :param data: The data set
         :return: A data frame containing all relevant information for the targets and companies
         """
-        data = self._prepare_data(data, time_frames, scopes.copy())
+        data = self._prepare_data(data)
         data = self._calculate_company_score(data)
         # We need to filter the scopes again, because we might have had to add a scope in te preparation step
-        data = data[data[self.c.COLS.SCOPE].isin(scopes)]
+        data = data[data[self.c.COLS.SCOPE].isin(self.scopes)]
         return data
 
     def _get_aggregations(self, data: pd.DataFrame) -> Tuple[Aggregation, pd.Series, pd.Series]:
@@ -409,21 +414,18 @@ class TemperatureScore(PortfolioAggregation):
         else:
             return None
 
-    def aggregate_scores(self, data: pd.DataFrame, time_frames: List[ETimeFrames],
-                         scopes: List[EScope]):
+    def aggregate_scores(self, data: pd.DataFrame) -> ScoreAggregations:
         """
         Aggregate scores to create a portfolio score per time_frame (short, mid, long).
 
         :param data: The results of the calculate method
-        :param time_frames: A list of time frames that should be calculated (if None or an empty list is passed, all scopes will be calculated)
-        :param scopes: A list of scope categories that should be calculated (if None or an empty list is passed, all scopes will be calculated)
         :return: A weighted temperature score for the portfolio
         """
 
         score_aggregations = ScoreAggregations()
-        for time_frame in time_frames:
+        for time_frame in self.time_frames:
             score_aggregation_scopes = ScoreAggregationScopes()
-            for scope in scopes:
+            for scope in self.scopes:
                 score_aggregation_scopes.__setattr__(scope.name, self._get_score_aggregation(data, time_frame, scope))
             score_aggregations.__setattr__(time_frame.value, score_aggregation_scopes)
 
@@ -477,11 +479,11 @@ class TemperatureScore(PortfolioAggregation):
             # Cap scores of 10 highest contributors per time frame-scope combination
             # TODO: Should this actually be per time-frame/scope combi? Aren't you engaging the company as a whole?
             aggregations = self.aggregate_scores(scores)
-            for time_frame in ETimeFrames:
-                for scope in scores[self.c.COLS.SCOPE].unique():
-                    number_top_contributors = min(10, len(aggregations[time_frame.value][scope]['all']['contributions']))
+            for time_frame in self.time_frames:
+                for scope in self.scopes:
+                    number_top_contributors = min(10, len(aggregations[time_frame.value][scope.name].all.contributions))
                     for contributor in range(number_top_contributors):
-                        company_name = aggregations[time_frame.value][scope]['all']['contributions'][contributor][
+                        company_name = aggregations[time_frame.value][scope.name].all.contributions[contributor][
                             self.c.COLS.COMPANY_NAME]
                         company_mask = ((scores[self.c.COLS.COMPANY_NAME] == company_name) &
                                         (scores[self.c.COLS.SCOPE] == scope) &

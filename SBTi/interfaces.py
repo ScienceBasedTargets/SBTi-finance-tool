@@ -11,10 +11,16 @@ class AggregationContribution(BaseModel):
     contribution_relative: float
     contribution: float
 
+    def __getitem__(self, item):
+        return getattr(self, item)
+
 
 class Aggregation(BaseModel):
     score: float
     contributions: List[AggregationContribution]
+
+    def __getitem__(self, item):
+        return getattr(self, item)
 
 
 class ScoreAggregation(BaseModel):
@@ -22,17 +28,26 @@ class ScoreAggregation(BaseModel):
     influence_percentage: float
     grouped: Optional[Dict[str, Aggregation]]
 
+    def __getitem__(self, item):
+        return getattr(self, item)
+
 
 class ScoreAggregationScopes(BaseModel):
     S1S2: Optional[ScoreAggregation]
     S3: Optional[ScoreAggregation]
     S1S2S3: Optional[ScoreAggregation]
 
+    def __getitem__(self, item):
+        return getattr(self, item)
+
 
 class ScoreAggregations(BaseModel):
     short: Optional[ScoreAggregationScopes]
-    mid: Optional[ScoreAggregation]
-    long: Optional[ScoreAggregation]
+    mid: Optional[ScoreAggregationScopes]
+    long: Optional[ScoreAggregationScopes]
+
+    def __getitem__(self, item):
+        return getattr(self, item)
 
 
 class ScenarioInterface(BaseModel):

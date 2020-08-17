@@ -1,8 +1,7 @@
 from typing import List, Optional, Tuple
 
 import pandas as pd
-from .interfaces import PortfolioCompany, EScope, ETimeFrames
-from .portfolio_coverage_tvp import PortfolioCoverageTVP
+from .interfaces import PortfolioCompany, EScope, ETimeFrames, ScoreAggregations
 from .target_validation import TargetValidation
 
 from .temperature_score import Scenario, TemperatureScore
@@ -30,7 +29,7 @@ def get_data(data_providers: List[DataProvider], portfolio: List[PortfolioCompan
 
 def calculate(portfolio_data: pd.DataFrame, fallback_score: float, aggregation_method: PortfolioAggregationMethod,
               grouping: Optional[List[str]], scenario: Optional[Scenario], time_frames: List[ETimeFrames],
-              scopes: List[EScope], anonymize: bool):
+              scopes: List[EScope], anonymize: bool) -> Tuple[pd.DataFrame, ScoreAggregations, Optional[dict]]:
     """
     Calculate the different parts of the temperature score (actual scores, aggregations, column distribution).
 
@@ -44,11 +43,11 @@ def calculate(portfolio_data: pd.DataFrame, fallback_score: float, aggregation_m
     :param anonymize: Whether to anonymize the resulting data set or not
     :return: The scores, the aggregations and the column distribution
     """
-    ts = TemperatureScore(fallback_score=fallback_score, scenario=scenario, grouping=grouping,
-                          aggregation_method=aggregation_method)
+    ts = TemperatureScore(time_frames=time_frames, scopes=scopes, fallback_score=fallback_score, scenario=scenario,
+                          grouping=grouping, aggregation_method=aggregation_method)
 
-    scores = ts.calculate(portfolio_data, time_frames, scopes)
-    aggregations = ts.aggregate_scores(scores, time_frames, scopes)
+    scores = ts.calculate(portfolio_data)
+    aggregations = ts.aggregate_scores(scores)
     column_distribution = ts.columns_percentage_distribution(portfolio_data)
 
     if anonymize:
