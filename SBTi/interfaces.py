@@ -27,7 +27,7 @@ class Aggregation(BaseModel):
 class ScoreAggregation(BaseModel):
     all: Aggregation
     influence_percentage: float
-    grouped: Optional[Dict[str, Aggregation]]
+    grouped: Dict[str, Aggregation]
 
     def __getitem__(self, item):
         return getattr(self, item)
