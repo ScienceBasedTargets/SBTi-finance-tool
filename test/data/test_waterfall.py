@@ -41,8 +41,10 @@ class TestWaterfall(unittest.TestCase):
         """
         Test whether data is retrieved as expected.
         """
-        company_data = SBTi.data.get_company_data(self.data_providers, self.companies)
-        assert len(company_data["company_id"].unique()) == 3, "The numbers of companies does not match"
+        company_data = SBTi.data.get_company_data(
+            self.data_providers, [company["company_id"] for company in self.companies])
+        assert len(set([company.company_id for company in company_data])) == 3, \
+            "The numbers of companies does not match"
 
 
 if __name__ == "__main__":
