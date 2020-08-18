@@ -13,7 +13,7 @@ from .bloomberg import Bloomberg
 from .cdp import CDP
 from .iss import ISS
 from .trucost import Trucost
-from .urgentum import Urgentum
+from .urgentem import Urgentem
 
 
 DATA_PROVIDER_MAP: Dict[str, Type[DataProvider]] = {
@@ -23,7 +23,7 @@ DATA_PROVIDER_MAP: Dict[str, Type[DataProvider]] = {
     "cdp": CDP,
     "iss": ISS,
     "trucost": Trucost,
-    "urgentum": Urgentum,
+    "urgentem": Urgentem,
 }
 
 

@@ -1,8 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import List
 
-import pandas as pd
-from SBTi.interfaces import IDataProviderCompany
+from SBTi.interfaces import IDataProviderCompany, IDataProviderTarget
 
 
 class DataProvider(ABC):
@@ -19,9 +18,10 @@ class DataProvider(ABC):
         pass
 
     @abstractmethod
-    def get_targets(self, company_ids: List[str]) -> pd.DataFrame:
+    def get_targets(self, company_ids: List[str]) -> List[IDataProviderTarget]:
         """
-        Get all relevant data for a certain company. This method should return a list of IDataProviderTarget instances.
+        Get all relevant targets for a certain company. This method should return a list of IDataProviderTarget
+        instances.
 
         :param company_ids: A list of company IDs (ISINs)
         :return: A list containing the targets

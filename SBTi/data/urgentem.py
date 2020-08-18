@@ -4,9 +4,9 @@ from SBTi.data.data_provider import DataProvider
 from SBTi.interfaces import IDataProviderCompany, IDataProviderTarget
 
 
-class CDP(DataProvider):
+class Urgentem(DataProvider):
     """
-    Data provider skeleton for CDP.
+    Data provider skeleton for Urgentem.
     """
 
     def get_targets(self, company_ids: List[str]) -> List[IDataProviderTarget]:
@@ -39,8 +39,6 @@ class CDP(DataProvider):
         For each of the companies, get the status of their target (Target set, Committed or No target) as it's known to
         the SBTi.
 
-        :param companies: A list of companies. Each company should be a dict with a "company_name" and "company_id"
-                            field.
         :return: The original list, enriched with a field called "sbti_target_status"
         """
         # TODO: Make an API request
