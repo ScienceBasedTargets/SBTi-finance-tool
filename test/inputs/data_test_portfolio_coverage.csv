@@ -1,4 +1,4 @@
-company_name,company_id,s1s2_emissions,s3_emissions,market_cap,investment_value,portfolio_weight,company_enterprise_value,company_ev_plus_cash,company_total_assets
+company_name,company_id,ghg_s1s2,ghg_s3,market_cap,investment_value,portfolio_weight,company_enterprise_value,company_ev_plus_cash,company_total_assets
 "Advanced Micro Devices, Inc",US0079031078,1601576,1601576,54327,42881,0.21,64649.13,51067.38,49437.57
 Capitas Finance Limited,,1247710,1247710,93541,56155,0.55,81380.67,87928.54,85122.31
 Non existant test company,TST123456789,79541,79541,79081,34690,0.24,94106.39,74336.14,71963.71
