@@ -97,6 +97,17 @@ class TemperatureScoreConfig(PortfolioAggregationConfig):
         ETimeFrames.LONG: "slope30",
     }
 
+    INTENSITY_MAPPINGS = {
+        "Revenue": "INT.emKyoto_gdp",
+        "Product": "INT.emKyoto_gdp",
+        "Cement": "INT.emKyoto_gdp",
+        "Oil": "INT.emCO2EI_PE",
+        "Steel": "INT.emKyoto_gdp",
+        "Aluminum": "INT.emKyoto_gdp",
+        "Power": "INT.emCO2EI_elecGen"
+    }
+    ABSOLUTE_MAPPING = "Emissions|Kyoto Gases"
+
     TEMPERATURE_RESULTS = 'temperature_results'
     INVESTMENT_VALUE = "investment_value"
 

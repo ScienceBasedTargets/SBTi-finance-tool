@@ -1,11 +1,10 @@
-import itertools
 from enum import Enum
-from typing import Optional, Tuple, Type, Dict, List
+from typing import Optional, Tuple, Type, List
 
 import pandas as pd
 import numpy as np
 
-from .interfaces import ScenarioInterface, EScope, ETimeFrames, Aggregation, AggregationContribution, ScoreAggregation, \
+from .interfaces import ScenarioInterface, EScope, ETimeFrames, Aggregation, AggregationContribution, ScoreAggregation,\
     ScoreAggregationScopes, ScoreAggregations
 from .portfolio_aggregation import PortfolioAggregation, PortfolioAggregationMethod
 from .configs import TemperatureScoreConfig
@@ -179,20 +178,10 @@ class TemperatureScore(PortfolioAggregation):
         :return: The mapped SR15 target
         """
         # TODO: Use constants
-        intensity_mappings = {
-            "Revenue": "INT.emKyoto_gdp",
-            "Product": "INT.emKyoto_gdp",
-            "Cement": "INT.emKyoto_gdp",
-            "Oil": "INT.emCO2EI_PE",
-            "Steel": "INT.emKyoto_gdp",
-            "Aluminum": "INT.emKyoto_gdp",
-            "Power": "INT.emCO2EI_elecGen"
-        }
-
         if target[self.c.COLS.TARGET_REFERENCE_NUMBER].strip().startswith(self.c.VALUE_TARGET_REFERENCE_INTENSITY_BASE):
-            return intensity_mappings.get(target[self.c.COLS.INTENSITY_METRIC], None)
+            return self.c.INTENSITY_MAPPINGS.get(target[self.c.COLS.INTENSITY_METRIC], None)
         else:
-            return "Emissions|Kyoto Gases"
+            return self.c.ABSOLUTE_MAPPING
 
     def get_annual_reduction_rate(self, target: pd.Series) -> Optional[float]:
         """
@@ -360,7 +349,7 @@ class TemperatureScore(PortfolioAggregation):
         data = data[data[self.c.COLS.SCOPE].isin(self.scopes)]
         return data
 
-    def _get_aggregations(self, data: pd.DataFrame) -> Tuple[Aggregation, pd.Series, pd.Series]:
+    def _get_aggregations(self, data: pd.DataFrame, total_companies: int) -> Tuple[Aggregation, pd.Series, pd.Series]:
         """
         Get the aggregated score over a certain data set. Also calculate the (relative) contribution of each company
 
@@ -376,6 +365,7 @@ class TemperatureScore(PortfolioAggregation):
         contributions = data.sort_values(self.c.COLS.CONTRIBUTION_RELATIVE, ascending=False).to_dict(orient="records")
         return Aggregation(
                 score=weighted_scores.sum(),
+                proportion=len(weighted_scores) / (total_companies / 100.0),
                 contributions=[AggregationContribution.parse_obj(contribution) for contribution in contributions]
             ), \
             data[self.c.COLS.CONTRIBUTION_RELATIVE], \
@@ -394,10 +384,12 @@ class TemperatureScore(PortfolioAggregation):
         """
         filtered_data = data[(data[self.c.COLS.TIME_FRAME] == time_frame) &
                              (data[self.c.COLS.SCOPE] == scope)].copy()
+        filtered_data[self.grouping] = filtered_data[self.grouping].fillna("unknown")
+        total_companies = len(filtered_data)
         if not filtered_data.empty:
             score_aggregation_all, \
                 filtered_data[self.c.COLS.CONTRIBUTION_RELATIVE], \
-                filtered_data[self.c.COLS.CONTRIBUTION] = self._get_aggregations(filtered_data)
+                filtered_data[self.c.COLS.CONTRIBUTION] = self._get_aggregations(filtered_data, total_companies)
             score_aggregation = ScoreAggregation(
                 grouped={},
                 all=score_aggregation_all,
@@ -407,9 +399,9 @@ class TemperatureScore(PortfolioAggregation):
             # If there are grouping column(s) we'll group in pandas and pass the results to the aggregation
             if len(self.grouping) > 0:
                 grouped_data = filtered_data.groupby(self.grouping)
-                for group_name, group in grouped_data:
-                    group_name_joined = group_name if type(group_name) == str else "-".join(group_name)
-                    score_aggregation.grouped[group_name_joined], _, _ = self._get_aggregations(group.copy())
+                for group_names, group in grouped_data:
+                    group_name_joined = group_names if type(group_names) == str else "-".join([str(group_name) for group_name in group_names])
+                    score_aggregation.grouped[group_name_joined], _, _ = self._get_aggregations(group.copy(), total_companies)
             return score_aggregation
         else:
             return None
@@ -430,35 +422,6 @@ class TemperatureScore(PortfolioAggregation):
             score_aggregations.__setattr__(time_frame.value, score_aggregation_scopes)
 
         return score_aggregations
-
-    def columns_percentage_distribution(self, data: pd.DataFrame) -> Optional[dict]:
-        """
-        Percentage distribution of the grouping columns
-
-        :param data: output from the target_validation
-        :return: percentage distribution of specified columns
-        """
-        if self.grouping is None or len(self.grouping) == 0:
-            return None
-
-        data = data[self.grouping].fillna('unknown')
-        if len(self.grouping) == 1:
-            percentage_distribution = round(
-                (data.groupby(self.grouping[0]).size() / data[self.grouping[0]].count()) * 100, 2)
-            return percentage_distribution.to_dict()
-        elif len(self.grouping) > 1:
-            percentage_distribution = round(
-                (data.groupby(self.grouping).size() / data[self.grouping[0]].count()) * 100, 2)
-            percentage_distribution = percentage_distribution.to_dict()
-
-            percentage_distribution_copy = percentage_distribution.copy()
-            # Modifies the original key name (tuple) into string representation
-            for key, value in percentage_distribution_copy.items():
-                key_combined = key if type(key) == str else "-".join(key)
-                percentage_distribution[key_combined] = percentage_distribution[key]
-                del percentage_distribution[key]
-            return percentage_distribution
-        return None
 
     def cap_scores(self, scores: pd.DataFrame) -> pd.DataFrame:
         """

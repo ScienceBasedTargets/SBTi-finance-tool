@@ -17,6 +17,7 @@ class AggregationContribution(BaseModel):
 
 class Aggregation(BaseModel):
     score: float
+    proportion: float
     contributions: List[AggregationContribution]
 
     def __getitem__(self, item):
@@ -60,6 +61,7 @@ class PortfolioCompany(BaseModel):
     company_id: str
     investment_value: float
     engagement_target: Optional[str] = "False"
+    user_fields: Optional[dict]
 
 
 class IDataProviderCompany(BaseModel):
