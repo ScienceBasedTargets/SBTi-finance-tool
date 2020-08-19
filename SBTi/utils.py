@@ -52,7 +52,8 @@ def get_data(data_providers: List[DataProvider], portfolio: List[PortfolioCompan
 
 def calculate(portfolio_data: pd.DataFrame, fallback_score: float, aggregation_method: PortfolioAggregationMethod,
               grouping: Optional[List[str]], scenario: Optional[Scenario], time_frames: List[ETimeFrames],
-              scopes: List[EScope], anonymize: bool) -> Tuple[pd.DataFrame, ScoreAggregations]:
+              scopes: List[EScope], anonymize: bool, aggregate: bool = True) -> Tuple[pd.DataFrame,
+                                                                                      Optional[ScoreAggregations]]:
     """
     Calculate the different parts of the temperature score (actual scores, aggregations, column distribution).
 
@@ -64,13 +65,16 @@ def calculate(portfolio_data: pd.DataFrame, fallback_score: float, aggregation_m
     :param grouping: The names of the columns to group on
     :param scenario: The scenario to play
     :param anonymize: Whether to anonymize the resulting data set or not
+    :param aggregate: Whether to aggregate the scores or not
     :return: The scores, the aggregations and the column distribution (if a
     """
     ts = TemperatureScore(time_frames=time_frames, scopes=scopes, fallback_score=fallback_score, scenario=scenario,
                           grouping=grouping, aggregation_method=aggregation_method)
 
     scores = ts.calculate(portfolio_data)
-    aggregations = ts.aggregate_scores(scores)
+    aggregations = None
+    if aggregate:
+        aggregations = ts.aggregate_scores(scores)
 
     if anonymize:
         scores = ts.anonymize_data_dump(scores)
