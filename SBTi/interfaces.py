@@ -1,15 +1,17 @@
 from enum import Enum
 from typing import Optional, Dict, List
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class AggregationContribution(BaseModel):
     company_name: str
     company_id: str
     temperature_score: float
-    contribution_relative: float
-    contribution: float
+    contribution_relative: float = Field(..., description="The relative contribution of this company to the aggregated "
+                                                          "score. If a value was missing this field will be zero.")
+    contribution: float = Field(..., description="The absolute contribution of this company to the aggregated score. "
+                                                 "If a value was missing this field will be zero.")
 
     def __getitem__(self, item):
         return getattr(self, item)
