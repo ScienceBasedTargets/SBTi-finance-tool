@@ -152,4 +152,5 @@ class IDataProviderTarget(BaseModel):
     base_year_ghg_s3: float
     start_year: Optional[int]
     end_year: int
+    time_frame: Optional[ETimeFrames]
     achieved_reduction: Optional[float] = 0
