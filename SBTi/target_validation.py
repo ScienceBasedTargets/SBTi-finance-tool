@@ -51,11 +51,17 @@ class TargetProtocol:
         # Only absolute targets or intensity targets with a valid intensity metric are allowed.
         target_type = "abs" in target.target_type.lower() or \
                       ("int" in target.target_type.lower() and
-                       not pd.isnull(target.intensity_metric) and
+                       target.intensity_metric is not None and
                        target.intensity_metric.lower() != "other")
         # The target should not have achieved it's reduction yet.
-        target_process = target.achieved_reduction < 1
+        target_process = pd.isnull(target.achieved_reduction) or \
+                         target.achieved_reduction is None or \
+                         target.achieved_reduction < 1
+
         # The end year should be greater than the start year.
+        if target.start_year is None or pd.isnull(target.start_year):
+            target.start_year = target.base_year
+
         target_end_year = target.end_year > target.start_year
         # Delete all S1 or S2 targets we can't combine
         s1 = target.scope != EScope.S1 or (not pd.isnull(target.coverage_s1) and not pd.isnull(target.base_year_ghg_s1)
@@ -72,10 +78,9 @@ class TargetProtocol:
         :return The split targets or the original target and None
         """
         if target.scope == EScope.S1S2S3:
-            s1s2, s3 = None, None
+            s1s2, s3 = target.copy(), None
             if (not pd.isnull(target.base_year_ghg_s1) and not pd.isnull(target.base_year_ghg_s1)) or \
                     target.coverage_s1 == target.coverage_s2:
-                s1s2 = target.copy()
                 s1s2.scope = EScope.S1S2
                 if not pd.isnull(target.base_year_ghg_s1) and not pd.isnull(target.base_year_ghg_s2) and \
                         target.base_year_ghg_s1 + target.base_year_ghg_s2 != 0:
