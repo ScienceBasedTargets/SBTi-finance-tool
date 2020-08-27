@@ -361,8 +361,10 @@ class TemperatureScore(PortfolioAggregation):
                                                           self.aggregation_method)
         data[self.c.COLS.CONTRIBUTION_RELATIVE] = weighted_scores / (weighted_scores.sum() / 100)
         data[self.c.COLS.CONTRIBUTION] = weighted_scores
-
-        contributions = data.sort_values(self.c.COLS.CONTRIBUTION_RELATIVE, ascending=False).to_dict(orient="records")
+        contributions = data\
+            .sort_values(self.c.COLS.CONTRIBUTION_RELATIVE, ascending=False)\
+            .where(pd.notnull(data), None)\
+            .to_dict(orient="records")
         return Aggregation(
                 score=weighted_scores.sum(),
                 proportion=len(weighted_scores) / (total_companies / 100.0),

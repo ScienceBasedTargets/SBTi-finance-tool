@@ -8,8 +8,8 @@ class AggregationContribution(BaseModel):
     company_name: str
     company_id: str
     temperature_score: float
-    contribution_relative: float
-    contribution: float
+    contribution_relative: Optional[float]
+    contribution: Optional[float]
 
     def __getitem__(self, item):
         return getattr(self, item)
