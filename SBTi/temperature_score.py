@@ -344,6 +344,9 @@ class TemperatureScore(PortfolioAggregation):
         :return: A data frame containing all relevant information for the targets and companies
         """
         data = self._prepare_data(data)
+        self._check_column(data, self.c.COLS.GHG_SCOPE12)
+        self._check_column(data, self.c.COLS.GHG_SCOPE3)
+
         data = self._calculate_company_score(data)
         # We need to filter the scopes again, because we might have had to add a scope in te preparation step
         data = data[data[self.c.COLS.SCOPE].isin(self.scopes)]

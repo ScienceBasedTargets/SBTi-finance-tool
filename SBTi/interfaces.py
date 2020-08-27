@@ -1,7 +1,8 @@
 from enum import Enum
 from typing import Optional, Dict, List
 
-from pydantic import BaseModel
+import pandas as pd
+from pydantic import BaseModel, validator
 
 
 class AggregationContribution(BaseModel):
@@ -154,3 +155,9 @@ class IDataProviderTarget(BaseModel):
     end_year: int
     time_frame: Optional[ETimeFrames]
     achieved_reduction: Optional[float] = 0
+
+    @validator('start_year', pre=True, always=False)
+    def validate_e(cls, val):
+        if val == "" or val == "nan" or pd.isnull(val):
+            return None
+        return val
