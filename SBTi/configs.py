@@ -36,7 +36,7 @@ class ColumnsConfig:
     SECTOR = 'sector'
     GHG_SCOPE12 = 'ghg_s1s2'
     GHG_SCOPE3 = 'ghg_s3'
-    COMPANY_REVENUE = 'revenue'
+    COMPANY_REVENUE = 'company_revenue'
     CASH_EQUIVALENTS = 'cash_equivalents'
     TARGET_CLASSIFICATION = 'target_classification'
     REDUCTION_AMBITION = 'reduction_ambition'
