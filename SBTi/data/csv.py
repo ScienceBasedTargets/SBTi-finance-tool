@@ -19,8 +19,8 @@ class CSVProvider(DataProvider):
 
     def get_targets(self, company_ids: list) -> List[IDataProviderTarget]:
         """
-        Get all relevant targets for a certain company. This method should return a list of IDataProviderTarget
-        instances.
+        Get all relevant targets for a list of company ids (ISIN). This method should return a list of
+        IDataProviderTarget instances.
 
         :param company_ids: A list of company IDs (ISINs)
         :return: A list containing the targets
@@ -32,7 +32,8 @@ class CSVProvider(DataProvider):
 
     def get_company_data(self, company_ids: list) -> List[IDataProviderCompany]:
         """
-        Get all relevant data for a certain company. This method should return a list of IDataProviderCompany instances.
+        Get all relevant data for a list of company ids (ISIN). This method should return a list of IDataProviderCompany
+        instances.
 
         :param company_ids: A list of company IDs (ISINs)
         :return: A list containing the company data
