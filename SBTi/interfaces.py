@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import Optional, Dict, List
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class AggregationContribution(BaseModel):
@@ -83,6 +83,8 @@ class IDataProviderCompany(BaseModel):
     company_enterprise_value: Optional[float]
     company_total_assets: Optional[float]
     company_cash_equivalents: Optional[float]
+
+    sbti_validated: bool = Field(False, description='True if the SBTi target status is "Target set", false otherwise')
 
 
 class SortableEnum(Enum):

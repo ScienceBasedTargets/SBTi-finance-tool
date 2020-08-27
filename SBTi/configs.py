@@ -42,7 +42,7 @@ class ColumnsConfig:
     REDUCTION_AMBITION = 'reduction_ambition'
     BASE_YEAR = 'base_year'
     END_YEAR = 'end_year'
-    SBTI_STATUS = 'sbti_status'
+    SBTI_VALIDATED = 'sbti_validated'
     ACHIEVED_EMISSIONS = "achieved_reduction"
     ISIC = 'isic'
     INDUSTRY_LVL1 = "industry_level_1"

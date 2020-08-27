@@ -2,6 +2,7 @@ import logging
 import pandas as pd
 from typing import List, Optional, Tuple, Type, Dict
 
+from SBTi.data.sbti import SBTi
 from SBTi.interfaces import IDataProviderTarget, IDataProviderCompany
 
 
@@ -78,6 +79,9 @@ def get_company_data(data_providers: list, company_ids: List[str]) -> List[IData
                 break
         except NotImplementedError:
             logger.warning("{} is not available yet".format(type(dp).__name__))
+
+    # Supplement the company data with the SBTi target status
+    company_data = SBTi().get_sbti_targets(company_data)
 
     return company_data
 
