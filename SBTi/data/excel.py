@@ -15,7 +15,7 @@ class ExcelProvider(DataProvider):
 
     def __init__(self, path: str, config: Type[ColumnsConfig] = ColumnsConfig):
         super().__init__()
-        self.data = pd.read_excel(path, sheet_name=None, skiprows=1)
+        self.data = pd.read_excel(path, sheet_name=None, skiprows=0)
         self.c = config
 
     def get_targets(self, company_ids: List[str]) -> List[IDataProviderTarget]:
