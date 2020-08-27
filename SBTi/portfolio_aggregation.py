@@ -94,8 +94,7 @@ class PortfolioAggregation(ABC):
             self._check_column(data, self.c.COLS.GHG_SCOPE12)
             self._check_column(data, self.c.COLS.GHG_SCOPE3)
             # Calculate the total emissions of all companies
-            emissions = data[self.c.COLS.GHG_SCOPE12].sum() + data[
-                self.c.COLS.GHG_SCOPE3].sum()
+            emissions = data[self.c.COLS.GHG_SCOPE12].sum() + data[self.c.COLS.GHG_SCOPE3].sum()
             try:
                 return data.apply(
                     lambda row: (row[self.c.COLS.GHG_SCOPE12] + row[self.c.COLS.GHG_SCOPE3]) / emissions * row[
