@@ -56,6 +56,20 @@ class PortfolioAggregation(ABC):
     def __init__(self, config: Type[PortfolioAggregationConfig] = PortfolioAggregationConfig):
         self.c = config
 
+    def _check_column(self, data: pd.DataFrame, column: str):
+        """
+        Check if a certain column is filled for all companies. If not throw an error.
+
+        :param data: The data to check
+        :param column: The column to check
+        :return:
+        """
+        missing_data = data[pd.isnull(data[column])][self.c.COLS.COMPANY_NAME].unique()
+        if len(missing_data):
+            raise ValueError("The value for {} is missing for the following companies: {}".format(
+                column, ", ".join(missing_data)
+            ))
+
     def _calculate_aggregate_score(self, data: pd.DataFrame, input_column: str,
                                    portfolio_aggregation_method: PortfolioAggregationMethod) -> pd.Series:
         """
@@ -77,6 +91,8 @@ class PortfolioAggregation(ABC):
 
         # Total emissions weighted temperature score (TETS)
         elif portfolio_aggregation_method == PortfolioAggregationMethod.TETS:
+            self._check_column(data, self.c.COLS.GHG_SCOPE12)
+            self._check_column(data, self.c.COLS.GHG_SCOPE3)
             # Calculate the total emissions of all companies
             emissions = data[self.c.COLS.GHG_SCOPE12].sum() + data[
                 self.c.COLS.GHG_SCOPE3].sum()
@@ -92,6 +108,8 @@ class PortfolioAggregation(ABC):
         elif PortfolioAggregationMethod.is_emissions_based(portfolio_aggregation_method):
             # These four methods only differ in the way the company is valued.
             if portfolio_aggregation_method == PortfolioAggregationMethod.ECOTS:
+                self._check_column(data, self.c.COLS.COMPANY_ENTERPRISE_VALUE)
+                self._check_column(data, self.c.COLS.CASH_EQUIVALENTS)
                 data[self.c.COLS.COMPANY_EV_PLUS_CASH] = data[self.c.COLS.COMPANY_ENTERPRISE_VALUE] + \
                                                          data[self.c.COLS.CASH_EQUIVALENTS]
 
@@ -99,6 +117,10 @@ class PortfolioAggregation(ABC):
 
             # Calculate the total owned emissions of all companies
             try:
+                self._check_column(data, self.c.COLS.INVESTMENT_VALUE)
+                self._check_column(data, value_column)
+                self._check_column(data, self.c.COLS.GHG_SCOPE12)
+                self._check_column(data, self.c.COLS.GHG_SCOPE3)
                 data[self.c.COLS.OWNED_EMISSIONS] = data.apply(
                     lambda row: (row[self.c.COLS.INVESTMENT_VALUE] / row[value_column]) * (
                             row[self.c.COLS.GHG_SCOPE12] + row[self.c.COLS.GHG_SCOPE3]),
