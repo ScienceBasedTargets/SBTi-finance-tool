@@ -352,6 +352,7 @@ class TemperatureScore(PortfolioAggregation):
 
         # We need to filter the scopes again, because we might have had to add a scope in te preparation step
         data = data[data[self.c.COLS.SCOPE].isin(self.scopes)]
+        data[self.c.COLS.TEMPERATURE_SCORE] = data[self.c.COLS.TEMPERATURE_SCORE].round(2)
         return data
 
     def _get_aggregations(self, data: pd.DataFrame, total_companies: int) -> Tuple[Aggregation, pd.Series, pd.Series]:
