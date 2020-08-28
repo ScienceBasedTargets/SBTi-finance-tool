@@ -1,108 +1,156 @@
 import datetime
 import itertools
-import logging
 
 import pandas as pd
-from typing import Type, List
+from typing import Type, List, Tuple, Optional
 from SBTi.configs import PortfolioAggregationConfig
 import logging
 
 from SBTi.interfaces import IDataProviderTarget, IDataProviderCompany, EScope, ETimeFrames
 
 
-class TargetValidation:
+class TargetProtocol:
     """
-    This class validates the targets, to make sure that only active, useful targets are considered.
+    This class validates the targets, to make sure that only active, useful targets are considered. It then combines the targets with company-related data into a dataframe where there's one row for each of the nine possible target types (short, mid, long * S1+S2, S3, S1+S2+S3). This class follows the procedures outlined by the target protocol that is a part of the "Temperature Rating Methodology" (2020), which has been created by CDP Worldwide and WWF International.
 
-    :param targets: The target related data
-    :param companies: The company related data
     :param config: A Portfolio aggregation config
     """
-
-    def __init__(self, targets: List[IDataProviderTarget], companies: List[IDataProviderCompany],
-                 config: Type[PortfolioAggregationConfig] = PortfolioAggregationConfig):
-        self.data = pd.DataFrame.from_records([c.dict() for c in targets])
+    def __init__(self, config: Type[PortfolioAggregationConfig] = PortfolioAggregationConfig):
         self.c = config
-        self.company_data = pd.DataFrame.from_records([c.dict() for c in companies])
         self.logger = logging.getLogger(__name__)
+        self.s2_targets: List[IDataProviderTarget] = []
+        self.target_data: pd.DataFrame = pd.DataFrame()
+        self.company_data: pd.DataFrame = pd.DataFrame()
+        self.data: pd.DataFrame = pd.DataFrame()
 
-    def target_validation(self) -> pd.DataFrame:
+    def process(self, targets: List[IDataProviderTarget], companies: List[IDataProviderCompany]) -> pd.DataFrame:
         """
-        Runs the target validation protocol.
+        Process the targets and companies, validate all targets and return a data frame that combines all targets and company data into a 9-box grid.
 
-        :return: A data frame with only valid targets, combined with the company-specific data. This will return a 9-box grid for all companies (i.e. one row for the three time-frame (short, mid, long) and the three scopes (s1s2, s3, s1s2s3). These rows might have empty targets.
+        :param targets: A list of targets
+        :param companies: A list of companies
+        :return: A data frame that combines the processed data
         """
-        self.test_target_type()
-
-        # self.data[self.c.COLS.SCOPE] = self.data[self.c.COLS.SCOPE].astype(str)
-        self.split_s1s2s3()
-        self.convert_s1_s2_into_s1s2()
-        self.test_boundary_coverage()
-        self.test_target_process()
-        self.test_end_year()
-        self.time_frame()
+        targets = self.prepare_targets(targets)
+        self.target_data = pd.DataFrame.from_records([c.dict() for c in targets])
+        self.company_data = pd.DataFrame.from_records([c.dict() for c in companies])
         self.group_targets()
-        self.data = self.combine_records()
-        return self.data
+        return pd.merge(left=self.data, right=self.company_data, how='outer', on=['company_id'])
 
-    def test_end_year(self):
+    def validate(self, target: IDataProviderTarget) -> bool:
         """
-        Records that have a valid end_year will be returned. A valid end_year is defined as a year that is greater then
-        the start_year.
+        Validate a target, meaning it should:
 
-        :return: a dataframe containing records that have correct end_year feature.
+        * Have a valid type
+        * Not be finished
+        * A valid end year
+
+        :param target: The target to validate
+        :return: True if it's a valid target, false if it isn't
         """
-        index_list = []
-        for index, record in self.data.iterrows():
-            if record[self.c.COLS.END_YEAR] > record[self.c.COLS.START_YEAR]:
-                index_list.append(index)
-        self.data = self.data.loc[index_list]
+        # Only absolute targets or intensity targets with a valid intensity metric are allowed.
+        target_type = "abs" in target.target_type.lower() or \
+                      ("int" in target.target_type.lower() and
+                       target.intensity_metric is not None and
+                       target.intensity_metric.lower() != "other")
+        # The target should not have achieved it's reduction yet.
+        target_process = pd.isnull(target.achieved_reduction) or \
+                         target.achieved_reduction is None or \
+                         target.achieved_reduction < 1
 
-    def test_missing_fields(self, data_set, required_columns: List[str]) -> pd.DataFrame:
+        # The end year should be greater than the start year.
+        if target.start_year is None or pd.isnull(target.start_year):
+            target.start_year = target.base_year
+
+        target_end_year = target.end_year > target.start_year
+        # Delete all S1 or S2 targets we can't combine
+        s1 = target.scope != EScope.S1 or (not pd.isnull(target.coverage_s1) and not pd.isnull(target.base_year_ghg_s1)
+                                           and not pd.isnull(target.base_year_ghg_s2))
+        s2 = target.scope != EScope.S2 or (not pd.isnull(target.coverage_s2) and not pd.isnull(target.base_year_ghg_s1)
+                                           and not pd.isnull(target.base_year_ghg_s2))
+        return target_type and target_process and target_end_year and s1 and s2
+
+    def _split_s1s2s3(self, target: IDataProviderTarget) -> Tuple[IDataProviderTarget, Optional[IDataProviderTarget]]:
         """
-        When a required field is missing (that we need to do calculations later on), we'll delete the whole row.
+        If there is a s1s2s3 scope, split it into two targets with s1s2 and s3
 
-        :param data_set: The data set that should be tested for missing columns.
-        :param required_columns: The columns that should be in the input data
-        :return: The input data set, without the invalid rows
+        :param target: The input target
+        :return The split targets or the original target and None
         """
-        for column in required_columns:
-            len_old = len(data_set)
-            data_set = data_set[data_set[column].notna()]
-            if len_old != len(data_set):
-                self.logger.warning("One or more targets have been deleted due to null values in column: {}".format(
-                    column))
-        return data_set
+        if target.scope == EScope.S1S2S3:
+            s1s2, s3 = target.copy(), None
+            if (not pd.isnull(target.base_year_ghg_s1) and not pd.isnull(target.base_year_ghg_s1)) or \
+                    target.coverage_s1 == target.coverage_s2:
+                s1s2.scope = EScope.S1S2
+                if not pd.isnull(target.base_year_ghg_s1) and not pd.isnull(target.base_year_ghg_s2) and \
+                        target.base_year_ghg_s1 + target.base_year_ghg_s2 != 0:
+                    coverage_percentage = (s1s2.coverage_s1 * s1s2.base_year_ghg_s1 +
+                                           s1s2.coverage_s2 * s1s2.base_year_ghg_s2) / \
+                                          (s1s2.base_year_ghg_s1 + s1s2.base_year_ghg_s2)
+                    s1s2.coverage_s1 = coverage_percentage
+                    s1s2.coverage_s2 = coverage_percentage
 
-    def test_target_type(self):
+            if not pd.isnull(target.coverage_s3):
+                s3 = target.copy()
+                s3.scope = EScope.S3
+            return s1s2, s3
+        else:
+            return target, None
+
+    def _combine_s1_s2(self, target: IDataProviderTarget):
         """
-        Test on target type and only allow only GHG emission reduction targets (absolute or intensity based).
+        Check if there is an S2 target that matches this target exactly (if this is a S1 target) and combine them into one target.
 
-        Target validation step 1: target type #64
-        If target type is Absolute => continue
-        If target type is Intensity =>
-        -- If Intensity_metric is Other (or none is specified) => Invalid target
-        -- For all other intensity_metrics => continue
-        If target type is Other (or none is specified) => Invalid target
+        :param target: The input target
+        :return: The combined target (or the original if no combining was required)
         """
-        index_list = []
+        if target.scope == EScope.S1 and not pd.isnull(target.base_year_ghg_s1):
+            matches = [t for t in self.s2_targets
+                       if t.company_id == target.company_id
+                       and t.base_year == target.base_year
+                       and t.start_year == target.start_year
+                       and t.end_year == target.end_year
+                       and t.target_type == target.target_type
+                       and t.intensity_metric == target.intensity_metric]
+            if len(matches) > 0:
+                matches.sort(key=lambda t: t.coverage_s2, reverse=True)
+                s2 = matches[0]
+                combined_coverage = (target.coverage_s1 * target.base_year_ghg_s1 +
+                                     s2.coverage_s2 * s2.base_year_ghg_s2) / \
+                                    (target.base_year_ghg_s1 + s2.base_year_ghg_s2)
+                target.reduction_ambition = target.reduction_ambition * target.coverage_s1 * target.base_year_ghg_s1 + \
+                                            s2.reduction_ambition * s2.coverage_s1 * s2.base_year_ghg_s2 / \
+                                            (target.base_year_ghg_s1 + s2.base_year_ghg_s1) / combined_coverage
+                target.coverage_s1 = combined_coverage
+                target.coverage_s2 = combined_coverage
+                # We don't need to delete the S2 target as it'll be definition have a lower coverage than the combined
+                # target, therefore it won't be picked for our 9-box grid
+        return target
 
-        self.data[self.c.COLS.TARGET_REFERENCE_NUMBER] = self.data[self.c.COLS.TARGET_REFERENCE_NUMBER].str.lower()
-        if self.c.COLS.INTENSITY_METRIC in self.data.columns:
-            self.data[self.c.COLS.INTENSITY_METRIC] = self.data[self.c.COLS.INTENSITY_METRIC].astype(str)
-            self.data[self.c.COLS.INTENSITY_METRIC] = self.data[self.c.COLS.INTENSITY_METRIC].str.lower()
-        for index, record in self.data.iterrows():
-            if not pd.isna(record[self.c.COLS.TARGET_REFERENCE_NUMBER]):
-                if 'abs' in record[self.c.COLS.TARGET_REFERENCE_NUMBER]:
-                    index_list.append(index)
-                elif 'int' in record[self.c.COLS.TARGET_REFERENCE_NUMBER]:
-                    if self.c.COLS.INTENSITY_METRIC in record and \
-                            not pd.isna(record[self.c.COLS.INTENSITY_METRIC]) and \
-                            'other' not in record[self.c.COLS.INTENSITY_METRIC]:
-                        index_list.append(index)
-        self.data = self.data.loc[index_list]
+    def _convert_s1_s2(self, target: IDataProviderTarget):
+        """
+        Convert a S1 or S2 target into a S1+S2 target.
 
-    def test_boundary_coverage(self):
+        :param target: The input target
+        :return: The converted target (or the original if no conversion was required)
+        """
+        # In both cases the base_year_ghg s1 + s2 should not be zero
+        if target.base_year_ghg_s1 + target.base_year_ghg_s2 != 0:
+            if target.scope == EScope.S1:
+                coverage = target.coverage_s1 * target.base_year_ghg_s1 / (
+                        target.base_year_ghg_s1 + target.base_year_ghg_s2)
+                target.coverage_s1 = coverage
+                target.coverage_s2 = coverage
+                target.scope = EScope.S1S2
+            elif target.scope == EScope.S2:
+                coverage = target.coverage_s2 * target.base_year_ghg_s2 / (
+                        target.base_year_ghg_s1 + target.base_year_ghg_s2)
+                target.coverage_s1 = coverage
+                target.coverage_s2 = coverage
+                target.scope = EScope.S1S2
+        return target
+
+    def _boundary_coverage(self, target: IDataProviderTarget) -> IDataProviderTarget:
         """
         Test on boundary coverage:
 
@@ -116,122 +164,60 @@ class TargetValidation:
 
         Option 3: default coverage
         Target is always valid, % uncovered is given default score in temperature score module.
-        """
-        index = []
-        for idx, record in self.data.iterrows():
-            if not pd.isna(record[self.c.COLS.SCOPE]):
-                if EScope.S1S2 == record[self.c.COLS.SCOPE]:
-                    if record[self.c.COLS.COVERAGE_S1] > 0.95:
-                        index.append(idx)
-                    else:
-                        index.append(idx)
-                        self.data.at[idx, self.c.COLS.REDUCTION_AMBITION] = \
-                            self.data[self.c.COLS.REDUCTION_AMBITION].loc[idx] * \
-                            (self.data[self.c.COLS.COVERAGE_S1].loc[idx])
-                elif EScope.S3 == record[self.c.COLS.SCOPE]:
-                    if record[self.c.COLS.COVERAGE_S3] > 0.67:
-                        index.append(idx)
-                    else:
-                        index.append(idx)
-                        self.data.at[idx, self.c.COLS.REDUCTION_AMBITION] = \
-                            self.data[self.c.COLS.REDUCTION_AMBITION].loc[idx] * \
-                            (self.data[self.c.COLS.COVERAGE_S3].loc[idx])
-        self.data = self.data.loc[index]
 
-    def test_target_process(self):
+        :param target: The input target
+        :return: The original target with a weighted reduction ambition, if so required
         """
-        Test on target process
-        If target process is 100%, the target is invalid (only forward looking targets allowed)
-        Output: a list of valid targets per company
+        if target.scope == EScope.S1S2:
+            if target.coverage_s1 <= 0.95:
+                target.reduction_ambition = target.reduction_ambition * target.coverage_s1
+        elif target.scope == EScope.S3:
+            if target.coverage_s3 <= 0.67:
+                target.reduction_ambition = target.reduction_ambition * target.coverage_s3
+        return target
 
-        Target progress: the percentage of the target already achieved
-        """
-        if self.c.COLS.ACHIEVED_EMISSIONS in self.data.columns:
-            index = []
-            for idx, record in self.data.iterrows():
-                if not pd.isna(record[self.c.COLS.ACHIEVED_EMISSIONS]):
-                    if record[self.c.COLS.ACHIEVED_EMISSIONS] != 100:
-                        index.append(idx)
-            self.data = self.data.loc[index]
-
-    def convert_s1_s2_into_s1s2(self):
-        """
-        Combine all s1 and a s2 targets into one s1s2 target.
-
-        :return:
-        """
-        s1_mask = self.data[self.c.COLS.SCOPE] == EScope.S1
-        s1 = self.data[s1_mask]
-        s1_delete_mask = (s1_mask & (
-                self.data[self.c.COLS.COVERAGE_S1].isna() | self.data[self.c.COLS.BASEYEAR_GHG_S1].isna() |
-                self.data[self.c.COLS.BASEYEAR_GHG_S2].isna()))
-        coverage_percentage = s1[self.c.COLS.COVERAGE_S1] * s1[self.c.COLS.BASEYEAR_GHG_S1] / (
-                s1[self.c.COLS.BASEYEAR_GHG_S1] + s1[self.c.COLS.BASEYEAR_GHG_S2])
-        self.data.loc[s1_mask, [self.c.COLS.COVERAGE_S1, self.c.COLS.COVERAGE_S2]] = coverage_percentage
-        self.data = self.data[~s1_delete_mask]
-
-        s2_mask = self.data[self.c.COLS.SCOPE] == EScope.S2
-        s2 = self.data[s2_mask]
-        s2_delete_mask = (s2_mask & (
-                self.data[self.c.COLS.COVERAGE_S2].isna() | self.data[self.c.COLS.BASEYEAR_GHG_S1].isna() |
-                self.data[self.c.COLS.BASEYEAR_GHG_S2].isna()))
-        coverage_percentage = s2[self.c.COLS.COVERAGE_S2] * s2[self.c.COLS.BASEYEAR_GHG_S2] / (
-                s2[self.c.COLS.BASEYEAR_GHG_S1] + s2[self.c.COLS.BASEYEAR_GHG_S2])
-        self.data.loc[s2_mask, [self.c.COLS.COVERAGE_S1, self.c.COLS.COVERAGE_S2]] = coverage_percentage
-        self.data = self.data[~s2_delete_mask]
-
-    def split_s1s2s3(self):
-        """
-        If there is a s1s2s3 scope, split it into two targets with s1s2 and s3
-        """
-        s1s2s3_mask = self.data[self.c.COLS.SCOPE] == EScope.S1S2S3
-        s1s2s3 = self.data[s1s2s3_mask]
-        self.data = self.data[~s1s2s3_mask]
-        for _, row in s1s2s3.iterrows():
-            if (pd.isnull(row[self.c.COLS.BASEYEAR_GHG_S1]) or pd.isnull(row[self.c.COLS.BASEYEAR_GHG_S2])) and \
-                    (row[self.c.COLS.COVERAGE_S1] != row[self.c.COLS.COVERAGE_S2]):
-                pass
-            else:
-                s1s2 = row.copy()
-                s1s2[self.c.COLS.SCOPE] = EScope.S1S2
-                if pd.isnull(s1s2[self.c.COLS.BASEYEAR_GHG_S1]) or pd.isnull(s1s2[self.c.COLS.BASEYEAR_GHG_S2]) or \
-                    s1s2[self.c.COLS.BASEYEAR_GHG_S1] + s1s2[self.c.COLS.BASEYEAR_GHG_S2] == 0:
-                    pass
-                else:
-                    coverage_percentage = (s1s2[self.c.COLS.COVERAGE_S1] * s1s2[self.c.COLS.BASEYEAR_GHG_S1] +
-                                           s1s2[self.c.COLS.COVERAGE_S2] * s1s2[self.c.COLS.BASEYEAR_GHG_S2]) / \
-                                          (s1s2[self.c.COLS.BASEYEAR_GHG_S1] + s1s2[self.c.COLS.BASEYEAR_GHG_S2])
-                    s1s2[self.c.COLS.COVERAGE_S1] = coverage_percentage
-                    s1s2[self.c.COLS.COVERAGE_S2] = coverage_percentage
-                    if not pd.isnull(coverage_percentage):
-                        self.data = self.data.append(s1s2).reset_index(drop=True)
-            if pd.isnull(row[self.c.COLS.COVERAGE_S3]):
-                pass
-            else:
-                s3 = row.copy()
-                s3[self.c.COLS.SCOPE] = EScope.S3
-                self.data = self.data.append(s3).reset_index(drop=True)
-
-    def time_frame(self):
+    def _time_frame(self, target: IDataProviderTarget) -> IDataProviderTarget:
         """
         Time frame is forward looking: target year - current year. Less than 5y = short, between 5 and 15 is mid, 15 to 30 is long
+
+        :param target: The input target
+        :return: The original target with the time_frame field filled out (if so required)
         """
         now = datetime.datetime.now()
-        time_frame_list = []
-        for index, record in self.data.iterrows():
-            if not pd.isna(record[self.c.COLS.END_YEAR]):
-                time_frame = record[self.c.COLS.END_YEAR] - now.year
-                if (time_frame <= 15) & (time_frame > 5):
-                    time_frame_list.append(ETimeFrames.MID)
-                elif (time_frame <= 30) & (time_frame > 15):
-                    time_frame_list.append(ETimeFrames.LONG)
-                elif time_frame <= 5:
-                    time_frame_list.append(ETimeFrames.SHORT)
-                else:
-                    time_frame_list.append(None)
-            else:
-                time_frame_list.append(None)
-        self.data[self.c.COLS.TIME_FRAME] = time_frame_list
+        time_frame = target.end_year - now.year
+        if time_frame <= 5:
+            target.time_frame = ETimeFrames.SHORT
+        elif time_frame <= 15:
+            target.time_frame = ETimeFrames.MID
+        elif time_frame <= 30:
+            target.time_frame = ETimeFrames.LONG
+
+        return target
+
+    def _prepare_target(self, target: IDataProviderTarget):
+        """
+        Prepare a target for usage later on in the process.
+
+        :param target:
+        :return:
+        """
+        target = self._combine_s1_s2(target)
+        target = self._convert_s1_s2(target)
+        target = self._boundary_coverage(target)
+        target = self._time_frame(target)
+        return target
+
+    def prepare_targets(self, targets: List[IDataProviderTarget]):
+        targets = list(filter(self.validate, targets))
+        self.s2_targets = list(filter(
+            lambda target: target.scope == EScope.S2 and not pd.isnull(target.base_year_ghg_s2) and
+                           not pd.isnull(target.coverage_s2), targets)
+        )
+
+        targets = list(filter(None, itertools.chain.from_iterable(map(self._split_s1s2s3, targets))))
+        targets = [self._prepare_target(target) for target in targets]
+
+        return targets
 
     def _find_target(self, row: pd.Series, target_columns: List[str]) -> pd.Series:
         """
@@ -243,9 +229,9 @@ class TargetValidation:
         """
 
         # Find all targets that correspond to the given row
-        target_data = self.data[(self.data[self.c.COLS.COMPANY_ID] == row[self.c.COLS.COMPANY_ID]) &
-                                (self.data[self.c.COLS.TIME_FRAME] == row[self.c.COLS.TIME_FRAME]) &
-                                (self.data[self.c.COLS.SCOPE] == row[self.c.COLS.SCOPE])].copy()
+        target_data = self.target_data[(self.target_data[self.c.COLS.COMPANY_ID] == row[self.c.COLS.COMPANY_ID]) &
+                                       (self.target_data[self.c.COLS.TIME_FRAME] == row[self.c.COLS.TIME_FRAME]) &
+                                       (self.target_data[self.c.COLS.SCOPE] == row[self.c.COLS.SCOPE])].copy()
         if len(target_data) == 0:
             # If there are no targets, we'll return the original row
             return row
@@ -254,42 +240,23 @@ class TargetValidation:
             return target_data[target_columns].iloc[0]
         else:
             # We prefer targets with higher emissions in scope
-            if target_data.iloc[0][self.c.COLS.SCOPE] == EScope.S1S2:
-                target_data = target_data[
-                    target_data[self.c.COLS.GHG_SCOPE12] == target_data[
-                        self.c.COLS.GHG_SCOPE12].max()].copy()
-            elif target_data.iloc[0][self.c.COLS.SCOPE] == EScope.S3:
-                target_data = target_data[
-                    target_data[self.c.COLS.GHG_SCOPE3] == target_data[
-                        self.c.COLS.GHG_SCOPE3].max()].copy()
-            if len(target_data) == 1:
-                return target_data[target_columns].iloc[0]
+            if target_data.iloc[0][self.c.COLS.SCOPE] == EScope.S3:
+                coverage_column = self.c.COLS.COVERAGE_S3
+            else:
+                coverage_column = self.c.COLS.COVERAGE_S1
 
-            # We prefer targets with higher base years
-            target_data = target_data[
-                target_data[self.c.COLS.BASE_YEAR] == target_data[self.c.COLS.BASE_YEAR].max()].copy()
-            if len(target_data) == 1:
-                return target_data[target_columns].iloc[0]
-
-            # We pick abs over int
-            if len(target_data[target_data[self.c.COLS.TARGET_REFERENCE_NUMBER].str.lower().str.startswith("abs")]) > 0:
-                target_data = target_data[
-                    target_data[self.c.COLS.TARGET_REFERENCE_NUMBER].str.lower().str.startswith("abs")].copy()
-            if len(target_data) == 1:
-                return target_data[target_columns].iloc[0]
-
-            # There are more than 1 targets, so we'll average them out
-            target_data[self.c.COLS.REDUCTION_AMBITION] = target_data[self.c.COLS.REDUCTION_AMBITION].mean()
-            return target_data[target_columns].iloc[0]
+            return target_data.sort_values(by=[coverage_column, self.c.COLS.END_YEAR, self.c.COLS.TARGET_REFERENCE_NUMBER,
+                                               self.c.COLS.REDUCTION_AMBITION], axis=0).iloc[0]
 
     def group_targets(self):
         """
-        Group the targets and create the 6 field grid (short, mid, long * s1s2, s3).
+        Group the targets and create the 9-box grid (short, mid, long * s1s2, s3, s1s2s3).
         Group valid targets by category & filter multiple targets#
         Input: a list of valid targets for each company:
         For each company:
 
-        Group all valid targets based on scope (S1+S2 / S3) and time frame (short / mid / long-term) into 6 categories.
+        Group all valid targets based on scope (S1+S2 / S3 / S1+S2+S3) and time frame (short / mid / long-term)
+        into 6 categories.
 
         For each category: if more than 1 target is available, filter based on the following criteria
         -- Highest boundary coverage
@@ -300,19 +267,10 @@ class TargetValidation:
         grid_columns = [self.c.COLS.COMPANY_ID, self.c.COLS.TIME_FRAME, self.c.COLS.SCOPE]
         companies = self.company_data[self.c.COLS.COMPANY_ID].unique()
         scopes = [EScope.S1S2, EScope.S3, EScope.S1S2S3]
-        empty_columns = [column for column in self.data.columns if column not in grid_columns]
+        empty_columns = [column for column in self.target_data.columns if column not in grid_columns]
         extended_data = pd.DataFrame(
             list(itertools.product(*[companies, ETimeFrames, scopes] + [[None]] * len(empty_columns))),
             columns=grid_columns + empty_columns)
 
         target_columns = extended_data.columns
-        self.data = self.combine_records()
         self.data = extended_data.apply(lambda row: self._find_target(row, target_columns), axis=1)
-
-    def combine_records(self) -> pd.DataFrame:
-        """
-        Combines both data frames together. The company_data and the portfolio data that filtered out companies.
-
-        :return: The combined data frame
-        """
-        return pd.merge(left=self.company_data, right=self.data, how='outer', on=['company_id'])

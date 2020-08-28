@@ -1,17 +1,16 @@
 from enum import Enum
 from typing import Optional, Dict, List
 
-from pydantic import BaseModel, Field
+import pandas as pd
+from pydantic import BaseModel, validator
 
 
 class AggregationContribution(BaseModel):
     company_name: str
     company_id: str
     temperature_score: float
-    contribution_relative: float = Field(..., description="The relative contribution of this company to the aggregated "
-                                                          "score. If a value was missing this field will be zero.")
-    contribution: float = Field(..., description="The absolute contribution of this company to the aggregated score. "
-                                                 "If a value was missing this field will be zero.")
+    contribution_relative: Optional[float]
+    contribution: Optional[float]
 
     def __getitem__(self, item):
         return getattr(self, item)
@@ -154,4 +153,11 @@ class IDataProviderTarget(BaseModel):
     base_year_ghg_s3: float
     start_year: Optional[int]
     end_year: int
+    time_frame: Optional[ETimeFrames]
     achieved_reduction: Optional[float] = 0
+
+    @validator('start_year', pre=True, always=False)
+    def validate_e(cls, val):
+        if val == "" or val == "nan" or pd.isnull(val):
+            return None
+        return val
