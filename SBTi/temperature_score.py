@@ -477,12 +477,12 @@ class TemperatureScore(PortfolioAggregation):
 
     def anonymize_data_dump(self, scores: pd.DataFrame) -> pd.DataFrame:
         """
-        Anonymize the scores by deleting the company IDs (ISIC) and renaming the companies.
+        Anonymize the scores by deleting the company IDs, ISIN and renaming the companies.
 
         :param scores: The data set with the temperature scores
         :return: The input data frame, anonymized
         """
-        scores.drop(columns=[self.c.COLS.COMPANY_ISIC, self.c.COLS.COMPANY_ID], inplace=True)
+        scores.drop(columns=[self.c.COLS.COMPANY_ID, self.c.COLS.COMPANY_ISIN], inplace=True)
         for index, company_name in enumerate(scores[self.c.COLS.COMPANY_NAME].unique()):
             scores.loc[scores[self.c.COLS.COMPANY_NAME] == company_name, self.c.COLS.COMPANY_NAME] = 'Company' + str(
                 index + 1)
