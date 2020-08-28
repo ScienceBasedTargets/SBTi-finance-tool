@@ -78,12 +78,16 @@ class PortfolioAggregationConfig:
 
 
 class TemperatureScoreConfig(PortfolioAggregationConfig):
+
+    """
+    This factor determines what part of the temperature for a not SBTi-validated company should be the TS and what part
+    should be the default score.
+    """
+    SBTI_FACTOR = 1
     FILE_SR15_MAPPING = os.path.join(os.path.dirname(os.path.realpath(__file__)), "inputs",
                                      "sr15_mapping.xlsx")
     FILE_REGRESSION_MODEL_SUMMARY = os.path.join(os.path.dirname(os.path.realpath(__file__)), "inputs",
                                                  "regression_model_summary.xlsx")
-    FILE_RAW_DATA_DUMP = os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "app",
-                                      "uploads", "test_output.csv")
 
     DEFAULT_INDUSTRY = "Others"
 
