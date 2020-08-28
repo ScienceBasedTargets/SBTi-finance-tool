@@ -28,7 +28,8 @@ setup(
     },
     include_package_data=True,
     install_requires=['pandas',
-                      'xlrd'],
+                      'xlrd',
+                      'pydantic'],
     python_requires='>=3.6',
     extras_require={
         'dev': [
