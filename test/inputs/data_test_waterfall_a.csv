@@ -1,4 +1,4 @@
-company_name,company_id,Target type,Intensity_metric,Scope,Coverage_S1,Coverage_S2,Coverage_S3,reduction_ambition,base_year,end_year,start_year,GHG_scope1+2,GHG_scope3,BaseYear_GHG_S1,BaseYear_GHG_S2,BaseYear_GHG_S3,achieved_reduction
+company_name,company_id,target_type,intensity_metric,scope,coverage_s1,coverage_s2,coverage_s3,reduction_ambition,base_year,end_year,start_year,ghg_s1s2,ghg_s3,base_year_ghg_s1,base_year_ghg_s2,base_year_ghg_s3,achieved_reduction
 "Advanced Micro Devices, Inc",US0079031078,Absolute,,S1+S2,1,1,,0.3,2018,2025,2020,11000,1200,11000,1200,,0.4
 Adobe Systems Inc.,US00724F1012,Intensity,Revenue,S2,,1,,0.4,2015,2030,2019,1558,13333,1558,13333,1350,0.5
 Capgemini Group,FR0000125338,Intensity,Revenue,S3,,,0.6,0.15,2018,2050,2018,1209218.586,2110267.414,1209218.586,2110267.414,,0.5

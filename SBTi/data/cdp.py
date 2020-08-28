@@ -4,9 +4,9 @@ from SBTi.data.data_provider import DataProvider
 from SBTi.interfaces import IDataProviderCompany, IDataProviderTarget
 
 
-class MSCI(DataProvider):
+class CDP(DataProvider):
     """
-    Data provider skeleton for MSCI.
+    Data provider skeleton for CDP.
     """
 
     def get_targets(self, company_ids: List[str]) -> List[IDataProviderTarget]:

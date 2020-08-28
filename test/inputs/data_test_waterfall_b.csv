@@ -1,4 +1,4 @@
-company_name,company_id,Target type,Intensity_metric,Scope,Coverage_S1,Coverage_S2,Coverage_S3,reduction_ambition,base_year,end_year,start_year,GHG_scope1+2,GHG_scope3,BaseYear_GHG_S1,BaseYear_GHG_S2,BaseYear_GHG_S3,achieved_reduction
+company_name,company_id,target_type,intensity_metric,scope,coverage_s1,coverage_s2,coverage_s3,reduction_ambition,base_year,end_year,start_year,ghg_s1s2,ghg_s3,base_year_ghg_s1,base_year_ghg_s2,base_year_ghg_s3,achieved_reduction
 Company D,SE0000000004,Absolute,,S3,,,0.6,0.3,2018,2030,2019,1542974.817,96876.18261,1542974.817,96876.18261,,0
 Company D,SE0000000004,intensity,Revenue,S1+S2,0.75,0.75,,0.46,2018,2023,2018,2435.07921,16574.11079,2435.07921,16574.11079,,1
 Company D,SE0000000004,absolute,,S1+S2,1,1,,0.69,2015,2020,2015,45289.34848,32682.65152,45289.34848,32682.65152,,0.42

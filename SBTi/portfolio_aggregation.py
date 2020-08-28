@@ -1,6 +1,6 @@
 from abc import ABC
 from enum import Enum
-from typing import Type, Optional
+from typing import Type
 
 import pandas as pd
 from .configs import PortfolioAggregationConfig, ColumnsConfig
@@ -11,51 +11,13 @@ class PortfolioAggregationMethod(Enum):
     The portfolio aggregation method determines how the temperature scores for the individual companies are aggregated
     into a single portfolio score.
     """
-    WATS = 1
-    TETS = 2
-    MOTS = 3
-    EOTS = 4
-    ECOTS = 5
-    AOTS = 6
-    ROTS = 7
-
-    @staticmethod
-    def from_int(value: int) -> 'PortfolioAggregationMethod':
-        """
-        Convert an integer to a portfolio aggregation method.
-
-        :param value: The value to convert
-        :return: The matching portfolio aggregation method
-        """
-        value_map = {
-            1: PortfolioAggregationMethod.WATS,
-            2: PortfolioAggregationMethod.TETS,
-            3: PortfolioAggregationMethod.MOTS,
-            4: PortfolioAggregationMethod.EOTS,
-            5: PortfolioAggregationMethod.ECOTS,
-            6: PortfolioAggregationMethod.AOTS,
-            7: PortfolioAggregationMethod.ROTS
-        }
-        return value_map.get(value, PortfolioAggregationMethod.WATS)
-
-    @staticmethod
-    def from_string(value: str) -> 'PortfolioAggregationMethod':
-        """
-        Convert a string to a portfolio aggregation method.
-
-        :param value: The value to convert
-        :return: The matching portfolio aggregation method
-        """
-        value_map = {
-            "WATS": PortfolioAggregationMethod.WATS,
-            "TETS": PortfolioAggregationMethod.TETS,
-            "MOTS": PortfolioAggregationMethod.MOTS,
-            "EOTS": PortfolioAggregationMethod.EOTS,
-            "ECOTS": PortfolioAggregationMethod.ECOTS,
-            "AOTS": PortfolioAggregationMethod.AOTS,
-            "ROTS": PortfolioAggregationMethod.ROTS
-        }
-        return value_map.get(value, PortfolioAggregationMethod.WATS)
+    WATS = 'WATS'
+    TETS = 'TETS'
+    MOTS = 'MOTS'
+    EOTS = 'EOTS'
+    ECOTS = 'ECOTS'
+    AOTS = 'AOTS'
+    ROTS = 'ROTS'
 
     @staticmethod
     def is_emissions_based(method: 'PortfolioAggregationMethod') -> bool:
@@ -66,8 +28,8 @@ class PortfolioAggregationMethod(Enum):
         :return:
         """
         return method == PortfolioAggregationMethod.MOTS or method == PortfolioAggregationMethod.EOTS or \
-               method == PortfolioAggregationMethod.ECOTS or method == PortfolioAggregationMethod.AOTS or \
-               method == PortfolioAggregationMethod.ROTS
+            method == PortfolioAggregationMethod.ECOTS or method == PortfolioAggregationMethod.AOTS or \
+            method == PortfolioAggregationMethod.ROTS
 
     @staticmethod
     def get_value_column(method: 'PortfolioAggregationMethod', column_config: Type[ColumnsConfig]) -> str:
@@ -94,6 +56,20 @@ class PortfolioAggregation(ABC):
     def __init__(self, config: Type[PortfolioAggregationConfig] = PortfolioAggregationConfig):
         self.c = config
 
+    def _check_column(self, data: pd.DataFrame, column: str):
+        """
+        Check if a certain column is filled for all companies. If not throw an error.
+
+        :param data: The data to check
+        :param column: The column to check
+        :return:
+        """
+        missing_data = data[pd.isnull(data[column])][self.c.COLS.COMPANY_NAME].unique()
+        if len(missing_data):
+            raise ValueError("The value for {} is missing for the following companies: {}".format(
+                column, ", ".join(missing_data)
+            ))
+
     def _calculate_aggregate_score(self, data: pd.DataFrame, input_column: str,
                                    portfolio_aggregation_method: PortfolioAggregationMethod) -> pd.Series:
         """
@@ -115,9 +91,10 @@ class PortfolioAggregation(ABC):
 
         # Total emissions weighted temperature score (TETS)
         elif portfolio_aggregation_method == PortfolioAggregationMethod.TETS:
+            self._check_column(data, self.c.COLS.GHG_SCOPE12)
+            self._check_column(data, self.c.COLS.GHG_SCOPE3)
             # Calculate the total emissions of all companies
-            emissions = data[self.c.COLS.GHG_SCOPE12].sum() + data[
-                self.c.COLS.GHG_SCOPE3].sum()
+            emissions = data[self.c.COLS.GHG_SCOPE12].sum() + data[self.c.COLS.GHG_SCOPE3].sum()
             try:
                 return data.apply(
                     lambda row: (row[self.c.COLS.GHG_SCOPE12] + row[self.c.COLS.GHG_SCOPE3]) / emissions * row[
@@ -130,6 +107,8 @@ class PortfolioAggregation(ABC):
         elif PortfolioAggregationMethod.is_emissions_based(portfolio_aggregation_method):
             # These four methods only differ in the way the company is valued.
             if portfolio_aggregation_method == PortfolioAggregationMethod.ECOTS:
+                self._check_column(data, self.c.COLS.COMPANY_ENTERPRISE_VALUE)
+                self._check_column(data, self.c.COLS.CASH_EQUIVALENTS)
                 data[self.c.COLS.COMPANY_EV_PLUS_CASH] = data[self.c.COLS.COMPANY_ENTERPRISE_VALUE] + \
                                                          data[self.c.COLS.CASH_EQUIVALENTS]
 
@@ -137,6 +116,10 @@ class PortfolioAggregation(ABC):
 
             # Calculate the total owned emissions of all companies
             try:
+                self._check_column(data, self.c.COLS.INVESTMENT_VALUE)
+                self._check_column(data, value_column)
+                self._check_column(data, self.c.COLS.GHG_SCOPE12)
+                self._check_column(data, self.c.COLS.GHG_SCOPE3)
                 data[self.c.COLS.OWNED_EMISSIONS] = data.apply(
                     lambda row: (row[self.c.COLS.INVESTMENT_VALUE] / row[value_column]) * (
                             row[self.c.COLS.GHG_SCOPE12] + row[self.c.COLS.GHG_SCOPE3]),
