@@ -1,4 +1,4 @@
-company_name,company_id,target_type,intensity_metric,scope,emissions_in_scope,reduction_ambition,base_year,start_year,end_year,achieved_reduction,target_status,time_frame,industry,ghg_s1s2,ghg_s3,market_cap,investment_value,portfolio_weight,cash_equivalents,company_enterprise_value,company_ev_plus_cash,company_total_assets
+company_name,company_id,target_type,intensity_metric,scope,emissions_in_scope,reduction_ambition,base_year,start_year,end_year,achieved_reduction,target_status,time_frame,industry,ghg_s1s2,ghg_s3,company_market_cap,investment_value,portfolio_weight,company_cash_equivalents,company_enterprise_value,company_ev_plus_cash,company_total_assets
 Company AA,Company AA,,,S1+S2,,,,,,,,short,test,1601576,1601576,54327,42881,0.128432371,19394.739,13576.3173,51067.38,49437.57
 Company AA,Company AA,Absolute,Revenue,S1+S2,100,1,2014,2015,2030,27, Underway,mid,test,1601576,1601576,54327,42881,0.128432371,19394.739,13576.3173,51067.38,49437.57
 Company AA,Company AA,,,S1+S2,,,,,,,,long,test,1601576,1601576,54327,42881,0.128432371,19394.739,13576.3173,51067.38,49437.57

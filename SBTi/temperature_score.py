@@ -344,9 +344,15 @@ class TemperatureScore(PortfolioAggregation):
         :return: A data frame containing all relevant information for the targets and companies
         """
         data = self._prepare_data(data)
-        data = self._calculate_company_score(data)
+
+        if EScope.S1S2S3 in self.scopes:
+            self._check_column(data, self.c.COLS.GHG_SCOPE12)
+            self._check_column(data, self.c.COLS.GHG_SCOPE3)
+            data = self._calculate_company_score(data)
+
         # We need to filter the scopes again, because we might have had to add a scope in te preparation step
         data = data[data[self.c.COLS.SCOPE].isin(self.scopes)]
+        data[self.c.COLS.TEMPERATURE_SCORE] = data[self.c.COLS.TEMPERATURE_SCORE].round(2)
         return data
 
     def _get_aggregations(self, data: pd.DataFrame, total_companies: int) -> Tuple[Aggregation, pd.Series, pd.Series]:
@@ -361,8 +367,10 @@ class TemperatureScore(PortfolioAggregation):
                                                           self.aggregation_method)
         data[self.c.COLS.CONTRIBUTION_RELATIVE] = weighted_scores / (weighted_scores.sum() / 100)
         data[self.c.COLS.CONTRIBUTION] = weighted_scores
-
-        contributions = data.sort_values(self.c.COLS.CONTRIBUTION_RELATIVE, ascending=False).to_dict(orient="records")
+        contributions = data\
+            .sort_values(self.c.COLS.CONTRIBUTION_RELATIVE, ascending=False)\
+            .where(pd.notnull(data), None)\
+            .to_dict(orient="records")
         return Aggregation(
                 score=weighted_scores.sum(),
                 proportion=len(weighted_scores) / (total_companies / 100.0),
@@ -455,7 +463,7 @@ class TemperatureScore(PortfolioAggregation):
                             scores.loc[company_mask, self.c.COLS.TEMPERATURE_SCORE].apply(
                                 lambda x: min(x, self.scenario.get_score_cap()))
         elif self.scenario.scenario_type == ScenarioType.HIGHEST_CONTRIBUTORS_APPROVED:
-            scores[self.c.COLS.ENGAGEMENT_TARGET] = scores[self.c.COLS.ENGAGEMENT_TARGET] == True
+            scores[self.c.COLS.ENGAGEMENT_TARGET] = scores[self.c.COLS.ENGAGEMENT_TARGET].fillna(False).astype('bool')
             score_based_on_target = scores[self.c.COLS.ENGAGEMENT_TARGET]
             scores.loc[score_based_on_target, self.c.COLS.TEMPERATURE_SCORE] = \
                 scores.loc[score_based_on_target, self.c.COLS.TEMPERATURE_SCORE].apply(

@@ -13,7 +13,7 @@ class ColumnsConfig:
     COMPANY_ISIC = "isic"
     REGRESSION_PARAM = "param"
     REGRESSION_INTERCEPT = "intercept"
-    MARKET_CAP = "market_cap"
+    MARKET_CAP = "company_market_cap"
     INVESTMENT_VALUE = "investment_value"
     COMPANY_ENTERPRISE_VALUE = "company_enterprise_value"
     COMPANY_EV_PLUS_CASH = "company_ev_plus_cash"
@@ -36,8 +36,8 @@ class ColumnsConfig:
     SECTOR = 'sector'
     GHG_SCOPE12 = 'ghg_s1s2'
     GHG_SCOPE3 = 'ghg_s3'
-    COMPANY_REVENUE = 'revenue'
-    CASH_EQUIVALENTS = 'cash_equivalents'
+    COMPANY_REVENUE = 'company_revenue'
+    CASH_EQUIVALENTS = 'company_cash_equivalents'
     TARGET_CLASSIFICATION = 'target_classification'
     REDUCTION_AMBITION = 'reduction_ambition'
     BASE_YEAR = 'base_year'
