@@ -2,7 +2,7 @@ from enum import Enum
 from typing import Optional, Dict, List
 
 import pandas as pd
-from pydantic import BaseModel, validator
+from pydantic import BaseModel, validator, Field
 
 
 class AggregationContribution(BaseModel):
@@ -60,6 +60,7 @@ class ScenarioInterface(BaseModel):
 class PortfolioCompany(BaseModel):
     company_name: str
     company_id: str
+    company_isin: Optional[str]
     investment_value: float
     engagement_target: Optional[str] = "False"
     user_fields: Optional[dict]
@@ -68,6 +69,7 @@ class PortfolioCompany(BaseModel):
 class IDataProviderCompany(BaseModel):
     company_name: str
     company_id: str
+    isic: Optional[str]
     ghg_s1s2: float
     ghg_s3: float
 
@@ -84,6 +86,8 @@ class IDataProviderCompany(BaseModel):
     company_enterprise_value: Optional[float]
     company_total_assets: Optional[float]
     company_cash_equivalents: Optional[float]
+
+    sbti_validated: bool = Field(False, description='True if the SBTi target status is "Target set", false otherwise')
 
 
 class SortableEnum(Enum):
