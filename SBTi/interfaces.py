@@ -60,6 +60,7 @@ class ScenarioInterface(BaseModel):
 class PortfolioCompany(BaseModel):
     company_name: str
     company_id: str
+    company_isin: str
     investment_value: float
     engagement_target: Optional[str] = "False"
     user_fields: Optional[dict]

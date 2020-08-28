@@ -10,6 +10,7 @@ from SBTi.interfaces import ETimeFrames
 class ColumnsConfig:
     # Define a constant for each column used in the
     COMPANY_ID = "company_id"
+    COMPANY_ISIN = "company_isin"
     COMPANY_ISIC = "isic"
     REGRESSION_PARAM = "param"
     REGRESSION_INTERCEPT = "intercept"
@@ -62,6 +63,7 @@ class ColumnsConfig:
     BASEYEAR_GHG_S3 = 'base_year_ghg_s3'
     REGION = 'region'
     ENGAGEMENT_TARGET = 'engagement_target'
+
 
     # SR15 mapping columns
     PARAM = "param"
@@ -134,5 +136,5 @@ class PortfolioCoverageTVPConfig(PortfolioAggregationConfig):
 
     # SBTi targets overview (TVP coverage)
     COL_COMPANY_NAME = "Company Name"
-    COL_COMPANY_ID = "ISIN"
+    COL_COMPANY_ISIN = "ISIN"
     COL_TARGET_STATUS = "Status"

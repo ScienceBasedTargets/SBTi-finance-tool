@@ -2,6 +2,7 @@ import logging
 import pandas as pd
 from typing import List, Optional, Tuple, Type, Dict
 
+from SBTi.configs import ColumnsConfig
 from SBTi.data.sbti import SBTi
 from SBTi.interfaces import IDataProviderTarget, IDataProviderCompany
 
@@ -80,9 +81,6 @@ def get_company_data(data_providers: list, company_ids: List[str]) -> List[IData
         except NotImplementedError:
             logger.warning("{} is not available yet".format(type(dp).__name__))
 
-    # Supplement the company data with the SBTi target status
-    company_data = SBTi().get_sbti_targets(company_data)
-
     return company_data
 
 
@@ -128,6 +126,19 @@ def _flatten_user_fields(record: PortfolioCompany):
     return record_dict
 
 
+def _make_isin_map(df_portfolio: pd.DataFrame) -> dict:
+    """
+    Create a mapping from company_id to ISIN (required for the SBTi matching).
+
+    :param df_portfolio: The complete portfolio
+    :return: A mapping from company_id to ISIN
+    """
+    return {company_id: company[ColumnsConfig.COMPANY_ISIN]
+            for company_id, company in df_portfolio[[ColumnsConfig.COMPANY_ID, ColumnsConfig.COMPANY_ISIN]]
+                .set_index(ColumnsConfig.COMPANY_ID)
+                .to_dict(orient='index').items()}
+
+
 def get_data(data_providers: List[data.DataProvider], portfolio: List[PortfolioCompany]) -> pd.DataFrame:
     """
     Get the required data from the data provider(s), validate the targets and return a 9-box grid for each company.
@@ -139,6 +150,9 @@ def get_data(data_providers: List[data.DataProvider], portfolio: List[PortfolioC
     df_portfolio = pd.DataFrame.from_records([_flatten_user_fields(c) for c in portfolio])
     company_data = get_company_data(data_providers, df_portfolio["company_id"].tolist())
     target_data = get_targets(data_providers, df_portfolio["company_id"].tolist())
+
+    # Supplement the company data with the SBTi target status
+    company_data = SBTi().get_sbti_targets(company_data, _make_isin_map(df_portfolio))
 
     # Prepare the data
     portfolio_data = TargetProtocol().process(target_data, company_data)
