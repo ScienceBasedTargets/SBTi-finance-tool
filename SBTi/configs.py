@@ -10,6 +10,7 @@ from SBTi.interfaces import ETimeFrames
 class ColumnsConfig:
     # Define a constant for each column used in the
     COMPANY_ID = "company_id"
+    COMPANY_ISIN = "company_isin"
     COMPANY_ISIC = "isic"
     REGRESSION_PARAM = "param"
     REGRESSION_INTERCEPT = "intercept"
@@ -42,7 +43,7 @@ class ColumnsConfig:
     REDUCTION_AMBITION = 'reduction_ambition'
     BASE_YEAR = 'base_year'
     END_YEAR = 'end_year'
-    SBTI_STATUS = 'sbti_status'
+    SBTI_VALIDATED = 'sbti_validated'
     ACHIEVED_EMISSIONS = "achieved_reduction"
     ISIC = 'isic'
     INDUSTRY_LVL1 = "industry_level_1"
@@ -63,6 +64,7 @@ class ColumnsConfig:
     REGION = 'region'
     ENGAGEMENT_TARGET = 'engagement_target'
 
+
     # SR15 mapping columns
     PARAM = "param"
     INTERCEPT = "intercept"
@@ -78,12 +80,16 @@ class PortfolioAggregationConfig:
 
 
 class TemperatureScoreConfig(PortfolioAggregationConfig):
+
+    """
+    This factor determines what part of the temperature for a not SBTi-validated company should be the TS and what part
+    should be the default score.
+    """
+    SBTI_FACTOR = 1
     FILE_SR15_MAPPING = os.path.join(os.path.dirname(os.path.realpath(__file__)), "inputs",
                                      "sr15_mapping.xlsx")
     FILE_REGRESSION_MODEL_SUMMARY = os.path.join(os.path.dirname(os.path.realpath(__file__)), "inputs",
                                                  "regression_model_summary.xlsx")
-    FILE_RAW_DATA_DUMP = os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "app",
-                                      "uploads", "test_output.csv")
 
     DEFAULT_INDUSTRY = "Others"
 
@@ -130,5 +136,5 @@ class PortfolioCoverageTVPConfig(PortfolioAggregationConfig):
 
     # SBTi targets overview (TVP coverage)
     COL_COMPANY_NAME = "Company Name"
-    COL_COMPANY_ID = "ISIN"
+    COL_COMPANY_ISIN = "ISIN"
     COL_TARGET_STATUS = "Status"
