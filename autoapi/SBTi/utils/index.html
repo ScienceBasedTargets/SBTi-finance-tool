@@ -1,0 +1,328 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>SBTi.utils &mdash; SBTi Temperature Alignment tool  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> SBTi Temperature Alignment tool
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rest_api.html">REST API &amp; UI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">SBTi Temperature Alignment tool</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+      <li><code class="xref py py-mod docutils literal notranslate"><span class="pre">SBTi.utils</span></code></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../_sources/autoapi/SBTi/utils/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-SBTi.utils">
+<span id="sbti-utils"></span><h1><a class="reference internal" href="#module-SBTi.utils" title="SBTi.utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SBTi.utils</span></code></a><a class="headerlink" href="#module-SBTi.utils" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
+<dl class="py data">
+<dt id="SBTi.utils.DATA_PROVIDER_MAP">
+<code class="sig-prename descclassname">SBTi.utils.</code><code class="sig-name descname">DATA_PROVIDER_MAP</code><em class="property"> :Dict[str, Type[data.DataProvider]]</em><a class="headerlink" href="#SBTi.utils.DATA_PROVIDER_MAP" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="SBTi.utils.get_data_providers">
+<code class="sig-prename descclassname">SBTi.utils.</code><code class="sig-name descname">get_data_providers</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data_providers_configs</span><span class="p">:</span> <span class="n">List<span class="p">[</span>dict<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">data_providers_input</span><span class="p">:</span> <span class="n">List<span class="p">[</span>str<span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span>data.DataProvider<span class="p">]</span><a class="headerlink" href="#SBTi.utils.get_data_providers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determines which data provider and in which order should be used.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data_providers_configs</strong> – A list of data provider configurations</p></li>
+<li><p><strong>data_providers_input</strong> – A list of data provider names</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a list of data providers in order.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="SBTi.utils.get_company_data">
+<code class="sig-prename descclassname">SBTi.utils.</code><code class="sig-name descname">get_company_data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data_providers</span><span class="p">:</span> <span class="n">list</span></em>, <em class="sig-param"><span class="n">company_ids</span><span class="p">:</span> <span class="n">List<span class="p">[</span>str<span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span>IDataProviderCompany<span class="p">]</span><a class="headerlink" href="#SBTi.utils.get_company_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the company data in a waterfall method, given a list of companies and a list of data providers. This will go
+through the list of data providers and retrieve the required info until either there are no companies left or there
+are no data providers left.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data_providers</strong> – A list of data providers instances</p></li>
+<li><p><strong>company_ids</strong> – A list of company ids (ISINs)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A data frame containing the company data</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="SBTi.utils.get_targets">
+<code class="sig-prename descclassname">SBTi.utils.</code><code class="sig-name descname">get_targets</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data_providers</span><span class="p">:</span> <span class="n">list</span></em>, <em class="sig-param"><span class="n">companies</span><span class="p">:</span> <span class="n">list</span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span>IDataProviderTarget<span class="p">]</span><a class="headerlink" href="#SBTi.utils.get_targets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the targets in a waterfall method, given a list of companies and a list of data providers. This will go through
+the list of data providers and retrieve the required info until either there are no companies left or there are no
+data providers left.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data_providers</strong> – A list of data providers instances</p></li>
+<li><p><strong>companies</strong> – A list of companies. Each company should be a dict and contain a company_name and company_id field</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A data frame containing the targets</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="SBTi.utils._flatten_user_fields">
+<code class="sig-prename descclassname">SBTi.utils.</code><code class="sig-name descname">_flatten_user_fields</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">record</span><span class="p">:</span> <span class="n">PortfolioCompany</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.utils._flatten_user_fields" title="Permalink to this definition">¶</a></dt>
+<dd><p>Flatten the user fields in a portfolio company and return it as a dictionary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>record</strong> – The record to flatten</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="SBTi.utils._make_isin_map">
+<code class="sig-prename descclassname">SBTi.utils.</code><code class="sig-name descname">_make_isin_map</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df_portfolio</span><span class="p">:</span> <span class="n">pd.DataFrame</span></em><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#SBTi.utils._make_isin_map" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a mapping from company_id to ISIN (required for the SBTi matching).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>df_portfolio</strong> – The complete portfolio</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A mapping from company_id to ISIN</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="SBTi.utils.get_data">
+<code class="sig-prename descclassname">SBTi.utils.</code><code class="sig-name descname">get_data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data_providers</span><span class="p">:</span> <span class="n">List<span class="p">[</span>data.DataProvider<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">portfolio</span><span class="p">:</span> <span class="n">List<span class="p">[</span>PortfolioCompany<span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; pd.DataFrame<a class="headerlink" href="#SBTi.utils.get_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the required data from the data provider(s), validate the targets and return a 9-box grid for each company.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data_providers</strong> – A list of DataProvider instances</p></li>
+<li><p><strong>portfolio</strong> – A list of PortfolioCompany models</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A data frame containing the relevant company-target data</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="SBTi.utils.calculate">
+<code class="sig-prename descclassname">SBTi.utils.</code><code class="sig-name descname">calculate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">portfolio_data</span><span class="p">:</span> <span class="n">pd.DataFrame</span></em>, <em class="sig-param"><span class="n">fallback_score</span><span class="p">:</span> <span class="n">float</span></em>, <em class="sig-param"><span class="n">aggregation_method</span><span class="p">:</span> <span class="n">PortfolioAggregationMethod</span></em>, <em class="sig-param"><span class="n">grouping</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>List<span class="p">[</span>str<span class="p">]</span><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">scenario</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Scenario<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">time_frames</span><span class="p">:</span> <span class="n">List<span class="p">[</span>ETimeFrames<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">scopes</span><span class="p">:</span> <span class="n">List<span class="p">[</span>EScope<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">anonymize</span><span class="p">:</span> <span class="n">bool</span></em>, <em class="sig-param"><span class="n">aggregate</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span> &#x2192; Tuple<span class="p">[</span>pd.DataFrame<span class="p">, </span>Optional<span class="p">[</span>ScoreAggregations<span class="p">]</span><span class="p">]</span><a class="headerlink" href="#SBTi.utils.calculate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the different parts of the temperature score (actual scores, aggregations, column distribution).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>portfolio_data</strong> – The portfolio data, already processed by the target validation module</p></li>
+<li><p><strong>fallback_score</strong> – The fallback score to use while calculating the temperature score</p></li>
+<li><p><strong>aggregation_method</strong> – The aggregation method to use</p></li>
+<li><p><strong>time_frames</strong> – The time frames that the temperature scores should be calculated for  (None to calculate all)</p></li>
+<li><p><strong>scopes</strong> – The scopes that the temperature scores should be calculated for (None to calculate all)</p></li>
+<li><p><strong>grouping</strong> – The names of the columns to group on</p></li>
+<li><p><strong>scenario</strong> – The scenario to play</p></li>
+<li><p><strong>anonymize</strong> – Whether to anonymize the resulting data set or not</p></li>
+<li><p><strong>aggregate</strong> – Whether to aggregate the scores or not</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The scores, the aggregations and the column distribution (if a</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Science Based Targets
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

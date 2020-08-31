@@ -166,25 +166,9 @@ class and overwriting one of the parameters.</p>
 </dd>
 </dl>
 <dl class="py method">
-<dt id="SBTi.portfolio_coverage_tvp.PortfolioCoverageTVP._get_target_status">
-<code class="sig-name descname">_get_target_status</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">company</span><span class="p">:</span> <span class="n">pd.Series</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.portfolio_coverage_tvp.PortfolioCoverageTVP._get_target_status" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the target status (Target set, Committed or No target) as it’s known to the SBTi for a certain row out of
-the company data dataframe.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>company</strong> – The company data</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The SBTi status of the target</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
 <dt id="SBTi.portfolio_coverage_tvp.PortfolioCoverageTVP.get_portfolio_coverage">
 <code class="sig-name descname">get_portfolio_coverage</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">company_data</span><span class="p">:</span> <span class="n">pd.DataFrame</span></em>, <em class="sig-param"><span class="n">portfolio_aggregation_method</span><span class="p">:</span> <span class="n">PortfolioAggregationMethod</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.portfolio_coverage_tvp.PortfolioCoverageTVP.get_portfolio_coverage" title="Permalink to this definition">¶</a></dt>
-<dd><p>For each of the companies, get the status of their target (Target set, Committed or No target) as it’s known to
-the SBTi. Matching will be done primarily on the company ID (ASIN) and secondary on the company name.</p>
+<dd><p>Get the TVP portfolio coverage (i.e. what part of the portfolio has a SBTi validated target).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">

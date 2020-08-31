@@ -21,8 +21,13 @@ Module Contents
 
       
 
+   .. attribute:: COMPANY_ISIN
+      :annotation: = company_isin
+
+      
+
    .. attribute:: COMPANY_ISIC
-      :annotation: = ISIC
+      :annotation: = isic
 
       
 
@@ -37,7 +42,7 @@ Module Contents
       
 
    .. attribute:: MARKET_CAP
-      :annotation: = market_cap
+      :annotation: = company_market_cap
 
       
 
@@ -62,22 +67,17 @@ Module Contents
       
 
    .. attribute:: TARGET_REFERENCE_NUMBER
-      :annotation: = Target type
+      :annotation: = target_type
 
       
 
    .. attribute:: SCOPE
-      :annotation: = Scope
-
-      
-
-   .. attribute:: SCOPE_CATEGORY
-      :annotation: = scope_category
+      :annotation: = scope
 
       
 
    .. attribute:: SR15
-      :annotation: = SR15
+      :annotation: = sr15
 
       
 
@@ -137,7 +137,7 @@ Module Contents
       
 
    .. attribute:: COUNTRY
-      :annotation: = Country
+      :annotation: = country
 
       
 
@@ -147,27 +147,27 @@ Module Contents
       
 
    .. attribute:: GHG_SCOPE12
-      :annotation: = GHG_scope1+2
+      :annotation: = ghg_s1s2
 
       
 
    .. attribute:: GHG_SCOPE3
-      :annotation: = GHG_scope3
+      :annotation: = ghg_s3
 
       
 
    .. attribute:: COMPANY_REVENUE
-      :annotation: = Revenue
+      :annotation: = company_revenue
 
       
 
    .. attribute:: CASH_EQUIVALENTS
-      :annotation: = cash_equivalents
+      :annotation: = company_cash_equivalents
 
       
 
    .. attribute:: TARGET_CLASSIFICATION
-      :annotation: = Target_classification
+      :annotation: = target_classification
 
       
 
@@ -186,8 +186,8 @@ Module Contents
 
       
 
-   .. attribute:: SBTI_STATUS
-      :annotation: = SBTi_status
+   .. attribute:: SBTI_VALIDATED
+      :annotation: = sbti_validated
 
       
 
@@ -197,62 +197,62 @@ Module Contents
       
 
    .. attribute:: ISIC
-      :annotation: = ISIC
+      :annotation: = isic
 
       
 
    .. attribute:: INDUSTRY_LVL1
-      :annotation: = Industry_lvl1
+      :annotation: = industry_level_1
 
       
 
    .. attribute:: INDUSTRY_LVL2
-      :annotation: = Industry_lvl2
+      :annotation: = industry_level_2
 
       
 
    .. attribute:: INDUSTRY_LVL3
-      :annotation: = Industry_lvl3
+      :annotation: = industry_level_3
 
       
 
    .. attribute:: INDUSTRY_LVL4
-      :annotation: = Industry_lvl4
+      :annotation: = industry_level_4
 
       
 
    .. attribute:: COVERAGE_S1
-      :annotation: = Coverage_S1
+      :annotation: = coverage_s1
 
       
 
    .. attribute:: COVERAGE_S2
-      :annotation: = Coverage_S2
+      :annotation: = coverage_s2
 
       
 
    .. attribute:: COVERAGE_S3
-      :annotation: = Coverage_S3
+      :annotation: = coverage_s3
 
       
 
    .. attribute:: INTENSITY_METRIC
-      :annotation: = Intensity_metric
+      :annotation: = intensity_metric
 
       
 
    .. attribute:: INTENSITY_METRIC_SR15
-      :annotation: = Intensity_metric
+      :annotation: = intensity_metric
 
       
 
    .. attribute:: TARGET_TYPE_SR15
-      :annotation: = Target_type
+      :annotation: = target_type
 
       
 
    .. attribute:: SR15_VARIABLE
-      :annotation: = SR15_variable
+      :annotation: = sr15_variable
 
       
 
@@ -262,22 +262,22 @@ Module Contents
       
 
    .. attribute:: BASEYEAR_GHG_S1
-      :annotation: = BaseYear_GHG_S1
+      :annotation: = base_year_ghg_s1
 
       
 
    .. attribute:: BASEYEAR_GHG_S2
-      :annotation: = BaseYear_GHG_S2
+      :annotation: = base_year_ghg_s2
 
       
 
    .. attribute:: BASEYEAR_GHG_S3
-      :annotation: = BaseYear_GHG_S3
+      :annotation: = base_year_ghg_s3
 
       
 
    .. attribute:: REGION
-      :annotation: = Region
+      :annotation: = region
 
       
 
@@ -311,85 +311,10 @@ Module Contents
 
       
 
-   .. attribute:: COMPANY_COLUMNS
-      
-
-      
-
-   .. attribute:: REQUIRED_FIELDS_TARGETS
-      
-
-      
-
-   .. attribute:: REQUIRED_FIELDS_COMPANY
-      
-
-      
-
-   .. attribute:: REQUIRED_COLUMNS_TARGETS
-      
-
-      
-
-   .. attribute:: REQUIRED_COLUMNS_COMPANY
-      
-
-      
-
 
 .. py:class:: PortfolioAggregationConfig
 
    .. attribute:: COLS
-      
-
-      
-
-   .. attribute:: VALUE_TIME_FRAMES
-      :annotation: = ['short', 'mid', 'long']
-
-      
-
-   .. attribute:: VALUE_SCOPE_S1S2
-      :annotation: = scope 1+2
-
-      
-
-   .. attribute:: VALUE_SCOPE_S3
-      :annotation: = scope 3
-
-      
-
-   .. attribute:: VALUE_SCOPE_S1S2S3
-      :annotation: = scope 1+2+3
-
-      
-
-   .. attribute:: VALUE_BASE_SCOPES
-      
-
-      
-
-   .. attribute:: VALUE_SCOPE_CATEGORY_S1S2
-      :annotation: = s1s2
-
-      
-
-   .. attribute:: VALUE_SCOPE_CATEGORY_S3
-      :annotation: = s3
-
-      
-
-   .. attribute:: VALUE_SCOPE_CATEGORY_S1S2S3
-      :annotation: = s1s2s3
-
-      
-
-   .. attribute:: VALUE_SCOPE_CATEGORIES
-      
-
-      
-
-   .. attribute:: SCOPE_MAP
       
 
       
@@ -399,17 +324,20 @@ Module Contents
 
    Bases: :class:`SBTi.configs.PortfolioAggregationConfig`
 
+   This factor determines what part of the temperature for a not SBTi-validated company should be the TS and what part
+   should be the default score.
+
+   .. attribute:: SBTI_FACTOR
+      :annotation: = 1
+
+      
+
    .. attribute:: FILE_SR15_MAPPING
       
 
       
 
    .. attribute:: FILE_REGRESSION_MODEL_SUMMARY
-      
-
-      
-
-   .. attribute:: FILE_RAW_DATA_DUMP
       
 
       
@@ -434,13 +362,18 @@ Module Contents
 
       
 
-   .. attribute:: CONTRIBUTION_COLUMNS
-      
-
-      
-
    .. attribute:: SLOPE_MAP
       
+
+      
+
+   .. attribute:: INTENSITY_MAPPINGS
+      
+
+      
+
+   .. attribute:: ABSOLUTE_MAPPING
+      :annotation: = Emissions|Kyoto Gases
 
       
 
@@ -451,21 +384,6 @@ Module Contents
 
    .. attribute:: INVESTMENT_VALUE
       :annotation: = investment_value
-
-      
-
-   .. attribute:: TIME_FRAME_SHORT
-      :annotation: = short
-
-      
-
-   .. attribute:: TIME_FRAME_MID
-      :annotation: = mid
-
-      
-
-   .. attribute:: TIME_FRAME_LONG
-      :annotation: = long
 
       
 
@@ -514,7 +432,7 @@ Module Contents
 
       
 
-   .. attribute:: COL_COMPANY_ID
+   .. attribute:: COL_COMPANY_ISIN
       :annotation: = ISIN
 
       

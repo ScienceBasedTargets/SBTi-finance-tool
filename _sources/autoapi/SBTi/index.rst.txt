@@ -27,9 +27,11 @@ Submodules
    :maxdepth: 1
 
    configs/index.rst
+   interfaces/index.rst
    portfolio_aggregation/index.rst
    portfolio_coverage_tvp/index.rst
    target_validation/index.rst
    temperature_score/index.rst
+   utils/index.rst
 
 

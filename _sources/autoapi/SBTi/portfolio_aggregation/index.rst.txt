@@ -16,59 +16,39 @@ Module Contents
    into a single portfolio score.
 
    .. attribute:: WATS
-      :annotation: = 1
+      :annotation: = WATS
 
       
 
    .. attribute:: TETS
-      :annotation: = 2
+      :annotation: = TETS
 
       
 
    .. attribute:: MOTS
-      :annotation: = 3
+      :annotation: = MOTS
 
       
 
    .. attribute:: EOTS
-      :annotation: = 4
+      :annotation: = EOTS
 
       
 
    .. attribute:: ECOTS
-      :annotation: = 5
+      :annotation: = ECOTS
 
       
 
    .. attribute:: AOTS
-      :annotation: = 6
+      :annotation: = AOTS
 
       
 
    .. attribute:: ROTS
-      :annotation: = 7
+      :annotation: = ROTS
 
       
-
-   .. method:: from_int(value: int)
-      :staticmethod:
-
-
-      Convert an integer to a portfolio aggregation method.
-
-      :param value: The value to convert
-      :return: The matching portfolio aggregation method
-
-
-   .. method:: from_string(value: str)
-      :staticmethod:
-
-
-      Convert a string to a portfolio aggregation method.
-
-      :param value: The value to convert
-      :return: The matching portfolio aggregation method
-
 
    .. method:: is_emissions_based(method: PortfolioAggregationMethod)
       :staticmethod:
@@ -95,6 +75,16 @@ Module Contents
    :param config: A class defining the constants that are used throughout this class. This parameter is only required
                    if you'd like to overwrite a constant. This can be done by extending the PortfolioAggregationConfig
                    class and overwriting one of the parameters.
+
+   .. method:: _check_column(self, data: pd.DataFrame, column: str)
+
+
+      Check if a certain column is filled for all companies. If not throw an error.
+
+      :param data: The data to check
+      :param column: The column to check
+      :return:
+
 
    .. method:: _calculate_aggregate_score(self, data: pd.DataFrame, input_column: str, portfolio_aggregation_method: PortfolioAggregationMethod)
 

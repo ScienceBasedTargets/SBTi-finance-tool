@@ -16,363 +16,355 @@ Submodules
    :maxdepth: 1
 
    bloomberg/index.rst
+   cdp/index.rst
    csv/index.rst
    data_provider/index.rst
    excel/index.rst
    iss/index.rst
    msci/index.rst
+   sbti/index.rst
    trucost/index.rst
-   urgentum/index.rst
+   urgentem/index.rst
 
 
 Package Contents
 ----------------
 
 
-.. py:class:: ColumnsConfig
+.. py:class:: DataProvider(**kwargs)
 
-   .. attribute:: COMPANY_ID
-      :annotation: = company_id
+   Bases: :class:`abc.ABC`
 
-      
+   General data provider super class.
 
-   .. attribute:: COMPANY_ISIC
-      :annotation: = ISIC
+   .. method:: get_targets(self, company_ids: List[str])
+      :abstractmethod:
 
-      
 
-   .. attribute:: REGRESSION_PARAM
-      :annotation: = param
+      Get all relevant targets for a list of company ids (ISIN). This method should return a list of
+      IDataProviderTarget instances.
 
-      
+      :param company_ids: A list of company IDs (ISINs)
+      :return: A list containing the targets
 
-   .. attribute:: REGRESSION_INTERCEPT
-      :annotation: = intercept
 
-      
+   .. method:: get_company_data(self, company_ids: List[str])
+      :abstractmethod:
 
-   .. attribute:: MARKET_CAP
-      :annotation: = market_cap
 
-      
+      Get all relevant data for a list of company ids (ISIN). This method should return a list of IDataProviderCompany
+      instances.
 
-   .. attribute:: INVESTMENT_VALUE
-      :annotation: = investment_value
+      :param company_ids: A list of company IDs (ISINs)
+      :return: A list containing the company data
 
-      
 
-   .. attribute:: COMPANY_ENTERPRISE_VALUE
-      :annotation: = company_enterprise_value
+   .. method:: get_sbti_targets(self, companies: list)
+      :abstractmethod:
 
-      
 
-   .. attribute:: COMPANY_EV_PLUS_CASH
-      :annotation: = company_ev_plus_cash
+      For each of the companies, get the status of their target (Target set, Committed or No target) as it's known to
+      the SBTi.
 
-      
+      :param companies: A list of companies. Each company should be a dict with a "company_name" and "company_id"
+                          field.
+      :return: The original list, enriched with a field called "sbti_target_status"
 
-   .. attribute:: COMPANY_TOTAL_ASSETS
-      :annotation: = company_total_assets
 
-      
 
-   .. attribute:: TARGET_REFERENCE_NUMBER
-      :annotation: = Target type
+.. py:class:: CSVProvider(path: str, path_targets: str, encoding: str = 'utf-8')
 
-      
+   Bases: :class:`SBTi.data.data_provider.DataProvider`
 
-   .. attribute:: SCOPE
-      :annotation: = Scope
+   Data provider skeleton for CSV files. This class serves primarily for testing purposes only!
 
-      
+   :param config: A dictionary containing a "path" field that leads to the path of the CSV file
 
-   .. attribute:: SCOPE_CATEGORY
-      :annotation: = scope_category
+   .. method:: get_targets(self, company_ids: list)
 
-      
 
-   .. attribute:: SR15
-      :annotation: = SR15
+      Get all relevant targets for a list of company ids (ISIN). This method should return a list of
+      IDataProviderTarget instances.
 
-      
+      :param company_ids: A list of company IDs (ISINs)
+      :return: A list containing the targets
 
-   .. attribute:: REDUCTION_FROM_BASE_YEAR
-      :annotation: = reduction_from_base_year
 
-      
+   .. method:: get_company_data(self, company_ids: list)
 
-   .. attribute:: START_YEAR
-      :annotation: = start_year
 
-      
+      Get all relevant data for a list of company ids (ISIN). This method should return a list of IDataProviderCompany
+      instances.
 
-   .. attribute:: VARIABLE
-      :annotation: = variable
+      :param company_ids: A list of company IDs (ISINs)
+      :return: A list containing the company data
 
-      
 
-   .. attribute:: SLOPE
-      :annotation: = slope
+   .. method:: get_sbti_targets(self, companies: list)
 
-      
 
-   .. attribute:: TIME_FRAME
-      :annotation: = time_frame
+      For each of the companies, get the status of their target (Target set, Committed or No target) as it's known to
+      the SBTi.
 
-      
+      :param companies: A list of companies. Each company should be a dict with a "company_name" and "company_id"
+                          field.
+      :return: The original list, enriched with a field called "sbti_target_status"
 
-   .. attribute:: MODEL
-      :annotation: = model
 
-      
 
-   .. attribute:: ANNUAL_REDUCTION_RATE
-      :annotation: = annual_reduction_rate
+.. py:class:: ExcelProvider(path: str, config: Type[ColumnsConfig] = ColumnsConfig)
 
-      
+   Bases: :class:`SBTi.data.data_provider.DataProvider`
 
-   .. attribute:: EMISSIONS_IN_SCOPE
-      :annotation: = emissions_in_scope
+   Data provider skeleton for CSV files. This class serves primarily for testing purposes only!
 
-      
+   :param config: A dictionary containing a "path" field that leads to the path of the CSV file
 
-   .. attribute:: TEMPERATURE_SCORE
-      :annotation: = temperature_score
+   .. method:: get_targets(self, company_ids: List[str])
 
-      
 
-   .. attribute:: COMPANY_NAME
-      :annotation: = company_name
+      Get all relevant targets for a list of company ids (ISIN). This method should return a list of
+      IDataProviderTarget instances.
 
-      
+      :param company_ids: A list of company IDs (ISINs)
+      :return: A list containing the targets
 
-   .. attribute:: OWNED_EMISSIONS
-      :annotation: = owned_emissions
 
-      
+   .. method:: get_company_data(self, company_ids: List[str])
 
-   .. attribute:: COUNTRY
-      :annotation: = Country
 
-      
+      Get all relevant data for a list of company ids (ISIN). This method should return a list of IDataProviderCompany
+      instances.
 
-   .. attribute:: SECTOR
-      :annotation: = sector
+      :param company_ids: A list of company IDs (ISINs)
+      :return: A list containing the company data
 
-      
 
-   .. attribute:: GHG_SCOPE12
-      :annotation: = GHG_scope1+2
+   .. method:: get_sbti_targets(self, companies: list)
+      :abstractmethod:
 
-      
 
-   .. attribute:: GHG_SCOPE3
-      :annotation: = GHG_scope3
+      For each of the companies, get the status of their target (Target set, Committed or No target) as it's known to
+      the SBTi.
 
-      
+      :param companies: A list of companies. Each company should be a dict with a "company_name" and "company_id"
+                          field.
+      :return: The original list, enriched with a field called "sbti_target_status"
 
-   .. attribute:: COMPANY_REVENUE
-      :annotation: = Revenue
 
-      
 
-   .. attribute:: CASH_EQUIVALENTS
-      :annotation: = cash_equivalents
+.. py:class:: Bloomberg(**kwargs)
 
-      
+   Bases: :class:`SBTi.data.data_provider.DataProvider`
 
-   .. attribute:: TARGET_CLASSIFICATION
-      :annotation: = Target_classification
+   Data provider skeleton for Bloomberg.
 
-      
+   .. method:: _request(self, endpoint: str, data: dict)
 
-   .. attribute:: REDUCTION_AMBITION
-      :annotation: = reduction_ambition
 
-      
+      Request data from the server.
+      Note: This request does in no way reflect the actual implementation, this is only a stub to show what a
+      potential API request COULD look like.
 
-   .. attribute:: BASE_YEAR
-      :annotation: = base_year
+      :param endpoint: The endpoint of the API
+      :param data: The data to send as a body
+      :return: The returned data, None in case of an error.
 
-      
 
-   .. attribute:: END_YEAR
-      :annotation: = end_year
+   .. method:: get_targets(self, company_ids: List[str])
+      :abstractmethod:
 
-      
 
-   .. attribute:: SBTI_STATUS
-      :annotation: = SBTi_status
+      Get all relevant targets for a list of company ids (ISIN). This method should return a list of
+      IDataProviderTarget instances.
 
-      
+      :param company_ids: A list of company IDs (ISINs)
+      :return: A list containing the targets
 
-   .. attribute:: ACHIEVED_EMISSIONS
-      :annotation: = achieved_reduction
 
-      
+   .. method:: get_company_data(self, company_ids: List[str])
+      :abstractmethod:
 
-   .. attribute:: ISIC
-      :annotation: = ISIC
 
-      
+      Get all relevant data for a list of company ids (ISIN). This method should return a list of IDataProviderCompany
+      instances.
 
-   .. attribute:: INDUSTRY_LVL1
-      :annotation: = Industry_lvl1
+      :param company_ids: A list of company IDs (ISINs)
+      :return: A list containing the company data
 
-      
 
-   .. attribute:: INDUSTRY_LVL2
-      :annotation: = Industry_lvl2
+   .. method:: get_sbti_targets(self, companies: list)
+      :abstractmethod:
 
-      
 
-   .. attribute:: INDUSTRY_LVL3
-      :annotation: = Industry_lvl3
+      For each of the companies, get the status of their target (Target set, Committed or No target) as it's known to
+      the SBTi.
 
-      
+      :param companies: A list of companies. Each company should be a dict with a "company_name" and "company_id"
+                          field.
+      :return: The original list, enriched with a field called "sbti_target_status"
 
-   .. attribute:: INDUSTRY_LVL4
-      :annotation: = Industry_lvl4
 
-      
 
-   .. attribute:: COVERAGE_S1
-      :annotation: = Coverage_S1
+.. py:class:: CDP(**kwargs)
 
-      
+   Bases: :class:`SBTi.data.data_provider.DataProvider`
 
-   .. attribute:: COVERAGE_S2
-      :annotation: = Coverage_S2
+   Data provider skeleton for CDP.
 
-      
+   .. method:: get_targets(self, company_ids: List[str])
+      :abstractmethod:
 
-   .. attribute:: COVERAGE_S3
-      :annotation: = Coverage_S3
 
-      
+      Get all relevant targets for a list of company ids (ISIN). This method should return a list of
+      IDataProviderTarget instances.
 
-   .. attribute:: INTENSITY_METRIC
-      :annotation: = Intensity_metric
+      :param company_ids: A list of company IDs (ISINs)
+      :return: A list containing the targets
 
-      
 
-   .. attribute:: INTENSITY_METRIC_SR15
-      :annotation: = Intensity_metric
+   .. method:: get_company_data(self, company_ids: List[str])
+      :abstractmethod:
 
-      
 
-   .. attribute:: TARGET_TYPE_SR15
-      :annotation: = Target_type
+      Get all relevant data for a list of company ids (ISIN). This method should return a list of IDataProviderCompany
+      instances.
 
-      
+      :param company_ids: A list of company IDs (ISINs)
+      :return: A list containing the company data
 
-   .. attribute:: SR15_VARIABLE
-      :annotation: = SR15_variable
 
-      
+   .. method:: get_sbti_targets(self, companies: list)
+      :abstractmethod:
 
-   .. attribute:: REGRESSION_MODEL
-      :annotation: = Regression_model
 
-      
+      For each of the companies, get the status of their target (Target set, Committed or No target) as it's known to
+      the SBTi.
 
-   .. attribute:: BASEYEAR_GHG_S1
-      :annotation: = BaseYear_GHG_S1
+      :param companies: A list of companies. Each company should be a dict with a "company_name" and "company_id"
+                          field.
+      :return: The original list, enriched with a field called "sbti_target_status"
 
-      
 
-   .. attribute:: BASEYEAR_GHG_S2
-      :annotation: = BaseYear_GHG_S2
 
-      
+.. py:class:: ISS(**kwargs)
 
-   .. attribute:: BASEYEAR_GHG_S3
-      :annotation: = BaseYear_GHG_S3
+   Bases: :class:`SBTi.data.data_provider.DataProvider`
 
-      
+   Data provider skeleton for ISS.
 
-   .. attribute:: REGION
-      :annotation: = Region
+   .. method:: get_targets(self, company_ids: List[str])
+      :abstractmethod:
 
-      
 
-   .. attribute:: ENGAGEMENT_TARGET
-      :annotation: = engagement_target
+      Get all relevant targets for a list of company ids (ISIN). This method should return a list of
+      IDataProviderTarget instances.
 
-      
+      :param company_ids: A list of company IDs (ISINs)
+      :return: A list containing the targets
 
-   .. attribute:: PARAM
-      :annotation: = param
 
-      
+   .. method:: get_company_data(self, company_ids: List[str])
+      :abstractmethod:
 
-   .. attribute:: INTERCEPT
-      :annotation: = intercept
 
-      
+      Get all relevant data for a list of company ids (ISIN). This method should return a list of IDataProviderCompany
+      instances.
 
-   .. attribute:: WEIGHTED_TEMPERATURE_SCORE
-      :annotation: = weighted_temperature_score
+      :param company_ids: A list of company IDs (ISINs)
+      :return: A list containing the company data
 
-      
 
-   .. attribute:: CONTRIBUTION_RELATIVE
-      :annotation: = contribution_relative
+   .. method:: get_sbti_targets(self, companies: list)
+      :abstractmethod:
 
-      
 
-   .. attribute:: CONTRIBUTION
-      :annotation: = contribution
+      For each of the companies, get the status of their target (Target set, Committed or No target) as it's known to
+      the SBTi.
 
-      
+      :param companies: A list of companies. Each company should be a dict with a "company_name" and "company_id"
+                          field.
+      :return: The original list, enriched with a field called "sbti_target_status"
 
-   .. attribute:: COMPANY_COLUMNS
-      
 
-      
 
-   .. attribute:: REQUIRED_FIELDS_TARGETS
-      
+.. py:class:: Trucost(**kwargs)
 
-      
+   Bases: :class:`SBTi.data.data_provider.DataProvider`
 
-   .. attribute:: REQUIRED_FIELDS_COMPANY
-      
+   Data provider skeleton for Trucost.
 
-      
+   .. method:: get_targets(self, company_ids: List[str])
+      :abstractmethod:
 
-   .. attribute:: REQUIRED_COLUMNS_TARGETS
-      
 
-      
+      Get all relevant targets for a list of company ids (ISIN). This method should return a list of
+      IDataProviderTarget instances.
 
-   .. attribute:: REQUIRED_COLUMNS_COMPANY
-      
+      :param company_ids: A list of company IDs (ISINs)
+      :return: A list containing the targets
 
-      
 
+   .. method:: get_company_data(self, company_ids: List[str])
+      :abstractmethod:
 
-.. function:: get_company_data(data_providers: list, companies: list, config: Type[ColumnsConfig] = ColumnsConfig) -> pd.DataFrame
 
-   Get the company data in a waterfall method, given a list of companies and a list of data providers. This will go
-   through the list of data providers and retrieve the required info until either there are no companies left or there
-   are no data providers left.
+      Get all relevant data for a list of company ids (ISIN). This method should return a list of IDataProviderCompany
+      instances.
 
-   :param data_providers: A list of data providers instances
-   :param companies: A list of companies. Each company should be a dict and contain a company_name and company_id field
-   :param config: A config containing the column names
-   :return: A data frame containing the company data
+      :param company_ids: A list of company IDs (ISINs)
+      :return: A list containing the company data
 
 
-.. function:: get_targets(data_providers: list, companies: list, config: Type[ColumnsConfig] = ColumnsConfig) -> pd.DataFrame
+   .. method:: get_sbti_targets(self, companies: list)
+      :abstractmethod:
 
-   Get the targets in a waterfall method, given a list of companies and a list of data providers. This will go through
-   the list of data providers and retrieve the required info until either there are no companies left or there are no
-   data providers left.
 
-   :param data_providers: A list of data providers instances
-   :param companies: A list of companies. Each company should be a dict and contain a company_name and company_id field
-   :param config: A config containing the column names
-   :return: A data frame containing the targets
+      For each of the companies, get the status of their target (Target set, Committed or No target) as it's known to
+      the SBTi.
+
+      :param companies: A list of companies. Each company should be a dict with a "company_name" and "company_id"
+                          field.
+      :return: The original list, enriched with a field called "sbti_target_status"
+
+
+
+.. py:class:: Urgentem(**kwargs)
+
+   Bases: :class:`SBTi.data.data_provider.DataProvider`
+
+   Data provider skeleton for Urgentem.
+
+   .. method:: get_targets(self, company_ids: List[str])
+      :abstractmethod:
+
+
+      Get all relevant targets for a list of company ids (ISIN). This method should return a list of
+      IDataProviderTarget instances.
+
+      :param company_ids: A list of company IDs (ISINs)
+      :return: A list containing the targets
+
+
+   .. method:: get_company_data(self, company_ids: List[str])
+      :abstractmethod:
+
+
+      Get all relevant data for a list of company ids (ISIN). This method should return a list of IDataProviderCompany
+      instances.
+
+      :param company_ids: A list of company IDs (ISINs)
+      :return: A list containing the company data
+
+
+   .. method:: get_sbti_targets(self, companies: list)
+      :abstractmethod:
+
+
+      For each of the companies, get the status of their target (Target set, Committed or No target) as it's known to
+      the SBTi.
+
+      :return: The original list, enriched with a field called "sbti_target_status"
+
 
 

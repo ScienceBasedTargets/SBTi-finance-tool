@@ -180,7 +180,7 @@ So, the SBTi toolkit caters for three types of usage:
 <span class="o">|</span>            <span class="n">docker</span><span class="o">.</span><span class="n">io</span><span class="o">/</span><span class="n">sbti</span><span class="o">/</span><span class="n">ui</span><span class="p">:</span><span class="n">latest</span>             <span class="o">|</span>
 <span class="o">|</span>                                                 <span class="o">|</span>
 <span class="o">|</span> <span class="o">+-----------------------------------------+</span>     <span class="o">|</span>
-<span class="o">|</span> <span class="o">|</span> <span class="n">REST</span> <span class="n">API</span><span class="p">:</span> <span class="n">Dockerized</span> <span class="n">Flask</span><span class="o">/</span><span class="n">NGINX</span>        <span class="o">|</span>     <span class="o">|</span>
+<span class="o">|</span> <span class="o">|</span> <span class="n">REST</span> <span class="n">API</span><span class="p">:</span> <span class="n">Dockerized</span> <span class="n">FastAPI</span><span class="o">/</span><span class="n">NGINX</span>      <span class="o">|</span>     <span class="o">|</span>
 <span class="o">|</span> <span class="o">|</span> <span class="n">Source</span> <span class="p">:</span> <span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">OFBDABV</span><span class="o">/</span><span class="n">SBTi_api</span>    <span class="o">|</span>     <span class="o">|</span>
 <span class="o">|</span> <span class="o">|</span> <span class="n">Install</span><span class="p">:</span> <span class="n">via</span> <span class="n">source</span> <span class="ow">or</span> <span class="n">dockerhub</span>        <span class="o">|</span>     <span class="o">|</span>
 <span class="o">|</span> <span class="o">|</span>          <span class="n">docker</span><span class="o">.</span><span class="n">io</span><span class="o">/</span><span class="n">sbti</span><span class="o">/</span><span class="n">sbti</span><span class="o">/</span><span class="n">api</span><span class="p">:</span><span class="n">latest</span> <span class="o">|</span>     <span class="o">|</span>
@@ -215,6 +215,11 @@ So, the SBTi toolkit caters for three types of usage:
 <li class="toctree-l3"><a class="reference internal" href="contributing.html#coding-guidelines">Coding guidelines</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#releasing">Releasing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#pypi-release">PyPi release</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#generate-documentation">Generate documentation</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="contributing.html#code-of-conduct">Code of conduct</a><ul class="simple">
 </ul>
 </li>
@@ -239,10 +244,12 @@ So, the SBTi toolkit caters for three types of usage:
 </li>
 <li class="toctree-l3"><a class="reference internal" href="autoapi/SBTi/index.html#submodules">Submodules</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="autoapi/SBTi/configs/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SBTi.configs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="autoapi/SBTi/interfaces/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SBTi.interfaces</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="autoapi/SBTi/portfolio_aggregation/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SBTi.portfolio_aggregation</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="autoapi/SBTi/portfolio_coverage_tvp/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SBTi.portfolio_coverage_tvp</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="autoapi/SBTi/target_validation/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SBTi.target_validation</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="autoapi/SBTi/temperature_score/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SBTi.temperature_score</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="autoapi/SBTi/utils/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SBTi.utils</span></code></a></li>
 </ul>
 </li>
 </ul>

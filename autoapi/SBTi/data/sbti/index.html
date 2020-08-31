@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>SBTi.data.msci &mdash; SBTi Temperature Alignment tool  documentation</title>
+  <title>SBTi.data.sbti &mdash; SBTi Temperature Alignment tool  documentation</title>
   
 
   
@@ -130,13 +130,13 @@
     
       <li><a href="../../../../index.html">Docs</a> &raquo;</li>
         
-      <li><code class="xref py py-mod docutils literal notranslate"><span class="pre">SBTi.data.msci</span></code></li>
+      <li><code class="xref py py-mod docutils literal notranslate"><span class="pre">SBTi.data.sbti</span></code></li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="../../../../_sources/autoapi/SBTi/data/msci/index.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../../../../_sources/autoapi/SBTi/data/sbti/index.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -149,57 +149,27 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="module-SBTi.data.msci">
-<span id="sbti-data-msci"></span><h1><a class="reference internal" href="#module-SBTi.data.msci" title="SBTi.data.msci"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SBTi.data.msci</span></code></a><a class="headerlink" href="#module-SBTi.data.msci" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-SBTi.data.sbti">
+<span id="sbti-data-sbti"></span><h1><a class="reference internal" href="#module-SBTi.data.sbti" title="SBTi.data.sbti"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SBTi.data.sbti</span></code></a><a class="headerlink" href="#module-SBTi.data.sbti" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
-<dt id="SBTi.data.msci.MSCI">
-<em class="property">class </em><code class="sig-prename descclassname">SBTi.data.msci.</code><code class="sig-name descname">MSCI</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.data.msci.MSCI" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="../data_provider/index.html#SBTi.data.data_provider.DataProvider" title="SBTi.data.data_provider.DataProvider"><code class="xref py py-class docutils literal notranslate"><span class="pre">SBTi.data.data_provider.DataProvider</span></code></a></p>
-<p>Data provider skeleton for MSCI.</p>
+<dt id="SBTi.data.sbti.SBTi">
+<em class="property">class </em><code class="sig-prename descclassname">SBTi.data.sbti.</code><code class="sig-name descname">SBTi</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">config</span><span class="p">:</span> <span class="n">Type<span class="p">[</span>PortfolioCoverageTVPConfig<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">PortfolioCoverageTVPConfig</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.data.sbti.SBTi" title="Permalink to this definition">¶</a></dt>
+<dd><p>Data provider skeleton for SBTi. This class only provides the sbti_validated field for existing companies.</p>
 <dl class="py method">
-<dt id="SBTi.data.msci.MSCI.get_targets">
-<em class="property">abstract </em><code class="sig-name descname">get_targets</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">company_ids</span><span class="p">:</span> <span class="n">List<span class="p">[</span>str<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.data.msci.MSCI.get_targets" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get all relevant targets for a list of company ids (ISIN). This method should return a list of
-IDataProviderTarget instances.</p>
+<dt id="SBTi.data.sbti.SBTi.get_sbti_targets">
+<code class="sig-name descname">get_sbti_targets</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">companies</span><span class="p">:</span> <span class="n">List<span class="p">[</span>IDataProviderCompany<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">isin_map</span><span class="p">:</span> <span class="n">dict</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.data.sbti.SBTi.get_sbti_targets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check for each company if they have an SBTi validated target.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>company_ids</strong> – A list of company IDs (ISINs)</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>companies</strong> – A list of IDataProviderCompany instances</p></li>
+<li><p><strong>isin_map</strong> – A map from company id to ISIN</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A list containing the targets</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="SBTi.data.msci.MSCI.get_company_data">
-<em class="property">abstract </em><code class="sig-name descname">get_company_data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">company_ids</span><span class="p">:</span> <span class="n">List<span class="p">[</span>str<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.data.msci.MSCI.get_company_data" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get all relevant data for a list of company ids (ISIN). This method should return a list of IDataProviderCompany
-instances.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>company_ids</strong> – A list of company IDs (ISINs)</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A list containing the company data</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="SBTi.data.msci.MSCI.get_sbti_targets">
-<em class="property">abstract </em><code class="sig-name descname">get_sbti_targets</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">companies</span><span class="p">:</span> <span class="n">list</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.data.msci.MSCI.get_sbti_targets" title="Permalink to this definition">¶</a></dt>
-<dd><p>For each of the companies, get the status of their target (Target set, Committed or No target) as it’s known to
-the SBTi.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>companies</strong> – A list of companies. Each company should be a dict with a “company_name” and “company_id”
-field.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The original list, enriched with a field called “sbti_target_status”</p>
+<dd class="field-even"><p>A list of IDataProviderCompany instances, supplemented with the SBTi information</p>
 </dd>
 </dl>
 </dd></dl>

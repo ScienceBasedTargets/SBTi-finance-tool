@@ -36,7 +36,7 @@
   <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="REST API" href="rest_api.html" />
+    <link rel="next" title="REST API &amp; UI" href="rest_api.html" />
     <link rel="prev" title="Getting Started" href="getting_started.html" /> 
 </head>
 
@@ -91,12 +91,17 @@
 <li class="toctree-l3"><a class="reference internal" href="#coding-guidelines">Coding guidelines</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#releasing">Releasing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pypi-release">PyPi release</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#generate-documentation">Generate documentation</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#code-of-conduct">Code of conduct</a><ul class="simple">
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="rest_api.html">REST API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rest_api.html">REST API &amp; UI</a></li>
 <li class="toctree-l1"><a class="reference internal" href="autoapi/index.html">API Reference</a></li>
 </ul>
 
@@ -202,6 +207,26 @@ The Jupyter notebooks in the “examples” directory have been setup to use aut
 In addition, we use Flake8 to lint the code, MyPy to check the type hints and Nose2 to do unit testing. These checks are done automatically when attempting to merge a pull request into master.</p>
 </div>
 </div>
+<div class="section" id="releasing">
+<h2>Releasing<a class="headerlink" href="#releasing" title="Permalink to this headline">¶</a></h2>
+<p>To release a new version of the module you need to take two steps, create a new PyPi release and generate the documentation.</p>
+<div class="section" id="pypi-release">
+<h3>PyPi release<a class="headerlink" href="#pypi-release" title="Permalink to this headline">¶</a></h3>
+<p>TODO</p>
+</div>
+<div class="section" id="generate-documentation">
+<h3>Generate documentation<a class="headerlink" href="#generate-documentation" title="Permalink to this headline">¶</a></h3>
+<p>To generate the documentation, you should follow these steps in the “SBTi” repository (the one containing the Python module).</p>
+<ol class="arabic simple">
+<li><p><cite>cd docs</cite></p></li>
+<li><p><cite>make html</cite></p></li>
+<li><p>Copy the contents of the <cite>docs/_build/</cite> folder into the <cite>gh_pages</cite> branch</p></li>
+<li><p>Start the FastAPI server from the <cite>SBTi_api</cite> branch</p></li>
+<li><p>Go to <a class="reference external" href="http://127.0.0.1/openapi.json">the docs</a> and copy this file to the “swagger” directory in the <cite>gh_pages</cite> branch.</p></li>
+<li><p>Commit and push the gh_pages branch</p></li>
+</ol>
+</div>
+</div>
 <div class="section" id="code-of-conduct">
 <h2>Code of conduct<a class="headerlink" href="#code-of-conduct" title="Permalink to this headline">¶</a></h2>
 <p>Everyone is here with the same goal, helping portfolio holders decrease their impact on climate change.
@@ -219,7 +244,7 @@ The only way this goal can be achieved is in an inclusive and welcoming environm
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="rest_api.html" class="btn btn-neutral float-right" title="REST API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="rest_api.html" class="btn btn-neutral float-right" title="REST API &amp; UI" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="getting_started.html" class="btn btn-neutral float-left" title="Getting Started" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

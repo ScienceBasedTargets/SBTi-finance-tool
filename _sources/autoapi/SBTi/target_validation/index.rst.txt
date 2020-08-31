@@ -8,55 +8,63 @@ Module Contents
 ---------------
 
 
-.. py:class:: TargetValidation(data: pd.DataFrame, company_data: pd.DataFrame, config: Type[PortfolioAggregationConfig] = PortfolioAggregationConfig)
+.. py:class:: TargetProtocol(config: Type[PortfolioAggregationConfig] = PortfolioAggregationConfig)
 
-   This class validates the targets, to make sure that only active, useful targets are considered.
+   This class validates the targets, to make sure that only active, useful targets are considered. It then combines the targets with company-related data into a dataframe where there's one row for each of the nine possible target types (short, mid, long * S1+S2, S3, S1+S2+S3). This class follows the procedures outlined by the target protocol that is a part of the "Temperature Rating Methodology" (2020), which has been created by CDP Worldwide and WWF International.
 
-   :param data: The target related data
-   :param company_data: The company related data
    :param config: A Portfolio aggregation config
 
-   .. method:: target_validation(self)
+   .. method:: process(self, targets: List[IDataProviderTarget], companies: List[IDataProviderCompany])
 
 
-      Runs the target validation protocol.
+      Process the targets and companies, validate all targets and return a data frame that combines all targets and company data into a 9-box grid.
 
-      :return: A data frame with only valid targets, combined with the company-specific data. This will return a 9-box grid for all companies (i.e. one row for the three time-frame (short, mid, long) and the three scopes (s1s2, s3, s1s2s3). These rows might have empty targets.
-
-
-   .. method:: test_end_year(self)
-
-
-      Records that have a valid end_year will be returned. A valid end_year is defined as a year that is greater then
-      the start_year.
-
-      :return: a dataframe containing records that have correct end_year feature.
+      :param targets: A list of targets
+      :param companies: A list of companies
+      :return: A data frame that combines the processed data
 
 
-   .. method:: test_missing_fields(self, data_set, required_columns: List[str])
+   .. method:: validate(self, target: IDataProviderTarget)
 
 
-      When a required field is missing (that we need to do calculations later on), we'll delete the whole row.
+      Validate a target, meaning it should:
 
-      :param data_set: The data set that should be tested for missing columns.
-      :param required_columns: The columns that should be in the input data
-      :return: The input data set, without the invalid rows
+      * Have a valid type
+      * Not be finished
+      * A valid end year
 
-
-   .. method:: test_target_type(self)
-
-
-      Test on target type and only allow only GHG emission reduction targets (absolute or intensity based).
-
-      Target validation step 1: target type #64
-      If target type is Absolute => continue
-      If target type is Intensity =>
-      -- If Intensity_metric is Other (or none is specified) => Invalid target
-      -- For all other intensity_metrics => continue
-      If target type is Other (or none is specified) => Invalid target
+      :param target: The target to validate
+      :return: True if it's a valid target, false if it isn't
 
 
-   .. method:: test_boundary_coverage(self)
+   .. method:: _split_s1s2s3(self, target: IDataProviderTarget)
+
+
+      If there is a s1s2s3 scope, split it into two targets with s1s2 and s3
+
+      :param target: The input target
+      :return The split targets or the original target and None
+
+
+   .. method:: _combine_s1_s2(self, target: IDataProviderTarget)
+
+
+      Check if there is an S2 target that matches this target exactly (if this is a S1 target) and combine them into one target.
+
+      :param target: The input target
+      :return: The combined target (or the original if no combining was required)
+
+
+   .. method:: _convert_s1_s2(self, target: IDataProviderTarget)
+
+
+      Convert a S1 or S2 target into a S1+S2 target.
+
+      :param target: The input target
+      :return: The converted target (or the original if no conversion was required)
+
+
+   .. method:: _boundary_coverage(self, target: IDataProviderTarget)
 
 
       Test on boundary coverage:
@@ -72,35 +80,30 @@ Module Contents
       Option 3: default coverage
       Target is always valid, % uncovered is given default score in temperature score module.
 
-
-   .. method:: test_target_process(self)
-
-
-      Test on target process
-      If target process is 100%, the target is invalid (only forward looking targets allowed)
-      Output: a list of valid targets per company
-
-      Target progress: the percentage of the target already achieved
+      :param target: The input target
+      :return: The original target with a weighted reduction ambition, if so required
 
 
-   .. method:: convert_s1_s2_into_s1s2(self)
-
-
-      Combine all s1 and a s2 targets into one s1s2 target.
-
-      :return:
-
-
-   .. method:: split_s1s2s3(self)
-
-
-      If there is a s1s2s3 scope, split it into two targets with s1s2 and s3
-
-
-   .. method:: time_frame(self)
+   .. method:: _time_frame(self, target: IDataProviderTarget)
 
 
       Time frame is forward looking: target year - current year. Less than 5y = short, between 5 and 15 is mid, 15 to 30 is long
+
+      :param target: The input target
+      :return: The original target with the time_frame field filled out (if so required)
+
+
+   .. method:: _prepare_target(self, target: IDataProviderTarget)
+
+
+      Prepare a target for usage later on in the process.
+
+      :param target:
+      :return:
+
+
+   .. method:: prepare_targets(self, targets: List[IDataProviderTarget])
+
 
 
    .. method:: _find_target(self, row: pd.Series, target_columns: List[str])
@@ -116,26 +119,19 @@ Module Contents
    .. method:: group_targets(self)
 
 
-      Group the targets and create the 6 field grid (short, mid, long * s1s2, s3).
+      Group the targets and create the 9-box grid (short, mid, long * s1s2, s3, s1s2s3).
       Group valid targets by category & filter multiple targets#
       Input: a list of valid targets for each company:
       For each company:
 
-      Group all valid targets based on scope (S1+S2 / S3) and time frame (short / mid / long-term) into 6 categories.
+      Group all valid targets based on scope (S1+S2 / S3 / S1+S2+S3) and time frame (short / mid / long-term)
+      into 6 categories.
 
       For each category: if more than 1 target is available, filter based on the following criteria
       -- Highest boundary coverage
       -- Latest base year
       -- Target type: Absolute over intensity
       -- If all else is equal: average the ambition of targets
-
-
-   .. method:: combine_records(self)
-
-
-      Combines both data frames together. The company_data and the portfolio data that filtered out companies.
-
-      :return: The combined data frame
 
 
 

@@ -264,7 +264,7 @@ You can choose whether you only want to run the API or also the UI. To run them,
 <li><p>Go to the EC2 service</p></li>
 <li><p>In the instance list find the instance running the Docker image</p></li>
 <li><p>Copy the public IP address of the instance</p></li>
-<li><p>In config/flask-site-nginx.conf update the server name to the public IP.</p></li>
+<li><p>In config/api-nginx.conf update the server name to the public IP.</p></li>
 <li><p>Now we need to rebuild and re-upload the image:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="o">-</span><span class="n">f</span> <span class="n">docker</span><span class="o">-</span><span class="n">compose_aws</span><span class="o">.</span><span class="n">yml</span> <span class="n">build</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">cache</span>
 <span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="o">-</span><span class="n">f</span> <span class="n">docker</span><span class="o">-</span><span class="n">compose_aws</span><span class="o">.</span><span class="n">yml</span> <span class="n">push</span>
