@@ -139,6 +139,17 @@ def _make_isin_map(df_portfolio: pd.DataFrame) -> dict:
                 .to_dict(orient='index').items()}
 
 
+def dataframe_to_portfolio(df_portfolio: pd.DataFrame) -> List[PortfolioCompany]:
+    """
+    Convert a data frame to a list of portfolio company objects.
+
+    :param df_portfolio: The data frame to parse. The column names should align with the attribute names of the
+    PortfolioCompany model.
+    :return: A list of portfolio companies
+    """
+    return [PortfolioCompany.parse_obj(company) for company in df_portfolio.to_dict(orient="records")]
+
+
 def get_data(data_providers: List[data.DataProvider], portfolio: List[PortfolioCompany]) -> pd.DataFrame:
     """
     Get the required data from the data provider(s), validate the targets and return a 9-box grid for each company.
