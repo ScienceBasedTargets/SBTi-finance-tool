@@ -10,6 +10,7 @@ from SBTi.target_validation import TargetProtocol
 from SBTi.temperature_score import TemperatureScore
 from SBTi.data.data_provider import DataProvider
 from SBTi.portfolio_aggregation import PortfolioAggregationMethod
+import copy
 
 import SBTi
 from typing import List
@@ -40,16 +41,10 @@ class TestDataProvider(DataProvider):
 
 class CoreTest(unittest.TestCase):
     def setUp(self):
-        pass
-
-    def test_basic(self):
-
-        company_id = "A"
-
-        # define company
-        company = IDataProviderCompany(
+        company_id = "BaseCompany"
+        self.company_base = IDataProviderCompany(
             company_name=company_id,
-            company_id="A",
+            company_id=company_id,
             ghg_s1s2=100,
             ghg_s3=0,
             company_revenue=100,
@@ -59,7 +54,7 @@ class CoreTest(unittest.TestCase):
             company_cash_equivalents=100,
         )
         # define targets
-        target = IDataProviderTarget(
+        self.target_base = IDataProviderTarget(
             company_id=company_id,
             target_type="absolute",
             scope=EScope.S1S2,
@@ -74,25 +69,28 @@ class CoreTest(unittest.TestCase):
             end_year=2030,
         )
 
+    def test_basic(self):
+
+        company_id = self.company_base.company_id
+
+        company = copy.deepcopy(self.company_base)
+        target = copy.deepcopy(self.target_base)
         # test provider
         data_provider = TestDataProvider(companies=[company], targets=[target])
 
-        tv = TargetProtocol()
+        # tv = TargetProtocol()
 
-        validated = tv.validate(target)
-        assert validated
+        # validated = tv.validate(target)
+        # assert validated
 
-        # process data
-        data = tv.process([target], [company])
+        # # process data
+        # data = tv.process([target], [company])
 
         temp_score = TemperatureScore(
             time_frames=[ETimeFrames.MID],
             scopes=[EScope.S1S2],
             aggregation_method=PortfolioAggregationMethod.WATS,
         )
-
-        scores = temp_score.calculate(data)
-        # print(scores.head(10))
 
         # portfolio data
         pf_company = PortfolioCompany(
@@ -102,12 +100,76 @@ class CoreTest(unittest.TestCase):
             company_isin=company_id,
         )
         portfolio_data = SBTi.utils.get_data([data_provider], [pf_company])
-        # print(portfolio_data.head(10))
+        print(portfolio_data.head(10))
 
-        agg_scores = temp_score.aggregate_scores(portfolio_data)
-        print(agg_scores.head(10))
+        scores = temp_score.calculate(portfolio_data)
+        print(scores)
 
         assert True
 
     def test_chaos(self):
+        # TODO: go thru lots of different parameters on company & target level and try to break it
         pass
+
+    def test_basic_flow(self):
+        # 2 Companies
+        company_ids = ["A", "B"]
+        companies: List[IDataProviderCompany] = []
+        targets: List[IDataProviderTarget] = []
+        pf_companies: List[PortfolioCompany] = []
+        for company_id in company_ids:
+
+            # company
+            company = copy.deepcopy(self.company_base)
+            company.company_id = company_id
+            companies.append(company)
+
+            # target
+            target = copy.deepcopy(self.target_base)
+            target.company_id = company_id
+            targets.append(target)
+
+            # pf company
+            pf_company = PortfolioCompany(
+                company_name=company_id,
+                company_id=company_id,
+                investment_value=100,
+                company_isin=company_id,
+            )
+            pf_companies.append(pf_company)
+
+        # test provider
+        data_provider = TestDataProvider(companies=companies, targets=targets)
+
+        # tv = TargetProtocol()
+
+        # validated = tv.validate(target)
+        # assert validated
+
+        # # process data
+        # data = tv.process([target], [company])
+
+        temp_score = TemperatureScore(
+            time_frames=[ETimeFrames.MID],
+            scopes=[EScope.S1S2],
+            aggregation_method=PortfolioAggregationMethod.WATS,
+        )
+
+        # portfolio data
+
+        portfolio_data = SBTi.utils.get_data([data_provider], pf_companies)
+        print(portfolio_data.head(10))
+
+        scores = temp_score.calculate(portfolio_data)
+        # print(scores.head(10))
+
+        agg_scores = temp_score.aggregate_scores(scores)
+        print(agg_scores)
+
+        assert True
+
+
+if __name__ == "__main__":
+    test = CoreTest()
+    test.setUp()
+    test.test_basic()
