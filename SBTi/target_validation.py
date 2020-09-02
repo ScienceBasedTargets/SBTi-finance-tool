@@ -185,7 +185,7 @@ class TargetProtocol:
         """
         now = datetime.datetime.now()
         time_frame = target.end_year - now.year
-        if time_frame <= 5:
+        if time_frame <= 4:
             target.time_frame = ETimeFrames.SHORT
         elif time_frame <= 15:
             target.time_frame = ETimeFrames.MID
