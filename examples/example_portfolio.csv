@@ -1,4 +1,4 @@
-company_name,company_id,ISIN,weights,investment_value,engagement_target
+company_name,company_id,company_isin,weights,investment_value,engagement_target
 "Advanced Micro Devices, Inc",US0079031078,US0079031078,6.36%,35000000,1
 Adobe Systems Inc.,US00724F1012,US00724F1012,1.82%,10000000,
 Capgemini Group,FR0000125338,FR0000125338,1.82%,10000000,
