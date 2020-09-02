@@ -4,10 +4,11 @@ from typing import Optional, Tuple, Type, List
 import pandas as pd
 import numpy as np
 
-from .interfaces import ScenarioInterface, EScope, ETimeFrames, Aggregation, AggregationContribution, ScoreAggregation,\
-    ScoreAggregationScopes, ScoreAggregations
+from .interfaces import ScenarioInterface, EScope, ETimeFrames, Aggregation, AggregationContribution, ScoreAggregation, \
+    ScoreAggregationScopes, ScoreAggregations, PortfolioCompany
 from .portfolio_aggregation import PortfolioAggregation, PortfolioAggregationMethod
 from .configs import TemperatureScoreConfig
+from . import data, utils
 
 
 class ScenarioType(Enum):
@@ -340,14 +341,20 @@ class TemperatureScore(PortfolioAggregation):
         ))
         return data
 
-    def calculate(self, data: pd.DataFrame):
+    def calculate(self, data: pd.DataFrame = None, data_providers: List[data.DataProvider] = None,
+                  portfolio: List[PortfolioCompany] = None):
         """
         Calculate the temperature for a dataframe of company data. The columns in the data frame should be a combination
         of IDataProviderTarget and IDataProviderCompany.
 
-        :param data: The data set
+        :param data: The data set (or None if the data should be retrieved)
+        :param data_providers: A list of DataProvider instances. Optional, only required if data is empty.
+        :param portfolio: A list of PortfolioCompany models. Optional, only required if data is empty.
         :return: A data frame containing all relevant information for the targets and companies
         """
+        if data is None:
+            data = utils.get_data(data_providers, portfolio)
+
         data = self._prepare_data(data)
 
         if EScope.S1S2S3 in self.scopes:
