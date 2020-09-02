@@ -341,8 +341,8 @@ class TemperatureScore(PortfolioAggregation):
         ))
         return data
 
-    def calculate(self, data: pd.DataFrame = None, data_providers: List[data.DataProvider] = None,
-                  portfolio: List[PortfolioCompany] = None):
+    def calculate(self, data: Optional[pd.DataFrame] = None, data_providers: Optional[List[data.DataProvider]] = None,
+                  portfolio: Optional[List[PortfolioCompany]] = None):
         """
         Calculate the temperature for a dataframe of company data. The columns in the data frame should be a combination
         of IDataProviderTarget and IDataProviderCompany.
@@ -353,7 +353,10 @@ class TemperatureScore(PortfolioAggregation):
         :return: A data frame containing all relevant information for the targets and companies
         """
         if data is None:
-            data = utils.get_data(data_providers, portfolio)
+            if data_providers is not None and portfolio is not None:
+                data = utils.get_data(data_providers, portfolio)
+            else:
+                raise ValueError("You need to pass and either a data set or a list of data providers and companies")
 
         data = self._prepare_data(data)
 
