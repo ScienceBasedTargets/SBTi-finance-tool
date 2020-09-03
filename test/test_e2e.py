@@ -56,7 +56,7 @@ class CoreTest(unittest.TestCase):
         # define targets
         self.target_base = IDataProviderTarget(
             company_id=company_id,
-            target_type="absolute",
+            target_type="abs",
             scope=EScope.S1S2,
             coverage_s1=0.95,
             coverage_s2=0.95,
@@ -69,36 +69,29 @@ class CoreTest(unittest.TestCase):
             end_year=2030,
         )
 
-    def test_basic(self):
+        #pf
+        self.pf_base = PortfolioCompany(
+            company_name=company_id,
+            company_id=company_id,
+            investment_value=100,
+            company_isin=company_id,
+        )
 
-        company_id = self.company_base.company_id
+    def test_basic(self):
 
         company = copy.deepcopy(self.company_base)
         target = copy.deepcopy(self.target_base)
         # test provider
         data_provider = TestDataProvider(companies=[company], targets=[target])
 
-        # tv = TargetProtocol()
-
-        # validated = tv.validate(target)
-        # assert validated
-
-        # # process data
-        # data = tv.process([target], [company])
-
         temp_score = TemperatureScore(
-            time_frames=[ETimeFrames.MID],
+            time_frames=[ETimeFrames.MID, ETimeFrames.SHORT, ETimeFrames.LONG],
             scopes=[EScope.S1S2],
             aggregation_method=PortfolioAggregationMethod.WATS,
         )
 
         # portfolio data
-        pf_company = PortfolioCompany(
-            company_name=company_id,
-            company_id=company_id,
-            investment_value=100,
-            company_isin=company_id,
-        )
+        pf_company = copy.deepcopy(self.pf_base)
         portfolio_data = SBTi.utils.get_data([data_provider], [pf_company])
         print(portfolio_data.head(10))
 
@@ -167,6 +160,11 @@ class CoreTest(unittest.TestCase):
         print(agg_scores)
 
         assert True
+
+    # Test with 10000+ companies
+    def test_regression(self):
+
+        pass
 
 
 if __name__ == "__main__":
