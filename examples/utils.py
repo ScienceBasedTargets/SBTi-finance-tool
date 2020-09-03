@@ -30,7 +30,7 @@ def collect_company_contributions(aggregated_portfolio, amended_portfolio, analy
     return company_contributions
 
 
-def plot_grouped_statistics(company_contributions, analysis_parameters):
+def plot_grouped_statistics(aggregated_portfolio, company_contributions, analysis_parameters):
     timeframe, scope, grouping = analysis_parameters
     scope = str(scope[0])
     timeframe = str(timeframe[0]).lower()
@@ -39,6 +39,9 @@ def plot_grouped_statistics(company_contributions, analysis_parameters):
     sector_contributions = company_contributions.groupby(grouping).contribution.sum().values
     sector_names = company_contributions.groupby(grouping).contribution.sum().keys()
     sector_temp_scores = [aggregation.score for aggregation in aggregated_portfolio[timeframe][scope]['grouped'].values()]
+
+    sector_temp_scores, sector_names, sector_contributions, sector_investments = \
+        zip(*sorted(zip(sector_temp_scores, sector_names, sector_contributions, sector_investments), reverse=True))
 
     fig = plt.figure(figsize=[10, 7.5])
     ax1 = fig.add_subplot(231)
@@ -57,6 +60,7 @@ def plot_grouped_statistics(company_contributions, analysis_parameters):
     for label in ax3.get_xticklabels():
         label.set_rotation(45)
         label.set_ha('right')
+    ax3.axhline(y=1.5, linestyle='--', color='k')
 
 
 def anonymize(portfolio, provider):
