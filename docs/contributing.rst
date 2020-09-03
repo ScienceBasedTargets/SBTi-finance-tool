@@ -39,6 +39,31 @@ Coding guidelines
 In general the code follows three principals, `OOP <https://en.wikipedia.org/wiki/Object-oriented_programming>`_, `PEP8 (code style) <https://www.python.org/dev/peps/pep-0008/>`_ and `PEP 484 (type hinting) <https://www.python.org/dev/peps/pep-0484/>`_.
 In addition, we use Flake8 to lint the code, MyPy to check the type hints and Nose2 to do unit testing. These checks are done automatically when attempting to merge a pull request into master.
 
+Releasing
+===============
+To release a new version of the module you need to take two steps, create a new PyPi release and generate the documentation.
+
+PyPi release
+------------------
+TODO
+
+Generate documentation
+------------------------
+To generate the documentation, you should follow these steps in the "SBTi" repository (the one containing the Python module).
+
+1. `cd docs`
+
+2. `make html`
+
+3. Copy the contents of the `docs/_build/` folder into the `gh_pages` branch
+
+4. Start the FastAPI server from the `SBTi_api` branch
+
+5. Go to `the docs <http://127.0.0.1/openapi.json>`_ and copy this file to the "swagger" directory in the `gh_pages` branch.
+
+6. Commit and push the gh_pages branch
+
+
 Code of conduct
 ===============
 Everyone is here with the same goal, helping portfolio holders decrease their impact on climate change.
