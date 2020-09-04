@@ -12,6 +12,26 @@ def print_aggregations(aggregations):
                     print("{} - {}: {t:.2f} degrees Celcius".format(time_frame, scope, t=scope_values["all"]["score"]))
 
 
+def print_scenario_gain(actual_aggregations, scenario_aggregations):
+    print("Actual portfolio temperature score")
+    print_aggregations(actual_aggregations)
+    print()
+    print("Scenario portfolio temperature score")
+    print_aggregations(scenario_aggregations)
+
+
+def print_grouped_scores(aggregations):
+    aggregations = aggregations.dict()
+    for time_frame, time_frame_values in aggregations.items():
+        if time_frame_values:
+            for scope, scope_values in time_frame_values.items():
+                if scope_values:
+                    print()
+                    print("{} - {}".format(time_frame, scope))
+                    for group, aggregation in scope_values["grouped"].items():
+                        print("{}: {t:.2f} degrees Celcius".format(group, t=aggregation["score"]))
+
+
 def collect_company_contributions(aggregated_portfolio, amended_portfolio, analysis_parameters):
     timeframe, scope, grouping = analysis_parameters
     scope = str(scope[0])
@@ -113,7 +133,7 @@ def plot_grouped_heatmap(grouped_aggregations, scope, timeframe):
     ax = fig.add_subplot(111)
     plt.set_cmap('OrRd')
     current_cmap = matplotlib.cm.get_cmap()
-    current_cmap.set_bad(color='grey')
+    current_cmap.set_bad(color='grey', alpha=0.4)
     im = ax.pcolormesh(grid)
     ax.set_xticks(0.5 + np.arange(0, len(sectors)))
     ax.set_yticks(0.5 + np.arange(0, len(regions)))
