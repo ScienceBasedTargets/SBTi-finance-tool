@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import pandas as pd
+import numpy as np
 
 
 def print_aggregations(aggregations):
@@ -83,3 +84,43 @@ def anonymize(portfolio, provider):
             provider.data['fundamental_data'].loc[provider.data['fundamental_data']['company_name'] == company_name, 'company_name'] = 'Company_' + str(
                 index + 1)
     return portfolio, provider
+
+
+def plot_grouped_heatmap(grouped_aggregations, scope, timeframe):
+    groups = grouped_aggregations[timeframe][scope].grouped
+    combinations = list(groups.keys())
+    sectors, regions = [], []
+    for combination in combinations:
+        sector, region = combination.split('-')
+        if sector not in sectors:
+            sectors.append(sector)
+        if region not in regions:
+            regions.append(region)
+    sectors = sorted(sectors)
+    regions = sorted(regions)
+
+    grid = np.zeros((len(regions), len(sectors)))
+    for i, region in enumerate(regions):
+        for j, sector in enumerate(sectors):
+            key = sector+'-'+region
+            if key in combinations:
+                grid[i, j] = groups[sector+'-'+region].score
+            else:
+                grid[i, j] = np.nan
+
+    import matplotlib
+    fig = plt.figure(figsize=[0.9*len(sectors), 0.8*len(regions)])
+    ax = fig.add_subplot(111)
+    plt.set_cmap('OrRd')
+    current_cmap = matplotlib.cm.get_cmap()
+    current_cmap.set_bad(color='grey')
+    im = ax.pcolormesh(grid)
+    ax.set_xticks(0.5 + np.arange(0, len(sectors)))
+    ax.set_yticks(0.5 + np.arange(0, len(regions)))
+    ax.set_yticklabels(regions)
+    ax.set_xticklabels(sectors)
+    for label in ax.get_xticklabels():
+        label.set_rotation(45)
+        label.set_ha('right')
+    fig.colorbar(im, ax=ax)
+    ax.set_title("Temperature score per region per sector")
