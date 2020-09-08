@@ -48,7 +48,7 @@ class TestTemperatureScore(unittest.TestCase):
                                    (scores["company_name"] == "Company AA") &
                                    (scores["time_frame"] == ETimeFrames.MID) &
                                    (scores["scope"] == EScope.S1S2S3)
-                                   ]["temperature_score"].iloc[0], 1.91, places=2,
+                                   ]["temperature_score"].iloc[0], 1.97, places=2,
                                msg="The aggregated temp score was incorrect")
         self.assertAlmostEqual(scores[
                                    (scores["company_name"] == "Company AA") &
@@ -60,9 +60,9 @@ class TestTemperatureScore(unittest.TestCase):
     def test_portfolio_aggregations(self):
         scores = self.temperature_score.calculate(self.data)
         aggregations = self.temperature_score.aggregate_scores(scores)
-        self.assertAlmostEqual(aggregations.short.S1S2.all.score, 2.79, places=2,
+        self.assertAlmostEqual(aggregations.short.S1S2.all.score, 2.73, places=2,
                                msg="Short WATS aggregation failed")
-        self.assertAlmostEqual(aggregations.mid.S1S2.all.score, 2.81, places=2,
+        self.assertAlmostEqual(aggregations.mid.S1S2.all.score, 2.89, places=2,
                                msg="Mid WATS aggregation failed")
         self.assertAlmostEqual(aggregations.long.S1S2.all.score, 3.2, places=2,
                                msg="Long WATS aggregation failed")
@@ -70,7 +70,7 @@ class TestTemperatureScore(unittest.TestCase):
         aggregations = self.temperature_score.aggregate_scores(scores)
         self.assertAlmostEqual(aggregations.short.S1S2.all.score, 2.86, places=2,
                                msg="Short TETS aggregation failed")
-        self.assertAlmostEqual(aggregations.mid.S1S2.all.score, 2.88, places=2,
+        self.assertAlmostEqual(aggregations.mid.S1S2.all.score, 3.41, places=2,
                                msg="Mid TETS aggregation failed")
         self.assertAlmostEqual(aggregations.long.S1S2.all.score, 3.2, places=2,
                                msg="Long TETS aggregation failed")
@@ -78,7 +78,7 @@ class TestTemperatureScore(unittest.TestCase):
         aggregations = self.temperature_score.aggregate_scores(scores)
         self.assertAlmostEqual(aggregations.short.S1S2.all.score, 2.88, places=2,
                                msg="Short MOTS aggregation failed")
-        self.assertAlmostEqual(aggregations.mid.S1S2.all.score, 2.87, places=2,
+        self.assertAlmostEqual(aggregations.mid.S1S2.all.score, 3.43, places=2,
                                msg="Mid MOTS aggregation failed")
         self.assertAlmostEqual(aggregations.long.S1S2.all.score, 3.2, places=2,
                                msg="Long MOTS aggregation failed")
@@ -86,7 +86,7 @@ class TestTemperatureScore(unittest.TestCase):
         aggregations = self.temperature_score.aggregate_scores(scores)
         self.assertAlmostEqual(aggregations.short.S1S2.all.score, 2.93, places=2,
                                msg="Short EOTS aggregation failed")
-        self.assertAlmostEqual(aggregations.mid.S1S2.all.score, 2.88, places=2,
+        self.assertAlmostEqual(aggregations.mid.S1S2.all.score, 3.48, places=2,
                                msg="Mid EOTS aggregation failed")
         self.assertAlmostEqual(aggregations.long.S1S2.all.score, 3.2, places=2,
                                msg="Long EOTS aggregation failed")
@@ -94,7 +94,7 @@ class TestTemperatureScore(unittest.TestCase):
         aggregations = self.temperature_score.aggregate_scores(scores)
         self.assertAlmostEqual(aggregations.short.S1S2.all.score, 2.93, places=2,
                                msg="Short ECOTS aggregation failed")
-        self.assertAlmostEqual(aggregations.mid.S1S2.all.score, 2.88, places=2,
+        self.assertAlmostEqual(aggregations.mid.S1S2.all.score, 3.48, places=2,
                                msg="Mid ECOTS aggregation failed")
         self.assertAlmostEqual(aggregations.long.S1S2.all.score, 3.2, places=2,
                                msg="Long ECOTS aggregation failed")
@@ -102,7 +102,7 @@ class TestTemperatureScore(unittest.TestCase):
         aggregations = self.temperature_score.aggregate_scores(scores)
         self.assertAlmostEqual(aggregations.short.S1S2.all.score, 2.88, places=2,
                                msg="Short AOTS aggregation failed")
-        self.assertAlmostEqual(aggregations.mid.S1S2.all.score, 2.87, places=2,
+        self.assertAlmostEqual(aggregations.mid.S1S2.all.score, 3.43, places=2,
                                msg="Mid AOTS aggregation failed")
         self.assertAlmostEqual(aggregations.long.S1S2.all.score, 3.2, places=2,
                                msg="Long AOTS aggregation failed")
