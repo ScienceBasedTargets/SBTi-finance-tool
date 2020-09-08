@@ -1,13 +1,26 @@
-# .github/workflows/treebeard.yml
-# Run all notebooks on every push and weekly
+# Run all notebooks on every push
 name: Notebooks
 on:
   push:
+    branches: [ \#210_David ]
 jobs:
   run:
     runs-on: ubuntu-latest
     name: Run treebeard
+    strategy:
+      matrix:
+        python-version: [3.6]
+
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+          run: |
+            python -m pip install --upgrade pip
+            pip install flake8 nose2 ossaudit mypy
+            if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
       - uses: treebeardtech/treebeard@master
+        notebooks: "examples/*ipynb"
