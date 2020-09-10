@@ -196,7 +196,7 @@ class TemperatureScore(PortfolioAggregation):
 
         try:
             return target[self.c.COLS.REDUCTION_AMBITION] / float(target[self.c.COLS.END_YEAR] -
-                                                                  target[self.c.COLS.START_YEAR])
+                                                                  target[self.c.COLS.BASE_YEAR])
         except ZeroDivisionError:
             raise ValueError("Couldn't calculate the annual reduction rate because the start and target year are the "
                              "same")
