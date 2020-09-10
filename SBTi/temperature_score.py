@@ -478,7 +478,6 @@ class TemperatureScore(PortfolioAggregation):
                             scores.loc[company_mask, self.c.COLS.TEMPERATURE_SCORE].apply(
                                 lambda x: min(x, self.scenario.get_score_cap()))
         elif self.scenario.scenario_type == ScenarioType.HIGHEST_CONTRIBUTORS_APPROVED:
-            scores[self.c.COLS.ENGAGEMENT_TARGET] = scores[self.c.COLS.ENGAGEMENT_TARGET].fillna(False).astype('bool')
             score_based_on_target = scores[self.c.COLS.ENGAGEMENT_TARGET]
             scores.loc[score_based_on_target, self.c.COLS.TEMPERATURE_SCORE] = \
                 scores.loc[score_based_on_target, self.c.COLS.TEMPERATURE_SCORE].apply(
