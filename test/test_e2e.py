@@ -1,4 +1,5 @@
 import unittest
+from unittest.case import SkipTest
 from SBTi.interfaces import (
     EScope,
     ETimeFrames,
@@ -79,11 +80,12 @@ class CoreTest(unittest.TestCase):
 
     def test_basic(self):
 
+        # Setup test provider
         company = copy.deepcopy(self.company_base)
         target = copy.deepcopy(self.target_base)
-        # test provider
         data_provider = TestDataProvider(companies=[company], targets=[target])
 
+        # Calculat4e Temp Scores
         temp_score = TemperatureScore(
             time_frames=[ETimeFrames.MID, ETimeFrames.SHORT, ETimeFrames.LONG],
             scopes=[EScope.S1S2],
@@ -93,10 +95,11 @@ class CoreTest(unittest.TestCase):
         # portfolio data
         pf_company = copy.deepcopy(self.pf_base)
         portfolio_data = SBTi.utils.get_data([data_provider], [pf_company])
-        print(portfolio_data.head(10))
 
+        # Verify data
         scores = temp_score.calculate(portfolio_data)
-        print(scores)
+        self.assertIsNotNone(scores)
+        self.assertEqual(len(scores.index), 3)
 
         assert True
 
@@ -105,7 +108,8 @@ class CoreTest(unittest.TestCase):
         pass
 
     def test_basic_flow(self):
-        # 2 Companies
+
+        # Set up 2 companies based on the base company
         company_ids = ["A", "B"]
         companies: List[IDataProviderCompany] = []
         targets: List[IDataProviderTarget] = []
@@ -131,40 +135,70 @@ class CoreTest(unittest.TestCase):
             )
             pf_companies.append(pf_company)
 
-        # test provider
         data_provider = TestDataProvider(companies=companies, targets=targets)
 
-        # tv = TargetProtocol()
-
-        # validated = tv.validate(target)
-        # assert validated
-
-        # # process data
-        # data = tv.process([target], [company])
-
+        # Calculate scores & Aggregated values
         temp_score = TemperatureScore(
             time_frames=[ETimeFrames.MID],
             scopes=[EScope.S1S2],
             aggregation_method=PortfolioAggregationMethod.WATS,
         )
 
-        # portfolio data
+        portfolio_data = SBTi.utils.get_data([data_provider], pf_companies)
+        scores = temp_score.calculate(portfolio_data)
+        agg_scores = temp_score.aggregate_scores(scores)
+
+        # verify that results exist
+        self.assertEqual(agg_scores.mid.S1S2.all.score, 0.54)
+
+    # Run some regression tests
+    @unittest.skip("only run for longer test runs")
+    def test_regression_companies(self):
+
+        nr_companies = 100
+
+        # test 10000 companies
+        companies: List[IDataProviderCompany] = []
+        targets: List[IDataProviderTarget] = []
+        pf_companies: List[PortfolioCompany] = []
+        
+
+        for i in range(nr_companies):
+
+            company_id = f"Company {str(i)}"
+            # company
+            company = copy.deepcopy(self.company_base)
+            company.company_id = company_id
+            companies.append(company)
+
+            # target
+            target = copy.deepcopy(self.target_base)
+            target.company_id = company_id
+            targets.append(target)
+
+            # pf company
+            pf_company = PortfolioCompany(
+                company_name=company_id,
+                company_id=company_id,
+                investment_value=100,
+                company_isin=company_id,
+            )
+            pf_companies.append(pf_company)
+
+        data_provider = TestDataProvider(companies=companies, targets=targets)
+
+         # Calculate scores & Aggregated values
+        temp_score = TemperatureScore(
+            time_frames=[ETimeFrames.MID],
+            scopes=[EScope.S1S2],
+            aggregation_method=PortfolioAggregationMethod.WATS,
+        )
 
         portfolio_data = SBTi.utils.get_data([data_provider], pf_companies)
-        print(portfolio_data.head(10))
-
         scores = temp_score.calculate(portfolio_data)
-        # print(scores.head(10))
-
         agg_scores = temp_score.aggregate_scores(scores)
-        print(agg_scores)
 
-        assert True
-
-    # Test with 10000+ companies
-    def test_regression(self):
-
-        pass
+        self.assertAlmostEqual(agg_scores.mid.S1S2.all.score, 0.54)
 
 
 if __name__ == "__main__":
