@@ -4,7 +4,7 @@ the module, extend the respective config class and pass it to the class as the "
 """
 import os
 
-from SBTi.interfaces import ETimeFrames
+from SBTi.interfaces import ETimeFrames, EScope
 
 
 class ColumnsConfig:
@@ -93,9 +93,9 @@ class TemperatureScoreConfig(PortfolioAggregationConfig):
 
     DEFAULT_INDUSTRY = "Others"
 
-    VALUE_TARGET_REFERENCE_ABSOLUTE = "Absolute"
-    VALUE_TARGET_REFERENCE_INTENSITY = "Intensity"
-    VALUE_TARGET_REFERENCE_INTENSITY_BASE = "Int"
+    VALUE_TARGET_REFERENCE_ABSOLUTE = "absolute"
+    VALUE_TARGET_REFERENCE_INTENSITY = "intensity"
+    VALUE_TARGET_REFERENCE_INTENSITY_BASE = "int"
 
     SLOPE_MAP = {
         ETimeFrames.SHORT: "slope5",
@@ -104,15 +104,43 @@ class TemperatureScoreConfig(PortfolioAggregationConfig):
     }
 
     INTENSITY_MAPPINGS = {
-        "Revenue": "INT.emKyoto_gdp",
-        "Product": "INT.emKyoto_gdp",
-        "Cement": "INT.emKyoto_gdp",
-        "Oil": "INT.emCO2EI_PE",
-        "Steel": "INT.emKyoto_gdp",
-        "Aluminum": "INT.emKyoto_gdp",
-        "Power": "INT.emCO2EI_elecGen"
+        ("Revenue", EScope.S1S2): "INT.emKyoto_gdp",
+        ("Revenue", EScope.S3): "INT.emKyoto_gdp",
+        ("Product", EScope.S1S2): "INT.emKyoto_gdp",
+        ("Product", EScope.S3): "INT.emKyoto_gdp",
+        ("Cement", EScope.S1S2): "INT.emKyoto_gdp",
+        ("Cement", EScope.S3): "INT.emKyoto_gdp",
+        ("Oil", EScope.S1S2): "INT.emCO2EI_PE",
+        ("Oil", EScope.S3): "INT.emCO2EI_PE",
+        ("Steel", EScope.S1S2): "INT.emKyoto_gdp",
+        ("Steel", EScope.S3): "INT.emKyoto_gdp",
+        ("Aluminum", EScope.S1S2): "INT.emKyoto_gdp",
+        ("Aluminum", EScope.S3): "INT.emKyoto_gdp",
+        ("Power", EScope.S1S2): "INT.emCO2EI_elecGen",
+        ("Power", EScope.S3): "INT.emCO2EI_elecGen"
     }
-    ABSOLUTE_MAPPING = "Emissions|Kyoto Gases"
+    ABSOLUTE_MAPPINGS = {
+        ("B06", EScope.S1S2): "Emissions|Kyoto Gases",
+        ("B06", EScope.S3): "Emissions|Kyoto Gases",
+        ("C23", EScope.S1S2): "Emissions|CO2|Energy and Industrial Processes",
+        ("C23", EScope.S3): "Emissions|Kyoto Gases",
+        ("C24", EScope.S1S2): "Emissions|CO2|Energy and Industrial Processes",
+        ("C24", EScope.S3): "Emissions|Kyoto Gases",
+        ("D35", EScope.S1S2): "Emissions|CO2|Energy and Industrial Processes",
+        ("D35", EScope.S3): "Emissions|Kyoto Gases",
+        ("H49", EScope.S1S2): "Emissions|Kyoto Gases",
+        ("H49", EScope.S3): "Emissions|Kyoto Gases",
+        ("H50", EScope.S1S2): "Emissions|Kyoto Gases",
+        ("H50", EScope.S3): "Emissions|Kyoto Gases",
+        ("H51", EScope.S1S2): "Emissions|Kyoto Gases",
+        ("H51", EScope.S3): "Emissions|Kyoto Gases",
+        ("H52", EScope.S1S2): "Emissions|Kyoto Gases",
+        ("H52", EScope.S3): "Emissions|Kyoto Gases",
+        ("H53", EScope.S1S2): "Emissions|Kyoto Gases",
+        ("H53", EScope.S3): "Emissions|Kyoto Gases",
+        ("other", EScope.S1S2): "Emissions|Kyoto Gases",
+        ("other", EScope.S3): "Emissions|Kyoto Gases"
+    }
 
     TEMPERATURE_RESULTS = 'temperature_results'
     INVESTMENT_VALUE = "investment_value"
