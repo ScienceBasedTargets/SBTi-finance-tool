@@ -4,6 +4,7 @@ from typing import Type
 
 import pandas as pd
 from .configs import PortfolioAggregationConfig, ColumnsConfig
+from .interfaces import EScope
 
 
 class PortfolioAggregationMethod(Enum):
