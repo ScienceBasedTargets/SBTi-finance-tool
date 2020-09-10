@@ -155,7 +155,7 @@ class TargetProtocol:
         Test on boundary coverage:
 
         Option 1: minimal coverage threshold
-        For S1+S2 targets: coverage% must be above 95%, for S3 targets coverage must be above 67%
+        For S1+S2 targets: coverage% must be at or above 95%, for S3 targets coverage must be above 67%
 
         Option 2: weighted coverage
         Thresholds are still 95% and 67%, target is always valid. Below threshold ambition is scaled.*
@@ -169,10 +169,10 @@ class TargetProtocol:
         :return: The original target with a weighted reduction ambition, if so required
         """
         if target.scope == EScope.S1S2:
-            if target.coverage_s1 <= 0.95:
+            if target.coverage_s1 < 0.95:
                 target.reduction_ambition = target.reduction_ambition * target.coverage_s1
         elif target.scope == EScope.S3:
-            if target.coverage_s3 <= 0.67:
+            if target.coverage_s3 < 0.67:
                 target.reduction_ambition = target.reduction_ambition * target.coverage_s3
         return target
 
