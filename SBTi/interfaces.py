@@ -69,7 +69,7 @@ class PortfolioCompany(BaseModel):
 class IDataProviderCompany(BaseModel):
     company_name: str
     company_id: str
-    isic: Optional[str]
+    isic: str
     ghg_s1s2: float
     ghg_s3: float
 
