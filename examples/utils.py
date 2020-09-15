@@ -3,6 +3,7 @@ import matplotlib
 import pandas as pd
 import numpy as np
 import copy as copy
+import random
 
 
 def print_aggregations(aggregations):
@@ -46,7 +47,7 @@ def collect_company_contributions(aggregated_portfolio, amended_portfolio, analy
         relative_contributions.append(contribution.contribution_relative)
         temperature_scores.append(contribution.temperature_score)
     company_contributions = pd.DataFrame(data={'company_name': company_names, 'contribution': relative_contributions, 'temperature_score': temperature_scores})
-    additional_columns = ['company_name', 'company_market_cap', 'investment_value'] + grouping
+    additional_columns = ['company_name', 'company_id', 'company_market_cap', 'investment_value'] + grouping
     company_contributions = company_contributions.merge(right=amended_portfolio[additional_columns], how='left', on='company_name')
     company_contributions['portfolio_percentage'] = 100 * company_contributions['investment_value'] / company_contributions['investment_value'].sum()
     company_contributions['ownership_percentage'] = 100 * company_contributions['investment_value'] / company_contributions['company_market_cap']
@@ -69,17 +70,20 @@ def plot_grouped_statistics(aggregated_portfolio, company_contributions, analysi
 
     fig = plt.figure(figsize=[10, 7.5])
     ax1 = fig.add_subplot(231)
+    ax1.set_prop_cycle(plt.cycler("color", plt.cm.tab20.colors))
     ax1.pie(sector_investments, autopct='%1.0f%%', pctdistance=1.25, labeldistance=2)
     ax1.set_title("Investments", pad=15)
 
+
     ax2 = fig.add_subplot(232)
+    ax2.set_prop_cycle(plt.cycler("color", plt.cm.tab20.colors))
     ax2.pie(sector_contributions, autopct='%1.0f%%', pctdistance=1.25, labeldistance=2)
     ax2.legend(labels=sector_names, bbox_to_anchor=(1.2, 1), loc='upper left')
     ax2.set_title("Contributions", pad=15)
 
     ax3 = fig.add_subplot(212)
     ax3.bar(sector_names, sector_temp_scores)
-    ax3.set_title("Temperature scores per " + grouping)
+    ax3.set_title("Temperature scores per " + grouping[0])
     ax3.set_ylabel("Temperature score")
     for label in ax3.get_xticklabels():
         label.set_rotation(45)
