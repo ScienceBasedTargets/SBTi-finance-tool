@@ -155,3 +155,18 @@ def plot_grouped_heatmap(grouped_aggregations, analysis_parameters):
         label.set_ha('right')
     fig.colorbar(im, ax=ax)
     ax.set_title("Temperature score per region per sector")
+
+
+def get_contributions_per_group(aggregations, analysis_parameters, group):
+    timeframe, scope, grouping = analysis_parameters
+    scope = str(scope[0])
+    timeframe = str(timeframe[0]).lower()
+    aggregations = aggregations.dict()
+
+    contributions = aggregations[timeframe][scope]['grouped'][group]['contributions']
+    contributions = pd.DataFrame(contributions)
+    columns = ['group'] + contributions.columns.tolist()
+    contributions['group'] = group
+    contributions = contributions[columns]
+    contributions.drop(columns=['contribution'], inplace=True)
+    return contributions
