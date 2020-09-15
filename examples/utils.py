@@ -1,6 +1,8 @@
 import matplotlib.pyplot as plt
+import matplotlib
 import pandas as pd
 import numpy as np
+import copy as copy
 
 
 def print_aggregations(aggregations):
@@ -44,7 +46,8 @@ def collect_company_contributions(aggregated_portfolio, amended_portfolio, analy
         relative_contributions.append(contribution.contribution_relative)
         temperature_scores.append(contribution.temperature_score)
     company_contributions = pd.DataFrame(data={'company_name': company_names, 'contribution': relative_contributions, 'temperature_score': temperature_scores})
-    company_contributions = company_contributions.merge(right=amended_portfolio[['company_name', grouping, 'company_market_cap', 'investment_value']], how='left', on='company_name')
+    additional_columns = ['company_name', 'company_market_cap', 'investment_value'] + grouping
+    company_contributions = company_contributions.merge(right=amended_portfolio[additional_columns], how='left', on='company_name')
     company_contributions['portfolio_percentage'] = 100 * company_contributions['investment_value'] / company_contributions['investment_value'].sum()
     company_contributions['ownership_percentage'] = 100 * company_contributions['investment_value'] / company_contributions['company_market_cap']
     company_contributions = company_contributions.sort_values(by='contribution', ascending=False)
@@ -106,7 +109,11 @@ def anonymize(portfolio, provider):
     return portfolio, provider
 
 
-def plot_grouped_heatmap(grouped_aggregations, scope, timeframe):
+def plot_grouped_heatmap(grouped_aggregations, analysis_parameters):
+    timeframe, scope, grouping = analysis_parameters
+    scope = str(scope[0])
+    timeframe = str(timeframe[0]).lower()
+
     groups = grouped_aggregations[timeframe][scope].grouped
     combinations = list(groups.keys())
     sectors, regions = [], []
@@ -128,13 +135,13 @@ def plot_grouped_heatmap(grouped_aggregations, scope, timeframe):
             else:
                 grid[i, j] = np.nan
 
-    import matplotlib
+
+    current_cmap = copy.copy(matplotlib.cm.get_cmap('OrRd'))
+    current_cmap.set_bad(color='grey', alpha=0.4)
+
     fig = plt.figure(figsize=[0.9*len(sectors), 0.8*len(regions)])
     ax = fig.add_subplot(111)
-    plt.set_cmap('OrRd')
-    current_cmap = matplotlib.cm.get_cmap()
-    current_cmap.set_bad(color='grey', alpha=0.4)
-    im = ax.pcolormesh(grid)
+    im = ax.pcolormesh(grid, cmap=current_cmap)
     ax.set_xticks(0.5 + np.arange(0, len(sectors)))
     ax.set_yticks(0.5 + np.arange(0, len(regions)))
     ax.set_yticklabels(regions)
