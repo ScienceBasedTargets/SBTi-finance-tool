@@ -178,11 +178,11 @@ class TemperatureScore(PortfolioAggregation):
         :param target: The target as a row of a dataframe
         :return: The mapped SR15 target
         """
-        # TODO: Use constants
         if target[self.c.COLS.TARGET_REFERENCE_NUMBER].strip().lower().startswith(self.c.VALUE_TARGET_REFERENCE_INTENSITY_BASE):
             return self.c.INTENSITY_MAPPINGS.get((target[self.c.COLS.INTENSITY_METRIC], target[self.c.COLS.SCOPE]), None)
         else:
-            return self.c.ABSOLUTE_MAPPINGS.get((target[self.c.COLS.COMPANY_ISIC][:3], target[self.c.COLS.SCOPE]),
+            # Only first 3 characters of ISIC code are relevant for the absolute mappings
+            return self.c.ABSOLUTE_MAPPINGS.get((target[self.c.COLS.COMPANY_ISIC][:3], target[self.c.COLS.SCOPE]), 
                                                 self.c.ABSOLUTE_MAPPINGS.get(("other", target[self.c.COLS.SCOPE])))
 
     def get_annual_reduction_rate(self, target: pd.Series) -> Optional[float]:
