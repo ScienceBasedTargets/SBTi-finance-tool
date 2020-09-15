@@ -56,3 +56,4 @@ As shown above the API is dependent on the Python Repo, in the same way the UI r
    getting_started
    contributing
    rest_api
+   1_getting_started

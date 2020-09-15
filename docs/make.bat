@@ -12,6 +12,9 @@ set BUILDDIR=_build
 
 if "%1" == "" goto help
 
+
+copy "..\examples\1_getting_started.ipynb" ".\1_getting_started.ipynb"
+
 %SPHINXBUILD% >NUL 2>NUL
 if errorlevel 9009 (
 	echo.
