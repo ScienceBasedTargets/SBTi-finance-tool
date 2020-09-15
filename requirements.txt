@@ -7,3 +7,4 @@ git+https://github.com/OFBDABV/sphinx-autoapi.git
 sphinx-rtd-theme==0.4.3
 pandas==1.0.3
 xlrd==1.2.0
+openpyxl==3.0.5
