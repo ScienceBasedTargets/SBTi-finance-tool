@@ -14,7 +14,7 @@ help:
 
 .PHONY: help Makefile
 
-"$(BUILDDIR)"/1_getting_started.ipynb: ../examples/1_getting_started.ipynb
+"$(BUILDDIR)"/4_analysis.ipynb: ../examples/4_analysis.ipynb
 	@[ -d dest ] || mkdir dest
 	cp $< $@
 
