@@ -1,4 +1,5 @@
 requests
 jupyter==1.0.0
 pandas==1.0.3
-git+git://github.com/OFBDABV/SBTi
+openpyxl==3.0.5
+matplotlib==3.3.1
