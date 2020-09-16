@@ -155,7 +155,7 @@ def plot_grouped_heatmap(grouped_aggregations, analysis_parameters):
         label.set_rotation(45)
         label.set_ha('right')
     fig.colorbar(im, ax=ax)
-    ax.set_title("Temperature score per region per sector")
+    ax.set_title("Temperature score per " + group_2 + " per " + group_1)
 
 
 def get_contributions_per_group(aggregations, analysis_parameters, group):
