@@ -1,5 +1,5 @@
 ********************
-REST API & UI
+Getting Started Using REST API & UI
 ********************
 The provided REST API makes it easy to integrate the SBTi temperature alignment tool as a microservice in your current IT infrastructure.
 Optionally you can also run the REST API with a small frontend, that makes testing substantially easier.

@@ -1,5 +1,5 @@
 ********************
-Getting Started
+Getting Started Using Python
 ********************
 The most fundamental part of the project is the Python module. This takes care of all the heavy lifting.
 You can install it easily through PIP. There are a couple ways to get started using the module.

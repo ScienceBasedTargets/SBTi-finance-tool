@@ -53,7 +53,10 @@ As shown above the API is dependent on the Python Repo, in the same way the UI r
    :maxdepth: 4
    :caption: Contents:
 
+   overview
    getting_started
-   contributing
    rest_api
    1_getting_started
+   DataRequirements
+   Legends
+   contributing
