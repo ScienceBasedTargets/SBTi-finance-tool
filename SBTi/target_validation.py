@@ -15,11 +15,13 @@ class TargetProtocol:
 
     :param config: A Portfolio aggregation config
     """
+
     def __init__(self, config: Type[PortfolioAggregationConfig] = PortfolioAggregationConfig):
         self.c = config
         self.logger = logging.getLogger(__name__)
         self.s2_targets: List[IDataProviderTarget] = []
         self.target_data: pd.DataFrame = pd.DataFrame()
+        self.indexed_target_data: pd.DataFrame = pd.DataFrame()
         self.company_data: pd.DataFrame = pd.DataFrame()
         self.data: pd.DataFrame = pd.DataFrame()
 
@@ -33,6 +35,8 @@ class TargetProtocol:
         """
         targets = self.prepare_targets(targets)
         self.target_data = pd.DataFrame.from_records([c.dict() for c in targets])
+        self.indexed_target_data = self.target_data.set_index([self.c.COLS.COMPANY_ID, self.c.COLS.TIME_FRAME,
+                                                              self.c.COLS.SCOPE])
         self.company_data = pd.DataFrame.from_records([c.dict() for c in companies])
         self.group_targets()
         return pd.merge(left=self.data, right=self.company_data, how='outer', on=['company_id'])
@@ -229,24 +233,26 @@ class TargetProtocol:
         """
 
         # Find all targets that correspond to the given row
-        target_data = self.target_data[(self.target_data[self.c.COLS.COMPANY_ID] == row[self.c.COLS.COMPANY_ID]) &
-                                       (self.target_data[self.c.COLS.TIME_FRAME] == row[self.c.COLS.TIME_FRAME]) &
-                                       (self.target_data[self.c.COLS.SCOPE] == row[self.c.COLS.SCOPE])].copy()
-        if len(target_data) == 0:
+        try:
+            target_data = self.indexed_target_data.loc[
+                (row[self.c.COLS.COMPANY_ID], row[self.c.COLS.TIME_FRAME], row[self.c.COLS.SCOPE])]
+
+            if isinstance(target_data, pd.Series):
+                # If there's exactly one target, we'll return that target
+                return target_data[target_columns]
+            else:
+                # We prefer targets with higher emissions in scope
+                if target_data.iloc[0][self.c.COLS.SCOPE] == EScope.S3:
+                    coverage_column = self.c.COLS.COVERAGE_S3
+                else:
+                    coverage_column = self.c.COLS.COVERAGE_S1
+
+            return \
+            target_data.sort_values(by=[coverage_column, self.c.COLS.END_YEAR, self.c.COLS.TARGET_REFERENCE_NUMBER,
+                                        self.c.COLS.REDUCTION_AMBITION], axis=0).iloc[0]
+        except KeyError:
             # If there are no targets, we'll return the original row
             return row
-        elif len(target_data) == 1:
-            # If there's exactly one target, we'll return that target
-            return target_data[target_columns].iloc[0]
-        else:
-            # We prefer targets with higher emissions in scope
-            if target_data.iloc[0][self.c.COLS.SCOPE] == EScope.S3:
-                coverage_column = self.c.COLS.COVERAGE_S3
-            else:
-                coverage_column = self.c.COLS.COVERAGE_S1
-
-            return target_data.sort_values(by=[coverage_column, self.c.COLS.END_YEAR, self.c.COLS.TARGET_REFERENCE_NUMBER,
-                                               self.c.COLS.REDUCTION_AMBITION], axis=0).iloc[0]
 
     def group_targets(self):
         """

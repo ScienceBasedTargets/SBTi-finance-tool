@@ -54,6 +54,7 @@ class EndToEndTest(unittest.TestCase):
             company_enterprise_value=100,
             company_total_assets=100,
             company_cash_equivalents=100,
+            isic='A12'
         )
         # define targets
         self.target_base = IDataProviderTarget(
@@ -136,7 +137,7 @@ class EndToEndTest(unittest.TestCase):
         self.assertEqual(agg_scores.mid.S1S2.all.score, 0.43)
 
     # Run some regression tests
-    @unittest.skip("only run for longer test runs")
+    # @unittest.skip("only run for longer test runs")
     def test_regression_companies(self):
 
         nr_companies = 1000
@@ -158,6 +159,12 @@ class EndToEndTest(unittest.TestCase):
             # target
             target = copy.deepcopy(self.target_base)
             target.company_id = company_id
+            targets.append(target)
+
+            # target
+            target = copy.deepcopy(self.target_base)
+            target.company_id = company_id
+            target.scope=EScope.S3
             targets.append(target)
 
             # pf company
@@ -284,5 +291,6 @@ class EndToEndTest(unittest.TestCase):
 if __name__ == "__main__":
     test = EndToEndTest()
     test.setUp()
-    test.test_basic()
-    test.test_basic_flow()
+    # test.test_basic()
+    # test.test_basic_flow()
+    test.test_regression_companies()
