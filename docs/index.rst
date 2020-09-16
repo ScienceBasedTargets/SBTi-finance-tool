@@ -56,7 +56,8 @@ As shown above the API is dependent on the Python Repo, in the same way the UI r
    overview
    getting_started
    rest_api
-   1_getting_started
    DataRequirements
    Legends
    contributing
+   rest_api
+   4_analysis.ipynb
