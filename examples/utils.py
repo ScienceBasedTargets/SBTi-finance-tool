@@ -117,39 +117,40 @@ def plot_grouped_heatmap(grouped_aggregations, analysis_parameters):
     timeframe, scope, grouping = analysis_parameters
     scope = str(scope[0])
     timeframe = str(timeframe[0]).lower()
+    group_1, group_2 = grouping
 
-    groups = grouped_aggregations[timeframe][scope].grouped
-    combinations = list(groups.keys())
-    sectors, regions = [], []
+    aggregations = grouped_aggregations[timeframe][scope].grouped
+    combinations = list(aggregations.keys())
+
+    groups = {group_1: [], group_2: []}
     for combination in combinations:
-        sector, region = combination.split('-')
-        if sector not in sectors:
-            sectors.append(sector)
-        if region not in regions:
-            regions.append(region)
-    sectors = sorted(sectors)
-    regions = sorted(regions)
+        item_group_1, item_group_2 = combination.split('-')
+        if item_group_1 not in groups[group_1]:
+            groups[group_1].append(item_group_1)
+        if item_group_2 not in groups[group_2]:
+            groups[group_2].append(item_group_2)
+    groups[group_1] = sorted(groups[group_1])
+    groups[group_2] = sorted(groups[group_2])
 
-    grid = np.zeros((len(regions), len(sectors)))
-    for i, region in enumerate(regions):
-        for j, sector in enumerate(sectors):
-            key = sector+'-'+region
+    grid = np.zeros((len(groups[group_2]), len(groups[group_1])))
+    for i, item_group_2 in enumerate(groups[group_2]):
+        for j, item_group_1 in enumerate(groups[group_1]):
+            key = item_group_1+'-'+item_group_2
             if key in combinations:
-                grid[i, j] = groups[sector+'-'+region].score
+                grid[i, j] = aggregations[item_group_1+'-'+item_group_2].score
             else:
                 grid[i, j] = np.nan
-
 
     current_cmap = copy.copy(matplotlib.cm.get_cmap('OrRd'))
     current_cmap.set_bad(color='grey', alpha=0.4)
 
-    fig = plt.figure(figsize=[0.9*len(sectors), 0.8*len(regions)])
+    fig = plt.figure(figsize=[0.9*len(groups[group_1]), 0.8*len(groups[group_2])])
     ax = fig.add_subplot(111)
     im = ax.pcolormesh(grid, cmap=current_cmap)
-    ax.set_xticks(0.5 + np.arange(0, len(sectors)))
-    ax.set_yticks(0.5 + np.arange(0, len(regions)))
-    ax.set_yticklabels(regions)
-    ax.set_xticklabels(sectors)
+    ax.set_xticks(0.5 + np.arange(0, len(groups[group_1])))
+    ax.set_yticks(0.5 + np.arange(0, len(groups[group_2])))
+    ax.set_yticklabels(groups[group_2])
+    ax.set_xticklabels(groups[group_1])
     for label in ax.get_xticklabels():
         label.set_rotation(45)
         label.set_ha('right')
