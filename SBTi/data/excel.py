@@ -46,7 +46,8 @@ class ExcelProvider(DataProvider):
             try:
                 model_targets.append(IDataProviderTarget.parse_obj(target))
             except ValidationError as e:
-                logger.warning("Company %s has no valid targets and will be skipped" % target[self.c.COMPANY_NAME])
+                logger.warning(
+                    "(one of) the target(s) of company %s is invalid and will be skipped" % target[self.c.COMPANY_NAME])
                 pass
         return model_targets
 
