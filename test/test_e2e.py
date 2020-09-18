@@ -19,7 +19,7 @@ from typing import List
 
 class TestDataProvider(DataProvider):
     def __init__(
-        self, targets: List[IDataProviderTarget], companies: List[IDataProviderCompany]
+            self, targets: List[IDataProviderTarget], companies: List[IDataProviderCompany]
     ):
         self.targets = targets
         self.companies = companies
@@ -42,6 +42,7 @@ class EndToEndTest(unittest.TestCase):
     - high load tests (>1000 targets)
     - testing of all different input values and running thru the whole process (tbd)
     """
+
     def setUp(self):
         company_id = "BaseCompany"
         self.company_base = IDataProviderCompany(
@@ -72,7 +73,7 @@ class EndToEndTest(unittest.TestCase):
             end_year=2030,
         )
 
-        #pf
+        # pf
         self.pf_base = PortfolioCompany(
             company_name=company_id,
             company_id=company_id,
@@ -110,8 +111,59 @@ class EndToEndTest(unittest.TestCase):
         # TODO: go thru lots of different parameters on company & target level and try to break it
         pass
 
+    def test_target_grouping(self):
+        """
+        This test is is checking the target grouping in the target validation from begin to end.
+        """
 
-   
+        companies, targets, pf_companies = self.create_base_companies(["A", "B", "C"])
+        target = copy.deepcopy(self.target_base)
+        target.company_id = 'A'
+        target.coverage_s1 = 0.75
+        target.coverage_s2 = 0.75
+        target.coverage_s3 = 0.75
+        targets.append(target)
+
+        # target
+        target = copy.deepcopy(self.target_base)
+        target.company_id = 'A'
+        target.coverage_s1 = 0.99
+        target.coverage_s2 = 0.99
+        target.coverage_s3 = 0.99
+        targets.append(target)
+
+        target = copy.deepcopy(self.target_base)
+        target.company_id = 'B'
+        target.scope = EScope.S3
+        target.coverage_s1 = 0.75
+        target.coverage_s2 = 0.75
+        target.coverage_s3 = 0.75
+        targets.append(target)
+
+        # target
+        target = copy.deepcopy(self.target_base)
+        target.company_id = 'B'
+        target.scope = EScope.S3
+        target.coverage_s1 = 0.99
+        target.coverage_s2 = 0.99
+        target.coverage_s3 = 0.99
+        targets.append(target)
+
+        data_provider = TestDataProvider(companies=companies, targets=targets)
+
+        # Calculate scores & Aggregated values
+        temp_score = TemperatureScore(
+            time_frames=[ETimeFrames.MID],
+            scopes=[EScope.S1S2, EScope.S1S2S3],
+            aggregation_method=PortfolioAggregationMethod.WATS,
+        )
+
+        portfolio_data = SBTi.utils.get_data([data_provider], pf_companies)
+        scores = temp_score.calculate(portfolio_data)
+        agg_scores = temp_score.aggregate_scores(scores)
+
+        # verify that results exist
+        self.assertAlmostEqual(agg_scores.mid.S1S2.all.score, 2.4633, places=4)
 
     def test_basic_flow(self):
         """
@@ -125,7 +177,7 @@ class EndToEndTest(unittest.TestCase):
         # Calculate scores & Aggregated values
         temp_score = TemperatureScore(
             time_frames=[ETimeFrames.MID],
-            scopes=[ EScope.S1S2, EScope.S1S2S3],
+            scopes=[EScope.S1S2, EScope.S1S2S3],
             aggregation_method=PortfolioAggregationMethod.WATS,
         )
 
@@ -146,10 +198,8 @@ class EndToEndTest(unittest.TestCase):
         companies: List[IDataProviderCompany] = []
         targets: List[IDataProviderTarget] = []
         pf_companies: List[PortfolioCompany] = []
-        
 
         for i in range(nr_companies):
-
             company_id = f"Company {str(i)}"
             # company
             company = copy.deepcopy(self.company_base)
@@ -159,12 +209,6 @@ class EndToEndTest(unittest.TestCase):
             # target
             target = copy.deepcopy(self.target_base)
             target.company_id = company_id
-            targets.append(target)
-
-            # target
-            target = copy.deepcopy(self.target_base)
-            target.company_id = company_id
-            target.scope=EScope.S3
             targets.append(target)
 
             # pf company
@@ -178,7 +222,7 @@ class EndToEndTest(unittest.TestCase):
 
         data_provider = TestDataProvider(companies=companies, targets=targets)
 
-         # Calculate scores & Aggregated values
+        # Calculate scores & Aggregated values
         temp_score = TemperatureScore(
             time_frames=[ETimeFrames.MID],
             scopes=[EScope.S1S2],
@@ -190,7 +234,6 @@ class EndToEndTest(unittest.TestCase):
         agg_scores = temp_score.aggregate_scores(scores)
 
         self.assertAlmostEqual(agg_scores.mid.S1S2.all.score, 0.43)
-
 
     def test_grouping(self):
         """
@@ -210,21 +253,19 @@ class EndToEndTest(unittest.TestCase):
             companies, targets, pf_companies = self.create_base_companies(company_ids_with_level)
             for company in companies:
                 company.industry_level_1 = ind_level
-            
+
             companies_all.extend(companies)
             targets_all.extend(targets)
             pf_companies_all.extend(pf_companies)
 
-            
-
         data_provider = TestDataProvider(companies=companies_all, targets=targets_all)
 
         temp_score = TemperatureScore(
-                time_frames=[ETimeFrames.MID],
-                scopes=[EScope.S1S2],
-                aggregation_method=PortfolioAggregationMethod.WATS,
-                grouping=["industry_level_1"]
-            )
+            time_frames=[ETimeFrames.MID],
+            scopes=[EScope.S1S2],
+            aggregation_method=PortfolioAggregationMethod.WATS,
+            grouping=["industry_level_1"]
+        )
 
         portfolio_data = SBTi.utils.get_data([data_provider], pf_companies_all)
         scores = temp_score.calculate(portfolio_data)
@@ -233,9 +274,8 @@ class EndToEndTest(unittest.TestCase):
         for ind_level in industry_levels:
             self.assertAlmostEqual(agg_scores.mid.S1S2.grouped[ind_level].score, 0.43)
 
-
     def test_score_cap(self):
-        
+
         companies, targets, pf_companies = self.create_base_companies(["A"])
         data_provider = TestDataProvider(companies=companies, targets=targets)
 
@@ -245,11 +285,11 @@ class EndToEndTest(unittest.TestCase):
         scenario.scenario_type = ScenarioType.APPROVED_TARGETS
 
         temp_score = TemperatureScore(
-                time_frames=[ETimeFrames.MID],
-                scopes=[EScope.S1S2],
-                aggregation_method=PortfolioAggregationMethod.WATS,
-                scenario=scenario
-            )
+            time_frames=[ETimeFrames.MID],
+            scopes=[EScope.S1S2],
+            aggregation_method=PortfolioAggregationMethod.WATS,
+            scenario=scenario
+        )
 
         portfolio_data = SBTi.utils.get_data([data_provider], pf_companies)
         scores = temp_score.calculate(portfolio_data)
@@ -257,8 +297,7 @@ class EndToEndTest(unittest.TestCase):
 
         # add verification
 
-
-    def create_base_companies(self,company_ids:List[str]):
+    def create_base_companies(self, company_ids: List[str]):
         """
         This is a helper method to create base companies that can be used for the test cases
         """
@@ -266,16 +305,10 @@ class EndToEndTest(unittest.TestCase):
         targets: List[IDataProviderTarget] = []
         pf_companies: List[PortfolioCompany] = []
         for company_id in company_ids:
-
             # company
             company = copy.deepcopy(self.company_base)
             company.company_id = company_id
             companies.append(company)
-
-            # target
-            target = copy.deepcopy(self.target_base)
-            target.company_id = company_id
-            targets.append(target)
 
             # pf company
             pf_company = PortfolioCompany(
@@ -288,9 +321,11 @@ class EndToEndTest(unittest.TestCase):
 
         return companies, targets, pf_companies
 
+
 if __name__ == "__main__":
     test = EndToEndTest()
     test.setUp()
     # test.test_basic()
-    # test.test_basic_flow()
-    test.test_regression_companies()
+    test.test_basic_flow()
+    # test.test_regression_companies()
+    # test.test_target_grouping()
