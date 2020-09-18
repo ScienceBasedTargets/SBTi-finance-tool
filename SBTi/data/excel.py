@@ -1,4 +1,6 @@
 from typing import Type, List
+from pydantic import ValidationError
+import logging
 
 import pandas as pd
 from SBTi.data.data_provider import DataProvider
@@ -26,10 +28,26 @@ class ExcelProvider(DataProvider):
         :param company_ids: A list of company IDs (ISINs)
         :return: A list containing the targets
         """
-        data_targets = self.data['target_data']
-        targets = data_targets.to_dict(orient="records")
-        model_targets: List[IDataProviderTarget] = [IDataProviderTarget.parse_obj(target) for target in targets]
+        model_targets = self._target_df_to_model(self.data['target_data'])
         model_targets = [target for target in model_targets if target.company_id in company_ids]
+        return model_targets
+
+    def _target_df_to_model(self, df_targets):
+        """
+        transforms target Dataframe into list of IDataProviderTarget instances
+
+        :param df_targets: pandas Dataframe with targets
+        :return: A list containing the targets
+        """
+        logger = logging.getLogger(__name__)
+        targets = df_targets.to_dict(orient="records")
+        model_targets: List[IDataProviderTarget] = []
+        for target in targets:
+            try:
+                model_targets.append(IDataProviderTarget.parse_obj(target))
+            except ValidationError as e:
+                logger.warning("Company %s has no valid targets and will be skipped" % target[self.c.COMPANY_NAME])
+                pass
         return model_targets
 
     def get_company_data(self, company_ids: List[str]) -> List[IDataProviderCompany]:
