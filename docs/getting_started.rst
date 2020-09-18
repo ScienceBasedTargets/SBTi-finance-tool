@@ -14,7 +14,7 @@ The easiest way to get started is by using the getting started notebook on Googl
 It goes through all the steps involved in installing the module and calculating a portfolio score.
 There are three notebooks that go through the process, step-by-step:
 
-1. `Analysis <https://colab.research.google.com/github/OFBDABV/SBTi/blob/master/examples/1_analysis.ipynb>`_
+1. `Analysis <https://colab.research.google.com/github/OFBDABV/SBTi/blob/master/examples/1_analysis_example.ipynb>`_
 2. `Getting started <https://colab.research.google.com/github/OFBDABV/SBTi/blob/master/examples/2_getting_started.ipynb>`_
 3. `Scenarios <https://colab.research.google.com/github/OFBDABV/SBTi/blob/master/examples/3_scenarios.ipynb>`_
 4. `Portfolio aggregations <https://colab.research.google.com/github/OFBDABV/SBTi/blob/master/examples/4_portfolio_aggregations.ipynb>`_
