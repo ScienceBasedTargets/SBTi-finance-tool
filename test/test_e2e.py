@@ -163,7 +163,7 @@ class EndToEndTest(unittest.TestCase):
         agg_scores = temp_score.aggregate_scores(scores)
 
         # verify that results exist
-        self.assertAlmostEqual(agg_scores.mid.S1S2.all.score, 2.4633, places=4)
+        self.assertAlmostEqual(agg_scores.mid.S1S2.all.score, 0.61666, places=4)
 
     def test_basic_flow(self):
         """
@@ -317,7 +317,12 @@ class EndToEndTest(unittest.TestCase):
                 investment_value=100,
                 company_isin=company_id,
             )
+
+            target = copy.deepcopy(self.target_base)
+            target.company_id = company_id
+
             pf_companies.append(pf_company)
+            targets.append(target)
 
         return companies, targets, pf_companies
 
@@ -326,6 +331,6 @@ if __name__ == "__main__":
     test = EndToEndTest()
     test.setUp()
     # test.test_basic()
-    test.test_basic_flow()
+    # test.test_basic_flow()
     # test.test_regression_companies()
-    # test.test_target_grouping()
+    test.test_target_grouping()

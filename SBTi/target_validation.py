@@ -36,6 +36,7 @@ class TargetProtocol:
         targets = self.prepare_targets(targets)
         self.target_data = pd.DataFrame.from_records([c.dict() for c in targets])
 
+        # Create an indexed DF for performance purposes
         self.target_data.index = self.target_data.reset_index().set_index(
             [self.c.COLS.COMPANY_ID, self.c.COLS.TIME_FRAME, self.c.COLS.SCOPE]).index
         self.target_data = self.target_data.sort_index()
@@ -238,11 +239,12 @@ class TargetProtocol:
         # Find all targets that correspond to the given row
         try:
             target_data = self.target_data.loc[
-                (row[self.c.COLS.COMPANY_ID], row[self.c.COLS.TIME_FRAME], row[self.c.COLS.SCOPE])]
+                (row[self.c.COLS.COMPANY_ID], row[self.c.COLS.TIME_FRAME], row[self.c.COLS.SCOPE])].copy()
             if isinstance(target_data, pd.Series):
+                # One match with Target data
                 return target_data[target_columns]
             else:
-                # We prefer targets with higher emissions in scope
+                # In case more than one target is available; we prefer targets with higher emissions in scope
                 if target_data.scope[0] == EScope.S3:
                     coverage_column = self.c.COLS.COVERAGE_S3
                 else:
@@ -252,6 +254,7 @@ class TargetProtocol:
                     by=[coverage_column, self.c.COLS.END_YEAR, self.c.COLS.TARGET_REFERENCE_NUMBER,
                         self.c.COLS.REDUCTION_AMBITION], axis=0).iloc[0][target_columns]
         except KeyError:
+            # No target found
             return row
 
         # if len(target_data) == 0:
@@ -287,6 +290,7 @@ class TargetProtocol:
         -- Target type: Absolute over intensity
         -- If all else is equal: average the ambition of targets
         """
+
         grid_columns = [self.c.COLS.COMPANY_ID, self.c.COLS.TIME_FRAME, self.c.COLS.SCOPE]
         companies = self.company_data[self.c.COLS.COMPANY_ID].unique()
         scopes = [EScope.S1S2, EScope.S3, EScope.S1S2S3]
@@ -296,4 +300,5 @@ class TargetProtocol:
             columns=grid_columns + empty_columns)
 
         target_columns = extended_data.columns
+
         self.data = extended_data.apply(lambda row: self._find_target(row, target_columns), axis=1)
