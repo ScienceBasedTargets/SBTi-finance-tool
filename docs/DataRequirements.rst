@@ -1,5 +1,5 @@
 ********************
-Data requirements
+Data Requirements
 ********************
 
 To calculate the temperature score and portfolio coverage the tool
@@ -52,8 +52,7 @@ categories: financial data, emissions and target data.
 These three categories can be imported via a single Excel file. For a
 template and example file see :download:`here <DataProviderTemplate.xlsx>`
 
-Financial data and reported GHG emissions
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 
 Fundamental data includes all company wide data. This includes GHG
 emissions per scope as well as ISIC codes. These classifications are
@@ -114,7 +113,7 @@ targets.
 This data is available by most data providers such as CDP or Urgentem.
 
 Please note that the tool requires the data in a specific format. For
-more detail, see the :download:`data provider template <DataProviderTemplate.xlsx>` and the Legend for the required
+more detail, see the :download:`data provider template <DataProviderTemplate.xlsx>` and the `Data Legends <Legends.html#input-data>`_ for the required
 data formats and expect values.
 
 
@@ -136,7 +135,7 @@ list is updated weekly by the SBTi. To ensure this list is up to date,
 the user can download the latest list from the SBTi site here:
 https://sciencebasedtargets.org/companies-taking-action/ and replace the
 Excel file in the tool with the downloaded file. To do this go to
-..\SBTi\inputs and replace the
+..\\SBTi\\inputs and replace the
 *current-Companies-Taking-Action-xxx.xslx* file with the newer file.
 
 
