@@ -62,14 +62,14 @@ class PortfolioCompany(BaseModel):
     company_id: str
     company_isin: Optional[str]
     investment_value: float
-    engagement_target: Optional[str] = "False"
+    engagement_target: Optional[bool] = False
     user_fields: Optional[dict]
 
 
 class IDataProviderCompany(BaseModel):
     company_name: str
     company_id: str
-    isic: Optional[str]
+    isic: str
     ghg_s1s2: float
     ghg_s3: float
 

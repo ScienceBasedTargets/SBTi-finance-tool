@@ -178,11 +178,12 @@ class TemperatureScore(PortfolioAggregation):
         :param target: The target as a row of a dataframe
         :return: The mapped SR15 target
         """
-        # TODO: Use constants
-        if target[self.c.COLS.TARGET_REFERENCE_NUMBER].strip().startswith(self.c.VALUE_TARGET_REFERENCE_INTENSITY_BASE):
-            return self.c.INTENSITY_MAPPINGS.get(target[self.c.COLS.INTENSITY_METRIC], None)
+        if target[self.c.COLS.TARGET_REFERENCE_NUMBER].strip().lower().startswith(self.c.VALUE_TARGET_REFERENCE_INTENSITY_BASE):
+            return self.c.INTENSITY_MAPPINGS.get((target[self.c.COLS.INTENSITY_METRIC], target[self.c.COLS.SCOPE]), None)
         else:
-            return self.c.ABSOLUTE_MAPPING
+            # Only first 3 characters of ISIC code are relevant for the absolute mappings
+            return self.c.ABSOLUTE_MAPPINGS.get((target[self.c.COLS.COMPANY_ISIC][:3], target[self.c.COLS.SCOPE]), 
+                                                self.c.ABSOLUTE_MAPPINGS.get(("other", target[self.c.COLS.SCOPE])))
 
     def get_annual_reduction_rate(self, target: pd.Series) -> Optional[float]:
         """
@@ -478,7 +479,6 @@ class TemperatureScore(PortfolioAggregation):
                             scores.loc[company_mask, self.c.COLS.TEMPERATURE_SCORE].apply(
                                 lambda x: min(x, self.scenario.get_score_cap()))
         elif self.scenario.scenario_type == ScenarioType.HIGHEST_CONTRIBUTORS_APPROVED:
-            scores[self.c.COLS.ENGAGEMENT_TARGET] = scores[self.c.COLS.ENGAGEMENT_TARGET].fillna(False).astype('bool')
             score_based_on_target = scores[self.c.COLS.ENGAGEMENT_TARGET]
             scores.loc[score_based_on_target, self.c.COLS.TEMPERATURE_SCORE] = \
                 scores.loc[score_based_on_target, self.c.COLS.TEMPERATURE_SCORE].apply(
