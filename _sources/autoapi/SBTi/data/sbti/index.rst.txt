@@ -1,0 +1,32 @@
+:mod:`SBTi.data.sbti`
+=====================
+
+.. py:module:: SBTi.data.sbti
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   SBTi.data.sbti.SBTi
+
+
+
+.. py:class:: SBTi(config: Type[PortfolioCoverageTVPConfig] = PortfolioCoverageTVPConfig)
+
+   Data provider skeleton for SBTi. This class only provides the sbti_validated field for existing companies.
+
+   .. method:: get_sbti_targets(self, companies: List[IDataProviderCompany], isin_map: dict) -> List[IDataProviderCompany]
+
+      Check for each company if they have an SBTi validated target.
+
+      :param companies: A list of IDataProviderCompany instances
+      :param isin_map: A map from company id to ISIN
+      :return: A list of IDataProviderCompany instances, supplemented with the SBTi information
+
+
+

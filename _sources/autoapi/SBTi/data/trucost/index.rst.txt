@@ -7,6 +7,14 @@
 Module Contents
 ---------------
 
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   SBTi.data.trucost.Trucost
+
+
 
 .. py:class:: Trucost(**kwargs)
 
@@ -14,9 +22,8 @@ Module Contents
 
    Data provider skeleton for Trucost.
 
-   .. method:: get_targets(self, company_ids: List[str])
+   .. method:: get_targets(self, company_ids: List[str]) -> List[IDataProviderTarget]
       :abstractmethod:
-
 
       Get all relevant targets for a list of company ids (ISIN). This method should return a list of
       IDataProviderTarget instances.
@@ -25,9 +32,8 @@ Module Contents
       :return: A list containing the targets
 
 
-   .. method:: get_company_data(self, company_ids: List[str])
+   .. method:: get_company_data(self, company_ids: List[str]) -> List[IDataProviderCompany]
       :abstractmethod:
-
 
       Get all relevant data for a list of company ids (ISIN). This method should return a list of IDataProviderCompany
       instances.
@@ -36,9 +42,8 @@ Module Contents
       :return: A list containing the company data
 
 
-   .. method:: get_sbti_targets(self, companies: list)
+   .. method:: get_sbti_targets(self, companies: list) -> list
       :abstractmethod:
-
 
       For each of the companies, get the status of their target (Target set, Committed or No target) as it's known to
       the SBTi.

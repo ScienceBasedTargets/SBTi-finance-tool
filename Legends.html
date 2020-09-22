@@ -1,0 +1,741 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Data Legends &mdash; SBTi Temperature Alignment tool  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Contributing" href="contributing.html" />
+    <link rel="prev" title="Data Requirements" href="DataRequirements.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> SBTi Temperature Alignment tool
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="1_analysis_example.html">SBTi-Finance Tool for Temperature Scoring &amp; Portfolio Coverage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started Using Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rest_api.html">Getting Started Using REST API &amp; UI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DataRequirements.html">Data Requirements</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Data Legends</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#input-data">Input Data</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#portfolio-data">Portfolio Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fundamental-data">Fundamental Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#target-data">Target data</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#output-data">Output data</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="links.html">Project Links</a></li>
+<li class="toctree-l1"><a class="reference internal" href="autoapi/index.html">API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">SBTi Temperature Alignment tool</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Data Legends</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/Legends.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="data-legends">
+<h1>Data Legends<a class="headerlink" href="#data-legends" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="input-data">
+<h2>Input Data<a class="headerlink" href="#input-data" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="portfolio-data">
+<h3>Portfolio Data<a class="headerlink" href="#portfolio-data" title="Permalink to this headline">¶</a></h3>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 4%" />
+<col style="width: 5%" />
+<col style="width: 53%" />
+<col style="width: 13%" />
+<col style="width: 25%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><strong>Data field</strong></p></td>
+<td><p><strong>Expected value</strong></p></td>
+<td><p><strong>Explanation</strong></p></td>
+<td><p><strong>Optional / required</strong></p></td>
+<td><p><strong>comment</strong></p></td>
+</tr>
+<tr class="row-even"><td><p>company_name</p></td>
+<td><p>Text</p></td>
+<td><p>Name of the company in your   portfolio</p></td>
+<td><p>Required</p></td>
+<td><p>Used for output purposes only</p></td>
+</tr>
+<tr class="row-odd"><td><p>company_id</p></td>
+<td><p>Text</p></td>
+<td><p>Identifier for the company in your portfolio, used to map target and fundamental data to the company</p></td>
+<td><p>Required</p></td>
+<td><p>You can use any unique company identifier, but must use the same identifier in all three input data files/tabs.</p></td>
+</tr>
+<tr class="row-even"><td><p>company_isin</p></td>
+<td><p>Text</p></td>
+<td><p>Identifier for the company in your portfolio, used to get the SBTi status of the company (i.e. whether or not the company has a target approved by the SBTi)</p></td>
+<td><p>Required, for portfolio coverage and temperature score.</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Investment_value</p></td>
+<td><p>Monetary value</p></td>
+<td><p>The monetary value invested in the company. Used for aggregation</p></td>
+<td><p>Required</p></td>
+<td><p>Make sure all values are in the same currency.</p></td>
+</tr>
+<tr class="row-even"><td><p>engagement_target</p></td>
+<td><p>TRUE, FALSE or empty</p></td>
+<td><p>Used for engagement analysis. When set to TRUE for a company it is possible to analyze what it would do for your portfolio temperature score if this company would set a well below 2 degree   Celsius (C) or a 2C target.</p></td>
+<td><p>Optional</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Additional_field</p></td>
+<td><p>Text</p></td>
+<td><p>It is possible to add additional fields to your portfolio data. These fields can be used to group companies by other categories than sectors, industries, regions and countries, e.g. market   cap bucket, investment strategy, asset class, etc.</p></td>
+<td><p>Optional</p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="fundamental-data">
+<h3>Fundamental Data<a class="headerlink" href="#fundamental-data" title="Permalink to this headline">¶</a></h3>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 6%" />
+<col style="width: 4%" />
+<col style="width: 55%" />
+<col style="width: 12%" />
+<col style="width: 23%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>Data field</p></td>
+<td><p>Expected value</p></td>
+<td><p>Explanation</p></td>
+<td><p>Optional / required</p></td>
+<td><p>comment</p></td>
+</tr>
+<tr class="row-even"><td><p>company_name</p></td>
+<td><p>Text</p></td>
+<td><p>Name of the company in your portfolio</p></td>
+<td><p>Optional</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>company_id</p></td>
+<td><p>Text</p></td>
+<td><p>Identifier for the company in your portfolio, used to map target and fundamental data to the company</p></td>
+<td><p>Required</p></td>
+<td><p>You can use any unique company identifier, but must use the same identifier in all three input data files/tabs.</p></td>
+</tr>
+<tr class="row-even"><td><p>isic</p></td>
+<td><p>Text</p></td>
+<td><p>Sector classification code for the company based on the International Standard Industrial Classification   (<a class="reference external" href="https://siccode.com/page/what-is-an-isic-code">https://siccode.com/page/what-is-an-isic-code</a>). Used to map targets to the   correct regression model. Should include at least the first two levels: Section   and Division.</p></td>
+<td><p>Required</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>country</p></td>
+<td><p>Text</p></td>
+<td><p>Country where the company has its headquarter. Used for analysis purposes only.</p></td>
+<td><p>Optional</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>region</p></td>
+<td><p>Text</p></td>
+<td><p>Region where the company has its headquarter. Used for analysis purposes only. Can be continental or more   granular.</p></td>
+<td><p>Optional</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>industry_level_1-4</p></td>
+<td><p>Text</p></td>
+<td><p>Level 1 through 4 of the industry classification of the company. Used for analysis purposes only. Can   be based on any industry classification system.</p></td>
+<td><p>Optional</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>sector</p></td>
+<td><p>Text</p></td>
+<td><p>Sector of the company. Used for analysis purposes only. Can be based on any classification system.</p></td>
+<td><p>Optional</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>ghg_s1s2</p></td>
+<td><p>tCO2e</p></td>
+<td><p>Total GHG emissions for scope 1 + 2 for the company.  Used to combine   temperature scores for scope 1 + 2 and scope 3 to temperature score for scope   1 + 2 + 3. Also used in combination with ghg_s3 in most aggregation methods   (except WATS)</p></td>
+<td><p>Required</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>ghg_s3</p></td>
+<td><p>tCO2e</p></td>
+<td><p>Total GHG emissions for scope 3 for the company.  Used to combine   temperature scores for scope 1 + 2 and scope 3 to temperature score for scope   1 + 2 + 3. Also used in combination with ghg_s1s2 in most aggregation methods   (except WATS)</p></td>
+<td><p>Required</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>company_revenue</p></td>
+<td><p>Monetary value</p></td>
+<td><p>In single dollars / euros / …. (can be any currency you choose). Revenue of the company in the most recent   year.</p></td>
+<td><p>Required only if using aggregation method ROTS.</p></td>
+<td><p>All values must be in the same currency.</p></td>
+</tr>
+<tr class="row-even"><td><p>company_market_cap</p></td>
+<td><p>Monetary value</p></td>
+<td><p>Market capitalization of the company in single dollars / euros / ….</p></td>
+<td><p>Required only if using aggregation method MOTS.</p></td>
+<td><p>All values must be in the same currency.</p></td>
+</tr>
+<tr class="row-odd"><td><p>company_enterprise_value</p></td>
+<td><p>Monetary value</p></td>
+<td><p>Enterprise value of the company in single dollars / euros / ….</p></td>
+<td><p>Required only if using aggregation method EOTS or ECOTS.</p></td>
+<td><p>All values must be in the same currency.</p></td>
+</tr>
+<tr class="row-even"><td><p>company_total_assets</p></td>
+<td><p>Monetary value</p></td>
+<td><p>Total assets of the company in single dollars / euros / ….</p></td>
+<td><p>Required only if using aggregation method AOTS.</p></td>
+<td><p>All values must be in the same currency.</p></td>
+</tr>
+<tr class="row-odd"><td><p>company_cash_equivalents</p></td>
+<td><p>Monetary value</p></td>
+<td><p>Cash equivalents of the company in single dollars / euros / … .</p></td>
+<td><p>Required only if using aggregation method ECOTS.</p></td>
+<td><p>All values must be in the same currency.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="target-data">
+<h3>Target data<a class="headerlink" href="#target-data" title="Permalink to this headline">¶</a></h3>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 3%" />
+<col style="width: 11%" />
+<col style="width: 45%" />
+<col style="width: 14%" />
+<col style="width: 27%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><strong>Data field</strong></p></td>
+<td><p><strong>Expected value</strong></p></td>
+<td><p><strong>Explanation</strong></p></td>
+<td><p><strong>Optional / required</strong></p></td>
+<td><p><strong>comment</strong></p></td>
+</tr>
+<tr class="row-even"><td><p>company_name</p></td>
+<td><p>Text</p></td>
+<td><p>Name of the company in your portfolio</p></td>
+<td><p>Optional</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>company_id</p></td>
+<td><p>Text</p></td>
+<td><p>Identifier for the company in your portfolio, used to map target and fundamental data to the company</p></td>
+<td><p>Required</p></td>
+<td><p>You can use any unique company identifier, but must use the same identifier in all three  input data files/tabs.</p></td>
+</tr>
+<tr class="row-even"><td><p>target_type</p></td>
+<td><p>Absolute, Intensity or Other</p></td>
+<td><p>Type of target. Can be absolute or intensity based GHG emission reduction target. All targets that are not GHG   emissions reduction targets can be mapped to Other. Used in the target validation protocol and to map the target to the relevant regression model in the temperature score module.</p></td>
+<td><p>Required</p></td>
+<td><p>If target_type is left empty the target will not be valid. If no other target is available for that time-frame and scope combination the company will be given a default score.</p></td>
+</tr>
+<tr class="row-odd"><td><p>intensity_metric</p></td>
+<td><p>Revenue, Product, Cement, Oil, Steel, Aluminum, Power Generation or Other</p></td>
+<td><p>The metric the intensity based GHG emission reduction target is based on. All intensity metrics must be mapped to these 8   categories. Used in target validation protocol and to map the target to the relevant regression model in the temperature score module.</p></td>
+<td><p>Required for targets with target type   “Intensity”. Can be left empty for other targets.</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>scope</p></td>
+<td><p>S1, S2, S1+S2, S1+S2+S3, S3</p></td>
+<td><p>The scope(s) covered by the target. All scope 3 targets, whether covering downstream, upstream or both must be mapped to S3.</p></td>
+<td><p>Required</p></td>
+<td><p>Targets without scope are not valid. If no target is available for a time-frame and scope combination the company will be given a default score.</p></td>
+</tr>
+<tr class="row-odd"><td><p>coverage_s1</p></td>
+<td><p>Number in decimals, between 0 and 1, e.g. 70% is denoted 0.7.</p></td>
+<td><p>The part of emissions covered in scope 1 for the target. Used to determine the temperature score.</p>
+<p>For targets covering scope 1 and 2 specify the same coverage percentage in coverage_s1 and coverage_s2</p>
+</td>
+<td><p>Required for a target that covers scope 1</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>coverage_s2</p></td>
+<td><p>Number in decimals, between 0 and 1, e.g. 70% is denoted 0.7.</p></td>
+<td><p>The part of emissions covered in scope 2 for the target.  Used to determine the temperature score.</p>
+<p>For targets covering scope 1 and 2 specify the same coverage percentage in coverage_s1 and coverage_s2.</p>
+</td>
+<td><p>Required for a target that covers scope 2</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>coverage_s3</p></td>
+<td><p>Number in decimals, between 0 and 1, e.g. 70% is denoted 0.7.</p></td>
+<td><p>The part of emissions covered in scope 3 for the target. Used to determine the temperature score.</p>
+<p>Note: this should be the coverage compare to the whole scope 3 emissions, so not just the part that is covered by the target.</p>
+</td>
+<td><p>Required for a target that covers scope 3</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>reduction_ambition</p></td>
+<td><p>Number in decimals, between 0 and 1, e.g. 70% is denoted 0.7.</p></td>
+<td><p>The emission reduction that is set as ambition in the target. Used to determine the temperature score.</p></td>
+<td><p>Required</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>base_year</p></td>
+<td><p>Year</p></td>
+<td><p>Base year of the target. Used in the target validation protocol and to determine the time frame of the target.</p></td>
+<td><p>Required</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>end_year</p></td>
+<td><p>Year</p></td>
+<td><p>End year of the target. Used in the target validation protocol and to determine the time frame of the target.</p></td>
+<td><p>Required</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>start_year</p></td>
+<td><p>Year</p></td>
+<td><p>Year the target was announced. Used in the target validation protocol. If not specified, it will be assumed the start year is equal to the base year.</p></td>
+<td><p>Optional</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>base_year_ghg_s1</p></td>
+<td><p>tCO2e</p></td>
+<td><p>Total reported GHG emissions for scope 1 for the company at the base year of the target. Used to convert targets covering only scope 1 or scope 2 to scope 1 + scope 2 targets.</p></td>
+<td><p>Required for targets that only   cover scope 1 or scope 2</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>base_year_ghg_s2</p></td>
+<td><p>tCO2e</p></td>
+<td><p>Total reported GHG emissions for scope 2 for the company at the base year of the target. Used to convert targets covering only scope 1 or scope 2 to scope 1 + scope 2 targets.</p></td>
+<td><p>Required for targets that only   cover scope 1 or scope 2</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>base_year_ghg_s3</p></td>
+<td><p>tCO2e</p></td>
+<td><p>Total reported GHG emissions for scope 3 for the company at the base year of the target.</p></td>
+<td><p>Optional</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>achieved_reduction</p></td>
+<td><p>Number between 0 and 1</p></td>
+<td><p>Part of the reduction ambition of the target that is already achieved by the company. Used in the target validation protocol. Targets with achieved reduction of 1 are invalidated.</p></td>
+<td><p>Optional. If not specified,   assumed   below 1</p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="output-data">
+<h2>Output data<a class="headerlink" href="#output-data" title="Permalink to this headline">¶</a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 5%" />
+<col style="width: 18%" />
+<col style="width: 70%" />
+<col style="width: 7%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>Data   field</p></td>
+<td><p>Expected value</p></td>
+<td><p>Explanation</p></td>
+<td><p>From</p></td>
+</tr>
+<tr class="row-even"><td><p>achieved_reduction</p></td>
+<td><p>Number between 0 and   1</p></td>
+<td><p>Part of the reduction   ambition of the target that is already achieved by the company. Used in the   target validation protocol. Targets with achieved reduction of 1 are   invalidated.</p></td>
+<td><p>Target data</p></td>
+</tr>
+<tr class="row-odd"><td><p>base_year</p></td>
+<td><p>Year</p></td>
+<td><p>Base year of the target. Used in the target validation   protocol and to determine the time frame of the target.</p></td>
+<td><p>Target data</p></td>
+</tr>
+<tr class="row-even"><td><p>base_year_ghg_s1</p></td>
+<td><p>In tCO2e</p></td>
+<td><p>Total GHG emissions for scope 1 for the company at the base year of the   target.</p></td>
+<td><p>Target data</p></td>
+</tr>
+<tr class="row-odd"><td><p>base_year_ghg_s2</p></td>
+<td><p>In tCO2e</p></td>
+<td><p>Total GHG emissions for scope 2 for the company at the base year of the   target.</p></td>
+<td><p>Target data</p></td>
+</tr>
+<tr class="row-even"><td><p>base_year_ghg_s3</p></td>
+<td><p>In tCO2e</p></td>
+<td><p>Total GHG emissions for scope 3 for the company at the base year of the   target.</p></td>
+<td><p>Target data</p></td>
+</tr>
+<tr class="row-odd"><td><p>company_id</p></td>
+<td><p>text</p></td>
+<td><p>Identifier for the   company in your portfolio, used to map target and fundamental data to the   company</p></td>
+<td><p>Portfolio data</p></td>
+</tr>
+<tr class="row-even"><td><p>company_isin</p></td>
+<td><p>text</p></td>
+<td><p>Identifier for the company in your portfolio, used to get the   SBTi status of the company (i.e. whether or not the company has a target   approved by the SBTi)</p></td>
+<td><p>Portfolio data</p></td>
+</tr>
+<tr class="row-odd"><td><p>company_name</p></td>
+<td><p>text</p></td>
+<td><p>Name of the company in your portfolio</p></td>
+<td><p>Portfolio data</p></td>
+</tr>
+<tr class="row-even"><td><p>coverage_s1</p></td>
+<td><p>Number in decimals, between 0 and 1</p></td>
+<td><p>The part of emissions covered in scope 1 for the target.  Used to determine the temperature score.</p></td>
+<td><p>Target data</p></td>
+</tr>
+<tr class="row-odd"><td><p>coverage_s2</p></td>
+<td><p>Number in decimals, between 0 and 1</p></td>
+<td><p>The part of emissions covered in scope 2 for the target.  Used to determine the temperature score.</p></td>
+<td><p>Target data</p></td>
+</tr>
+<tr class="row-even"><td><p>coverage_s3</p></td>
+<td><p>Number in decimals, between 0 and 1</p></td>
+<td><p>The part of emissions covered in scope 3 for the target.  Used to determine the temperature score.</p></td>
+<td><p>Target data</p></td>
+</tr>
+<tr class="row-odd"><td><p>end_year</p></td>
+<td><p>Year</p></td>
+<td><p>End year of the target.    Used in the target validation protocol and to determine the time frame   of the target.</p></td>
+<td><p>Target data</p></td>
+</tr>
+<tr class="row-even"><td><p>Intensity_metric</p></td>
+<td><p>Revenue, Product, Cement, Oil, Steel, Aluminum, Power Generation or   Other</p></td>
+<td><p>The metric the intensity based GHG emission reduction target is based   on. All intensity metrics must be mapped to the eight categories in the   column on the left. Used in target validation protocol and to map the target   to the relevant regression model in the temperature score module.</p></td>
+<td><p>Target data</p></td>
+</tr>
+<tr class="row-odd"><td><p>Reduction_ambition</p></td>
+<td><p>Number in decimals, between 0 and 1</p></td>
+<td><p>The emission reduction that is set as ambition in the target. Used to   determine the temperature score.</p></td>
+<td><p>Target data</p></td>
+</tr>
+<tr class="row-even"><td><p>start_year</p></td>
+<td><p>Year</p></td>
+<td><p>Year the target was announced. Used in the target validation protocol.   If not specified, it is assumed the start year is equal to the base year.</p></td>
+<td><p>Target data</p></td>
+</tr>
+<tr class="row-odd"><td><p>Target_type</p></td>
+<td><p>Absolute, Intensity or Other</p></td>
+<td><p>Type of target. Can be absolute or intensity based GHG emission   reduction target. All targets that are not GHG emissions reduction targets   can be mapped to Other. Used   in the target validation protocol and to map the target to the relevant   regression model in the temperature score module.</p></td>
+<td><p>Target data</p></td>
+</tr>
+<tr class="row-even"><td rowspan="4"><p>Time_frame</p></td>
+<td rowspan="4"><p>SHORT, MID or LONG</p></td>
+<td><p>The targets are sorted by time frame.</p></td>
+<td rowspan="4"><p>Determined in tool</p></td>
+</tr>
+<tr class="row-odd"><td><p>SHORT: targets shorter than 5   years</p></td>
+</tr>
+<tr class="row-even"><td><p>MID: targets between 5 and 15   years</p></td>
+</tr>
+<tr class="row-odd"><td><p>LONG: targets between 15 and   30 years.</p></td>
+</tr>
+<tr class="row-even"><td><p>ghg_s1s2</p></td>
+<td><p>tCO2e</p></td>
+<td><p>Total GHG emissions for scope 1 + 2 for the company.  Used to combine temperature scores for   scope 1 + 2 and scope 3 to temperature score for scope 1 + 2 + 3. Also used   in combination with ghg_s3 in most aggregation methods (except WATS)</p></td>
+<td><p>Fundamental data</p></td>
+</tr>
+<tr class="row-odd"><td><p>ghg_s3</p></td>
+<td><p>tCO2e</p></td>
+<td><p>Total GHG emissions for scope 3 for the company.  Used to combine temperature scores for   scope 1 + 2 and scope 3 to temperature score for scope 1 + 2 + 3. Also used   in combination with ghg_s3 in all aggregation methods, except WATS.</p></td>
+<td><p>Fundamental data</p></td>
+</tr>
+<tr class="row-even"><td><p>sbti_validated</p></td>
+<td><p>FALSE or TRUE</p></td>
+<td><p>Returns true if the company has a SBTi-approved target.</p></td>
+<td><p>SBTi data or fundamental data</p></td>
+</tr>
+<tr class="row-odd"><td><p>Investment_value</p></td>
+<td><p>Monetary value</p></td>
+<td><p>The monetary value invested in the company.</p></td>
+<td><p>Portfolio data</p></td>
+</tr>
+<tr class="row-even"><td><p>engagement_target</p></td>
+<td><p>TRUE, FALSE or   empty</p></td>
+<td><p>Used for engagement analysis. When set to TRUE for a company   it is possible to analyze what it would do for your portfolio temperature   score if this company would set a (well below) 2 degrees target.</p></td>
+<td><p>Portfolio data</p></td>
+</tr>
+<tr class="row-odd"><td><p>sr15</p></td>
+<td><p>text</p></td>
+<td><p>The regression model used. This is determined based on the   target type, ISIC, intensity_metric and scope. See [link   to methodology doc, updated mapping section] for   more detail</p></td>
+<td><p>Output from the tool</p></td>
+</tr>
+<tr class="row-even"><td rowspan="2"><p>Annual_reduction</p></td>
+<td rowspan="2"><p>Number in decimals, between 0 and 1</p></td>
+<td><p>The annual reduction based on the reduction_ambition and the   length of the target. Calculated as</p></td>
+<td rowspan="2"><p>Output from the tool</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+</tr>
+<tr class="row-even"><td rowspan="4"><p>slope</p></td>
+<td rowspan="4"><p>Slope5, slope15, slope30</p></td>
+<td><p>Used in determining the regression model to use to calculate   the temperature score for a specific target based on its  time frame.</p></td>
+<td rowspan="4"><p>Output from the tool</p></td>
+</tr>
+<tr class="row-odd"><td><p>Short-term targets: slope5</p></td>
+</tr>
+<tr class="row-even"><td><p>Mid-term targets: slope15</p></td>
+</tr>
+<tr class="row-odd"><td><p>Long-term targets: slope30</p></td>
+</tr>
+<tr class="row-even"><td><p>samplesize</p></td>
+<td><p>Number</p></td>
+<td><p>The   sample size used in the regression model. For model 4 this is 128. Not used   in calculations. See <a class="reference external" href="https://github.com/CDPworldwide/TROPICS-regression/">https://github.com/CDPworldwide/TROPICS-regression/</a> for   more detail about the regressions.</p></td>
+<td><p>Regression model</p></td>
+</tr>
+<tr class="row-odd"><td><p>model</p></td>
+<td><p>Integer</p></td>
+<td><p>The   regression model used. This is model 4 by default. See   <a class="reference external" href="https://github.com/CDPworldwide/TROPICS-regression/">https://github.com/CDPworldwide/TROPICS-regression/</a> for more detail about the   regressions.</p></td>
+<td><p>Regression model</p></td>
+</tr>
+<tr class="row-even"><td rowspan="3"><p>variable</p></td>
+<td rowspan="3"><p>text</p></td>
+<td><p>The regression scenario used to determine the temperature   score of a target, for example</p></td>
+<td rowspan="3"><p>Regression model</p></td>
+</tr>
+<tr class="row-odd"><td><p>Emissions|Kyoto Gases</p></td>
+</tr>
+<tr class="row-even"><td></td>
+</tr>
+<tr class="row-odd"><td><p>param</p></td>
+<td><p>Number in decimals, between 0 and 1</p></td>
+<td><p>The temperature score (TS) is calculated using linear regressions.</p></td>
+<td><p>Regression model</p></td>
+</tr>
+<tr class="row-even"><td><p>intercept</p></td>
+<td><p>Number in decimals, between 0 and 1</p></td>
+<td><p>The temperature score (TS) is calculated using linear regressions.</p></td>
+<td><p>Regression model</p></td>
+</tr>
+<tr class="row-odd"><td><p>r2</p></td>
+<td><p>Number in decimals, between 0 and 1</p></td>
+<td><p>r2 represents the fit of the regression model on the data used to   create the regressions. Not used in calculations.</p></td>
+<td><p>Regression model</p></td>
+</tr>
+<tr class="row-even"><td><p>temperature_score</p></td>
+<td><p>Number</p></td>
+<td><p>The temperature score calculated for the combination of   company, scope and time frame</p></td>
+<td><p>Output from tool</p></td>
+</tr>
+<tr class="row-odd"><td><p>temperature_results</p></td>
+<td><p>Number in decimals, between 0 and 1</p></td>
+<td><p>Represents the part of the score that is calculated using a   valid target as defined by the target validation protocol vs. the part using   the default score. For more detail, see [link to Chapter   2 of Methodology document]</p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="contributing.html" class="btn btn-neutral float-right" title="Contributing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="DataRequirements.html" class="btn btn-neutral float-left" title="Data Requirements" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Science Based Targets
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

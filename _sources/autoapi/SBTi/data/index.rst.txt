@@ -30,6 +30,21 @@ Submodules
 Package Contents
 ----------------
 
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   SBTi.data.DataProvider
+   SBTi.data.CSVProvider
+   SBTi.data.ExcelProvider
+   SBTi.data.Bloomberg
+   SBTi.data.CDP
+   SBTi.data.ISS
+   SBTi.data.Trucost
+   SBTi.data.Urgentem
+
+
 
 .. py:class:: DataProvider(**kwargs)
 
@@ -37,9 +52,8 @@ Package Contents
 
    General data provider super class.
 
-   .. method:: get_targets(self, company_ids: List[str])
+   .. method:: get_targets(self, company_ids: List[str]) -> List[IDataProviderTarget]
       :abstractmethod:
-
 
       Get all relevant targets for a list of company ids (ISIN). This method should return a list of
       IDataProviderTarget instances.
@@ -48,9 +62,8 @@ Package Contents
       :return: A list containing the targets
 
 
-   .. method:: get_company_data(self, company_ids: List[str])
+   .. method:: get_company_data(self, company_ids: List[str]) -> List[IDataProviderCompany]
       :abstractmethod:
-
 
       Get all relevant data for a list of company ids (ISIN). This method should return a list of IDataProviderCompany
       instances.
@@ -59,9 +72,8 @@ Package Contents
       :return: A list containing the company data
 
 
-   .. method:: get_sbti_targets(self, companies: list)
+   .. method:: get_sbti_targets(self, companies: list) -> list
       :abstractmethod:
-
 
       For each of the companies, get the status of their target (Target set, Committed or No target) as it's known to
       the SBTi.
@@ -80,8 +92,7 @@ Package Contents
 
    :param config: A dictionary containing a "path" field that leads to the path of the CSV file
 
-   .. method:: get_targets(self, company_ids: list)
-
+   .. method:: get_targets(self, company_ids: list) -> List[IDataProviderTarget]
 
       Get all relevant targets for a list of company ids (ISIN). This method should return a list of
       IDataProviderTarget instances.
@@ -90,8 +101,15 @@ Package Contents
       :return: A list containing the targets
 
 
-   .. method:: get_company_data(self, company_ids: list)
+   .. method:: _target_df_to_model(self, df_targets)
 
+      transforms target Dataframe into list of IDataProviderTarget instances
+
+      :param df_targets: pandas Dataframe with targets
+      :return: A list containing the targets
+
+
+   .. method:: get_company_data(self, company_ids: list) -> List[IDataProviderCompany]
 
       Get all relevant data for a list of company ids (ISIN). This method should return a list of IDataProviderCompany
       instances.
@@ -100,8 +118,7 @@ Package Contents
       :return: A list containing the company data
 
 
-   .. method:: get_sbti_targets(self, companies: list)
-
+   .. method:: get_sbti_targets(self, companies: list) -> list
 
       For each of the companies, get the status of their target (Target set, Committed or No target) as it's known to
       the SBTi.
@@ -120,8 +137,7 @@ Package Contents
 
    :param config: A dictionary containing a "path" field that leads to the path of the CSV file
 
-   .. method:: get_targets(self, company_ids: List[str])
-
+   .. method:: get_targets(self, company_ids: List[str]) -> List[IDataProviderTarget]
 
       Get all relevant targets for a list of company ids (ISIN). This method should return a list of
       IDataProviderTarget instances.
@@ -130,8 +146,15 @@ Package Contents
       :return: A list containing the targets
 
 
-   .. method:: get_company_data(self, company_ids: List[str])
+   .. method:: _target_df_to_model(self, df_targets)
 
+      transforms target Dataframe into list of IDataProviderTarget instances
+
+      :param df_targets: pandas Dataframe with targets
+      :return: A list containing the targets
+
+
+   .. method:: get_company_data(self, company_ids: List[str]) -> List[IDataProviderCompany]
 
       Get all relevant data for a list of company ids (ISIN). This method should return a list of IDataProviderCompany
       instances.
@@ -140,9 +163,8 @@ Package Contents
       :return: A list containing the company data
 
 
-   .. method:: get_sbti_targets(self, companies: list)
+   .. method:: get_sbti_targets(self, companies: list) -> list
       :abstractmethod:
-
 
       For each of the companies, get the status of their target (Target set, Committed or No target) as it's known to
       the SBTi.
@@ -159,8 +181,7 @@ Package Contents
 
    Data provider skeleton for Bloomberg.
 
-   .. method:: _request(self, endpoint: str, data: dict)
-
+   .. method:: _request(self, endpoint: str, data: dict) -> Optional[object]
 
       Request data from the server.
       Note: This request does in no way reflect the actual implementation, this is only a stub to show what a
@@ -171,9 +192,8 @@ Package Contents
       :return: The returned data, None in case of an error.
 
 
-   .. method:: get_targets(self, company_ids: List[str])
+   .. method:: get_targets(self, company_ids: List[str]) -> List[IDataProviderTarget]
       :abstractmethod:
-
 
       Get all relevant targets for a list of company ids (ISIN). This method should return a list of
       IDataProviderTarget instances.
@@ -182,9 +202,8 @@ Package Contents
       :return: A list containing the targets
 
 
-   .. method:: get_company_data(self, company_ids: List[str])
+   .. method:: get_company_data(self, company_ids: List[str]) -> List[IDataProviderCompany]
       :abstractmethod:
-
 
       Get all relevant data for a list of company ids (ISIN). This method should return a list of IDataProviderCompany
       instances.
@@ -193,9 +212,8 @@ Package Contents
       :return: A list containing the company data
 
 
-   .. method:: get_sbti_targets(self, companies: list)
+   .. method:: get_sbti_targets(self, companies: list) -> list
       :abstractmethod:
-
 
       For each of the companies, get the status of their target (Target set, Committed or No target) as it's known to
       the SBTi.
@@ -212,9 +230,8 @@ Package Contents
 
    Data provider skeleton for CDP.
 
-   .. method:: get_targets(self, company_ids: List[str])
+   .. method:: get_targets(self, company_ids: List[str]) -> List[IDataProviderTarget]
       :abstractmethod:
-
 
       Get all relevant targets for a list of company ids (ISIN). This method should return a list of
       IDataProviderTarget instances.
@@ -223,9 +240,8 @@ Package Contents
       :return: A list containing the targets
 
 
-   .. method:: get_company_data(self, company_ids: List[str])
+   .. method:: get_company_data(self, company_ids: List[str]) -> List[IDataProviderCompany]
       :abstractmethod:
-
 
       Get all relevant data for a list of company ids (ISIN). This method should return a list of IDataProviderCompany
       instances.
@@ -234,9 +250,8 @@ Package Contents
       :return: A list containing the company data
 
 
-   .. method:: get_sbti_targets(self, companies: list)
+   .. method:: get_sbti_targets(self, companies: list) -> list
       :abstractmethod:
-
 
       For each of the companies, get the status of their target (Target set, Committed or No target) as it's known to
       the SBTi.
@@ -253,9 +268,8 @@ Package Contents
 
    Data provider skeleton for ISS.
 
-   .. method:: get_targets(self, company_ids: List[str])
+   .. method:: get_targets(self, company_ids: List[str]) -> List[IDataProviderTarget]
       :abstractmethod:
-
 
       Get all relevant targets for a list of company ids (ISIN). This method should return a list of
       IDataProviderTarget instances.
@@ -264,9 +278,8 @@ Package Contents
       :return: A list containing the targets
 
 
-   .. method:: get_company_data(self, company_ids: List[str])
+   .. method:: get_company_data(self, company_ids: List[str]) -> List[IDataProviderCompany]
       :abstractmethod:
-
 
       Get all relevant data for a list of company ids (ISIN). This method should return a list of IDataProviderCompany
       instances.
@@ -275,9 +288,8 @@ Package Contents
       :return: A list containing the company data
 
 
-   .. method:: get_sbti_targets(self, companies: list)
+   .. method:: get_sbti_targets(self, companies: list) -> list
       :abstractmethod:
-
 
       For each of the companies, get the status of their target (Target set, Committed or No target) as it's known to
       the SBTi.
@@ -294,9 +306,8 @@ Package Contents
 
    Data provider skeleton for Trucost.
 
-   .. method:: get_targets(self, company_ids: List[str])
+   .. method:: get_targets(self, company_ids: List[str]) -> List[IDataProviderTarget]
       :abstractmethod:
-
 
       Get all relevant targets for a list of company ids (ISIN). This method should return a list of
       IDataProviderTarget instances.
@@ -305,9 +316,8 @@ Package Contents
       :return: A list containing the targets
 
 
-   .. method:: get_company_data(self, company_ids: List[str])
+   .. method:: get_company_data(self, company_ids: List[str]) -> List[IDataProviderCompany]
       :abstractmethod:
-
 
       Get all relevant data for a list of company ids (ISIN). This method should return a list of IDataProviderCompany
       instances.
@@ -316,9 +326,8 @@ Package Contents
       :return: A list containing the company data
 
 
-   .. method:: get_sbti_targets(self, companies: list)
+   .. method:: get_sbti_targets(self, companies: list) -> list
       :abstractmethod:
-
 
       For each of the companies, get the status of their target (Target set, Committed or No target) as it's known to
       the SBTi.
@@ -335,9 +344,8 @@ Package Contents
 
    Data provider skeleton for Urgentem.
 
-   .. method:: get_targets(self, company_ids: List[str])
+   .. method:: get_targets(self, company_ids: List[str]) -> List[IDataProviderTarget]
       :abstractmethod:
-
 
       Get all relevant targets for a list of company ids (ISIN). This method should return a list of
       IDataProviderTarget instances.
@@ -346,9 +354,8 @@ Package Contents
       :return: A list containing the targets
 
 
-   .. method:: get_company_data(self, company_ids: List[str])
+   .. method:: get_company_data(self, company_ids: List[str]) -> List[IDataProviderCompany]
       :abstractmethod:
-
 
       Get all relevant data for a list of company ids (ISIN). This method should return a list of IDataProviderCompany
       instances.
@@ -357,9 +364,8 @@ Package Contents
       :return: A list containing the company data
 
 
-   .. method:: get_sbti_targets(self, companies: list)
+   .. method:: get_sbti_targets(self, companies: list) -> list
       :abstractmethod:
-
 
       For each of the companies, get the status of their target (Target set, Committed or No target) as it's known to
       the SBTi.

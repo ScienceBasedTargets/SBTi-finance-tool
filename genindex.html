@@ -1,9 +1,7 @@
 
 
-
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8">
   
@@ -13,12 +11,19 @@
   
 
   
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
+
+  
   
   
   
 
   
-  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -26,15 +31,11 @@
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
     
-
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
     <link rel="index" title="Index" href="#" />
     <link rel="search" title="Search" href="search.html" /> 
 </head>
@@ -50,7 +51,7 @@
           
 
           
-            <a href="index.html" class="icon icon-home"> SBTi Temperature Alignment tool
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> SBTi Temperature Alignment tool
           
 
           
@@ -73,6 +74,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -82,15 +84,20 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="1_analysis_example.html">SBTi-Finance Tool for Temperature Scoring &amp; Portfolio Coverage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started Using Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rest_api.html">Getting Started Using REST API &amp; UI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DataRequirements.html">Data Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Legends.html">Data Legends</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="rest_api.html">REST API &amp; UI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="links.html">Project Links</a></li>
 <li class="toctree-l1"><a class="reference internal" href="autoapi/index.html">API Reference</a></li>
 </ul>
 
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -129,7 +136,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="index.html">Docs</a> &raquo;</li>
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
       <li>Index</li>
     
@@ -208,12 +215,12 @@
 </li>
       <li><a href="autoapi/SBTi/portfolio_aggregation/index.html#SBTi.portfolio_aggregation.PortfolioAggregation._check_column">_check_column() (SBTi.portfolio_aggregation.PortfolioAggregation method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="autoapi/SBTi/target_validation/index.html#SBTi.target_validation.TargetProtocol._combine_s1_s2">_combine_s1_s2() (SBTi.target_validation.TargetProtocol method)</a>
 </li>
       <li><a href="autoapi/SBTi/target_validation/index.html#SBTi.target_validation.TargetProtocol._convert_s1_s2">_convert_s1_s2() (SBTi.target_validation.TargetProtocol method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="autoapi/SBTi/target_validation/index.html#SBTi.target_validation.TargetProtocol._find_target">_find_target() (SBTi.target_validation.TargetProtocol method)</a>
 </li>
       <li><a href="autoapi/SBTi/utils/index.html#SBTi.utils._flatten_user_fields">_flatten_user_fields() (in module SBTi.utils)</a>
@@ -238,6 +245,16 @@
       </ul></li>
       <li><a href="autoapi/SBTi/target_validation/index.html#SBTi.target_validation.TargetProtocol._split_s1s2s3">_split_s1s2s3() (SBTi.target_validation.TargetProtocol method)</a>
 </li>
+      <li><a href="autoapi/SBTi/data/csv/index.html#SBTi.data.csv.CSVProvider._target_df_to_model">_target_df_to_model() (SBTi.data.csv.CSVProvider method)</a>
+
+      <ul>
+        <li><a href="autoapi/SBTi/data/index.html#SBTi.data.CSVProvider._target_df_to_model">(SBTi.data.CSVProvider method)</a>
+</li>
+        <li><a href="autoapi/SBTi/data/excel/index.html#SBTi.data.excel.ExcelProvider._target_df_to_model">(SBTi.data.excel.ExcelProvider method)</a>
+</li>
+        <li><a href="autoapi/SBTi/data/index.html#SBTi.data.ExcelProvider._target_df_to_model">(SBTi.data.ExcelProvider method)</a>
+</li>
+      </ul></li>
       <li><a href="autoapi/SBTi/target_validation/index.html#SBTi.target_validation.TargetProtocol._time_frame">_time_frame() (SBTi.target_validation.TargetProtocol method)</a>
 </li>
   </ul></td>
@@ -246,7 +263,7 @@
 <h2 id="A">A</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autoapi/SBTi/configs/index.html#SBTi.configs.TemperatureScoreConfig.ABSOLUTE_MAPPING">ABSOLUTE_MAPPING (SBTi.configs.TemperatureScoreConfig attribute)</a>
+      <li><a href="autoapi/SBTi/configs/index.html#SBTi.configs.TemperatureScoreConfig.ABSOLUTE_MAPPINGS">ABSOLUTE_MAPPINGS (SBTi.configs.TemperatureScoreConfig attribute)</a>
 </li>
       <li><a href="autoapi/SBTi/configs/index.html#SBTi.configs.ColumnsConfig.ACHIEVED_EMISSIONS">ACHIEVED_EMISSIONS (SBTi.configs.ColumnsConfig attribute)</a>
 </li>
@@ -422,14 +439,16 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="autoapi/SBTi/utils/index.html#SBTi.utils.DATA_PROVIDER_MAP">DATA_PROVIDER_MAP (in module SBTi.utils)</a>
 </li>
+      <li><a href="autoapi/SBTi/utils/index.html#SBTi.utils.dataframe_to_portfolio">dataframe_to_portfolio() (in module SBTi.utils)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="autoapi/SBTi/data/index.html#SBTi.data.DataProvider">DataProvider (class in SBTi.data)</a>
 
       <ul>
         <li><a href="autoapi/SBTi/data/data_provider/index.html#SBTi.data.data_provider.DataProvider">(class in SBTi.data.data_provider)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="autoapi/SBTi/configs/index.html#SBTi.configs.TemperatureScoreConfig.DEFAULT_INDUSTRY">DEFAULT_INDUSTRY (SBTi.configs.TemperatureScoreConfig attribute)</a>
 </li>
   </ul></td>
@@ -1211,11 +1230,19 @@
 
   <div role="contentinfo">
     <p>
+        
         &copy; Copyright 2020, Science Based Targets
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -1226,7 +1253,6 @@
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {

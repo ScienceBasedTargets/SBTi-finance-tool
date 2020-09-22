@@ -1,0 +1,1911 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>SBTi-Finance Tool for Temperature Scoring &amp; Portfolio Coverage &mdash; SBTi Temperature Alignment tool  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Getting Started Using Python" href="getting_started.html" />
+    <link rel="prev" title="SBTi-Finance Tool for Temperature Scoring &amp; Portfolio Coverage" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> SBTi Temperature Alignment tool
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">SBTi-Finance Tool for Temperature Scoring &amp; Portfolio Coverage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#Introduction-to-temperature-scoring-and-portfolio-coverage-methods">Introduction to temperature scoring and portfolio coverage methods</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Why-has-SBTi-built-this-tool?">Why has SBTi built this tool?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#What-can-you-use-the-SBTi-Finance-Tool-for?">What can you use the SBTi-Finance Tool for?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#What-data-do-I-need-to-use-the-tool?">What data do I need to use the tool?</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Company-identifiers">Company identifiers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Corporate-GHG-targets">Corporate GHG targets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#GHG-Emission-Data">GHG Emission Data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Portfolio-financial-data">Portfolio financial data</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#Where-do-I-get-the-data?">Where do I get the data?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#How-are-temperature-scores-produced?">How are temperature scores produced?</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Start-your-analysis-here">Start your analysis here</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Install-the-SBTi-Python-module">Install the SBTi Python module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Create-a-data-provider">Create a data provider</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Load-your-portfolio">Load your portfolio</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#Step-1-&amp;-2:-Aggregate-multiple-company-targets-to-produce-company-score">Step 1 &amp; 2: Aggregate multiple company targets to produce company score</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#How-to-convert-a-target-to-a-temperature?">How to convert a target to a temperature?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Scope-Classification">Scope Classification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Timeframe">Timeframe</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Scope-Coverage">Scope Coverage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Company-Temperature-Scores">Company Temperature Scores</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Default-Score">Default Score</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Calculate-the-company-temperature-scores">Calculate the company temperature scores</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#Step-3:-Calculate-a-portfolio-level-temperature-score">Step 3: Calculate a portfolio level temperature score</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Portfolio-coverage">Portfolio coverage</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#Step-4:-How-can-I-improve-my-portfolio’s-temperature-score?">Step 4: How can I improve my portfolio’s temperature score?</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Analysing-hotspots">Analysing hotspots</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Quick-analysis">Quick analysis</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#Sector-analysis">Sector analysis</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id1">Quick analysis</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#Companies-to-engage-with">Companies to engage with</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id2">Quick analysis</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#What-if-analysis">What-if analysis</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Portfolio-temperature-score-impact">Portfolio temperature score impact</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Sector-temperature-score-impact">Sector temperature score impact</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#Company-temperature-score-contribution-impact">Company temperature score contribution impact</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#Save-your-data-for-further-analysis">Save your data for further analysis</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started Using Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rest_api.html">Getting Started Using REST API &amp; UI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DataRequirements.html">Data Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Legends.html">Data Legends</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="links.html">Project Links</a></li>
+<li class="toctree-l1"><a class="reference internal" href="autoapi/index.html">API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">SBTi Temperature Alignment tool</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>SBTi-Finance Tool for Temperature Scoring &amp; Portfolio Coverage</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/1_analysis_example.ipynb.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container,
+div.nbinput.container div.prompt,
+div.nbinput.container div.input_area,
+div.nbinput.container div[class*=highlight],
+div.nbinput.container div[class*=highlight] pre,
+div.nboutput.container,
+div.nboutput.container div.prompt,
+div.nboutput.container div.output_area,
+div.nboutput.container div[class*=highlight],
+div.nboutput.container div[class*=highlight] pre {
+    background: none;
+    border: none;
+    padding: 0 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    width: 4.5ex;
+    padding-top: 5px;
+    position: relative;
+    user-select: none;
+}
+
+div.nbinput.container div.prompt > div,
+div.nboutput.container div.prompt > div {
+    position: absolute;
+    right: 0;
+    margin-right: 0.3ex;
+}
+
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        width: unset;
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+
+    div.nbinput.container div.prompt > div,
+    div.nboutput.container div.prompt > div {
+        position: unset;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    background: #f5f5f5;
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 5px;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt a.copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="SBTi-Finance-Tool-for-Temperature-Scoring-&amp;-Portfolio-Coverage">
+<h1>SBTi-Finance Tool for Temperature Scoring &amp; Portfolio Coverage<a class="headerlink" href="#SBTi-Finance-Tool-for-Temperature-Scoring-&-Portfolio-Coverage" title="Permalink to this headline">¶</a></h1>
+<p><strong>Do you want to understand what drives the temperature score of your portfolio to make better engagement and investment decisions?</strong></p>
+<p><img alt="ExampleGraphs" src="https://github.com/OFBDABV/SBTi/raw/master/examples/images/JN_HeroImage.jpg" /></p>
+<p>This notebook provides some examples of how to use the SBTi-Finance Tool to analyse portfolios’ and companies’ GHG emissions reduction targets.</p>
+<p>The notebook is not intended as a production tool, but for you to be able to evaluate if this tool can fit with your objectives and workflow. The open source code for the tool is available at <a class="reference external" href="https://github.com/OFBDABV/SBTi">https://github.com/OFBDABV/SBTi</a>, which should allow you to integrate it into your environment and then use as a production tool. A number of commercial data and services providers, such as CDP, Bloomberg, ISS, MSCI, TruCost, Urgentem and Ortec Finance are buidling or are considering providing solutions
+based on the open-source code or the methodology.</p>
+<p>This notebook combines text and code to provide a testing environment for your research, to give you and understanding of how the tool can help you analyse companies’ and portfolios’ temperature scores, to aid your engagement and investment decisions.</p>
+<p>The notebook is loaded with example data, but you can also use your own data. For your first test, you can simply run the code cells one by one in the current sequence, to get an understanding of how it works.</p>
+<p>To run the code in a notebook, simply click on a cell and press SHIFT+ENTER or click the black “Play/Run cell” button in between the brackets [ ] (hover over it with your mouse) in the upper left hand corner of each code cell.</p>
+<p>Beware of the order in which you run the cells - if you do not follow the order below, you may run into errors. In that case, start again from the top.</p>
+<p>If you are not familiar with Notebooks, please refer to <a class="reference external" href="https://colab.research.google.com/notebooks/basic_features_overview.ipynb">this introduction</a>.</p>
+<div class="section" id="Introduction-to-temperature-scoring-and-portfolio-coverage-methods">
+<h2>Introduction to temperature scoring and portfolio coverage methods<a class="headerlink" href="#Introduction-to-temperature-scoring-and-portfolio-coverage-methods" title="Permalink to this headline">¶</a></h2>
+<p>Three methods are currently supported by the <a class="reference external" href="https://sciencebasedtargets.org/financial-institutions">SBTi</a> for setting targets on scope 3 portfolio emissions: the Sectoral Decarbonization Approach (SDA), the SBT Portfolio Coverage, and the SBT Temperature Scoring. The latter two methods, Portfolio Coverage and Temperature Scoring, require assessing the targets disclosed by the companies within a financial institution’s portfolio.</p>
+<p>Financial institutions may use the portfolio coverage and/or <a class="reference external" href="https://sciencebasedtargets.org/wp-content/uploads/2020/07/Temperature-Scoring-Beta-Methodology.pdf">temperature scoring methods</a> to set targets for their corporate instruments, including corporate debt, listed equity and bonds, and private equity and debt (See relevant “Required Activities” in Table 5-2 of the <a class="reference external" href="https://sciencebasedtargets.org/wp-content/uploads/2020/07/Temperature-Scoring-Beta-Methodology.pdf">SBTi guidance</a> to
+drive adoption of science-based targets).</p>
+<p>To use the <em>portfolio coverage method</em>, financial institutions commit to engaging with their investees to set their own approved science-based targets, such that the financial institution is on a linear path to 100% SBT portfolio coverage by 2040. As the fulfillment of portfolio coverage targets mean that investees’ SBTs have been approved by SBTi, the 2040 timeline has been determined to allow companies enough time to implement their target to ultimately achieve an economy-wide transition to
+net zero by 2050.</p>
+<p>To use the <em>temperature scoring method</em>, financial institutions determine the current temperature score of their portfolio based on the public GHG emission reduction targets of their investees (these targets include SBTs and any other valid public GHG targets that meet the method criteria). Financial institutions set targets to align their base year portfolio temperature score to a long-term temperature goal (e.g. 2°C, well-below 2°C, 1.5°C). The temperature scoring method is an open source
+framework to enable the translation of corporate GHG emission reduction targets into temperature scores at a target, company, and a portfolio level. The method provides a protocol to enable the aggregation of target level scores to generate a temperature rating for a company based on the ambition of its targets. Finally, the method defines a series of weighting options that can enable financial institutions and others to produce portfolio level temperature ratings.</p>
+<div class="section" id="Why-has-SBTi-built-this-tool?">
+<h3>Why has SBTi built this tool?<a class="headerlink" href="#Why-has-SBTi-built-this-tool?" title="Permalink to this headline">¶</a></h3>
+<p>The SBTi has developed a codebase to function as a calculator for the portfolio coverage and temperature scoring methods. This tool is fed with the necessary data to generate temperature scores at the company and portfolio level, in addition to providing analytics on target setting . The code reflects the logical steps that are outlined in the publicly available <a class="reference external" href="https://sciencebasedtargets.org/wp-content/uploads/2020/07/Temperature-Scoring-Beta-Methodology.pdf">temperature scoring
+methodology</a>, develped by <a class="reference external" href="https://www.cdp.net/">CDP</a> and <a class="reference external" href="https://wwf.panda.org/">WWF</a>.</p>
+<p>The tool was created to enable the widespread implementation of the method by data providers and financial institutions, to work with any data source and in most IT environments. For each method, the tool provides the following outputs: * Portfolio coverage: generate the % of the portfolio currently covered by approved science based targets. * Temperature scoring: generate the base year temperature score of the portfolio (in addition to the individual temperature scores of the portfolio
+companies). It also enables the generation of a series of what-if scenarios to showcase how this temperature score could be reduced.</p>
+</div>
+<div class="section" id="What-can-you-use-the-SBTi-Finance-Tool-for?">
+<h3>What can you use the SBTi-Finance Tool for?<a class="headerlink" href="#What-can-you-use-the-SBTi-Finance-Tool-for?" title="Permalink to this headline">¶</a></h3>
+<p>As a portfolio manager or analyst, you can use the SBTi-Finance Temperature Scoring and Portfolio Coverage tool for analysing companies, sectors, countries, investment strategies and portfolios to understand how they contribute to climate change. You can for example: * Measure your portfolio’s current temperature score * Identify the biggest contributors on an individual company, country and sector basis * Use the tool as an aid for strategic allocation and securities selection * Analyse
+what effect changes in your portfolio might have on the portfolio temperature score * Model impact of engagement on your temperature score, that is, how your score could improve if you were able to convince an investee company to participate in setting GHG reduction targets * Identify which company engagements would have the biggest impact on your portfolio’s temperature score * Plan engagement strategies based on your modelling * Help you create an action plan for reaching your emission
+reduction target</p>
+</div>
+<div class="section" id="What-data-do-I-need-to-use-the-tool?">
+<h3>What data do I need to use the tool?<a class="headerlink" href="#What-data-do-I-need-to-use-the-tool?" title="Permalink to this headline">¶</a></h3>
+<p>The tool itself is data agnostic, and has no built in databases. This means that users must import all needed data to perform the analysis. This can come from a variety of sources, but must be inputted in the required formats. Four types of data are needed to run the calculator. These are described in the table below.</p>
+<div class="section" id="Company-identifiers">
+<h4>Company identifiers<a class="headerlink" href="#Company-identifiers" title="Permalink to this headline">¶</a></h4>
+<p>Company name, ISIC (International Standard Industrial Classification) sector classification, and ISIN (if relevant) or other company identifier are required to be fed into the tool.</p>
+</div>
+<div class="section" id="Corporate-GHG-targets">
+<h4>Corporate GHG targets<a class="headerlink" href="#Corporate-GHG-targets" title="Permalink to this headline">¶</a></h4>
+<p>This refers to the data required to analyse a corporate GHG reduction target, including: * Target types (absolute/intensity) * Base year * Target year * Scope coverage * Boundary coverage within scope * % achieved * Intensity activity (if appliable)</p>
+</div>
+<div class="section" id="GHG-Emission-Data">
+<h4>GHG Emission Data<a class="headerlink" href="#GHG-Emission-Data" title="Permalink to this headline">¶</a></h4>
+<p>Both scope 1+2 and scope 3 emissions data, either reported or modelled.</p>
+</div>
+<div class="section" id="Portfolio-financial-data">
+<h4>Portfolio financial data<a class="headerlink" href="#Portfolio-financial-data" title="Permalink to this headline">¶</a></h4>
+<p>Seven weighting option are currently available to aggregate company scores to produce portfolio scores. Depending on the option chosen, the following data may be required:</p>
+<ol class="loweralpha simple">
+<li><p>Invested value (holdings)</p></li>
+<li><p>Market capitalisation</p></li>
+<li><p>Enterprise value</p></li>
+<li><p>Enterprise value + cash</p></li>
+<li><p>Total assets</p></li>
+<li><p>Revenue</p></li>
+</ol>
+<p>Refer to the “data requirements” at <a class="reference external" href="http://getting-started.sbti-tool.org/">http://getting-started.sbti-tool.org/</a> for full documentation. Also refer to the full methodology for <a class="reference external" href="https://sciencebasedtargets.org/wp-content/uploads/2020/07/Temperature-Scoring-Beta-Methodology.pdf">temperature scoring</a>.</p>
+</div>
+</div>
+<div class="section" id="Where-do-I-get-the-data?">
+<h3>Where do I get the data?<a class="headerlink" href="#Where-do-I-get-the-data?" title="Permalink to this headline">¶</a></h3>
+<p>Commercial data providers such as * Bloomberg * CDP * ISS * MSCI * TrueCost and * Urgentem</p>
+<p>can provide some or all of the data needed for the SBTi-Finance Tool.</p>
+<p>There is also a free data set available with target data on SBTi’s website. This includes data of all the companies that have set emissions reduction targets that have been approved by SBTi and is updated on a weekly basis. You can download an Excel-file with the data here: <a class="reference external" href="https://sciencebasedtargets.org/companies-taking-action/">https://sciencebasedtargets.org/companies-taking-action/</a>.</p>
+<p>However, the tool does allow you to also calculate temperature scores for companies that have publicly announced emission reduction targets but that have not had them approved by the SBTi. Commercial data providers such as those mentioned above can provide target data for these companies.</p>
+</div>
+</div>
+<div class="section" id="How-are-temperature-scores-produced?">
+<h2>How are temperature scores produced?<a class="headerlink" href="#How-are-temperature-scores-produced?" title="Permalink to this headline">¶</a></h2>
+<p>The methodology consists of four key steps, each requiring specific data points that are inputted at the beginning of the process. These data points are then used to convert the corporate targets into temperature scores at the company and the portfolio level.</p>
+<p><strong>Step 1:</strong> The targets are first filtered and if valid are each translated to a specific temperature, based on the relevant regression model. The sector classification of the company is used to ensure that the target is correctly mapped to the appropriate model e.g. a target for power generation must be mapped to the power sector pathway. This process enables the translation of target ambition over a certain target time period into a temperature score. For example, a 30% absolute reduction
+target over 10 years will be converted into a temperature score of 1.98°C.</p>
+<p><strong>Step 2:</strong> GHG emission data is employed to aggregate and target scores to produce a score at the company level.</p>
+<p><strong>Step 3:</strong> The company scores are combined with portfolio financial data to generate scores at the portfolio level.</p>
+<p><strong>Step 4:</strong> After the initial score calculations, a scenario generator can be used to determine how certain actions can change the temperature score. This can be done by changing your exposure to your holdings in the portfolio import file or by rerunning the calculations using hypothetical scenarios.</p>
+<p><img alt="TSWorkflow" src="https://github.com/OFBDABV/SBTi/raw/master/examples/images/JN_DataFlow.png" /></p>
+<div class="section" id="Start-your-analysis-here">
+<h3>Start your analysis here<a class="headerlink" href="#Start-your-analysis-here" title="Permalink to this headline">¶</a></h3>
+<p>To start using the tool, run the below cells in order by clicking the “play” buttons when you hover over the space in between the brackets [ ] for each cell, as below. We’ll show you how to select the various options and to use your own data through this notebook.</p>
+<p><img alt="PlayButton" src="https://github.com/OFBDABV/SBTi/raw/master/examples/images/JN_Play.png" /></p>
+<p>Be aware that the session in this notebook is temporary. When you close it or leave it unused for a long period, you need to restart the notebook from the beginning.</p>
+<div class="section" id="Install-the-SBTi-Python-module">
+<h4>Install the SBTi Python module<a class="headerlink" href="#Install-the-SBTi-Python-module" title="Permalink to this headline">¶</a></h4>
+<p>This is only required if you haven’t already installed the SBTi module. The next two cells load the required Python packages to use the SBTi tool.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Uncomment the second line and comment out the third line if you wish to use the official release.</span>
+<span class="c1"># !pip install SBTi</span>
+<span class="o">!</span>pip install git+git://github.com/OFBDABV/SBTi
+
+<span class="c1"># Install other Python modules required to use this notebook</span>
+<span class="o">!</span>pip install <span class="nv">matplotlib</span><span class="o">==</span><span class="m">3</span>.2.2
+<span class="o">!</span>pip install <span class="nv">openpyxl</span><span class="o">==</span><span class="m">2</span>.5.9
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">SBTi</span>
+<span class="kn">from</span> <span class="nn">SBTi.data.excel</span> <span class="kn">import</span> <span class="n">ExcelProvider</span>
+<span class="kn">from</span> <span class="nn">SBTi.portfolio_aggregation</span> <span class="kn">import</span> <span class="n">PortfolioAggregationMethod</span>
+<span class="kn">from</span> <span class="nn">SBTi.portfolio_coverage_tvp</span> <span class="kn">import</span> <span class="n">PortfolioCoverageTVP</span>
+<span class="kn">from</span> <span class="nn">SBTi.temperature_score</span> <span class="kn">import</span> <span class="n">TemperatureScore</span><span class="p">,</span> <span class="n">Scenario</span><span class="p">,</span> <span class="n">ScenarioType</span><span class="p">,</span> <span class="n">EngagementType</span>
+<span class="kn">from</span> <span class="nn">SBTi.interfaces</span> <span class="kn">import</span> <span class="n">ETimeFrames</span><span class="p">,</span> <span class="n">EScope</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="o">%</span><span class="k">matplotlib</span> inline
+</pre></div>
+</div>
+</div>
+<div class="section" id="Download-resources-for-Google-Colab-environment">
+<h5>Download resources for Google Colab environment<a class="headerlink" href="#Download-resources-for-Google-Colab-environment" title="Permalink to this headline">¶</a></h5>
+<p>This is only required if you are using Google Colab. Otherwise, just skip this section. The following cell retrieves the example data and plotting functionality and places it in this Google Colab environment, so that it can be used further on to show the tool’s options. The data_provider_example contains the fundamental (emissions and financial) and target data, while the example_portfolio contains the list of companies with identifiers and investment values. Later on you can choose to use your
+own data instead.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">urllib.request</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">):</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">)</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="s2">&quot;data/data_provider_example.xlsx&quot;</span><span class="p">):</span>
+    <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlretrieve</span><span class="p">(</span><span class="s2">&quot;https://github.com/OFBDABV/SBTi/raw/master/examples/data/data_provider_example.xlsx&quot;</span><span class="p">,</span> <span class="s2">&quot;data/data_provider_example.xlsx&quot;</span><span class="p">)</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="s2">&quot;data/example_portfolio.csv&quot;</span><span class="p">):</span>
+    <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlretrieve</span><span class="p">(</span><span class="s2">&quot;https://github.com/OFBDABV/SBTi/raw/master/examples/data/example_portfolio.csv&quot;</span><span class="p">,</span> <span class="s2">&quot;data/example_portfolio.csv&quot;</span><span class="p">)</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="s2">&quot;utils.py&quot;</span><span class="p">):</span>
+    <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlretrieve</span><span class="p">(</span><span class="s2">&quot;https://github.com/OFBDABV/SBTi/raw/master/examples/utils.py&quot;</span><span class="p">,</span> <span class="s2">&quot;utils.py&quot;</span><span class="p">)</span>
+<span class="k">try</span><span class="p">:</span>  <span class="c1"># Import statement when run in Google Colabs</span>
+    <span class="kn">from</span> <span class="nn">utils</span> <span class="kn">import</span> <span class="n">collect_company_contributions</span><span class="p">,</span> <span class="n">plot_grouped_statistics</span><span class="p">,</span> <span class="n">anonymize</span><span class="p">,</span> <span class="n">print_aggregations</span><span class="p">,</span> \
+        <span class="n">plot_grouped_heatmap</span><span class="p">,</span> <span class="n">print_scenario_gain</span><span class="p">,</span> <span class="n">print_grouped_scores</span><span class="p">,</span> <span class="n">get_contributions_per_group</span>
+<span class="k">except</span><span class="p">:</span>  <span class="c1"># Import statement when run locally</span>
+    <span class="kn">from</span> <span class="nn">examples.utils</span> <span class="kn">import</span> <span class="n">collect_company_contributions</span><span class="p">,</span> <span class="n">plot_grouped_statistics</span><span class="p">,</span> <span class="n">anonymize</span><span class="p">,</span> <span class="n">print_aggregations</span><span class="p">,</span> \
+        <span class="n">plot_grouped_heatmap</span><span class="p">,</span> <span class="n">print_scenario_gain</span><span class="p">,</span> <span class="n">print_grouped_scores</span><span class="p">,</span> <span class="n">get_contributions_per_group</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Logging">
+<h5>Logging<a class="headerlink" href="#Logging" title="Permalink to this headline">¶</a></h5>
+<p>The following cell initialises the Python standard library logging utilities. The SBTi module makes use of these utilities to send log messages on warnings or errors that can arise during use of the module, which help the user to pinpoint potential mistakes. The log level can be changed according to the users needs.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">logging</span>
+<span class="n">root_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">()</span>
+<span class="n">root_logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="s2">&quot;INFO&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="Create-a-data-provider">
+<h4>Create a data provider<a class="headerlink" href="#Create-a-data-provider" title="Permalink to this headline">¶</a></h4>
+<p>By running the following cell, you load our example data. If you want to score your own portfolio, this is where you can upload data from your data provider or your own data lake. Please refer to the “Data requirements” at <a class="reference external" href="http://getting-started.sbti-tool.org/">http://getting-started.sbti-tool.org/</a> for a full description of the data and formats needed.</p>
+<p>By specifying a data provider, you can connect to the data source of your choice, e.g. CDP, Urgentem, your own data lake, etc. In this example, the provider data is located in an Excel file. Per default we use the example data downloaded in the previous step. To replace the example data with your own data, first place your file in the data folder: - When using Google Colab: click the folder logo in the left pane; hover your mouse of the ‘data’ folder; click the three dots; click upload; select
+your file. - When running this notebook locally: place your file in the ‘data’ folder that is located in the same directory as this notebook.</p>
+<p>Next, change the file location between the quotes below: replace ‘data_provider_example’ with your_filename (don’t remove the double quotes in the cell below).</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">provider</span> <span class="o">=</span> <span class="n">ExcelProvider</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">&quot;data/data_provider_example.xlsx&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Load-your-portfolio">
+<h4>Load your portfolio<a class="headerlink" href="#Load-your-portfolio" title="Permalink to this headline">¶</a></h4>
+<p>In this example, the portfolio data is stored as a CSV file. If you wish to replace the portfolio file with your own portfolio file, your CSV file should at least have a “company_id” column (the identifier of the company) and a “investment value” column (the amount of money invested in each of the companies in your portfolio e.g. the value of the shares you hold). Please refer to the “Data requirements” at <a class="reference external" href="http://getting-started.sbti-tool.org/">http://getting-started.sbti-tool.org/</a> for a full description of the data and formats
+needed. To change the portfolio file, follow the same steps as for the data provider, described above. Next, change the file location between the quotes below: replace ‘<code class="docutils literal notranslate"><span class="pre">example_portfolio</span></code>’ with your_filename (don’t remove the double quotes in the cell below).</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">portfolio</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;data/example_portfolio.csv&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;iso-8859-1&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>The next cell displays the first 5 rows of data in your file.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">portfolio</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>company_name</th>
+      <th>company_id</th>
+      <th>company_isin</th>
+      <th>weights</th>
+      <th>investment_value</th>
+      <th>engagement_target</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Advanced Micro Devices, Inc</td>
+      <td>US0079031078</td>
+      <td>US0079031078</td>
+      <td>6.36%</td>
+      <td>35000000</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Adobe Systems Inc.</td>
+      <td>US00724F1012</td>
+      <td>US00724F1012</td>
+      <td>1.82%</td>
+      <td>10000000</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Capgemini Group</td>
+      <td>FR0000125338</td>
+      <td>FR0000125338</td>
+      <td>1.82%</td>
+      <td>10000000</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Cisco Systems, Inc.</td>
+      <td>US17275R1023</td>
+      <td>US17275R1023</td>
+      <td>1.82%</td>
+      <td>10000000</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Coca-Cola HBC AG</td>
+      <td>CH0198251305</td>
+      <td>CH0198251305</td>
+      <td>1.82%</td>
+      <td>10000000</td>
+      <td>NaN</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p>To load the data from the data provider, we need to convert the data of the portfolio.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">companies</span> <span class="o">=</span> <span class="n">SBTi</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">dataframe_to_portfolio</span><span class="p">(</span><span class="n">portfolio</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="Step-1-&amp;-2:-Aggregate-multiple-company-targets-to-produce-company-score">
+<h2>Step 1 &amp; 2: Aggregate multiple company targets to produce company score<a class="headerlink" href="#Step-1-&-2:-Aggregate-multiple-company-targets-to-produce-company-score" title="Permalink to this headline">¶</a></h2>
+<p>The target protocol represents the first step of the process, which is to convert individual targets of various formats into temperature scores. This is achieved by generating simple regression models for estimated warming in 2100 from climate scenarios with short, medium, and long-term trends in metrics like absolute emissions or emissions intensities. Regression models are generated based on scenarios in the IPCC Special Report on 1.5°C scenario database <strong>(link to the report)</strong>. In addition
+to defining methods for disclosed targets, this step outlines the methodology used to define a default score to be applied to all non-disclosing companies.</p>
+<p>This stage will map the targets to the existing regression models, which uses the ISIC sector classification to link to target to the appropriate regression model. For example, a company in the power sector with an intensity target using a per MWh activity would be mapped to the power generation temperature pathway. The table below summarises the ISIC classifications and how the targets are mapped to regression models. <strong>[Insert final regression table]</strong></p>
+<div class="section" id="How-to-convert-a-target-to-a-temperature?">
+<h3>How to convert a target to a temperature?<a class="headerlink" href="#How-to-convert-a-target-to-a-temperature?" title="Permalink to this headline">¶</a></h3>
+<p>Since companies often have multiple climate targets, covering different scopes and timeframes, a protocol is then used to aggregate all target data into scores at a company level. This protocol defines the minimum quality criteria for determining the acceptability of a target to be scored and the steps required to identify and aggregate multiple targets to produce an overall company score. Scores are produced for both scope 1+2 and for scope 3, over 3 timeframes (short, mid, long-term). Hence
+the scope coverage and the target year of the targets is necessary to accurately classify these targets. The below figure shows how targets are currently split by scope and timeframe.</p>
+<p><img alt="ScopesTimeframes" src="https://github.com/OFBDABV/SBTi/raw/master/examples/images/JN_CompanyAggregation.png" /></p>
+</div>
+<div class="section" id="Scope-Classification">
+<h3>Scope Classification<a class="headerlink" href="#Scope-Classification" title="Permalink to this headline">¶</a></h3>
+<p>The targets are first sorted by scope. The table below provides examples of how these targets are classified into either scope 1+2 or scope 3. For combined targets (scope 1+2+3) where the underlying composition is not clear (i.e. the % scope coverage), the ambition is applied only to the scope 1+2 portion, and the if no details on scope 3 coverage are provided, the scope 3 portion would receive the default score.</p>
+<p><img alt="ScopeClassification" src="https://github.com/OFBDABV/SBTi/raw/master/examples/images/JN_Scopes.png" /></p>
+</div>
+<div class="section" id="Timeframe">
+<h3>Timeframe<a class="headerlink" href="#Timeframe" title="Permalink to this headline">¶</a></h3>
+<p>The targets are the sorted by timeframe.</p>
+<ul class="simple">
+<li><p>SHORT: targets shorter than 5 years</p></li>
+<li><p>MID: targets between 5 and 15 years</p></li>
+<li><p>LONG: targets longer than 15 years</p></li>
+</ul>
+</div>
+<div class="section" id="Scope-Coverage">
+<h3>Scope Coverage<a class="headerlink" href="#Scope-Coverage" title="Permalink to this headline">¶</a></h3>
+<p>The scope coverage determines the amount of emissions in the scope that are covered by the target. For scope 1+2 targets, all targets that are greater than 95% coverage are valid, no further revision needs to be undertaken. The ambition of the target is however, normalised to the relative boundary coverage of the target. For all scope 1+2 targets under 95% coverage, and scope 3 targets under 67% coverage, the ambition of the target is therefore linked to the coverage. This means an ambitious
+target covering only a small portion of the scope emissions would be weighted lower as a result of the reduced coverage. The temperature score for the scope is computed using the following equation, where TS is temperature score:</p>
+<p><code class="docutils literal notranslate"><span class="pre">Scope</span> <span class="pre">TS</span> <span class="pre">=</span> <span class="pre">(%</span> <span class="pre">emissions</span> <span class="pre">in</span> <span class="pre">scope</span> <span class="pre">covered</span> <span class="pre">by</span> <span class="pre">target)</span> <span class="pre">x</span> <span class="pre">(target</span> <span class="pre">TS)</span></code></p>
+</div>
+<div class="section" id="Company-Temperature-Scores">
+<h3>Company Temperature Scores<a class="headerlink" href="#Company-Temperature-Scores" title="Permalink to this headline">¶</a></h3>
+<p>One representative score is produced for each of the following six options, displayed in the table below.</p>
+<p>In cases where more than one target is disclosed for a given scope, or timeframe e.g. two midterm targets covering scope 1+2, multiple scores per category would be produced. To generate just one representative score per category, a series of filtering steps is performed:</p>
+<p>For all companies with one valid target in each scope and timeframe, generate the 6 scores per company. For companies who do not report, for example a scope 3 target, they receive a default score. For companies with no valid targets, all 6 entries would receive default score (see below). The 6 entries are combined to produce an overall scope 1+2+3 score using the most recent reported GHG weighting of the company.</p>
+<p><img alt="ScopeTimeframeTable" src="https://github.com/OFBDABV/SBTi/raw/master/examples/images/JN_CompanyTS.PNG" /></p>
+</div>
+<div class="section" id="Default-Score">
+<h3>Default Score<a class="headerlink" href="#Default-Score" title="Permalink to this headline">¶</a></h3>
+<p>For companies who do not have valid targets, or if they do not have sufficient information covering a particular scope or timeframe, a default score is applied. The temperature rating methodology will use a 3.2°C value as an interim solution to derive temperature scores for companies with no forward-looking targets. This implies that these companies are expected to decarbonise along a 3.2°C pathway, consistent with global policies implemented to ensure reduction of emissions at this rate. The
+tool enables users to choose their own default score at the following temperatures: 3.2°C, 3.9°C or 4.5°C.</p>
+</div>
+<div class="section" id="Calculate-the-company-temperature-scores">
+<h3>Calculate the company temperature scores<a class="headerlink" href="#Calculate-the-company-temperature-scores" title="Permalink to this headline">¶</a></h3>
+<p>The temperature score is calculated via the following steps: * Target validation protocol: Here all targets are sorted by time frame and scope per company. For each combination a ‘best’ target is chosen. * Mapping: Each target is mapped to a regression model based on the type of target (absolute vs. intensity), the company ISIC, the intensity metric (for intensity based targets) and the scope. * Calculation: The mapped regression model returns a linear function to calculate the temperature
+score based on the linear annual reduction (LAR) of the ambition. TS = intersect + slope * LAR. For example, the formula of the Kyoto Gases regression is TS = 2.7 + (-0.31) * LAR.</p>
+<p>In the amended portfolio you’ll find your original portfolio, amended with the emissions and the temperature score.</p>
+<p>The temperature scores can be computed for different scopes and different timeframes. More information on scopes and timeframes can be found on the SBTi website.</p>
+<p>The timeframe options are SHORT, MID and LONG-term and can be implemented through the ETimeFrames object, in the code below. For example, you can add the SHORT timeframe by replacing the first line of the following cell by: <code class="docutils literal notranslate"><span class="pre">time_frames</span> <span class="pre">=</span> <span class="pre">[ETimeFrames.SHORT,</span> <span class="pre">ETimeFrames.MID]</span></code></p>
+<p>The scope options are S1, S2, S1S2, S3 and S1S2S3 and can be implemented using the EScope object. For example, you can add the S3 scope by replacing the second line of the following cell by: <code class="docutils literal notranslate"><span class="pre">scopes</span> <span class="pre">=</span> <span class="pre">[EScope.S1S2,</span> <span class="pre">EScope.S3,</span> <span class="pre">EScope.S1S2S3]</span></code></p>
+<ul class="simple">
+<li><p>S1: scope 1</p></li>
+<li><p>S2: scope 2</p></li>
+<li><p>S2: scope 3</p></li>
+</ul>
+<p>Finally, the default temperature score can be specified by assigning the value 3.2, 3.9 or 4.5 on the third line in the following cell.</p>
+<p>In this example, we use the mid-term timeframe and the S1S2 &amp; S1S2S3 scopes to calculate the aggregated company temperature scores. The default temperature score is 3.2.</p>
+<p>For more information about all fields shown in the output, please refer to the Legend at <a class="reference external" href="http://getting-started.sbti-tool.org">http://getting-started.sbti-tool.org</a>.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">time_frames</span> <span class="o">=</span> <span class="p">[</span><span class="n">ETimeFrames</span><span class="o">.</span><span class="n">MID</span><span class="p">]</span>
+<span class="n">scopes</span> <span class="o">=</span> <span class="p">[</span><span class="n">EScope</span><span class="o">.</span><span class="n">S1S2</span><span class="p">,</span> <span class="n">EScope</span><span class="o">.</span><span class="n">S1S2S3</span><span class="p">]</span>
+<span class="n">fallback_score</span> <span class="o">=</span> <span class="mf">3.2</span>
+
+<span class="n">temperature_score</span> <span class="o">=</span> <span class="n">TemperatureScore</span><span class="p">(</span>
+    <span class="n">time_frames</span><span class="o">=</span><span class="n">time_frames</span><span class="p">,</span>
+    <span class="n">scopes</span><span class="o">=</span><span class="n">scopes</span><span class="p">,</span>
+    <span class="n">fallback_score</span><span class="o">=</span><span class="n">fallback_score</span>
+<span class="p">)</span>
+<span class="n">amended_portfolio</span> <span class="o">=</span> <span class="n">temperature_score</span><span class="o">.</span><span class="n">calculate</span><span class="p">(</span><span class="n">data_providers</span><span class="o">=</span><span class="p">[</span><span class="n">provider</span><span class="p">],</span> <span class="n">portfolio</span><span class="o">=</span><span class="n">companies</span><span class="p">)</span>
+<span class="n">amended_portfolio</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>achieved_reduction</th>
+      <th>base_year</th>
+      <th>base_year_ghg_s1</th>
+      <th>base_year_ghg_s2</th>
+      <th>base_year_ghg_s3</th>
+      <th>company_id</th>
+      <th>coverage_s1</th>
+      <th>coverage_s2</th>
+      <th>coverage_s3</th>
+      <th>end_year</th>
+      <th>...</th>
+      <th>annual_reduction_rate</th>
+      <th>slope</th>
+      <th>samplesize</th>
+      <th>model</th>
+      <th>variable</th>
+      <th>param</th>
+      <th>intercept</th>
+      <th>r2</th>
+      <th>temperature_score</th>
+      <th>temperature_results</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.74</td>
+      <td>2013.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>NaN</td>
+      <td>US0079031078</td>
+      <td>0.860000</td>
+      <td>0.860000</td>
+      <td>NaN</td>
+      <td>2030.0</td>
+      <td>...</td>
+      <td>0.027785</td>
+      <td>slope15</td>
+      <td>128</td>
+      <td>4</td>
+      <td>Emissions|Kyoto Gases</td>
+      <td>-0.312329</td>
+      <td>2.697261</td>
+      <td>0.829523</td>
+      <td>1.83</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>US0079031078</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>slope15</td>
+      <td>128</td>
+      <td>4</td>
+      <td>Emissions|Kyoto Gases</td>
+      <td>-0.312329</td>
+      <td>2.697261</td>
+      <td>0.829523</td>
+      <td>2.83</td>
+      <td>0.727326</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0.50</td>
+      <td>2015.0</td>
+      <td>1558.0</td>
+      <td>13333.0</td>
+      <td>1350.0</td>
+      <td>US00724F1012</td>
+      <td>0.895373</td>
+      <td>0.895373</td>
+      <td>NaN</td>
+      <td>2030.0</td>
+      <td>...</td>
+      <td>0.032559</td>
+      <td>slope15</td>
+      <td>128</td>
+      <td>4</td>
+      <td>INT.emKyoto_gdp</td>
+      <td>-0.533878</td>
+      <td>4.107377</td>
+      <td>0.826692</td>
+      <td>2.37</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>US00724F1012</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>slope15</td>
+      <td>128</td>
+      <td>4</td>
+      <td>Emissions|Kyoto Gases</td>
+      <td>-0.312329</td>
+      <td>2.697261</td>
+      <td>0.829523</td>
+      <td>2.20</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>FR0000125338</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>slope15</td>
+      <td>128</td>
+      <td>4</td>
+      <td>Emissions|Kyoto Gases</td>
+      <td>-0.312329</td>
+      <td>2.697261</td>
+      <td>0.829523</td>
+      <td>3.20</td>
+      <td>1.000000</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 47 columns</p>
+</div></div>
+</div>
+</div>
+</div>
+<div class="section" id="Step-3:-Calculate-a-portfolio-level-temperature-score">
+<h2>Step 3: Calculate a portfolio level temperature score<a class="headerlink" href="#Step-3:-Calculate-a-portfolio-level-temperature-score" title="Permalink to this headline">¶</a></h2>
+<p>This step generates the results at the portfolio level for both the portfolio coverage and the temperature scoring method. Seven portfolio weighting options currently exist:</p>
+<ul class="simple">
+<li><p>Option 1: Weighted average temperature score (WATS)</p></li>
+<li><p>Option 2: Total emissions weighted temperature score (TETS)</p></li>
+<li><p>Option 3: Market Owned emissions weighted temperature score (MOTS)</p></li>
+<li><p>Option 4: Enterprise Owned emissions weighted temperature score (EOTS).</p></li>
+<li><p>Option 5: EV + Cash emissions weighted temperature score (ECOTS)</p></li>
+<li><p>Option 6: Total Assets emissions weighted temperature score (AOTS)</p></li>
+<li><p>Option 7: Revenue owned emissions weighted temperature score (ROTS)</p></li>
+</ul>
+<p>Please see Section 3 of the <a class="reference external" href="https://sciencebasedtargets.org/wp-content/uploads/2020/07/Temperature-Scoring-Beta-Methodology.pdf">temperature scoring methodology</a> for further details of the weighting calculation steps.</p>
+<p>The financial information imported through the in the data_provider_example.xlxs at the start of this process is used to weight the individual companies in a portfolio. For example, the EOTS, uses the portfolio invested value as a portion of the company’s enterprise value to weight the company’s temperature score. The scores at the company level are aggregated for both scope 1+2, and for scope 1+2+3, generating two portfolio scores for the selected time period.</p>
+<p>For analysing SBT Portfolio Coverage, the tool also displays the percentage of SBTi approved companies on the portfolio based on the same weighting approach.</p>
+<p>In this example we use the “Weighted Average Temperature Score”. For more details on how to use the various weighting options in the notebook, have a look at notebook 3 (“3_portfolio_aggregations.ipynb” in the examples folder in <a class="reference external" href="https://github.com/OFBDABV/SBTi">GitHub</a>). The temperature scores are calculated per time-frame/scope combination.</p>
+<p>To change the aggregation method, replace the extension “<code class="docutils literal notranslate"><span class="pre">WATS</span></code>” in <code class="docutils literal notranslate"><span class="pre">PortfolioAggregationMethod.WATS</span></code> (the first line) with the abbreviation of the desired aggregation method, e.g. ECOTS, from the list of aggregation options above. The output displays the portfolio temperature score for the time frame and the scopes you have selected.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">temperature_score</span><span class="o">.</span><span class="n">aggregation_method</span> <span class="o">=</span> <span class="n">PortfolioAggregationMethod</span><span class="o">.</span><span class="n">WATS</span>
+<span class="n">aggregated_portfolio</span> <span class="o">=</span> <span class="n">temperature_score</span><span class="o">.</span><span class="n">aggregate_scores</span><span class="p">(</span><span class="n">amended_portfolio</span><span class="p">)</span>
+<span class="n">print_aggregations</span><span class="p">(</span><span class="n">aggregated_portfolio</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+mid - S1S2: 2.55 degrees Celcius
+mid - S1S2S3: 2.82 degrees Celcius
+</pre></div></div>
+</div>
+<div class="section" id="Portfolio-coverage">
+<h3>Portfolio coverage<a class="headerlink" href="#Portfolio-coverage" title="Permalink to this headline">¶</a></h3>
+<p>The portfolio coverage gives insights in the coverage of portfolio entities that have set GHG emissions reduction targets, STBi-validated or otherwise. Companies with SBTi status Approved have a score of 100%, all others have a score of 0%. The aggregation method used for the portfolio coverage is the same as for the temperature score. If you want to change that you can do so in the previous section.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">portfolio_coverage_tvp</span> <span class="o">=</span> <span class="n">PortfolioCoverageTVP</span><span class="p">()</span>
+<span class="n">coverage</span> <span class="o">=</span> <span class="n">portfolio_coverage_tvp</span><span class="o">.</span><span class="n">get_portfolio_coverage</span><span class="p">(</span><span class="n">amended_portfolio</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="n">temperature_score</span><span class="o">.</span><span class="n">aggregation_method</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Part of portfolio with climate targets is </span><span class="si">{c:.2f}</span><span class="s2">%&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="n">coverage</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Part of portfolio with climate targets is 35.45%
+</pre></div></div>
+</div>
+</div>
+</div>
+<div class="section" id="Step-4:-How-can-I-improve-my-portfolio’s-temperature-score?">
+<h2>Step 4: How can I improve my portfolio’s temperature score?<a class="headerlink" href="#Step-4:-How-can-I-improve-my-portfolio’s-temperature-score?" title="Permalink to this headline">¶</a></h2>
+<p>The final step can be used to get insight into the effect your action can have on your temperature score. This can be done by first analysing for example the current hotspots and contributors to the portfolio and sector TS (temperature score).</p>
+<p>Finally you can also model changes the impact of changes in exposure of your holdings in the portfolio by rerunning the calculations using various scenarios. These scenarios give you an insight to how your score will be affected by certain engagement actions.</p>
+<p>A total of 6 ready made scenarios can be employed to test strategies for reducing the current temperature score in the last example of this section.</p>
+<div class="section" id="Analysing-hotspots">
+<h3>Analysing hotspots<a class="headerlink" href="#Analysing-hotspots" title="Permalink to this headline">¶</a></h3>
+<p>The first analysis of your portfolio could be to understand if you have any particular hotspots in your portfolio. We can do that by analysing different groupings of companies.</p>
+<p>The tool allows you to calculate temperature scores for <em>groups</em> of companies. In this example we group the scores by sector and region, and leave the timeframe and scope unchanged. Any categorical variable in the data provided by you or your data provider (in the <code class="docutils literal notranslate"><span class="pre">Data_Provider_Example.xlsx</span></code> imported above) can be used as grouping variable, e.g. sectors, industries, regions, countries, market cap buckets, as well as the additional fields you imported via the portfolio data.</p>
+<p>You can change the variable by which the data is grouped by replacing the fourth line in the following cell. For example, replacing “grouping=[‘sector’, ‘region’]” by “grouping=[‘sector’, ‘country’]” would result in temperature scores per sector per country.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">grouping</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;sector&#39;</span><span class="p">,</span> <span class="s1">&#39;region&#39;</span><span class="p">]</span>
+<span class="n">temperature_score</span> <span class="o">=</span> <span class="n">TemperatureScore</span><span class="p">(</span>
+    <span class="n">time_frames</span><span class="o">=</span><span class="n">time_frames</span><span class="p">,</span>
+    <span class="n">scopes</span><span class="o">=</span><span class="n">scopes</span><span class="p">,</span>
+    <span class="n">grouping</span><span class="o">=</span><span class="n">grouping</span>
+<span class="p">)</span>
+<span class="n">grouped_portfolio</span> <span class="o">=</span> <span class="n">temperature_score</span><span class="o">.</span><span class="n">calculate</span><span class="p">(</span><span class="n">data_providers</span><span class="o">=</span><span class="p">[</span><span class="n">provider</span><span class="p">],</span> <span class="n">portfolio</span><span class="o">=</span><span class="n">companies</span><span class="p">)</span>
+<span class="n">grouped_aggregations</span> <span class="o">=</span> <span class="n">temperature_score</span><span class="o">.</span><span class="n">aggregate_scores</span><span class="p">(</span><span class="n">grouped_portfolio</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>The aggregated scores can then be used, for example, to show the relation between sectors and regions with respect to temperature score. A visualization of this relation is shown in the heatmap below. The grey fields indicate that the portfolio contains no assest for those combinations.</p>
+<div class="section" id="Quick-analysis">
+<h4>Quick analysis<a class="headerlink" href="#Quick-analysis" title="Permalink to this headline">¶</a></h4>
+<p>We can see here that our North American (NA) Health Care, Asian Consumer discretionary, and NA and European IT are in reasonable shape, but that we have many sectors across the globe that have a large number of companies with default scores, where we need to engage and influence these companies to set targets. We need to run some more detailed analysis to identify which sectors and companies are the best candidates for our engagement.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">analysis_parameters</span> <span class="o">=</span> <span class="p">([</span><span class="n">ETimeFrames</span><span class="o">.</span><span class="n">MID</span><span class="p">],</span> <span class="p">[</span><span class="n">EScope</span><span class="o">.</span><span class="n">S1S2</span><span class="p">],</span> <span class="n">grouping</span><span class="p">)</span>
+<span class="n">plot_grouped_heatmap</span><span class="p">(</span><span class="n">grouped_aggregations</span><span class="p">,</span> <span class="n">analysis_parameters</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/1_analysis_example_41_0.png" src="_images/1_analysis_example_41_0.png" />
+</div>
+</div>
+<p>For example, we see that the Industrials in Asia perform worse than their counterparts in North America and Europe. We can zoom in on the companies in this group and their relative contributions to the group’s temperature score.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">region</span> <span class="o">=</span>  <span class="s1">&#39;Asia&#39;</span>
+<span class="n">sector</span> <span class="o">=</span> <span class="s1">&#39;Industrials&#39;</span>
+<span class="n">group</span> <span class="o">=</span> <span class="n">sector</span> <span class="o">+</span> <span class="s1">&#39;-&#39;</span> <span class="o">+</span> <span class="n">region</span>
+<span class="n">group_contributions</span> <span class="o">=</span> <span class="n">get_contributions_per_group</span><span class="p">(</span><span class="n">grouped_aggregations</span><span class="p">,</span> <span class="n">analysis_parameters</span><span class="p">,</span> <span class="n">group</span><span class="p">)</span>
+<span class="n">group_contributions</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>group</th>
+      <th>company_name</th>
+      <th>company_id</th>
+      <th>temperature_score</th>
+      <th>contribution_relative</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Industrials-Asia</td>
+      <td>SUMITOMO CHEMICAL Co., Ltd.</td>
+      <td>JP3401400001</td>
+      <td>3.2</td>
+      <td>33.33</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Industrials-Asia</td>
+      <td>Company G</td>
+      <td>CN0000000007</td>
+      <td>3.2</td>
+      <td>33.33</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Industrials-Asia</td>
+      <td>Company AE</td>
+      <td>TH0000000031</td>
+      <td>3.2</td>
+      <td>33.33</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+</div>
+</div>
+<div class="section" id="Sector-analysis">
+<h3>Sector analysis<a class="headerlink" href="#Sector-analysis" title="Permalink to this headline">¶</a></h3>
+<p>Sector analysis may help us with bringing some clarity into our analysis from the heatmap above. In order to identify the companies that your portfolio would most benefit from engaging with, we can start with identifying the biggest contributing sectors to the portfolio’s temperature score, as in our example below.</p>
+<p>Contributions can be identified on an individual company level, as well as contributions from companies grouped by one of their characteristics, e.g. sector or region. The exact definitions of companies’ contributions to the portfolio temperature scores depend on the selected aggregation method.</p>
+<p>You can group companies on any categorical variable (e.g. sectors, countries, market cap buckets, investment strategies, etc) you provide through your dataprovider, in this example in the Data_Provider_Example.xlsx imported above.</p>
+<p>For our analysis we select one time-frame (MID) and one scope (S1+S2) and group the outcomes on sector and compare AUM to temperature score contribution. We also then display the sector temperature scores.</p>
+<p>To change the time frame, replace the extension “MID” in ETimeFrames.MID (the first line) to SHORT or LONG. To change the time frame, replace the extension “S1S2” in EScope.S1S2 (the second line) to S3 or S1S2S3. To change the grouping, replace ‘sector’ (the third line) to the category variable you are interested in.</p>
+<div class="section" id="id1">
+<h4>Quick analysis<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h4>
+<p>In this example we can see that Materials, Financials, Energy, Consumer Staples and the Communication sectors are all scoring above 3.0C. From the pie charts we can also see that Materials, Financials and Consumer Staples are contributing more to the temperature score than their weight in the portfolio.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">time_frames</span> <span class="o">=</span> <span class="p">[</span><span class="n">ETimeFrames</span><span class="o">.</span><span class="n">MID</span><span class="p">]</span>
+<span class="n">scopes</span> <span class="o">=</span> <span class="p">[</span><span class="n">EScope</span><span class="o">.</span><span class="n">S1S2</span><span class="p">]</span>
+<span class="n">grouping</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;sector&#39;</span><span class="p">]</span>
+<span class="n">analysis_parameters</span> <span class="o">=</span> <span class="p">(</span><span class="n">time_frames</span><span class="p">,</span> <span class="n">scopes</span><span class="p">,</span> <span class="n">grouping</span><span class="p">)</span>
+
+<span class="n">temperature_score</span> <span class="o">=</span> <span class="n">TemperatureScore</span><span class="p">(</span><span class="n">time_frames</span><span class="o">=</span><span class="n">time_frames</span><span class="p">,</span>
+                                     <span class="n">scopes</span><span class="o">=</span><span class="n">scopes</span><span class="p">,</span>
+                                     <span class="n">grouping</span><span class="o">=</span><span class="n">grouping</span><span class="p">)</span>
+<span class="n">amended_portfolio</span> <span class="o">=</span> <span class="n">temperature_score</span><span class="o">.</span><span class="n">calculate</span><span class="p">(</span><span class="n">data_providers</span><span class="o">=</span><span class="p">[</span><span class="n">provider</span><span class="p">],</span> <span class="n">portfolio</span><span class="o">=</span><span class="n">companies</span><span class="p">)</span>
+<span class="n">aggregated_portfolio</span> <span class="o">=</span> <span class="n">temperature_score</span><span class="o">.</span><span class="n">aggregate_scores</span><span class="p">(</span><span class="n">amended_portfolio</span><span class="p">)</span>
+<span class="n">company_contributions</span> <span class="o">=</span> <span class="n">collect_company_contributions</span><span class="p">(</span><span class="n">aggregated_portfolio</span><span class="p">,</span> <span class="n">amended_portfolio</span><span class="p">,</span> <span class="n">analysis_parameters</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">plot_grouped_statistics</span><span class="p">(</span><span class="n">aggregated_portfolio</span><span class="p">,</span> <span class="n">company_contributions</span><span class="p">,</span> <span class="n">analysis_parameters</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/1_analysis_example_46_0.png" src="_images/1_analysis_example_46_0.png" />
+</div>
+</div>
+<p>We can use what we learned from this analysis to drill into a few of the highest contributing scoring sectors to see which companies are the biggest contributors on the sector level. Considering the health care sector, for instance, we see in the table below that Company N is by far the largest contributor, and might therefore be a candidate to engage with.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">sector_contributions</span> <span class="o">=</span> <span class="n">company_contributions</span><span class="p">[[</span><span class="s1">&#39;company_name&#39;</span><span class="p">,</span> <span class="s1">&#39;company_id&#39;</span><span class="p">,</span> <span class="s1">&#39;sector&#39;</span><span class="p">,</span> <span class="s1">&#39;contribution&#39;</span><span class="p">,</span> <span class="s1">&#39;temperature_score&#39;</span><span class="p">,</span> <span class="s1">&#39;ownership_percentage&#39;</span><span class="p">,</span> <span class="s1">&#39;portfolio_percentage&#39;</span><span class="p">]]</span>
+<span class="n">sector_contributions</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">sector_contributions</span><span class="p">[</span><span class="s1">&#39;sector&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;Health Care&#39;</span><span class="p">][:</span><span class="mi">10</span><span class="p">]</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>company_name</th>
+      <th>company_id</th>
+      <th>sector</th>
+      <th>contribution</th>
+      <th>temperature_score</th>
+      <th>ownership_percentage</th>
+      <th>portfolio_percentage</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Company N</td>
+      <td>FR0000000014</td>
+      <td>Health Care</td>
+      <td>9.83</td>
+      <td>3.20</td>
+      <td>0.19</td>
+      <td>7.82</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>Company AD</td>
+      <td>KE0000000030</td>
+      <td>Health Care</td>
+      <td>2.29</td>
+      <td>3.20</td>
+      <td>0.01</td>
+      <td>1.82</td>
+    </tr>
+    <tr>
+      <th>46</th>
+      <td>CVS Health</td>
+      <td>US1266501006</td>
+      <td>Health Care</td>
+      <td>0.04</td>
+      <td>0.05</td>
+      <td>0.01</td>
+      <td>1.82</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+</div>
+</div>
+<div class="section" id="Companies-to-engage-with">
+<h3>Companies to engage with<a class="headerlink" href="#Companies-to-engage-with" title="Permalink to this headline">¶</a></h3>
+<p>In addition to statistics of the companies grouped by a given category, as we did with the sector analysis above, you can analyse the companies’ individual contributions to the portfolio temperature score across the whole portfolio, as we have done below. Alternatively we can use the information we gathered above to do the below analysis for one of the identified sectors. To reiterate, the contribution column shows the contribution of a specific company to the overall portfolio temperature
+score. The computation of these contributions differs, in accordance with the aggregation methods explained above.</p>
+<p>In this analysis we are also choosing to display temperature score, ownership and portfolio weight. Therefore, we can use this table to analyse which companies we may have a better chance of having a successful engagement with. We show the top 10 contributing companies. To see more or fewer companies change the ‘10’ near the end of the line in “[:10]”.</p>
+<div class="section" id="id2">
+<h4>Quick analysis<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h4>
+<p>In this case we are primarily looking at our ownership of the company in relation to the contribution to find companies which we may be able to influence and where our work will have an impact on our portfolio TS.</p>
+<p>Company N has the biggest contribution to our TS, and even if we have a substantial position in our portfolio, we own a very small part of the company, so any engagement effort by just us may not be that successsful.</p>
+<p>We may have better luck with Comapny Q where we own close to 5% of the company, and it is still a reasonably large position in our portfolio and if we are successful, it may have a bigger impact on our portfolio score than with for example company N.</p>
+<p>Naturally, we can join other investors to influence Company N to convince them to set emission reduction targets. This contribution table gives you some of the information you need to make these decisions.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">company_contributions</span><span class="p">[[</span><span class="s1">&#39;company_name&#39;</span><span class="p">,</span> <span class="s1">&#39;company_id&#39;</span><span class="p">,</span> <span class="s1">&#39;contribution&#39;</span><span class="p">,</span> <span class="s1">&#39;temperature_score&#39;</span><span class="p">,</span> <span class="s1">&#39;ownership_percentage&#39;</span><span class="p">,</span> <span class="s1">&#39;portfolio_percentage&#39;</span><span class="p">]][:</span><span class="mi">10</span><span class="p">]</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>company_name</th>
+      <th>company_id</th>
+      <th>contribution</th>
+      <th>temperature_score</th>
+      <th>ownership_percentage</th>
+      <th>portfolio_percentage</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Company N</td>
+      <td>FR0000000014</td>
+      <td>9.83</td>
+      <td>3.20</td>
+      <td>0.19</td>
+      <td>7.82</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Advanced Micro Devices, Inc</td>
+      <td>US0079031078</td>
+      <td>4.58</td>
+      <td>1.83</td>
+      <td>0.33</td>
+      <td>6.36</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Company Q</td>
+      <td>CA0000000017</td>
+      <td>2.74</td>
+      <td>3.20</td>
+      <td>4.81</td>
+      <td>2.18</td>
+    </tr>
+    <tr>
+      <th>26</th>
+      <td>Dell Technologies</td>
+      <td>US24703L1035</td>
+      <td>2.29</td>
+      <td>3.20</td>
+      <td>0.29</td>
+      <td>1.82</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>Company AE</td>
+      <td>TH0000000031</td>
+      <td>2.29</td>
+      <td>3.20</td>
+      <td>0.21</td>
+      <td>1.82</td>
+    </tr>
+    <tr>
+      <th>21</th>
+      <td>Company I</td>
+      <td>CN0000000009</td>
+      <td>2.29</td>
+      <td>3.20</td>
+      <td>0.33</td>
+      <td>1.82</td>
+    </tr>
+    <tr>
+      <th>22</th>
+      <td>Company AF</td>
+      <td>ID0000000032</td>
+      <td>2.29</td>
+      <td>3.20</td>
+      <td>0.97</td>
+      <td>1.82</td>
+    </tr>
+    <tr>
+      <th>23</th>
+      <td>Company F</td>
+      <td>NL0000000006</td>
+      <td>2.29</td>
+      <td>3.20</td>
+      <td>0.11</td>
+      <td>1.82</td>
+    </tr>
+    <tr>
+      <th>25</th>
+      <td>Capgemini Group</td>
+      <td>FR0000125338</td>
+      <td>2.29</td>
+      <td>3.20</td>
+      <td>0.32</td>
+      <td>1.82</td>
+    </tr>
+    <tr>
+      <th>27</th>
+      <td>L'Oréal</td>
+      <td>FR0000120321</td>
+      <td>2.29</td>
+      <td>3.20</td>
+      <td>0.40</td>
+      <td>1.82</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+</div>
+</div>
+<div class="section" id="What-if-analysis">
+<h3>What-if analysis<a class="headerlink" href="#What-if-analysis" title="Permalink to this headline">¶</a></h3>
+<p>To determine the effect of engaging (part of) your portfolio, you can run a number of scenarios: - 1: Engage companies to set 2 degree targets. This means that the score of all companies that didn’t yet set a target will be set to 2 degrees celcius. - 2: Engage companies to set well below 2 degree targets. The maximum score for all companies that have set targets will be capped at 1.75 degrees celcius. - 3a: Engage the top 10 contributors to set 2 degree targets. - 3b: Engage the top 10
+contributors to have set well below 2 degree targets. This means that the maximum score for all the targets of these companies will be capped at 1.75 degrees celcius. - 4a: Engage the predefined companies to set 2 degree targets. - 4b: Engage the predefined companies to set well below 2 degree targets. This means that the maximum score for all the targets of these companies will be capped at 1.75 degrees celcius.</p>
+<p>In this example, we identified a couple of companies above where we think we can have some success in our engagement efforts. Next, we will therefore investigate the effect of engaging Company Q and Company AF in setting targets.</p>
+<p>The cell below defines scenario 4a, which means that we manage to get the companies we engage with, to set GHG emission reduction targets that give them both a score of 2.0C. We will define the companies in the next cell below. To change the scenario, replace the extension “HIGHEST_CONTRIBUTORS_APPROVED” in ScenarioType.HIGHEST_CONTRIBUTORS_APPROVED (the second line) to TARGETS (for scenario 1), APPROVED_TARGETS (scenario 2) or HIGHEST_CONTRIBUTORS (scenario 3). To differentiate between options
+a and b in scenario 3 and 4, change the extension “SET_TARGETS” in EngagementType.SET_TARGETS. Use “SET_TARGETS” for option a and “SET_SBTI_TARGETS” for option b. For scenarios 1 and 2 the choice here does not matter. In the fourth and fifth lines the aggregation method and grouping are specified. You can change these the same way as in the previous sections.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">scenario</span> <span class="o">=</span> <span class="n">Scenario</span><span class="p">()</span>
+<span class="n">scenario</span><span class="o">.</span><span class="n">scenario_type</span> <span class="o">=</span> <span class="n">ScenarioType</span><span class="o">.</span><span class="n">HIGHEST_CONTRIBUTORS_APPROVED</span>
+<span class="n">scenario</span><span class="o">.</span><span class="n">engagement_type</span> <span class="o">=</span> <span class="n">EngagementType</span><span class="o">.</span><span class="n">SET_TARGETS</span>
+<span class="n">scenario</span><span class="o">.</span><span class="n">aggregation_method</span> <span class="o">=</span> <span class="n">PortfolioAggregationMethod</span><span class="o">.</span><span class="n">WATS</span>
+<span class="n">scenario</span><span class="o">.</span><span class="n">grouping</span> <span class="o">=</span> <span class="s1">&#39;sector&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="Portfolio-temperature-score-impact">
+<h4>Portfolio temperature score impact<a class="headerlink" href="#Portfolio-temperature-score-impact" title="Permalink to this headline">¶</a></h4>
+<p>In our what-if analysis, we can now add Company Q and Company AF with company IDs CA0000000017 and ID0000000032 to to the companies which have set a target. Please note that our example portfolio file contains a column named “engagement_target”. The companies with values of 1.0 in this column are included in this scenario. The cell below adds Company Q and Company AF to these other predefined companies in the portfolio, which were already marked for engagement.</p>
+<p>You can add more companies to target by copying line 2 or 3 of the following cell and replacing the company ID by the ID of your selected company.</p>
+<div class="section" id="id3">
+<h5>Quick analysis<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h5>
+<p>As we can see below, the impact on our portfolio TS of engaging with the companies selected for engagement reduces our portfolio temperatures score from 2.55C to 2.50C.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">scenario_portfolio</span> <span class="o">=</span> <span class="n">portfolio</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">scenario_portfolio</span><span class="p">[</span><span class="s1">&#39;engagement_target&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="n">scenario_portfolio</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">scenario_portfolio</span><span class="p">[</span><span class="s1">&#39;company_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;CA0000000017&#39;</span><span class="p">,</span> <span class="s1">&#39;engagement_target&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">scenario_portfolio</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">scenario_portfolio</span><span class="p">[</span><span class="s1">&#39;company_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;ID0000000032&#39;</span><span class="p">,</span> <span class="s1">&#39;engagement_target&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">scenario_companies</span> <span class="o">=</span> <span class="p">[</span><span class="n">SBTi</span><span class="o">.</span><span class="n">interfaces</span><span class="o">.</span><span class="n">PortfolioCompany</span><span class="o">.</span><span class="n">parse_obj</span><span class="p">(</span><span class="n">company</span><span class="p">)</span> <span class="k">for</span> <span class="n">company</span> <span class="ow">in</span> <span class="n">scenario_portfolio</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(</span><span class="n">orient</span><span class="o">=</span><span class="s2">&quot;records&quot;</span><span class="p">)]</span>
+<span class="n">scenario_data</span> <span class="o">=</span> <span class="n">SBTi</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">get_data</span><span class="p">([</span><span class="n">provider</span><span class="p">],</span> <span class="n">scenario_companies</span><span class="p">)</span>
+
+<span class="n">temperature_score</span><span class="o">.</span><span class="n">scenario</span> <span class="o">=</span> <span class="n">scenario</span>
+<span class="n">scenario_companies</span> <span class="o">=</span> <span class="n">SBTi</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">dataframe_to_portfolio</span><span class="p">(</span><span class="n">scenario_portfolio</span><span class="p">)</span>
+<span class="n">scenario_scores</span> <span class="o">=</span> <span class="n">temperature_score</span><span class="o">.</span><span class="n">calculate</span><span class="p">(</span><span class="n">data_providers</span><span class="o">=</span><span class="p">[</span><span class="n">provider</span><span class="p">],</span> <span class="n">portfolio</span><span class="o">=</span><span class="n">scenario_companies</span><span class="p">)</span>
+<span class="n">scenario_aggregated</span> <span class="o">=</span> <span class="n">temperature_score</span><span class="o">.</span><span class="n">aggregate_scores</span><span class="p">(</span><span class="n">scenario_scores</span><span class="p">)</span>
+<span class="n">print_scenario_gain</span><span class="p">(</span><span class="n">aggregated_portfolio</span><span class="p">,</span> <span class="n">scenario_aggregated</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Actual portfolio temperature score
+mid - S1S2: 2.55 degrees Celcius
+
+Scenario portfolio temperature score
+mid - S1S2: 2.50 degrees Celcius
+</pre></div></div>
+</div>
+</div>
+</div>
+<div class="section" id="Sector-temperature-score-impact">
+<h4>Sector temperature score impact<a class="headerlink" href="#Sector-temperature-score-impact" title="Permalink to this headline">¶</a></h4>
+<p>We can dig in a bit deeper into our analysis to identify changes in sector temperature scores.</p>
+<p>In the two cell below we print the scenario effects on temperature score per sector and then display this data with pie charts and and a histogram. The first block shows the scope 1 and 2 mid-term temperature scores per sector calculated with the current temperature scores. The second block shows the temperature scores of the same categories, but now based on the what-if scenario where the chosen companies have set 2 degree targets.</p>
+<div class="section" id="id4">
+<h5>Quick analysis<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h5>
+<p>The Energy, Consumer Staples and Communication sectors are no longer scoring above 3.0C. We still need to do some work in the Materials and Financials sector, to reduce these sector scores.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre>
+<span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Actual temperature scores&quot;</span><span class="p">)</span>
+<span class="n">print_grouped_scores</span><span class="p">(</span><span class="n">aggregated_portfolio</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">Scenario temperature scores&quot;</span><span class="p">)</span>
+<span class="n">print_grouped_scores</span><span class="p">(</span><span class="n">scenario_aggregated</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Actual temperature scores
+
+mid - S1S2
+Communication Services: 3.20 degrees Celcius
+Consumer Discretionary: 2.00 degrees Celcius
+Consumer Staples: 3.20 degrees Celcius
+Energy: 3.20 degrees Celcius
+Financials: 3.20 degrees Celcius
+Health Care: 2.70 degrees Celcius
+Industrials: 2.33 degrees Celcius
+Information Technology: 1.20 degrees Celcius
+Materials: 3.20 degrees Celcius
+Real Estate: 2.59 degrees Celcius
+Utilities: 2.44 degrees Celcius
+
+
+Scenario temperature scores
+
+mid - S1S2
+Communication Services: 2.00 degrees Celcius
+Consumer Discretionary: 2.00 degrees Celcius
+Consumer Staples: 2.80 degrees Celcius
+Energy: 3.20 degrees Celcius
+Financials: 3.20 degrees Celcius
+Health Care: 2.70 degrees Celcius
+Industrials: 2.33 degrees Celcius
+Information Technology: 1.20 degrees Celcius
+Materials: 3.20 degrees Celcius
+Real Estate: 2.59 degrees Celcius
+Utilities: 2.44 degrees Celcius
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">scenario_contributions</span> <span class="o">=</span> <span class="n">collect_company_contributions</span><span class="p">(</span><span class="n">scenario_aggregated</span><span class="p">,</span> <span class="n">scenario_scores</span><span class="p">,</span> <span class="n">analysis_parameters</span><span class="p">)</span>
+<span class="n">plot_grouped_statistics</span><span class="p">(</span><span class="n">scenario_aggregated</span><span class="p">,</span> <span class="n">scenario_contributions</span><span class="p">,</span> <span class="n">analysis_parameters</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/1_analysis_example_59_0.png" src="_images/1_analysis_example_59_0.png" />
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="Company-temperature-score-contribution-impact">
+<h3>Company temperature score contribution impact<a class="headerlink" href="#Company-temperature-score-contribution-impact" title="Permalink to this headline">¶</a></h3>
+<p>If our engagement is successful we can see that both Company Q and Company AF would disappear from from the list of biggest contributing companies to our TS.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">scenario_contributions</span><span class="p">[</span><span class="s1">&#39;temperature_score_change&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">scenario_contributions</span><span class="p">[</span><span class="s1">&#39;temperature_score&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">company_contributions</span><span class="p">[</span><span class="s1">&#39;temperature_score&#39;</span><span class="p">]</span>
+<span class="n">scenario_contributions</span><span class="p">[</span><span class="s1">&#39;contribution_change&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">scenario_contributions</span><span class="p">[</span><span class="s1">&#39;contribution&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">company_contributions</span><span class="p">[</span><span class="s1">&#39;contribution&#39;</span><span class="p">]</span>
+<span class="n">largest_reductions</span> <span class="o">=</span> <span class="n">scenario_contributions</span><span class="p">[</span><span class="n">scenario_contributions</span><span class="p">[</span><span class="s1">&#39;temperature_score_change&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="mf">0.0</span><span class="p">]</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span>
+    <span class="n">scenario_contributions</span><span class="p">[[</span><span class="s1">&#39;company_name&#39;</span><span class="p">,</span> <span class="s1">&#39;contribution&#39;</span><span class="p">,</span> <span class="s1">&#39;contribution_change&#39;</span><span class="p">,</span> <span class="s1">&#39;temperature_score&#39;</span><span class="p">,</span> <span class="s1">&#39;temperature_score_change&#39;</span><span class="p">,</span> <span class="s1">&#39;ownership_percentage&#39;</span><span class="p">,</span> <span class="s1">&#39;portfolio_percentage&#39;</span><span class="p">]][:</span><span class="mi">10</span><span class="p">],</span>
+    <span class="n">largest_reductions</span><span class="p">[[</span><span class="s1">&#39;company_name&#39;</span><span class="p">,</span> <span class="s1">&#39;contribution&#39;</span><span class="p">,</span> <span class="s1">&#39;contribution_change&#39;</span><span class="p">,</span> <span class="s1">&#39;temperature_score&#39;</span><span class="p">,</span> <span class="s1">&#39;temperature_score_change&#39;</span><span class="p">,</span> <span class="s1">&#39;ownership_percentage&#39;</span><span class="p">,</span> <span class="s1">&#39;portfolio_percentage&#39;</span><span class="p">]]</span>
+<span class="p">])</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>company_name</th>
+      <th>contribution</th>
+      <th>contribution_change</th>
+      <th>temperature_score</th>
+      <th>temperature_score_change</th>
+      <th>ownership_percentage</th>
+      <th>portfolio_percentage</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Company N</td>
+      <td>10.02</td>
+      <td>0.19</td>
+      <td>3.20</td>
+      <td>0.00</td>
+      <td>0.19</td>
+      <td>7.82</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Advanced Micro Devices, Inc</td>
+      <td>4.66</td>
+      <td>0.09</td>
+      <td>1.83</td>
+      <td>0.00</td>
+      <td>0.33</td>
+      <td>6.36</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>Company X</td>
+      <td>2.33</td>
+      <td>0.04</td>
+      <td>3.20</td>
+      <td>0.00</td>
+      <td>0.51</td>
+      <td>1.82</td>
+    </tr>
+    <tr>
+      <th>31</th>
+      <td>Company Y</td>
+      <td>2.33</td>
+      <td>0.04</td>
+      <td>3.20</td>
+      <td>0.00</td>
+      <td>0.28</td>
+      <td>1.82</td>
+    </tr>
+    <tr>
+      <th>30</th>
+      <td>Company Z</td>
+      <td>2.33</td>
+      <td>0.04</td>
+      <td>3.20</td>
+      <td>0.00</td>
+      <td>0.08</td>
+      <td>1.82</td>
+    </tr>
+    <tr>
+      <th>29</th>
+      <td>SUMITOMO CHEMICAL Co., Ltd.</td>
+      <td>2.33</td>
+      <td>0.04</td>
+      <td>3.20</td>
+      <td>0.00</td>
+      <td>0.27</td>
+      <td>1.82</td>
+    </tr>
+    <tr>
+      <th>28</th>
+      <td>Company AA</td>
+      <td>2.33</td>
+      <td>0.04</td>
+      <td>3.20</td>
+      <td>0.00</td>
+      <td>0.07</td>
+      <td>1.82</td>
+    </tr>
+    <tr>
+      <th>27</th>
+      <td>Company AB</td>
+      <td>2.33</td>
+      <td>0.04</td>
+      <td>3.20</td>
+      <td>0.00</td>
+      <td>0.14</td>
+      <td>1.82</td>
+    </tr>
+    <tr>
+      <th>26</th>
+      <td>Company V</td>
+      <td>2.33</td>
+      <td>0.04</td>
+      <td>3.20</td>
+      <td>0.00</td>
+      <td>0.03</td>
+      <td>1.82</td>
+    </tr>
+    <tr>
+      <th>25</th>
+      <td>NRG Energy Inc</td>
+      <td>2.33</td>
+      <td>0.04</td>
+      <td>3.20</td>
+      <td>0.00</td>
+      <td>0.14</td>
+      <td>1.82</td>
+    </tr>
+    <tr>
+      <th>32</th>
+      <td>Company Q</td>
+      <td>1.75</td>
+      <td>-0.54</td>
+      <td>2.00</td>
+      <td>-1.20</td>
+      <td>4.81</td>
+      <td>2.18</td>
+    </tr>
+    <tr>
+      <th>33</th>
+      <td>Adobe Systems Inc.</td>
+      <td>1.73</td>
+      <td>-0.56</td>
+      <td>2.37</td>
+      <td>-0.83</td>
+      <td>5.87</td>
+      <td>1.82</td>
+    </tr>
+    <tr>
+      <th>34</th>
+      <td>Delta Electronics</td>
+      <td>1.70</td>
+      <td>0.01</td>
+      <td>2.34</td>
+      <td>-0.03</td>
+      <td>0.01</td>
+      <td>1.82</td>
+    </tr>
+    <tr>
+      <th>35</th>
+      <td>Danone</td>
+      <td>1.59</td>
+      <td>-0.08</td>
+      <td>2.19</td>
+      <td>-0.15</td>
+      <td>12.25</td>
+      <td>1.82</td>
+    </tr>
+    <tr>
+      <th>36</th>
+      <td>Company AF</td>
+      <td>1.46</td>
+      <td>-0.11</td>
+      <td>2.00</td>
+      <td>-0.19</td>
+      <td>0.97</td>
+      <td>1.82</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+</div>
+</div>
+<div class="section" id="Save-your-data-for-further-analysis">
+<h2>Save your data for further analysis<a class="headerlink" href="#Save-your-data-for-further-analysis" title="Permalink to this headline">¶</a></h2>
+<p>To take your analysis outside of this notebook and for example for internal and client reporting, you can export all data to Excel and the clipboard for pasting into and analysing in other applications.</p>
+<p>In order to store the portfolio and provider data locally, two options apply: 1. You are running the SBTi tool locally or from Google Colab 2. You are running the SBTi tool from a Docker container</p>
+<p>If you run the SBTi tool locally or from Google Colab, you: - Specify and filenames of the output files in the cell below - Run the cell below</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">data_dump_filename</span> <span class="o">=</span> <span class="s1">&#39;data_dump.xlsx&#39;</span>
+<span class="n">amended_portfolio</span><span class="o">.</span><span class="n">to_excel</span><span class="p">(</span><span class="n">data_dump_filename</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>If you run the SBTi tool locally, you finished the notebook at this point. If you run the SBTi tool from Google Colab, you: - Click on the files icon in the left pane - Click the three dots that appear after hovering over the file - Download the file to your local machine</p>
+<p>and you finished the notebook.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="getting_started.html" class="btn btn-neutral float-right" title="Getting Started Using Python" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral float-left" title="SBTi-Finance Tool for Temperature Scoring &amp; Portfolio Coverage" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Science Based Targets
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

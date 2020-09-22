@@ -1,8 +1,7 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8">
   
@@ -12,12 +11,19 @@
   
 
   
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/theme_overrides.css" type="text/css" />
+
+  
   
   
   
 
   
-  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
@@ -25,15 +31,11 @@
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
         <script src="../../../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
     
-
-  
-  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
 </head>
@@ -49,7 +51,7 @@
           
 
           
-            <a href="../../../index.html" class="icon icon-home"> SBTi Temperature Alignment tool
+            <a href="../../../index.html" class="icon icon-home" alt="Documentation Home"> SBTi Temperature Alignment tool
           
 
           
@@ -72,6 +74,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -81,15 +84,20 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../1_analysis_example.html">SBTi-Finance Tool for Temperature Scoring &amp; Portfolio Coverage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started Using Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rest_api.html">Getting Started Using REST API &amp; UI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../DataRequirements.html">Data Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Legends.html">Data Legends</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">Contributing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../rest_api.html">REST API &amp; UI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../links.html">Project Links</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../index.html">API Reference</a></li>
 </ul>
 
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -128,7 +136,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
         
       <li><code class="xref py py-mod docutils literal notranslate"><span class="pre">SBTi.configs</span></code></li>
     
@@ -149,13 +157,58 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="module-SBTi.configs">
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="module-SBTi.configs">
 <span id="sbti-configs"></span><h1><a class="reference internal" href="#module-SBTi.configs" title="SBTi.configs"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SBTi.configs</span></code></a><a class="headerlink" href="#module-SBTi.configs" title="Permalink to this headline">¶</a></h1>
-<p><p>This file defines the constants used throughout the different classes. In order to redefine these settings whilst using
+<p>This file defines the constants used throughout the different classes. In order to redefine these settings whilst using
 the module, extend the respective config class and pass it to the class as the “constants” parameter.</p>
-</p>
 <div class="section" id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#SBTi.configs.ColumnsConfig" title="SBTi.configs.ColumnsConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ColumnsConfig</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#SBTi.configs.PortfolioAggregationConfig" title="SBTi.configs.PortfolioAggregationConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PortfolioAggregationConfig</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#SBTi.configs.TemperatureScoreConfig" title="SBTi.configs.TemperatureScoreConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TemperatureScoreConfig</span></code></a></p></td>
+<td><p>This factor determines what part of the temperature for a not SBTi-validated company should be the TS and what part</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#SBTi.configs.PortfolioCoverageTVPConfig" title="SBTi.configs.PortfolioCoverageTVPConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PortfolioCoverageTVPConfig</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
 <dl class="py class">
 <dt id="SBTi.configs.ColumnsConfig">
 <em class="property">class </em><code class="sig-prename descclassname">SBTi.configs.</code><code class="sig-name descname">ColumnsConfig</code><a class="headerlink" href="#SBTi.configs.ColumnsConfig" title="Permalink to this definition">¶</a></dt>
@@ -494,17 +547,17 @@ should be the default score.</p>
 
 <dl class="py attribute">
 <dt id="SBTi.configs.TemperatureScoreConfig.VALUE_TARGET_REFERENCE_ABSOLUTE">
-<code class="sig-name descname">VALUE_TARGET_REFERENCE_ABSOLUTE</code><em class="property"> = Absolute</em><a class="headerlink" href="#SBTi.configs.TemperatureScoreConfig.VALUE_TARGET_REFERENCE_ABSOLUTE" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">VALUE_TARGET_REFERENCE_ABSOLUTE</code><em class="property"> = absolute</em><a class="headerlink" href="#SBTi.configs.TemperatureScoreConfig.VALUE_TARGET_REFERENCE_ABSOLUTE" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt id="SBTi.configs.TemperatureScoreConfig.VALUE_TARGET_REFERENCE_INTENSITY">
-<code class="sig-name descname">VALUE_TARGET_REFERENCE_INTENSITY</code><em class="property"> = Intensity</em><a class="headerlink" href="#SBTi.configs.TemperatureScoreConfig.VALUE_TARGET_REFERENCE_INTENSITY" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">VALUE_TARGET_REFERENCE_INTENSITY</code><em class="property"> = intensity</em><a class="headerlink" href="#SBTi.configs.TemperatureScoreConfig.VALUE_TARGET_REFERENCE_INTENSITY" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt id="SBTi.configs.TemperatureScoreConfig.VALUE_TARGET_REFERENCE_INTENSITY_BASE">
-<code class="sig-name descname">VALUE_TARGET_REFERENCE_INTENSITY_BASE</code><em class="property"> = Int</em><a class="headerlink" href="#SBTi.configs.TemperatureScoreConfig.VALUE_TARGET_REFERENCE_INTENSITY_BASE" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">VALUE_TARGET_REFERENCE_INTENSITY_BASE</code><em class="property"> = int</em><a class="headerlink" href="#SBTi.configs.TemperatureScoreConfig.VALUE_TARGET_REFERENCE_INTENSITY_BASE" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -518,8 +571,8 @@ should be the default score.</p>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="SBTi.configs.TemperatureScoreConfig.ABSOLUTE_MAPPING">
-<code class="sig-name descname">ABSOLUTE_MAPPING</code><em class="property"> = Emissions|Kyoto Gases</em><a class="headerlink" href="#SBTi.configs.TemperatureScoreConfig.ABSOLUTE_MAPPING" title="Permalink to this definition">¶</a></dt>
+<dt id="SBTi.configs.TemperatureScoreConfig.ABSOLUTE_MAPPINGS">
+<code class="sig-name descname">ABSOLUTE_MAPPINGS</code><a class="headerlink" href="#SBTi.configs.TemperatureScoreConfig.ABSOLUTE_MAPPINGS" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -592,6 +645,7 @@ should be the default score.</p>
 
 </div>
 </div>
+</div>
 
 
            </div>
@@ -604,11 +658,19 @@ should be the default score.</p>
 
   <div role="contentinfo">
     <p>
+        
         &copy; Copyright 2020, Science Based Targets
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -619,7 +681,6 @@ should be the default score.</p>
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {

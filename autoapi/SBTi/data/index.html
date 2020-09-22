@@ -1,8 +1,7 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8">
   
@@ -12,12 +11,19 @@
   
 
   
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/theme_overrides.css" type="text/css" />
+
+  
   
   
   
 
   
-  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
@@ -25,15 +31,11 @@
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
         <script src="../../../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
     
-
-  
-  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
 </head>
@@ -49,7 +51,7 @@
           
 
           
-            <a href="../../../index.html" class="icon icon-home"> SBTi Temperature Alignment tool
+            <a href="../../../index.html" class="icon icon-home" alt="Documentation Home"> SBTi Temperature Alignment tool
           
 
           
@@ -72,6 +74,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -81,15 +84,20 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../1_analysis_example.html">SBTi-Finance Tool for Temperature Scoring &amp; Portfolio Coverage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started Using Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rest_api.html">Getting Started Using REST API &amp; UI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../DataRequirements.html">Data Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Legends.html">Data Legends</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">Contributing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../rest_api.html">REST API &amp; UI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../links.html">Project Links</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../index.html">API Reference</a></li>
 </ul>
 
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -128,7 +136,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
         
       <li><code class="xref py py-mod docutils literal notranslate"><span class="pre">SBTi.data</span></code></li>
     
@@ -149,10 +157,33 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="module-SBTi.data">
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="module-SBTi.data">
 <span id="sbti-data"></span><h1><a class="reference internal" href="#module-SBTi.data" title="SBTi.data"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SBTi.data</span></code></a><a class="headerlink" href="#module-SBTi.data" title="Permalink to this headline">¶</a></h1>
-<p><p>This module contains classes that create connections to data providers.</p>
-</p>
+<p>This module contains classes that create connections to data providers.</p>
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
@@ -172,6 +203,40 @@
 </div>
 <div class="section" id="package-contents">
 <h2>Package Contents<a class="headerlink" href="#package-contents" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#SBTi.data.DataProvider" title="SBTi.data.DataProvider"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DataProvider</span></code></a></p></td>
+<td><p>General data provider super class.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#SBTi.data.CSVProvider" title="SBTi.data.CSVProvider"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CSVProvider</span></code></a></p></td>
+<td><p>Data provider skeleton for CSV files. This class serves primarily for testing purposes only!</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#SBTi.data.ExcelProvider" title="SBTi.data.ExcelProvider"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ExcelProvider</span></code></a></p></td>
+<td><p>Data provider skeleton for CSV files. This class serves primarily for testing purposes only!</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#SBTi.data.Bloomberg" title="SBTi.data.Bloomberg"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Bloomberg</span></code></a></p></td>
+<td><p>Data provider skeleton for Bloomberg.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#SBTi.data.CDP" title="SBTi.data.CDP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CDP</span></code></a></p></td>
+<td><p>Data provider skeleton for CDP.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#SBTi.data.ISS" title="SBTi.data.ISS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ISS</span></code></a></p></td>
+<td><p>Data provider skeleton for ISS.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#SBTi.data.Trucost" title="SBTi.data.Trucost"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Trucost</span></code></a></p></td>
+<td><p>Data provider skeleton for Trucost.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#SBTi.data.Urgentem" title="SBTi.data.Urgentem"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Urgentem</span></code></a></p></td>
+<td><p>Data provider skeleton for Urgentem.</p></td>
+</tr>
+</tbody>
+</table>
 <dl class="py class">
 <dt id="SBTi.data.DataProvider">
 <em class="property">class </em><code class="sig-prename descclassname">SBTi.data.</code><code class="sig-name descname">DataProvider</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.data.DataProvider" title="Permalink to this definition">¶</a></dt>
@@ -179,7 +244,7 @@
 <p>General data provider super class.</p>
 <dl class="py method">
 <dt id="SBTi.data.DataProvider.get_targets">
-<em class="property">abstract </em><code class="sig-name descname">get_targets</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">company_ids</span><span class="p">:</span> <span class="n">List<span class="p">[</span>str<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.data.DataProvider.get_targets" title="Permalink to this definition">¶</a></dt>
+<em class="property">abstract </em><code class="sig-name descname">get_targets</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">company_ids</span><span class="p">:</span> <span class="n">List<span class="p">[</span>str<span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span>IDataProviderTarget<span class="p">]</span><a class="headerlink" href="#SBTi.data.DataProvider.get_targets" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get all relevant targets for a list of company ids (ISIN). This method should return a list of
 IDataProviderTarget instances.</p>
 <dl class="field-list simple">
@@ -194,7 +259,7 @@ IDataProviderTarget instances.</p>
 
 <dl class="py method">
 <dt id="SBTi.data.DataProvider.get_company_data">
-<em class="property">abstract </em><code class="sig-name descname">get_company_data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">company_ids</span><span class="p">:</span> <span class="n">List<span class="p">[</span>str<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.data.DataProvider.get_company_data" title="Permalink to this definition">¶</a></dt>
+<em class="property">abstract </em><code class="sig-name descname">get_company_data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">company_ids</span><span class="p">:</span> <span class="n">List<span class="p">[</span>str<span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span>IDataProviderCompany<span class="p">]</span><a class="headerlink" href="#SBTi.data.DataProvider.get_company_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get all relevant data for a list of company ids (ISIN). This method should return a list of IDataProviderCompany
 instances.</p>
 <dl class="field-list simple">
@@ -209,7 +274,7 @@ instances.</p>
 
 <dl class="py method">
 <dt id="SBTi.data.DataProvider.get_sbti_targets">
-<em class="property">abstract </em><code class="sig-name descname">get_sbti_targets</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">companies</span><span class="p">:</span> <span class="n">list</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.data.DataProvider.get_sbti_targets" title="Permalink to this definition">¶</a></dt>
+<em class="property">abstract </em><code class="sig-name descname">get_sbti_targets</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">companies</span><span class="p">:</span> <span class="n">list</span></em><span class="sig-paren">)</span> &#x2192; list<a class="headerlink" href="#SBTi.data.DataProvider.get_sbti_targets" title="Permalink to this definition">¶</a></dt>
 <dd><p>For each of the companies, get the status of their target (Target set, Committed or No target) as it’s known to
 the SBTi.</p>
 <dl class="field-list simple">
@@ -237,7 +302,7 @@ field.</p>
 </dl>
 <dl class="py method">
 <dt id="SBTi.data.CSVProvider.get_targets">
-<code class="sig-name descname">get_targets</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">company_ids</span><span class="p">:</span> <span class="n">list</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.data.CSVProvider.get_targets" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_targets</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">company_ids</span><span class="p">:</span> <span class="n">list</span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span>IDataProviderTarget<span class="p">]</span><a class="headerlink" href="#SBTi.data.CSVProvider.get_targets" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get all relevant targets for a list of company ids (ISIN). This method should return a list of
 IDataProviderTarget instances.</p>
 <dl class="field-list simple">
@@ -251,8 +316,22 @@ IDataProviderTarget instances.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt id="SBTi.data.CSVProvider._target_df_to_model">
+<code class="sig-name descname">_target_df_to_model</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">df_targets</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.data.CSVProvider._target_df_to_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>transforms target Dataframe into list of IDataProviderTarget instances</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>df_targets</strong> – pandas Dataframe with targets</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list containing the targets</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt id="SBTi.data.CSVProvider.get_company_data">
-<code class="sig-name descname">get_company_data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">company_ids</span><span class="p">:</span> <span class="n">list</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.data.CSVProvider.get_company_data" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_company_data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">company_ids</span><span class="p">:</span> <span class="n">list</span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span>IDataProviderCompany<span class="p">]</span><a class="headerlink" href="#SBTi.data.CSVProvider.get_company_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get all relevant data for a list of company ids (ISIN). This method should return a list of IDataProviderCompany
 instances.</p>
 <dl class="field-list simple">
@@ -267,7 +346,7 @@ instances.</p>
 
 <dl class="py method">
 <dt id="SBTi.data.CSVProvider.get_sbti_targets">
-<code class="sig-name descname">get_sbti_targets</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">companies</span><span class="p">:</span> <span class="n">list</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.data.CSVProvider.get_sbti_targets" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_sbti_targets</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">companies</span><span class="p">:</span> <span class="n">list</span></em><span class="sig-paren">)</span> &#x2192; list<a class="headerlink" href="#SBTi.data.CSVProvider.get_sbti_targets" title="Permalink to this definition">¶</a></dt>
 <dd><p>For each of the companies, get the status of their target (Target set, Committed or No target) as it’s known to
 the SBTi.</p>
 <dl class="field-list simple">
@@ -295,7 +374,7 @@ field.</p>
 </dl>
 <dl class="py method">
 <dt id="SBTi.data.ExcelProvider.get_targets">
-<code class="sig-name descname">get_targets</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">company_ids</span><span class="p">:</span> <span class="n">List<span class="p">[</span>str<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.data.ExcelProvider.get_targets" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_targets</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">company_ids</span><span class="p">:</span> <span class="n">List<span class="p">[</span>str<span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span>IDataProviderTarget<span class="p">]</span><a class="headerlink" href="#SBTi.data.ExcelProvider.get_targets" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get all relevant targets for a list of company ids (ISIN). This method should return a list of
 IDataProviderTarget instances.</p>
 <dl class="field-list simple">
@@ -309,8 +388,22 @@ IDataProviderTarget instances.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt id="SBTi.data.ExcelProvider._target_df_to_model">
+<code class="sig-name descname">_target_df_to_model</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">df_targets</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.data.ExcelProvider._target_df_to_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>transforms target Dataframe into list of IDataProviderTarget instances</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>df_targets</strong> – pandas Dataframe with targets</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list containing the targets</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt id="SBTi.data.ExcelProvider.get_company_data">
-<code class="sig-name descname">get_company_data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">company_ids</span><span class="p">:</span> <span class="n">List<span class="p">[</span>str<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.data.ExcelProvider.get_company_data" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_company_data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">company_ids</span><span class="p">:</span> <span class="n">List<span class="p">[</span>str<span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span>IDataProviderCompany<span class="p">]</span><a class="headerlink" href="#SBTi.data.ExcelProvider.get_company_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get all relevant data for a list of company ids (ISIN). This method should return a list of IDataProviderCompany
 instances.</p>
 <dl class="field-list simple">
@@ -325,7 +418,7 @@ instances.</p>
 
 <dl class="py method">
 <dt id="SBTi.data.ExcelProvider.get_sbti_targets">
-<em class="property">abstract </em><code class="sig-name descname">get_sbti_targets</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">companies</span><span class="p">:</span> <span class="n">list</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.data.ExcelProvider.get_sbti_targets" title="Permalink to this definition">¶</a></dt>
+<em class="property">abstract </em><code class="sig-name descname">get_sbti_targets</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">companies</span><span class="p">:</span> <span class="n">list</span></em><span class="sig-paren">)</span> &#x2192; list<a class="headerlink" href="#SBTi.data.ExcelProvider.get_sbti_targets" title="Permalink to this definition">¶</a></dt>
 <dd><p>For each of the companies, get the status of their target (Target set, Committed or No target) as it’s known to
 the SBTi.</p>
 <dl class="field-list simple">
@@ -348,7 +441,7 @@ field.</p>
 <p>Data provider skeleton for Bloomberg.</p>
 <dl class="py method">
 <dt id="SBTi.data.Bloomberg._request">
-<code class="sig-name descname">_request</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">endpoint</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">dict</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.data.Bloomberg._request" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">_request</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">endpoint</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">dict</span></em><span class="sig-paren">)</span> &#x2192; Optional<span class="p">[</span>object<span class="p">]</span><a class="headerlink" href="#SBTi.data.Bloomberg._request" title="Permalink to this definition">¶</a></dt>
 <dd><p>Request data from the server.
 Note: This request does in no way reflect the actual implementation, this is only a stub to show what a
 potential API request COULD look like.</p>
@@ -367,7 +460,7 @@ potential API request COULD look like.</p>
 
 <dl class="py method">
 <dt id="SBTi.data.Bloomberg.get_targets">
-<em class="property">abstract </em><code class="sig-name descname">get_targets</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">company_ids</span><span class="p">:</span> <span class="n">List<span class="p">[</span>str<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.data.Bloomberg.get_targets" title="Permalink to this definition">¶</a></dt>
+<em class="property">abstract </em><code class="sig-name descname">get_targets</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">company_ids</span><span class="p">:</span> <span class="n">List<span class="p">[</span>str<span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span>IDataProviderTarget<span class="p">]</span><a class="headerlink" href="#SBTi.data.Bloomberg.get_targets" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get all relevant targets for a list of company ids (ISIN). This method should return a list of
 IDataProviderTarget instances.</p>
 <dl class="field-list simple">
@@ -382,7 +475,7 @@ IDataProviderTarget instances.</p>
 
 <dl class="py method">
 <dt id="SBTi.data.Bloomberg.get_company_data">
-<em class="property">abstract </em><code class="sig-name descname">get_company_data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">company_ids</span><span class="p">:</span> <span class="n">List<span class="p">[</span>str<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.data.Bloomberg.get_company_data" title="Permalink to this definition">¶</a></dt>
+<em class="property">abstract </em><code class="sig-name descname">get_company_data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">company_ids</span><span class="p">:</span> <span class="n">List<span class="p">[</span>str<span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span>IDataProviderCompany<span class="p">]</span><a class="headerlink" href="#SBTi.data.Bloomberg.get_company_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get all relevant data for a list of company ids (ISIN). This method should return a list of IDataProviderCompany
 instances.</p>
 <dl class="field-list simple">
@@ -397,7 +490,7 @@ instances.</p>
 
 <dl class="py method">
 <dt id="SBTi.data.Bloomberg.get_sbti_targets">
-<em class="property">abstract </em><code class="sig-name descname">get_sbti_targets</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">companies</span><span class="p">:</span> <span class="n">list</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.data.Bloomberg.get_sbti_targets" title="Permalink to this definition">¶</a></dt>
+<em class="property">abstract </em><code class="sig-name descname">get_sbti_targets</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">companies</span><span class="p">:</span> <span class="n">list</span></em><span class="sig-paren">)</span> &#x2192; list<a class="headerlink" href="#SBTi.data.Bloomberg.get_sbti_targets" title="Permalink to this definition">¶</a></dt>
 <dd><p>For each of the companies, get the status of their target (Target set, Committed or No target) as it’s known to
 the SBTi.</p>
 <dl class="field-list simple">
@@ -420,7 +513,7 @@ field.</p>
 <p>Data provider skeleton for CDP.</p>
 <dl class="py method">
 <dt id="SBTi.data.CDP.get_targets">
-<em class="property">abstract </em><code class="sig-name descname">get_targets</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">company_ids</span><span class="p">:</span> <span class="n">List<span class="p">[</span>str<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.data.CDP.get_targets" title="Permalink to this definition">¶</a></dt>
+<em class="property">abstract </em><code class="sig-name descname">get_targets</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">company_ids</span><span class="p">:</span> <span class="n">List<span class="p">[</span>str<span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span>IDataProviderTarget<span class="p">]</span><a class="headerlink" href="#SBTi.data.CDP.get_targets" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get all relevant targets for a list of company ids (ISIN). This method should return a list of
 IDataProviderTarget instances.</p>
 <dl class="field-list simple">
@@ -435,7 +528,7 @@ IDataProviderTarget instances.</p>
 
 <dl class="py method">
 <dt id="SBTi.data.CDP.get_company_data">
-<em class="property">abstract </em><code class="sig-name descname">get_company_data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">company_ids</span><span class="p">:</span> <span class="n">List<span class="p">[</span>str<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.data.CDP.get_company_data" title="Permalink to this definition">¶</a></dt>
+<em class="property">abstract </em><code class="sig-name descname">get_company_data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">company_ids</span><span class="p">:</span> <span class="n">List<span class="p">[</span>str<span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span>IDataProviderCompany<span class="p">]</span><a class="headerlink" href="#SBTi.data.CDP.get_company_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get all relevant data for a list of company ids (ISIN). This method should return a list of IDataProviderCompany
 instances.</p>
 <dl class="field-list simple">
@@ -450,7 +543,7 @@ instances.</p>
 
 <dl class="py method">
 <dt id="SBTi.data.CDP.get_sbti_targets">
-<em class="property">abstract </em><code class="sig-name descname">get_sbti_targets</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">companies</span><span class="p">:</span> <span class="n">list</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.data.CDP.get_sbti_targets" title="Permalink to this definition">¶</a></dt>
+<em class="property">abstract </em><code class="sig-name descname">get_sbti_targets</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">companies</span><span class="p">:</span> <span class="n">list</span></em><span class="sig-paren">)</span> &#x2192; list<a class="headerlink" href="#SBTi.data.CDP.get_sbti_targets" title="Permalink to this definition">¶</a></dt>
 <dd><p>For each of the companies, get the status of their target (Target set, Committed or No target) as it’s known to
 the SBTi.</p>
 <dl class="field-list simple">
@@ -473,7 +566,7 @@ field.</p>
 <p>Data provider skeleton for ISS.</p>
 <dl class="py method">
 <dt id="SBTi.data.ISS.get_targets">
-<em class="property">abstract </em><code class="sig-name descname">get_targets</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">company_ids</span><span class="p">:</span> <span class="n">List<span class="p">[</span>str<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.data.ISS.get_targets" title="Permalink to this definition">¶</a></dt>
+<em class="property">abstract </em><code class="sig-name descname">get_targets</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">company_ids</span><span class="p">:</span> <span class="n">List<span class="p">[</span>str<span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span>IDataProviderTarget<span class="p">]</span><a class="headerlink" href="#SBTi.data.ISS.get_targets" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get all relevant targets for a list of company ids (ISIN). This method should return a list of
 IDataProviderTarget instances.</p>
 <dl class="field-list simple">
@@ -488,7 +581,7 @@ IDataProviderTarget instances.</p>
 
 <dl class="py method">
 <dt id="SBTi.data.ISS.get_company_data">
-<em class="property">abstract </em><code class="sig-name descname">get_company_data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">company_ids</span><span class="p">:</span> <span class="n">List<span class="p">[</span>str<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.data.ISS.get_company_data" title="Permalink to this definition">¶</a></dt>
+<em class="property">abstract </em><code class="sig-name descname">get_company_data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">company_ids</span><span class="p">:</span> <span class="n">List<span class="p">[</span>str<span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span>IDataProviderCompany<span class="p">]</span><a class="headerlink" href="#SBTi.data.ISS.get_company_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get all relevant data for a list of company ids (ISIN). This method should return a list of IDataProviderCompany
 instances.</p>
 <dl class="field-list simple">
@@ -503,7 +596,7 @@ instances.</p>
 
 <dl class="py method">
 <dt id="SBTi.data.ISS.get_sbti_targets">
-<em class="property">abstract </em><code class="sig-name descname">get_sbti_targets</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">companies</span><span class="p">:</span> <span class="n">list</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.data.ISS.get_sbti_targets" title="Permalink to this definition">¶</a></dt>
+<em class="property">abstract </em><code class="sig-name descname">get_sbti_targets</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">companies</span><span class="p">:</span> <span class="n">list</span></em><span class="sig-paren">)</span> &#x2192; list<a class="headerlink" href="#SBTi.data.ISS.get_sbti_targets" title="Permalink to this definition">¶</a></dt>
 <dd><p>For each of the companies, get the status of their target (Target set, Committed or No target) as it’s known to
 the SBTi.</p>
 <dl class="field-list simple">
@@ -526,7 +619,7 @@ field.</p>
 <p>Data provider skeleton for Trucost.</p>
 <dl class="py method">
 <dt id="SBTi.data.Trucost.get_targets">
-<em class="property">abstract </em><code class="sig-name descname">get_targets</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">company_ids</span><span class="p">:</span> <span class="n">List<span class="p">[</span>str<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.data.Trucost.get_targets" title="Permalink to this definition">¶</a></dt>
+<em class="property">abstract </em><code class="sig-name descname">get_targets</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">company_ids</span><span class="p">:</span> <span class="n">List<span class="p">[</span>str<span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span>IDataProviderTarget<span class="p">]</span><a class="headerlink" href="#SBTi.data.Trucost.get_targets" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get all relevant targets for a list of company ids (ISIN). This method should return a list of
 IDataProviderTarget instances.</p>
 <dl class="field-list simple">
@@ -541,7 +634,7 @@ IDataProviderTarget instances.</p>
 
 <dl class="py method">
 <dt id="SBTi.data.Trucost.get_company_data">
-<em class="property">abstract </em><code class="sig-name descname">get_company_data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">company_ids</span><span class="p">:</span> <span class="n">List<span class="p">[</span>str<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.data.Trucost.get_company_data" title="Permalink to this definition">¶</a></dt>
+<em class="property">abstract </em><code class="sig-name descname">get_company_data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">company_ids</span><span class="p">:</span> <span class="n">List<span class="p">[</span>str<span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span>IDataProviderCompany<span class="p">]</span><a class="headerlink" href="#SBTi.data.Trucost.get_company_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get all relevant data for a list of company ids (ISIN). This method should return a list of IDataProviderCompany
 instances.</p>
 <dl class="field-list simple">
@@ -556,7 +649,7 @@ instances.</p>
 
 <dl class="py method">
 <dt id="SBTi.data.Trucost.get_sbti_targets">
-<em class="property">abstract </em><code class="sig-name descname">get_sbti_targets</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">companies</span><span class="p">:</span> <span class="n">list</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.data.Trucost.get_sbti_targets" title="Permalink to this definition">¶</a></dt>
+<em class="property">abstract </em><code class="sig-name descname">get_sbti_targets</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">companies</span><span class="p">:</span> <span class="n">list</span></em><span class="sig-paren">)</span> &#x2192; list<a class="headerlink" href="#SBTi.data.Trucost.get_sbti_targets" title="Permalink to this definition">¶</a></dt>
 <dd><p>For each of the companies, get the status of their target (Target set, Committed or No target) as it’s known to
 the SBTi.</p>
 <dl class="field-list simple">
@@ -579,7 +672,7 @@ field.</p>
 <p>Data provider skeleton for Urgentem.</p>
 <dl class="py method">
 <dt id="SBTi.data.Urgentem.get_targets">
-<em class="property">abstract </em><code class="sig-name descname">get_targets</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">company_ids</span><span class="p">:</span> <span class="n">List<span class="p">[</span>str<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.data.Urgentem.get_targets" title="Permalink to this definition">¶</a></dt>
+<em class="property">abstract </em><code class="sig-name descname">get_targets</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">company_ids</span><span class="p">:</span> <span class="n">List<span class="p">[</span>str<span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span>IDataProviderTarget<span class="p">]</span><a class="headerlink" href="#SBTi.data.Urgentem.get_targets" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get all relevant targets for a list of company ids (ISIN). This method should return a list of
 IDataProviderTarget instances.</p>
 <dl class="field-list simple">
@@ -594,7 +687,7 @@ IDataProviderTarget instances.</p>
 
 <dl class="py method">
 <dt id="SBTi.data.Urgentem.get_company_data">
-<em class="property">abstract </em><code class="sig-name descname">get_company_data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">company_ids</span><span class="p">:</span> <span class="n">List<span class="p">[</span>str<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.data.Urgentem.get_company_data" title="Permalink to this definition">¶</a></dt>
+<em class="property">abstract </em><code class="sig-name descname">get_company_data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">company_ids</span><span class="p">:</span> <span class="n">List<span class="p">[</span>str<span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span>IDataProviderCompany<span class="p">]</span><a class="headerlink" href="#SBTi.data.Urgentem.get_company_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get all relevant data for a list of company ids (ISIN). This method should return a list of IDataProviderCompany
 instances.</p>
 <dl class="field-list simple">
@@ -609,7 +702,7 @@ instances.</p>
 
 <dl class="py method">
 <dt id="SBTi.data.Urgentem.get_sbti_targets">
-<em class="property">abstract </em><code class="sig-name descname">get_sbti_targets</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">companies</span><span class="p">:</span> <span class="n">list</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.data.Urgentem.get_sbti_targets" title="Permalink to this definition">¶</a></dt>
+<em class="property">abstract </em><code class="sig-name descname">get_sbti_targets</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">companies</span><span class="p">:</span> <span class="n">list</span></em><span class="sig-paren">)</span> &#x2192; list<a class="headerlink" href="#SBTi.data.Urgentem.get_sbti_targets" title="Permalink to this definition">¶</a></dt>
 <dd><p>For each of the companies, get the status of their target (Target set, Committed or No target) as it’s known to
 the SBTi.</p>
 <dl class="field-list simple">
@@ -621,6 +714,7 @@ the SBTi.</p>
 
 </dd></dl>
 
+</div>
 </div>
 </div>
 
@@ -635,11 +729,19 @@ the SBTi.</p>
 
   <div role="contentinfo">
     <p>
+        
         &copy; Copyright 2020, Science Based Targets
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -650,7 +752,6 @@ the SBTi.</p>
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {

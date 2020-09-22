@@ -1,8 +1,8 @@
-********************
-REST API & UI
-********************
+***********************************
+Getting Started Using REST API & UI
+***********************************
 The provided REST API makes it easy to integrate the SBTi temperature alignment tool as a microservice in your current IT infrastructure.
-Optionally you can also run the REST API with a small frontend, that makes testing substantially easier.
+Optionally you can also run the REST API with a small frontend, that makes testing  easier.
 
 Usage
 ====================
@@ -18,17 +18,17 @@ Locally
 
 * **Step 1**: Install Docker desktop
 
-For testing locally on your own Windows or Mac PC we first need to have a Docker engine running.
-For Linux users, this natively available in your OS and you can skip step 1. Docker provides some excellent installation
+For testing locally on your own Windows or Mac PC you first need to have a Docker engine running.
+For Linux users, this is natively available in your OS and you can skip step 1. Docker provides installation
 instructions for `Windows <https://docs.docker.com/docker-for-windows/install/>`_ and
-`Mac <https://docs.docker.com/docker-for-mac/install/>`_. After you've finished these installation guides, we'll continue
+`Mac <https://docs.docker.com/docker-for-mac/install/>`_. After you have finished these installation guides, we'll continue
 with step 2.
 
 * **Step 2**: Download and run the SBTi container.
 The project consists of two containers, the `API <https://hub.docker.com/r/sbti/api>`_ and the `UI <https://hub.docker.com/r/sbti/ui>`_, both of which can be found on Docker Hub.
 You can choose whether you only want to run the API or also the UI. To run them, you need to download a compose file. If you only want to run the API, you need to use `this file <https://raw.githubusercontent.com/OFBDABV/SBTi_api/master/docker-compose.yml>`_, if you also want the UI, you should use `this file <https://raw.githubusercontent.com/OFBDABV/SBTi_api/master/docker-compose-ui.yml>`_.
 
-Now download the file of your choose and store it as `docker-compose.yml` in your home directory.
+Now download the file of your choice and store it as `docker-compose.yml` in your home directory.
 
 *For Windows users*
 
@@ -52,7 +52,7 @@ Now download the file of your choose and store it as `docker-compose.yml` in you
 
 .. note:: This command assumes that your command prompt is currently in the same directory as the docker-compose.yml file that you downloaded earlier.
 
-4. This commando starts retrieving the latest version of the tool and will expose it at localhost:5000
+4. This command starts retrieving the latest version of the tool and will expose it at localhost:5000
 5. Open your browser and go to http://localhost:5000 to access the tool. If you're running the UI, the UI will be on http://localhost:5000 and the API on http://localhost:5001
 
 .. image:: restapi-deploy-windows-3.png
@@ -63,24 +63,24 @@ Now download the file of your choose and store it as `docker-compose.yml` in you
 
 *For Mac users*
 
-1. One of the quickest and easiest ways to open Terminal on Mac is with Spotlight Search
-2. If you have the Spotlight Search button in your menu bar, click it. Otherwise, you can use the keyboard shortcut Command + Space
-3. Type in "Terminal"
-4. You should see the Terminal application under Top Hit at the top of your results. Double-click it and Terminal will open.
+One of the quickest and easiest ways to open Terminal on Mac is with Spotlight Search
+1. If you have the Spotlight Search button in your menu bar, click it. Otherwise, you can use the keyboard shortcut Command + Space
+2. Type in "Terminal"
+3. You should see the Terminal application under Top Hit at the top of your results. Double-click it and Terminal will open.
 
 .. image:: restapi-deploy-mac-1.jpg
     :width: 500px
     :align: center
     :alt: alternate text
 
-5. Enter the following command and hit enter::
+4. Enter the following command and hit enter::
 
     docker-compose up
 
 .. note:: This command assumes that your command prompt is currently in the same directory as the docker-compose.yml file that you downloaded earlier.
 
-4. This commando starts retrieving the latest version of the tool and will expose it at localhost:5000
-5. Open your browser and go to http://localhost:5000 to access the tool. If you're running the UI, the UI will be on http://localhost:5000 and the API on http://localhost:5001
+5. This commando starts retrieving the latest version of the tool and will expose it at localhost:5000
+6. Open your browser and go to http://localhost:5000 to access the tool. If you're running the UI, the UI will be on http://localhost:5000 and the API on http://localhost:5001
 
 Amazon AWS
 *********************

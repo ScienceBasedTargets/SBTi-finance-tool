@@ -1,15 +1,19 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8">
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>SBTi Temperature Alignment tool’s documentation &mdash; SBTi Temperature Alignment tool  documentation</title>
+  <title>SBTi-Finance Tool for Temperature Scoring &amp; Portfolio Coverage &mdash; SBTi Temperature Alignment tool  documentation</title>
   
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
 
   
   
@@ -17,7 +21,9 @@
   
 
   
-  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -25,18 +31,14 @@
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
     
-
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Getting Started" href="getting_started.html" /> 
+    <link rel="next" title="SBTi-Finance Tool for Temperature Scoring &amp; Portfolio Coverage" href="1_analysis_example.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -50,7 +52,7 @@
           
 
           
-            <a href="#" class="icon icon-home"> SBTi Temperature Alignment tool
+            <a href="#" class="icon icon-home" alt="Documentation Home"> SBTi Temperature Alignment tool
           
 
           
@@ -73,6 +75,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -82,15 +85,20 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="1_analysis_example.html">SBTi-Finance Tool for Temperature Scoring &amp; Portfolio Coverage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started Using Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rest_api.html">Getting Started Using REST API &amp; UI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DataRequirements.html">Data Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Legends.html">Data Legends</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="rest_api.html">REST API &amp; UI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="links.html">Project Links</a></li>
 <li class="toctree-l1"><a class="reference internal" href="autoapi/index.html">API Reference</a></li>
 </ul>
 
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -129,9 +137,9 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="#">Docs</a> &raquo;</li>
+      <li><a href="#" class="icon icon-home"></a> &raquo;</li>
         
-      <li>SBTi Temperature Alignment tool’s documentation</li>
+      <li>SBTi-Finance Tool for Temperature Scoring &amp; Portfolio Coverage</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -150,26 +158,48 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="sbti-temperature-alignment-tool-s-documentation">
-<h1>SBTi Temperature Alignment tool’s documentation<a class="headerlink" href="#sbti-temperature-alignment-tool-s-documentation" title="Permalink to this headline">¶</a></h1>
-<p>This package helps companies and financial institutions to assess the temperature alignment of current targets,
-commitments, and investment and lending portfolios, and to use this information to develop targets for official
-validation by the SBTi.</p>
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="sbti-finance-tool-for-temperature-scoring-portfolio-coverage">
+<h1>SBTi-Finance Tool for Temperature Scoring &amp; Portfolio Coverage<a class="headerlink" href="#sbti-finance-tool-for-temperature-scoring-portfolio-coverage" title="Permalink to this headline">¶</a></h1>
+<p><em>Do you want to understand what drives the temperature score of your portfolio to make better engagement and investment decisions?</em></p>
+<a class="reference internal image-reference" href="_images/JN_HeroImage.jpg"><img alt="alternate text" class="align-center" src="_images/JN_HeroImage.jpg" style="width: 700px;" /></a>
+<div class="section" id="an-introduction-to-the-technical-documentation">
+<h2>An introduction to the technical documentation<a class="headerlink" href="#an-introduction-to-the-technical-documentation" title="Permalink to this headline">¶</a></h2>
+</div>
 <div class="section" id="quickstart">
 <h2>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline">¶</a></h2>
 <p>To get up-and-running quickly we’ve got a no-code and a Python option:</p>
 <ul class="simple">
 <li><p><strong>No-code</strong>: Run the project locally as a <a class="reference external" href="rest_api.html#locally">web application using Docker</a></p></li>
-<li><p><strong>Python</strong>: Run a Jupyter notebook, without any installation in <a class="reference external" href="getting_started.html#google-colab">Google Colab</a> or <a class="reference external" href="getting_started.html#jupyter-notebooks">locally</a>.</p></li>
+<li><p><strong>Python</strong>: Run a Jupyter notebook, without any installation in <a class="reference external" href="getting_started.html#google-colab">Google Colab</a> or <a class="reference external" href="getting_started.html#jupyter-notebooks">locally</a>. In addition one can found a static version of the detailed analysis notebook in the <a class="reference external" href="1_analysis_example.html">SBTi-Finance Tool for Temperature Scoring &amp; Portfolio Coverage section</a></p></li>
 </ul>
 </div>
 <div class="section" id="project-structure">
 <h2>Project structure<a class="headerlink" href="#project-structure" title="Permalink to this headline">¶</a></h2>
-<p>This package helps companies and financial institutions to assess the temperature alignment of current
-targets, commitments, and investment and lending portfolios, and to use this information to develop
-targets for official validation by the SBTi.</p>
-<p>This tool can be used either as a standalone Python package, a REST API or as a simple webapp which provides a simple skin on the API.
-So, the SBTi toolkit caters for three types of usage:
+<p>This tool can be used either as a standalone Python package, a REST API or as a simple webapp which provides a simple skin on the API. So, the SBTi toolkit caters for three types of usage:
 - Users can integrate the Python package in their codebase
 - The tool can be included as a Microservice (containerised REST API) in any IT infrastructure (in the cloud or on premise)
 - As an webapp, exposing the functionality with a simple user interface.</p>
@@ -200,7 +230,68 @@ So, the SBTi toolkit caters for three types of usage:
 <div class="toctree-wrapper compound">
 <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="1_analysis_example.html">SBTi-Finance Tool for Temperature Scoring &amp; Portfolio Coverage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="1_analysis_example.html#Introduction-to-temperature-scoring-and-portfolio-coverage-methods">Introduction to temperature scoring and portfolio coverage methods</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="1_analysis_example.html#Why-has-SBTi-built-this-tool?">Why has SBTi built this tool?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="1_analysis_example.html#What-can-you-use-the-SBTi-Finance-Tool-for?">What can you use the SBTi-Finance Tool for?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="1_analysis_example.html#What-data-do-I-need-to-use-the-tool?">What data do I need to use the tool?</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="1_analysis_example.html#Company-identifiers">Company identifiers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="1_analysis_example.html#Corporate-GHG-targets">Corporate GHG targets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="1_analysis_example.html#GHG-Emission-Data">GHG Emission Data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="1_analysis_example.html#Portfolio-financial-data">Portfolio financial data</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="1_analysis_example.html#Where-do-I-get-the-data?">Where do I get the data?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="1_analysis_example.html#How-are-temperature-scores-produced?">How are temperature scores produced?</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="1_analysis_example.html#Start-your-analysis-here">Start your analysis here</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="1_analysis_example.html#Install-the-SBTi-Python-module">Install the SBTi Python module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="1_analysis_example.html#Create-a-data-provider">Create a data provider</a></li>
+<li class="toctree-l4"><a class="reference internal" href="1_analysis_example.html#Load-your-portfolio">Load your portfolio</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="1_analysis_example.html#Step-1-&amp;-2:-Aggregate-multiple-company-targets-to-produce-company-score">Step 1 &amp; 2: Aggregate multiple company targets to produce company score</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="1_analysis_example.html#How-to-convert-a-target-to-a-temperature?">How to convert a target to a temperature?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="1_analysis_example.html#Scope-Classification">Scope Classification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="1_analysis_example.html#Timeframe">Timeframe</a></li>
+<li class="toctree-l3"><a class="reference internal" href="1_analysis_example.html#Scope-Coverage">Scope Coverage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="1_analysis_example.html#Company-Temperature-Scores">Company Temperature Scores</a></li>
+<li class="toctree-l3"><a class="reference internal" href="1_analysis_example.html#Default-Score">Default Score</a></li>
+<li class="toctree-l3"><a class="reference internal" href="1_analysis_example.html#Calculate-the-company-temperature-scores">Calculate the company temperature scores</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="1_analysis_example.html#Step-3:-Calculate-a-portfolio-level-temperature-score">Step 3: Calculate a portfolio level temperature score</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="1_analysis_example.html#Portfolio-coverage">Portfolio coverage</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="1_analysis_example.html#Step-4:-How-can-I-improve-my-portfolio’s-temperature-score?">Step 4: How can I improve my portfolio’s temperature score?</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="1_analysis_example.html#Analysing-hotspots">Analysing hotspots</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="1_analysis_example.html#Quick-analysis">Quick analysis</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="1_analysis_example.html#Sector-analysis">Sector analysis</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="1_analysis_example.html#id1">Quick analysis</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="1_analysis_example.html#Companies-to-engage-with">Companies to engage with</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="1_analysis_example.html#id2">Quick analysis</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="1_analysis_example.html#What-if-analysis">What-if analysis</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="1_analysis_example.html#Portfolio-temperature-score-impact">Portfolio temperature score impact</a></li>
+<li class="toctree-l4"><a class="reference internal" href="1_analysis_example.html#Sector-temperature-score-impact">Sector temperature score impact</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="1_analysis_example.html#Company-temperature-score-contribution-impact">Company temperature score contribution impact</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="1_analysis_example.html#Save-your-data-for-further-analysis">Save your data for further analysis</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started Using Python</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="getting_started.html#google-colab">Google Colab</a></li>
 <li class="toctree-l2"><a class="reference internal" href="getting_started.html#jupyter-notebooks">Jupyter notebooks</a></li>
 <li class="toctree-l2"><a class="reference internal" href="getting_started.html#starting-from-scratch">Starting from scratch</a><ul class="simple">
@@ -208,24 +299,7 @@ So, the SBTi toolkit caters for three types of usage:
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="contributing.html#submitting-a-bug-report-or-a-feature-request">Submitting a bug report or a feature request</a></li>
-<li class="toctree-l2"><a class="reference internal" href="contributing.html#contributing-code">Contributing code</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="contributing.html#getting-started">Getting started</a></li>
-<li class="toctree-l3"><a class="reference internal" href="contributing.html#coding-guidelines">Coding guidelines</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="contributing.html#releasing">Releasing</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="contributing.html#pypi-release">PyPi release</a></li>
-<li class="toctree-l3"><a class="reference internal" href="contributing.html#generate-documentation">Generate documentation</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="contributing.html#code-of-conduct">Code of conduct</a><ul class="simple">
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="rest_api.html">REST API &amp; UI</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="rest_api.html">Getting Started Using REST API &amp; UI</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="rest_api.html#usage">Usage</a></li>
 <li class="toctree-l2"><a class="reference internal" href="rest_api.html#installation">Installation</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="rest_api.html#locally">Locally</a></li>
@@ -236,6 +310,42 @@ So, the SBTi toolkit caters for three types of usage:
 </li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="DataRequirements.html">Data Requirements</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="DataRequirements.html#portfolio-data">Portfolio data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="DataRequirements.html#company-data">Company data</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="DataRequirements.html#target-data">Target data</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="DataRequirements.html#sbti-status">SBTi status</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Legends.html">Data Legends</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Legends.html#input-data">Input Data</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Legends.html#portfolio-data">Portfolio Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Legends.html#fundamental-data">Fundamental Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Legends.html#target-data">Target data</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Legends.html#output-data">Output data</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#submitting-a-bug-report-or-a-feature-request">Submitting a bug report or a feature request</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#contributing-code">Contributing code</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#getting-started">Getting started</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#coding-guidelines">Coding guidelines</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#releasing">Releasing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#generate-documentation">Generate documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#code-of-conduct">Code of conduct</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="links.html">Project Links</a></li>
 <li class="toctree-l1"><a class="reference internal" href="autoapi/index.html">API Reference</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="autoapi/SBTi/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SBTi</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="autoapi/SBTi/index.html#subpackages">Subpackages</a><ul>
@@ -269,7 +379,7 @@ So, the SBTi toolkit caters for three types of usage:
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="getting_started.html" class="btn btn-neutral float-right" title="Getting Started" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="1_analysis_example.html" class="btn btn-neutral float-right" title="SBTi-Finance Tool for Temperature Scoring &amp; Portfolio Coverage" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
     </div>
@@ -279,11 +389,19 @@ So, the SBTi toolkit caters for three types of usage:
 
   <div role="contentinfo">
     <p>
+        
         &copy; Copyright 2020, Science Based Targets
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -294,7 +412,6 @@ So, the SBTi toolkit caters for three types of usage:
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {

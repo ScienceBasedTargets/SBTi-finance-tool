@@ -1,0 +1,487 @@
+:mod:`SBTi.interfaces`
+======================
+
+.. py:module:: SBTi.interfaces
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   SBTi.interfaces.AggregationContribution
+   SBTi.interfaces.Aggregation
+   SBTi.interfaces.ScoreAggregation
+   SBTi.interfaces.ScoreAggregationScopes
+   SBTi.interfaces.ScoreAggregations
+   SBTi.interfaces.ScenarioInterface
+   SBTi.interfaces.PortfolioCompany
+   SBTi.interfaces.IDataProviderCompany
+   SBTi.interfaces.SortableEnum
+   SBTi.interfaces.EScope
+   SBTi.interfaces.ETimeFrames
+   SBTi.interfaces.IDataProviderTarget
+
+
+
+.. py:class:: AggregationContribution
+
+   Bases: :class:`pydantic.BaseModel`
+
+   .. attribute:: company_name
+      :annotation: :str
+
+      
+
+   .. attribute:: company_id
+      :annotation: :str
+
+      
+
+   .. attribute:: temperature_score
+      :annotation: :float
+
+      
+
+   .. attribute:: contribution_relative
+      :annotation: :Optional[float]
+
+      
+
+   .. attribute:: contribution
+      :annotation: :Optional[float]
+
+      
+
+   .. method:: __getitem__(self, item)
+
+
+
+.. py:class:: Aggregation
+
+   Bases: :class:`pydantic.BaseModel`
+
+   .. attribute:: score
+      :annotation: :float
+
+      
+
+   .. attribute:: proportion
+      :annotation: :float
+
+      
+
+   .. attribute:: contributions
+      :annotation: :List[AggregationContribution]
+
+      
+
+   .. method:: __getitem__(self, item)
+
+
+
+.. py:class:: ScoreAggregation
+
+   Bases: :class:`pydantic.BaseModel`
+
+   .. attribute:: all
+      :annotation: :Aggregation
+
+      
+
+   .. attribute:: influence_percentage
+      :annotation: :float
+
+      
+
+   .. attribute:: grouped
+      :annotation: :Dict[str, Aggregation]
+
+      
+
+   .. method:: __getitem__(self, item)
+
+
+
+.. py:class:: ScoreAggregationScopes
+
+   Bases: :class:`pydantic.BaseModel`
+
+   .. attribute:: S1S2
+      :annotation: :Optional[ScoreAggregation]
+
+      
+
+   .. attribute:: S3
+      :annotation: :Optional[ScoreAggregation]
+
+      
+
+   .. attribute:: S1S2S3
+      :annotation: :Optional[ScoreAggregation]
+
+      
+
+   .. method:: __getitem__(self, item)
+
+
+
+.. py:class:: ScoreAggregations
+
+   Bases: :class:`pydantic.BaseModel`
+
+   .. attribute:: short
+      :annotation: :Optional[ScoreAggregationScopes]
+
+      
+
+   .. attribute:: mid
+      :annotation: :Optional[ScoreAggregationScopes]
+
+      
+
+   .. attribute:: long
+      :annotation: :Optional[ScoreAggregationScopes]
+
+      
+
+   .. method:: __getitem__(self, item)
+
+
+
+.. py:class:: ScenarioInterface
+
+   Bases: :class:`pydantic.BaseModel`
+
+   .. attribute:: number
+      :annotation: :int
+
+      
+
+   .. attribute:: engagement_type
+      :annotation: :Optional[str]
+
+      
+
+
+.. py:class:: PortfolioCompany
+
+   Bases: :class:`pydantic.BaseModel`
+
+   .. attribute:: company_name
+      :annotation: :str
+
+      
+
+   .. attribute:: company_id
+      :annotation: :str
+
+      
+
+   .. attribute:: company_isin
+      :annotation: :Optional[str]
+
+      
+
+   .. attribute:: investment_value
+      :annotation: :float
+
+      
+
+   .. attribute:: engagement_target
+      :annotation: :Optional[bool] = False
+
+      
+
+   .. attribute:: user_fields
+      :annotation: :Optional[dict]
+
+      
+
+
+.. py:class:: IDataProviderCompany
+
+   Bases: :class:`pydantic.BaseModel`
+
+   .. attribute:: company_name
+      :annotation: :str
+
+      
+
+   .. attribute:: company_id
+      :annotation: :str
+
+      
+
+   .. attribute:: isic
+      :annotation: :str
+
+      
+
+   .. attribute:: ghg_s1s2
+      :annotation: :float
+
+      
+
+   .. attribute:: ghg_s3
+      :annotation: :float
+
+      
+
+   .. attribute:: country
+      :annotation: :Optional[str]
+
+      
+
+   .. attribute:: region
+      :annotation: :Optional[str]
+
+      
+
+   .. attribute:: sector
+      :annotation: :Optional[str]
+
+      
+
+   .. attribute:: industry_level_1
+      :annotation: :Optional[str]
+
+      
+
+   .. attribute:: industry_level_2
+      :annotation: :Optional[str]
+
+      
+
+   .. attribute:: industry_level_3
+      :annotation: :Optional[str]
+
+      
+
+   .. attribute:: industry_level_4
+      :annotation: :Optional[str]
+
+      
+
+   .. attribute:: company_revenue
+      :annotation: :Optional[float]
+
+      
+
+   .. attribute:: company_market_cap
+      :annotation: :Optional[float]
+
+      
+
+   .. attribute:: company_enterprise_value
+      :annotation: :Optional[float]
+
+      
+
+   .. attribute:: company_total_assets
+      :annotation: :Optional[float]
+
+      
+
+   .. attribute:: company_cash_equivalents
+      :annotation: :Optional[float]
+
+      
+
+   .. attribute:: sbti_validated
+      :annotation: :bool
+
+      
+
+
+.. py:class:: SortableEnum
+
+   Bases: :class:`enum.Enum`
+
+   Generic enumeration.
+
+   Derive from this class to define new enumerations.
+
+   .. method:: __str__(self)
+
+      Return str(self).
+
+
+   .. method:: __ge__(self, other)
+
+      Return self>=value.
+
+
+   .. method:: __gt__(self, other)
+
+      Return self>value.
+
+
+   .. method:: __le__(self, other)
+
+      Return self<=value.
+
+
+   .. method:: __lt__(self, other)
+
+      Return self<value.
+
+
+
+.. py:class:: EScope
+
+   Bases: :class:`SBTi.interfaces.SortableEnum`
+
+   Generic enumeration.
+
+   Derive from this class to define new enumerations.
+
+   .. attribute:: S1
+      :annotation: = S1
+
+      
+
+   .. attribute:: S2
+      :annotation: = S2
+
+      
+
+   .. attribute:: S3
+      :annotation: = S3
+
+      
+
+   .. attribute:: S1S2
+      :annotation: = S1+S2
+
+      
+
+   .. attribute:: S1S2S3
+      :annotation: = S1+S2+S3
+
+      
+
+   .. method:: get_result_scopes(cls) -> List['EScope']
+      :classmethod:
+
+      Get a list of scopes that should be calculated if the user leaves it open.
+
+      :return: A list of EScope objects
+
+
+
+.. py:class:: ETimeFrames
+
+   Bases: :class:`SBTi.interfaces.SortableEnum`
+
+   Generic enumeration.
+
+   Derive from this class to define new enumerations.
+
+   .. attribute:: SHORT
+      :annotation: = short
+
+      
+
+   .. attribute:: MID
+      :annotation: = mid
+
+      
+
+   .. attribute:: LONG
+      :annotation: = long
+
+      
+
+
+.. py:class:: IDataProviderTarget
+
+   Bases: :class:`pydantic.BaseModel`
+
+   .. attribute:: company_id
+      :annotation: :str
+
+      
+
+   .. attribute:: target_type
+      :annotation: :str
+
+      
+
+   .. attribute:: intensity_metric
+      :annotation: :Optional[str]
+
+      
+
+   .. attribute:: scope
+      :annotation: :EScope
+
+      
+
+   .. attribute:: coverage_s1
+      :annotation: :float
+
+      
+
+   .. attribute:: coverage_s2
+      :annotation: :float
+
+      
+
+   .. attribute:: coverage_s3
+      :annotation: :float
+
+      
+
+   .. attribute:: reduction_ambition
+      :annotation: :float
+
+      
+
+   .. attribute:: base_year
+      :annotation: :int
+
+      
+
+   .. attribute:: base_year_ghg_s1
+      :annotation: :float
+
+      
+
+   .. attribute:: base_year_ghg_s2
+      :annotation: :float
+
+      
+
+   .. attribute:: base_year_ghg_s3
+      :annotation: :float
+
+      
+
+   .. attribute:: start_year
+      :annotation: :Optional[int]
+
+      
+
+   .. attribute:: end_year
+      :annotation: :int
+
+      
+
+   .. attribute:: time_frame
+      :annotation: :Optional[ETimeFrames]
+
+      
+
+   .. attribute:: achieved_reduction
+      :annotation: :Optional[float] = 0
+
+      
+
+   .. method:: validate_e(cls, val)
+
+
+

@@ -1,8 +1,7 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8">
   
@@ -12,12 +11,19 @@
   
 
   
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/theme_overrides.css" type="text/css" />
+
+  
   
   
   
 
   
-  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
@@ -25,15 +31,11 @@
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
         <script src="../../../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
     
-
-  
-  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
 </head>
@@ -49,7 +51,7 @@
           
 
           
-            <a href="../../../index.html" class="icon icon-home"> SBTi Temperature Alignment tool
+            <a href="../../../index.html" class="icon icon-home" alt="Documentation Home"> SBTi Temperature Alignment tool
           
 
           
@@ -72,6 +74,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -81,15 +84,20 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../1_analysis_example.html">SBTi-Finance Tool for Temperature Scoring &amp; Portfolio Coverage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started Using Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rest_api.html">Getting Started Using REST API &amp; UI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../DataRequirements.html">Data Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Legends.html">Data Legends</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">Contributing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../rest_api.html">REST API &amp; UI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../links.html">Project Links</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../index.html">API Reference</a></li>
 </ul>
 
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -128,7 +136,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
         
       <li><code class="xref py py-mod docutils literal notranslate"><span class="pre">SBTi.interfaces</span></code></li>
     
@@ -149,10 +157,80 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="module-SBTi.interfaces">
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="module-SBTi.interfaces">
 <span id="sbti-interfaces"></span><h1><a class="reference internal" href="#module-SBTi.interfaces" title="SBTi.interfaces"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SBTi.interfaces</span></code></a><a class="headerlink" href="#module-SBTi.interfaces" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#SBTi.interfaces.AggregationContribution" title="SBTi.interfaces.AggregationContribution"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AggregationContribution</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#SBTi.interfaces.Aggregation" title="SBTi.interfaces.Aggregation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Aggregation</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#SBTi.interfaces.ScoreAggregation" title="SBTi.interfaces.ScoreAggregation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ScoreAggregation</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#SBTi.interfaces.ScoreAggregationScopes" title="SBTi.interfaces.ScoreAggregationScopes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ScoreAggregationScopes</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#SBTi.interfaces.ScoreAggregations" title="SBTi.interfaces.ScoreAggregations"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ScoreAggregations</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#SBTi.interfaces.ScenarioInterface" title="SBTi.interfaces.ScenarioInterface"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ScenarioInterface</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#SBTi.interfaces.PortfolioCompany" title="SBTi.interfaces.PortfolioCompany"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PortfolioCompany</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#SBTi.interfaces.IDataProviderCompany" title="SBTi.interfaces.IDataProviderCompany"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IDataProviderCompany</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#SBTi.interfaces.SortableEnum" title="SBTi.interfaces.SortableEnum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SortableEnum</span></code></a></p></td>
+<td><p>Generic enumeration.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#SBTi.interfaces.EScope" title="SBTi.interfaces.EScope"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EScope</span></code></a></p></td>
+<td><p>Generic enumeration.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#SBTi.interfaces.ETimeFrames" title="SBTi.interfaces.ETimeFrames"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ETimeFrames</span></code></a></p></td>
+<td><p>Generic enumeration.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#SBTi.interfaces.IDataProviderTarget" title="SBTi.interfaces.IDataProviderTarget"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IDataProviderTarget</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
 <dl class="py class">
 <dt id="SBTi.interfaces.AggregationContribution">
 <em class="property">class </em><code class="sig-prename descclassname">SBTi.interfaces.</code><code class="sig-name descname">AggregationContribution</code><a class="headerlink" href="#SBTi.interfaces.AggregationContribution" title="Permalink to this definition">¶</a></dt>
@@ -335,7 +413,7 @@
 
 <dl class="py attribute">
 <dt id="SBTi.interfaces.PortfolioCompany.engagement_target">
-<code class="sig-name descname">engagement_target</code><em class="property"> :Optional[str] = False</em><a class="headerlink" href="#SBTi.interfaces.PortfolioCompany.engagement_target" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">engagement_target</code><em class="property"> :Optional[bool] = False</em><a class="headerlink" href="#SBTi.interfaces.PortfolioCompany.engagement_target" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -361,7 +439,7 @@
 
 <dl class="py attribute">
 <dt id="SBTi.interfaces.IDataProviderCompany.isic">
-<code class="sig-name descname">isic</code><em class="property"> :Optional[str]</em><a class="headerlink" href="#SBTi.interfaces.IDataProviderCompany.isic" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">isic</code><em class="property"> :str</em><a class="headerlink" href="#SBTi.interfaces.IDataProviderCompany.isic" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -445,30 +523,37 @@
 <dt id="SBTi.interfaces.SortableEnum">
 <em class="property">class </em><code class="sig-prename descclassname">SBTi.interfaces.</code><code class="sig-name descname">SortableEnum</code><a class="headerlink" href="#SBTi.interfaces.SortableEnum" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
+<p>Generic enumeration.</p>
+<p>Derive from this class to define new enumerations.</p>
 <dl class="py method">
 <dt id="SBTi.interfaces.SortableEnum.__str__">
 <code class="sig-name descname">__str__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.interfaces.SortableEnum.__str__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Return str(self).</p>
+</dd></dl>
 
 <dl class="py method">
 <dt id="SBTi.interfaces.SortableEnum.__ge__">
 <code class="sig-name descname">__ge__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">other</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.interfaces.SortableEnum.__ge__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Return self&gt;=value.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt id="SBTi.interfaces.SortableEnum.__gt__">
 <code class="sig-name descname">__gt__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">other</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.interfaces.SortableEnum.__gt__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Return self&gt;value.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt id="SBTi.interfaces.SortableEnum.__le__">
 <code class="sig-name descname">__le__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">other</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.interfaces.SortableEnum.__le__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Return self&lt;=value.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt id="SBTi.interfaces.SortableEnum.__lt__">
 <code class="sig-name descname">__lt__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">other</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.interfaces.SortableEnum.__lt__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Return self&lt;value.</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -476,6 +561,8 @@
 <dt id="SBTi.interfaces.EScope">
 <em class="property">class </em><code class="sig-prename descclassname">SBTi.interfaces.</code><code class="sig-name descname">EScope</code><a class="headerlink" href="#SBTi.interfaces.EScope" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#SBTi.interfaces.SortableEnum" title="SBTi.interfaces.SortableEnum"><code class="xref py py-class docutils literal notranslate"><span class="pre">SBTi.interfaces.SortableEnum</span></code></a></p>
+<p>Generic enumeration.</p>
+<p>Derive from this class to define new enumerations.</p>
 <dl class="py attribute">
 <dt id="SBTi.interfaces.EScope.S1">
 <code class="sig-name descname">S1</code><em class="property"> = S1</em><a class="headerlink" href="#SBTi.interfaces.EScope.S1" title="Permalink to this definition">¶</a></dt>
@@ -503,7 +590,7 @@
 
 <dl class="py method">
 <dt id="SBTi.interfaces.EScope.get_result_scopes">
-<em class="property">classmethod </em><code class="sig-name descname">get_result_scopes</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cls</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.interfaces.EScope.get_result_scopes" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="sig-name descname">get_result_scopes</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cls</span></em><span class="sig-paren">)</span> &#x2192; List[‘EScope’]<a class="headerlink" href="#SBTi.interfaces.EScope.get_result_scopes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a list of scopes that should be calculated if the user leaves it open.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -518,6 +605,8 @@
 <dt id="SBTi.interfaces.ETimeFrames">
 <em class="property">class </em><code class="sig-prename descclassname">SBTi.interfaces.</code><code class="sig-name descname">ETimeFrames</code><a class="headerlink" href="#SBTi.interfaces.ETimeFrames" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#SBTi.interfaces.SortableEnum" title="SBTi.interfaces.SortableEnum"><code class="xref py py-class docutils literal notranslate"><span class="pre">SBTi.interfaces.SortableEnum</span></code></a></p>
+<p>Generic enumeration.</p>
+<p>Derive from this class to define new enumerations.</p>
 <dl class="py attribute">
 <dt id="SBTi.interfaces.ETimeFrames.SHORT">
 <code class="sig-name descname">SHORT</code><em class="property"> = short</em><a class="headerlink" href="#SBTi.interfaces.ETimeFrames.SHORT" title="Permalink to this definition">¶</a></dt>
@@ -628,6 +717,7 @@
 
 </div>
 </div>
+</div>
 
 
            </div>
@@ -640,11 +730,19 @@
 
   <div role="contentinfo">
     <p>
+        
         &copy; Copyright 2020, Science Based Targets
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -655,7 +753,6 @@
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {

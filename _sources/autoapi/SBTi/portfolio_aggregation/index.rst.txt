@@ -7,6 +7,15 @@
 Module Contents
 ---------------
 
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   SBTi.portfolio_aggregation.PortfolioAggregationMethod
+   SBTi.portfolio_aggregation.PortfolioAggregation
+
+
 
 .. py:class:: PortfolioAggregationMethod
 
@@ -50,9 +59,8 @@ Module Contents
 
       
 
-   .. method:: is_emissions_based(method: PortfolioAggregationMethod)
+   .. method:: is_emissions_based(method: PortfolioAggregationMethod) -> bool
       :staticmethod:
-
 
       Check whether a given method is emissions-based (i.e. it uses the emissions to calculate the aggregation).
 
@@ -60,9 +68,8 @@ Module Contents
       :return:
 
 
-   .. method:: get_value_column(method: PortfolioAggregationMethod, column_config: Type[ColumnsConfig])
+   .. method:: get_value_column(method: PortfolioAggregationMethod, column_config: Type[ColumnsConfig]) -> str
       :staticmethod:
-
 
 
 
@@ -78,7 +85,6 @@ Module Contents
 
    .. method:: _check_column(self, data: pd.DataFrame, column: str)
 
-
       Check if a certain column is filled for all companies. If not throw an error.
 
       :param data: The data to check
@@ -86,8 +92,7 @@ Module Contents
       :return:
 
 
-   .. method:: _calculate_aggregate_score(self, data: pd.DataFrame, input_column: str, portfolio_aggregation_method: PortfolioAggregationMethod)
-
+   .. method:: _calculate_aggregate_score(self, data: pd.DataFrame, input_column: str, portfolio_aggregation_method: PortfolioAggregationMethod) -> pd.Series
 
       Aggregate the scores in a given column based on a certain portfolio aggregation method.
 

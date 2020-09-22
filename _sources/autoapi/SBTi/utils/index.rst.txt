@@ -1,0 +1,111 @@
+:mod:`SBTi.utils`
+=================
+
+.. py:module:: SBTi.utils
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   SBTi.utils.get_data_providers
+   SBTi.utils.get_company_data
+   SBTi.utils.get_targets
+   SBTi.utils._flatten_user_fields
+   SBTi.utils._make_isin_map
+   SBTi.utils.dataframe_to_portfolio
+   SBTi.utils.get_data
+   SBTi.utils.calculate
+
+
+.. data:: DATA_PROVIDER_MAP
+   :annotation: :Dict[str, Type[data.DataProvider]]
+
+   
+
+.. function:: get_data_providers(data_providers_configs: List[dict], data_providers_input: List[str]) -> List[data.DataProvider]
+
+   Determines which data provider and in which order should be used.
+
+   :param data_providers_configs: A list of data provider configurations
+   :param data_providers_input: A list of data provider names
+   :return: a list of data providers in order.
+
+
+.. function:: get_company_data(data_providers: list, company_ids: List[str]) -> List[IDataProviderCompany]
+
+   Get the company data in a waterfall method, given a list of companies and a list of data providers. This will go
+   through the list of data providers and retrieve the required info until either there are no companies left or there
+   are no data providers left.
+
+   :param data_providers: A list of data providers instances
+   :param company_ids: A list of company ids (ISINs)
+   :return: A data frame containing the company data
+
+
+.. function:: get_targets(data_providers: list, companies: list) -> List[IDataProviderTarget]
+
+   Get the targets in a waterfall method, given a list of companies and a list of data providers. This will go through
+   the list of data providers and retrieve the required info until either there are no companies left or there are no
+   data providers left.
+
+   :param data_providers: A list of data providers instances
+   :param companies: A list of companies. Each company should be a dict and contain a company_name and company_id field
+   :return: A data frame containing the targets
+
+
+.. function:: _flatten_user_fields(record: PortfolioCompany)
+
+   Flatten the user fields in a portfolio company and return it as a dictionary.
+
+   :param record: The record to flatten
+   :return:
+
+
+.. function:: _make_isin_map(df_portfolio: pd.DataFrame) -> dict
+
+   Create a mapping from company_id to ISIN (required for the SBTi matching).
+
+   :param df_portfolio: The complete portfolio
+   :return: A mapping from company_id to ISIN
+
+
+.. function:: dataframe_to_portfolio(df_portfolio: pd.DataFrame) -> List[PortfolioCompany]
+
+   Convert a data frame to a list of portfolio company objects.
+
+   :param df_portfolio: The data frame to parse. The column names should align with the attribute names of the
+   PortfolioCompany model.
+   :return: A list of portfolio companies
+
+
+.. function:: get_data(data_providers: List[data.DataProvider], portfolio: List[PortfolioCompany]) -> pd.DataFrame
+
+   Get the required data from the data provider(s), validate the targets and return a 9-box grid for each company.
+
+   :param data_providers: A list of DataProvider instances
+   :param portfolio: A list of PortfolioCompany models
+   :return: A data frame containing the relevant company-target data
+
+
+.. function:: calculate(portfolio_data: pd.DataFrame, fallback_score: float, aggregation_method: PortfolioAggregationMethod, grouping: Optional[List[str]], scenario: Optional[Scenario], time_frames: List[ETimeFrames], scopes: List[EScope], anonymize: bool, aggregate: bool = True) -> Tuple[pd.DataFrame, Optional[ScoreAggregations]]
+
+   Calculate the different parts of the temperature score (actual scores, aggregations, column distribution).
+
+   :param portfolio_data: The portfolio data, already processed by the target validation module
+   :param fallback_score: The fallback score to use while calculating the temperature score
+   :param aggregation_method: The aggregation method to use
+   :param time_frames: The time frames that the temperature scores should be calculated for  (None to calculate all)
+   :param scopes: The scopes that the temperature scores should be calculated for (None to calculate all)
+   :param grouping: The names of the columns to group on
+   :param scenario: The scenario to play
+   :param anonymize: Whether to anonymize the resulting data set or not
+   :param aggregate: Whether to aggregate the scores or not
+   :return: The scores, the aggregations and the column distribution (if a
+
+

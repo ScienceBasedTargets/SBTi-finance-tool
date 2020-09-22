@@ -13,6 +13,17 @@
 Module Contents
 ---------------
 
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   SBTi.configs.ColumnsConfig
+   SBTi.configs.PortfolioAggregationConfig
+   SBTi.configs.TemperatureScoreConfig
+   SBTi.configs.PortfolioCoverageTVPConfig
+
+
 
 .. py:class:: ColumnsConfig
 
@@ -348,17 +359,17 @@ Module Contents
       
 
    .. attribute:: VALUE_TARGET_REFERENCE_ABSOLUTE
-      :annotation: = Absolute
+      :annotation: = absolute
 
       
 
    .. attribute:: VALUE_TARGET_REFERENCE_INTENSITY
-      :annotation: = Intensity
+      :annotation: = intensity
 
       
 
    .. attribute:: VALUE_TARGET_REFERENCE_INTENSITY_BASE
-      :annotation: = Int
+      :annotation: = int
 
       
 
@@ -372,8 +383,8 @@ Module Contents
 
       
 
-   .. attribute:: ABSOLUTE_MAPPING
-      :annotation: = Emissions|Kyoto Gases
+   .. attribute:: ABSOLUTE_MAPPINGS
+      
 
       
 

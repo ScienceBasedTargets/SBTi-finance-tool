@@ -1,8 +1,7 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8">
   
@@ -12,12 +11,19 @@
   
 
   
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
+
+  
   
   
   
 
   
-  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -25,19 +31,15 @@
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
     
-
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="REST API &amp; UI" href="rest_api.html" />
-    <link rel="prev" title="Getting Started" href="getting_started.html" /> 
+    <link rel="next" title="Project Links" href="links.html" />
+    <link rel="prev" title="Data Legends" href="Legends.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -51,7 +53,7 @@
           
 
           
-            <a href="index.html" class="icon icon-home"> SBTi Temperature Alignment tool
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> SBTi Temperature Alignment tool
           
 
           
@@ -74,6 +76,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -83,7 +86,11 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="1_analysis_example.html">SBTi-Finance Tool for Temperature Scoring &amp; Portfolio Coverage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started Using Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rest_api.html">Getting Started Using REST API &amp; UI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DataRequirements.html">Data Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Legends.html">Data Legends</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Contributing</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#submitting-a-bug-report-or-a-feature-request">Submitting a bug report or a feature request</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#contributing-code">Contributing code</a><ul>
@@ -92,7 +99,6 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#releasing">Releasing</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#pypi-release">PyPi release</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#generate-documentation">Generate documentation</a></li>
 </ul>
 </li>
@@ -101,13 +107,14 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="rest_api.html">REST API &amp; UI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="links.html">Project Links</a></li>
 <li class="toctree-l1"><a class="reference internal" href="autoapi/index.html">API Reference</a></li>
 </ul>
 
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -146,7 +153,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="index.html">Docs</a> &raquo;</li>
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
       <li>Contributing</li>
     
@@ -167,10 +174,33 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="contributing">
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="contributing">
 <h1>Contributing<a class="headerlink" href="#contributing" title="Permalink to this headline">¶</a></h1>
-<p>Any contribution is highly appreciated. The most common way to get
-contribute to the project is through coding, however contributions to
+<p>Any contribution is highly appreciated. The most common way to contribute to the project is through coding, however contributions to
 the documentation are also very welcome.</p>
 <div class="section" id="submitting-a-bug-report-or-a-feature-request">
 <h2>Submitting a bug report or a feature request<a class="headerlink" href="#submitting-a-bug-report-or-a-feature-request" title="Permalink to this headline">¶</a></h2>
@@ -178,7 +208,7 @@ the documentation are also very welcome.</p>
 <p>If you encounter any bugs or missing features, please don’t hesitate to open a ticket. However, before submitting a new issue, please check that there isn’t already another issue or pull request that addresses your issue.</p>
 <p>To make sure that others know exactly what the problem is, the ticket should have the following characteristics:</p>
 <ul class="simple">
-<li><p>Reproducible: It should be possible for other to reproduce the issue, ideally through a small code snippet in the description of the issue</p></li>
+<li><p>Reproducible: It should be possible for others to reproduce the issue, ideally through a small code snippet in the description of the issue</p></li>
 <li><p>Labelled: Add a label that describes the contents of the ticket, e.g. “bug”, “feature request” or “documentation”</p></li>
 </ul>
 </div>
@@ -210,10 +240,6 @@ In addition, we use Flake8 to lint the code, MyPy to check the type hints and No
 <div class="section" id="releasing">
 <h2>Releasing<a class="headerlink" href="#releasing" title="Permalink to this headline">¶</a></h2>
 <p>To release a new version of the module you need to take two steps, create a new PyPi release and generate the documentation.</p>
-<div class="section" id="pypi-release">
-<h3>PyPi release<a class="headerlink" href="#pypi-release" title="Permalink to this headline">¶</a></h3>
-<p>TODO</p>
-</div>
 <div class="section" id="generate-documentation">
 <h3>Generate documentation<a class="headerlink" href="#generate-documentation" title="Permalink to this headline">¶</a></h3>
 <p>To generate the documentation, you should follow these steps in the “SBTi” repository (the one containing the Python module).</p>
@@ -230,7 +256,7 @@ In addition, we use Flake8 to lint the code, MyPy to check the type hints and No
 <div class="section" id="code-of-conduct">
 <h2>Code of conduct<a class="headerlink" href="#code-of-conduct" title="Permalink to this headline">¶</a></h2>
 <p>Everyone is here with the same goal, helping portfolio holders decrease their impact on climate change.
-The only way this goal can be achieved is in an inclusive and welcoming environment. Therefore this project is governed by a <a class="reference external" href="https://github.com/OFBDABV/SBTi/blob/master/CODE_OF_CONDUCT.md">code of conduct</a>. By participating, you are expected to uphold this code. If you encounter any violations, please report them to the SBTi: <a class="reference external" href="mailto:finance&#37;&#52;&#48;sciencebasedtargets&#46;org">finance<span>&#64;</span>sciencebasedtargets<span>&#46;</span>org</a> .</p>
+The only way this goal can be achieved is in an inclusive and welcoming environment. Therefore, this project is governed by a <a class="reference external" href="https://github.com/OFBDABV/SBTi/blob/master/CODE_OF_CONDUCT.md">code of conduct</a>. By participating, you are expected to uphold this code. If you encounter any violations, please report them.</p>
 <div class="toctree-wrapper compound">
 </div>
 </div>
@@ -244,10 +270,10 @@ The only way this goal can be achieved is in an inclusive and welcoming environm
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="rest_api.html" class="btn btn-neutral float-right" title="REST API &amp; UI" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="links.html" class="btn btn-neutral float-right" title="Project Links" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="getting_started.html" class="btn btn-neutral float-left" title="Getting Started" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="Legends.html" class="btn btn-neutral float-left" title="Data Legends" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -256,11 +282,19 @@ The only way this goal can be achieved is in an inclusive and welcoming environm
 
   <div role="contentinfo">
     <p>
+        
         &copy; Copyright 2020, Science Based Targets
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -271,7 +305,6 @@ The only way this goal can be achieved is in an inclusive and welcoming environm
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {

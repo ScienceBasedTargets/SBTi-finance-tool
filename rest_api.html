@@ -1,15 +1,19 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8">
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>REST API &amp; UI &mdash; SBTi Temperature Alignment tool  documentation</title>
+  <title>Getting Started Using REST API &amp; UI &mdash; SBTi Temperature Alignment tool  documentation</title>
   
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
 
   
   
@@ -17,7 +21,9 @@
   
 
   
-  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -25,18 +31,15 @@
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
     
-
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="Contributing" href="contributing.html" /> 
+    <link rel="next" title="Data Requirements" href="DataRequirements.html" />
+    <link rel="prev" title="Getting Started Using Python" href="getting_started.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -50,7 +53,7 @@
           
 
           
-            <a href="index.html" class="icon icon-home"> SBTi Temperature Alignment tool
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> SBTi Temperature Alignment tool
           
 
           
@@ -73,6 +76,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -82,9 +86,9 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">REST API &amp; UI</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="1_analysis_example.html">SBTi-Finance Tool for Temperature Scoring &amp; Portfolio Coverage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started Using Python</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Getting Started Using REST API &amp; UI</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#locally">Locally</a></li>
@@ -95,12 +99,17 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="DataRequirements.html">Data Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Legends.html">Data Legends</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="links.html">Project Links</a></li>
 <li class="toctree-l1"><a class="reference internal" href="autoapi/index.html">API Reference</a></li>
 </ul>
 
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -139,9 +148,9 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="index.html">Docs</a> &raquo;</li>
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li>REST API &amp; UI</li>
+      <li>Getting Started Using REST API &amp; UI</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -160,10 +169,34 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="rest-api-ui">
-<h1>REST API &amp; UI<a class="headerlink" href="#rest-api-ui" title="Permalink to this headline">¶</a></h1>
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="getting-started-using-rest-api-ui">
+<h1>Getting Started Using REST API &amp; UI<a class="headerlink" href="#getting-started-using-rest-api-ui" title="Permalink to this headline">¶</a></h1>
 <p>The provided REST API makes it easy to integrate the SBTi temperature alignment tool as a microservice in your current IT infrastructure.
-Optionally you can also run the REST API with a small frontend, that makes testing substantially easier.</p>
+Optionally you can also run the REST API with a small frontend, that makes testing  easier.</p>
 <div class="section" id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
 <p>The complete REST API reference is available <a class="reference external" href="https://ofbdabv.github.io/SBTi/swagger/index.html">here</a>.</p>
@@ -177,17 +210,17 @@ We’ll provide instructions here for installing the REST API either on your loc
 <ul class="simple">
 <li><p><strong>Step 1</strong>: Install Docker desktop</p></li>
 </ul>
-<p>For testing locally on your own Windows or Mac PC we first need to have a Docker engine running.
-For Linux users, this natively available in your OS and you can skip step 1. Docker provides some excellent installation
+<p>For testing locally on your own Windows or Mac PC you first need to have a Docker engine running.
+For Linux users, this is natively available in your OS and you can skip step 1. Docker provides installation
 instructions for <a class="reference external" href="https://docs.docker.com/docker-for-windows/install/">Windows</a> and
-<a class="reference external" href="https://docs.docker.com/docker-for-mac/install/">Mac</a>. After you’ve finished these installation guides, we’ll continue
+<a class="reference external" href="https://docs.docker.com/docker-for-mac/install/">Mac</a>. After you have finished these installation guides, we’ll continue
 with step 2.</p>
 <ul class="simple">
 <li><p><strong>Step 2</strong>: Download and run the SBTi container.</p></li>
 </ul>
 <p>The project consists of two containers, the <a class="reference external" href="https://hub.docker.com/r/sbti/api">API</a> and the <a class="reference external" href="https://hub.docker.com/r/sbti/ui">UI</a>, both of which can be found on Docker Hub.
 You can choose whether you only want to run the API or also the UI. To run them, you need to download a compose file. If you only want to run the API, you need to use <a class="reference external" href="https://raw.githubusercontent.com/OFBDABV/SBTi_api/master/docker-compose.yml">this file</a>, if you also want the UI, you should use <a class="reference external" href="https://raw.githubusercontent.com/OFBDABV/SBTi_api/master/docker-compose-ui.yml">this file</a>.</p>
-<p>Now download the file of your choose and store it as <cite>docker-compose.yml</cite> in your home directory.</p>
+<p>Now download the file of your choice and store it as <cite>docker-compose.yml</cite> in your home directory.</p>
 <p><em>For Windows users</em></p>
 <ol class="arabic simple">
 <li><p>Open Command Prompt from a Start Menu Search. Select “Run as administrator”.</p></li>
@@ -207,19 +240,17 @@ You can choose whether you only want to run the API or also the UI. To run them,
 <p>This command assumes that your command prompt is currently in the same directory as the docker-compose.yml file that you downloaded earlier.</p>
 </div>
 <ol class="arabic simple" start="4">
-<li><p>This commando starts retrieving the latest version of the tool and will expose it at localhost:5000</p></li>
+<li><p>This command starts retrieving the latest version of the tool and will expose it at localhost:5000</p></li>
 <li><p>Open your browser and go to <a class="reference external" href="http://localhost:5000">http://localhost:5000</a> to access the tool. If you’re running the UI, the UI will be on <a class="reference external" href="http://localhost:5000">http://localhost:5000</a> and the API on <a class="reference external" href="http://localhost:5001">http://localhost:5001</a></p></li>
 </ol>
 <a class="reference internal image-reference" href="_images/restapi-deploy-windows-3.png"><img alt="alternate text" class="align-center" src="_images/restapi-deploy-windows-3.png" style="width: 500px;" /></a>
 <p><em>For Mac users</em></p>
-<ol class="arabic simple">
-<li><p>One of the quickest and easiest ways to open Terminal on Mac is with Spotlight Search</p></li>
-<li><p>If you have the Spotlight Search button in your menu bar, click it. Otherwise, you can use the keyboard shortcut Command + Space</p></li>
-<li><p>Type in “Terminal”</p></li>
-<li><p>You should see the Terminal application under Top Hit at the top of your results. Double-click it and Terminal will open.</p></li>
-</ol>
+<p>One of the quickest and easiest ways to open Terminal on Mac is with Spotlight Search
+1. If you have the Spotlight Search button in your menu bar, click it. Otherwise, you can use the keyboard shortcut Command + Space
+2. Type in “Terminal”
+3. You should see the Terminal application under Top Hit at the top of your results. Double-click it and Terminal will open.</p>
 <a class="reference internal image-reference" href="_images/restapi-deploy-mac-1.jpg"><img alt="alternate text" class="align-center" src="_images/restapi-deploy-mac-1.jpg" style="width: 500px;" /></a>
-<ol class="arabic" start="5">
+<ol class="arabic" start="4">
 <li><p>Enter the following command and hit enter:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="n">up</span>
 </pre></div>
@@ -230,7 +261,7 @@ You can choose whether you only want to run the API or also the UI. To run them,
 <p class="admonition-title">Note</p>
 <p>This command assumes that your command prompt is currently in the same directory as the docker-compose.yml file that you downloaded earlier.</p>
 </div>
-<ol class="arabic simple" start="4">
+<ol class="arabic simple" start="5">
 <li><p>This commando starts retrieving the latest version of the tool and will expose it at localhost:5000</p></li>
 <li><p>Open your browser and go to <a class="reference external" href="http://localhost:5000">http://localhost:5000</a> to access the tool. If you’re running the UI, the UI will be on <a class="reference external" href="http://localhost:5000">http://localhost:5000</a> and the API on <a class="reference external" href="http://localhost:5001">http://localhost:5001</a></p></li>
 </ol>
@@ -292,8 +323,10 @@ You can choose whether you only want to run the API or also the UI. To run them,
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
+        <a href="DataRequirements.html" class="btn btn-neutral float-right" title="Data Requirements" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
-        <a href="contributing.html" class="btn btn-neutral float-left" title="Contributing" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+        <a href="getting_started.html" class="btn btn-neutral float-left" title="Getting Started Using Python" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -302,11 +335,19 @@ You can choose whether you only want to run the API or also the UI. To run them,
 
   <div role="contentinfo">
     <p>
+        
         &copy; Copyright 2020, Science Based Targets
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -317,7 +358,6 @@ You can choose whether you only want to run the API or also the UI. To run them,
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {
