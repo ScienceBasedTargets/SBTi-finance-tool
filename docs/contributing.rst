@@ -1,8 +1,7 @@
 ********************
 Contributing
 ********************
-Any contribution is highly appreciated. The most common way to get
-contribute to the project is through coding, however contributions to
+Any contribution is highly appreciated. The most common way to contribute to the project is through coding, however contributions to
 the documentation are also very welcome.
 
 Submitting a bug report or a feature request
@@ -13,7 +12,7 @@ If you encounter any bugs or missing features, please don't hesitate to open a t
 
 To make sure that others know exactly what the problem is, the ticket should have the following characteristics:
 
-* Reproducible: It should be possible for other to reproduce the issue, ideally through a small code snippet in the description of the issue
+* Reproducible: It should be possible for others to reproduce the issue, ideally through a small code snippet in the description of the issue
 * Labelled: Add a label that describes the contents of the ticket, e.g. "bug", "feature request" or "documentation"
 
 Contributing code
@@ -43,9 +42,6 @@ Releasing
 ===============
 To release a new version of the module you need to take two steps, create a new PyPi release and generate the documentation.
 
-PyPi release
-------------------
-TODO
 
 Generate documentation
 ------------------------
@@ -67,7 +63,7 @@ To generate the documentation, you should follow these steps in the "SBTi" repos
 Code of conduct
 ===============
 Everyone is here with the same goal, helping portfolio holders decrease their impact on climate change.
-The only way this goal can be achieved is in an inclusive and welcoming environment. Therefore this project is governed by a `code of conduct <https://github.com/OFBDABV/SBTi/blob/master/CODE_OF_CONDUCT.md>`_. By participating, you are expected to uphold this code. If you encounter any violations, please report them to the SBTi: finance@sciencebasedtargets.org .
+The only way this goal can be achieved is in an inclusive and welcoming environment. Therefore, this project is governed by a `code of conduct <https://github.com/OFBDABV/SBTi/blob/master/CODE_OF_CONDUCT.md>`_. By participating, you are expected to uphold this code. If you encounter any violations, please report them.
 
 .. toctree::
    :maxdepth: 4

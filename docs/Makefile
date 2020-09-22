@@ -14,6 +14,10 @@ help:
 
 .PHONY: help Makefile
 
+"$(BUILDDIR)"/1_analysis_example.ipynb: ../examples/1_analysis_example.ipynb
+	@[ -d dest ] || mkdir dest
+	cp $< $@
+
 # Catch-all target: route all unknown targets to Sphinx using the new
 # "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
 %: Makefile

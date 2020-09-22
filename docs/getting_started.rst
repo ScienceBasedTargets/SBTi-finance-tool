@@ -1,18 +1,18 @@
-********************
-Getting Started
-********************
+****************************
+Getting Started Using Python
+****************************
 The most fundamental part of the project is the Python module. This takes care of all the heavy lifting.
 You can install it easily through PIP. There are a couple ways to get started using the module.
 The easiest option is to run our getting started notebook on Google Colab. Alternatively you can also run the `getting
 started notebooks <https://github.com/OFBDABV/SBTi/tree/master/examples>`_ locally or start from scratch using the API reference.
 
-.. note:: This page only concerns itself with the Python module. The getting started documentation for the REST API can be found on its `dedicated page <https://ofbdabv.github.io/SBTi/rest_api.html>`_. For a distinction between the different parts of the project, have a look at `the homepage <https://ofbdabv.github.io/SBTi/index.html>`_.
+.. note:: This page only concerns itself with the Python module. The getting started documentation for the REST API can be found on its `dedicated page <rest_api.html>`_. For a distinction between the different parts of the project, have a look at `the homepage <index.html>`_.
 
 Google Colab
 -------------
 The easiest way to get started is by using the getting started notebook on Google Colab.
-It goes through all the steps involved in installing the module and calculating a portfolio score.
-There are three notebooks that go through the process, step-by-step:
+It guides you through all the steps involved in installing the module and consequently running it, i.e. calculating a portfolio score.
+There are five notebooks that go through the process, step-by-step:
 
 1. `Analysis <https://colab.research.google.com/github/OFBDABV/SBTi/blob/master/examples/1_analysis_example.ipynb>`_
 2. `Getting started <https://colab.research.google.com/github/OFBDABV/SBTi/blob/master/examples/2_getting_started.ipynb>`_
@@ -22,7 +22,7 @@ There are three notebooks that go through the process, step-by-step:
 
 Jupyter notebooks
 -----------------
-Alternatively you can also run the getting started notebooks locally. To do so, you first need to setup a new environment.
+Alternatively, you can also run the getting started notebooks locally. To do so, you first need to setup a new environment.
 In the next examples, we'll assume you use Anaconda to manage your environments::
 
     cd examples
