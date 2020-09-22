@@ -113,7 +113,7 @@ class EndToEndTest(unittest.TestCase):
 
     def test_target_grouping(self):
         """
-        This test is is checking the target grouping in the target validation from begin to end.
+        This test is checking the target grouping in the target validation from begin to end.
         """
 
         companies, targets, pf_companies = self.create_base_companies(["A", "B", "C"])
@@ -330,7 +330,8 @@ class EndToEndTest(unittest.TestCase):
 if __name__ == "__main__":
     test = EndToEndTest()
     test.setUp()
-    # test.test_basic()
-    # test.test_basic_flow()
-    # test.test_regression_companies()
+    test.test_basic()
+    test.test_basic_flow()
+    test.test_regression_companies()
+    test.test_score_cap()
     test.test_target_grouping()

@@ -257,23 +257,6 @@ class TargetProtocol:
             # No target found
             return row
 
-        # if len(target_data) == 0:
-        #     # If there are no targets, we'll return the original row
-        #     return row
-        # elif len(target_data) == 1:
-        #     # If there's exactly one target, we'll return that target
-        #     return target_data[target_columns].iloc[0]
-        # else:
-        #     # We prefer targets with higher emissions in scope
-        #     if target_data.iloc[0][self.c.COLS.SCOPE] == EScope.S3:
-        #         coverage_column = self.c.COLS.COVERAGE_S3
-        #     else:
-        #         coverage_column = self.c.COLS.COVERAGE_S1
-        #
-        #     return \
-        #     target_data.sort_values(by=[coverage_column, self.c.COLS.END_YEAR, self.c.COLS.TARGET_REFERENCE_NUMBER,
-        #                                 self.c.COLS.REDUCTION_AMBITION], axis=0).iloc[0]
-
     def group_targets(self):
         """
         Group the targets and create the 9-box grid (short, mid, long * s1s2, s3, s1s2s3).
@@ -298,7 +281,5 @@ class TargetProtocol:
         extended_data = pd.DataFrame(
             list(itertools.product(*[companies, ETimeFrames, scopes] + [[None]] * len(empty_columns))),
             columns=grid_columns + empty_columns)
-
         target_columns = extended_data.columns
-
         self.data = extended_data.apply(lambda row: self._find_target(row, target_columns), axis=1)
