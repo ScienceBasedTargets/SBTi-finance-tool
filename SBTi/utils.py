@@ -147,6 +147,7 @@ def dataframe_to_portfolio(df_portfolio: pd.DataFrame) -> List[PortfolioCompany]
     PortfolioCompany model.
     :return: A list of portfolio companies
     """
+    df_portfolio[ColumnsConfig.ENGAGEMENT_TARGET] = df_portfolio[ColumnsConfig.ENGAGEMENT_TARGET].fillna(False).astype('bool')
     return [PortfolioCompany.parse_obj(company) for company in df_portfolio.to_dict(orient="records")]
 
 
