@@ -244,15 +244,15 @@ class TargetProtocol:
                 # One match with Target data
                 return target_data[target_columns]
             else:
-                # In case more than one target is available; we prefer targets with higher emissions in scope
                 if target_data.scope[0] == EScope.S3:
                     coverage_column = self.c.COLS.COVERAGE_S3
                 else:
                     coverage_column = self.c.COLS.COVERAGE_S1
-
+                # In case more than one target is available; we prefer targets with higher coverage, later end year, and target type 'absolute'
                 return target_data.sort_values(
-                    by=[coverage_column, self.c.COLS.END_YEAR, self.c.COLS.TARGET_REFERENCE_NUMBER,
-                        self.c.COLS.REDUCTION_AMBITION], axis=0).iloc[0][target_columns]
+                    by=[coverage_column, self.c.COLS.END_YEAR, self.c.COLS.TARGET_REFERENCE_NUMBER],
+                    axis=0,
+                    ascending=[False, False, True]).iloc[0][target_columns]
         except KeyError:
             # No target found
             return row
