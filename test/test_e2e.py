@@ -7,14 +7,15 @@ from SBTi.interfaces import (
     IDataProviderTarget,
     PortfolioCompany,
 )
-from SBTi.target_validation import TargetProtocol
+
 from SBTi.temperature_score import EngagementType, Scenario, ScenarioType, TemperatureScore
-from SBTi.data.data_provider import DataProvider
 from SBTi.portfolio_aggregation import PortfolioAggregationMethod
 import copy
-
 import SBTi
 from typing import List
+from SBTi.data.data_provider import DataProvider
+from typing import List
+from SBTi.interfaces import IDataProviderCompany,IDataProviderTarget
 
 
 class TestDataProvider(DataProvider):
@@ -34,6 +35,7 @@ class TestDataProvider(DataProvider):
         return self.companies
 
 
+
 class EndToEndTest(unittest.TestCase):
     """
     This class is containing a set of end to end tests:
@@ -45,6 +47,7 @@ class EndToEndTest(unittest.TestCase):
 
     def setUp(self):
         company_id = "BaseCompany"
+        self.BASE_COMP_SCORE = 0.43
         self.company_base = IDataProviderCompany(
             company_name=company_id,
             company_id=company_id,
@@ -193,7 +196,7 @@ class EndToEndTest(unittest.TestCase):
         agg_scores = temp_score.aggregate_scores(scores)
 
         # verify that results exist
-        self.assertEqual(agg_scores.mid.S1S2.all.score, 0.43)
+        self.assertEqual(agg_scores.mid.S1S2.all.score, self.BASE_COMP_SCORE)
 
     # Run some regression tests
     # @unittest.skip("only run for longer test runs")
@@ -240,7 +243,7 @@ class EndToEndTest(unittest.TestCase):
         scores = temp_score.calculate(portfolio_data)
         agg_scores = temp_score.aggregate_scores(scores)
 
-        self.assertAlmostEqual(agg_scores.mid.S1S2.all.score, 0.43)
+        self.assertAlmostEqual(agg_scores.mid.S1S2.all.score, self.BASE_COMP_SCORE)
 
     def test_grouping(self):
         """
@@ -279,7 +282,7 @@ class EndToEndTest(unittest.TestCase):
         agg_scores = temp_score.aggregate_scores(scores)
 
         for ind_level in industry_levels:
-            self.assertAlmostEqual(agg_scores.mid.S1S2.grouped[ind_level].score, 0.43)
+            self.assertAlmostEqual(agg_scores.mid.S1S2.grouped[ind_level].score, self.BASE_COMP_SCORE)
 
     def test_score_cap(self):
 
