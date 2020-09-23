@@ -116,7 +116,7 @@ class EndToEndTest(unittest.TestCase):
         This test is checking the target grouping in the target validation from begin to end.
         """
 
-        companies, targets, pf_companies = self.create_base_companies(["A", "B", "C"])
+        companies, targets, pf_companies = self.create_base_companies(["A", "B", "C", "D"])
         target = copy.deepcopy(self.target_base)
         target.company_id = 'A'
         target.coverage_s1 = 0.75
@@ -124,7 +124,6 @@ class EndToEndTest(unittest.TestCase):
         target.coverage_s3 = 0.75
         targets.append(target)
 
-        # target
         target = copy.deepcopy(self.target_base)
         target.company_id = 'A'
         target.coverage_s1 = 0.99
@@ -137,16 +136,23 @@ class EndToEndTest(unittest.TestCase):
         target.scope = EScope.S3
         target.coverage_s1 = 0.75
         target.coverage_s2 = 0.75
-        target.coverage_s3 = 0.75
+        target.coverage_s3 = 0.49
         targets.append(target)
 
-        # target
         target = copy.deepcopy(self.target_base)
         target.company_id = 'B'
         target.scope = EScope.S3
         target.coverage_s1 = 0.99
         target.coverage_s2 = 0.99
-        target.coverage_s3 = 0.99
+        target.coverage_s3 = 0.49
+        targets.append(target)
+
+        target = copy.deepcopy(self.target_base)
+        target.company_id = 'D'
+        target.coverage_s1 = 0.95
+        target.coverage_s2 = 0.95
+        target.target_type = 'int'
+        target.intensity_metric = 'Revenue'
         targets.append(target)
 
         data_provider = TestDataProvider(companies=companies, targets=targets)
@@ -163,7 +169,7 @@ class EndToEndTest(unittest.TestCase):
         agg_scores = temp_score.aggregate_scores(scores)
 
         # verify that results exist
-        self.assertAlmostEqual(agg_scores.mid.S1S2.all.score, 0.61666, places=4)
+        self.assertAlmostEqual(agg_scores.mid.S1S2.all.score, 0.4300, places=4)
 
     def test_basic_flow(self):
         """
