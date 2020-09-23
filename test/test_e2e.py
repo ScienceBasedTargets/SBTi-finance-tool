@@ -145,6 +145,7 @@ class EndToEndTest(unittest.TestCase):
         target.coverage_s1 = 0.99
         target.coverage_s2 = 0.99
         target.coverage_s3 = 0.49
+        target.end_year = 2035
         targets.append(target)
 
         target = copy.deepcopy(self.target_base)
