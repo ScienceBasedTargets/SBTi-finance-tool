@@ -1,5 +1,3 @@
-import matplotlib.pyplot as plt
-import matplotlib
 import pandas as pd
 import numpy as np
 import copy as copy
@@ -8,11 +6,12 @@ import random
 
 def print_aggregations(aggregations):
     aggregations = aggregations.dict()
+    print("{:<10s} {:<10s} {}".format('Timeframe', 'Scope', 'Temp score'))
     for time_frame, time_frame_values in aggregations.items():
         if time_frame_values:
             for scope, scope_values in time_frame_values.items():
                 if scope_values:
-                    print("{} - {}: {t:.2f} degrees Celcius".format(time_frame, scope, t=scope_values["all"]["score"]))
+                    print("{:<10s} {:<10s} {:.2f}".format(time_frame, scope, scope_values["all"]["score"]))
 
 
 def print_scenario_gain(actual_aggregations, scenario_aggregations):
@@ -30,9 +29,10 @@ def print_grouped_scores(aggregations):
             for scope, scope_values in time_frame_values.items():
                 if scope_values:
                     print()
+                    print("{:<25s}{}".format('', 'Temp score'))
                     print("{} - {}".format(time_frame, scope))
                     for group, aggregation in scope_values["grouped"].items():
-                        print("{}: {t:.2f} degrees Celcius".format(group, t=aggregation["score"]))
+                        print("{:<25s}{t:.2f}".format(group, t=aggregation["score"]))
 
 
 def collect_company_contributions(aggregated_portfolio, amended_portfolio, analysis_parameters):
@@ -56,6 +56,8 @@ def collect_company_contributions(aggregated_portfolio, amended_portfolio, analy
 
 
 def plot_grouped_statistics(aggregated_portfolio, company_contributions, analysis_parameters):
+    import matplotlib.pyplot as plt
+
     timeframe, scope, grouping = analysis_parameters
     scope = str(scope[0])
     timeframe = str(timeframe[0]).lower()
@@ -114,6 +116,9 @@ def anonymize(portfolio, provider):
 
 
 def plot_grouped_heatmap(grouped_aggregations, analysis_parameters):
+    import matplotlib.pyplot as plt
+    import matplotlib
+
     timeframe, scope, grouping = analysis_parameters
     scope = str(scope[0])
     timeframe = str(timeframe[0]).lower()

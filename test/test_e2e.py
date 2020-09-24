@@ -173,7 +173,7 @@ class EndToEndTest(unittest.TestCase):
         agg_scores = temp_score.aggregate_scores(scores)
 
         # verify that results exist
-        self.assertAlmostEqual(agg_scores.mid.S1S2.all.score, 0.4300, places=4)
+        self.assertAlmostEqual(agg_scores.mid.S1S2.all.score, self.BASE_COMP_SCORE, places=4)
 
     def test_basic_flow(self):
         """
