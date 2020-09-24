@@ -25,10 +25,7 @@ class SBTi:
         """
         for company in companies:
             targets = self.targets[self.targets[self.c.COL_COMPANY_ISIN] == isin_map.get(company.company_id)]
-            if len(targets) > 1:
-                raise ValueError("There is more than one target classification available for company: {}".format(
-                    company.company_name))
-            elif len(targets) == 1:
-                company.sbti_validated = targets.iloc[0][self.c.COL_TARGET_STATUS] == self.c.VALUE_TARGET_SET
+            if len(targets) > 0:
+                company.sbti_validated = self.c.VALUE_TARGET_SET in targets[self.c.COL_TARGET_STATUS].values
 
         return companies
