@@ -1,4 +1,4 @@
-> Don't forget to fill out the survey at http://survey.sbti-tool.org/
+> Visit  http://getting-started.sbti-tool.org/ for the full documentation
 
 > If you have any additional questions or comments send a mail to: finance@sciencebasedtargets.org
 
