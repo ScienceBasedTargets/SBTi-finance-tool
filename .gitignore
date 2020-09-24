@@ -137,3 +137,9 @@ docker-compose_aws.yml
 .idea/workspace.xml
 *.exe
 %USERPROFILE%/*
+
+# vscode
+.vscode
+
+# Misc
+.noseids
