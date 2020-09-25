@@ -17,9 +17,9 @@ For ease of comprehension, please ensure your report includes the following char
 Contributing code
 ====================
 Our preferred way for contributing code is to fork the repository, make changes on your personal fork and then create a pull request to merge your changes back into the main repository. 
-Before a pull request can be approved it needs to be reviewed by two core contributors, then these automated checks need to be passed (see “Coding Guidelines” section below).
+Before a pull request can be approved it needs to be reviewed by two core contributors, then these automated checks need to be passed (see "Coding Guidelines" section below).
 
-.. note:: Please assign the issue you’re working on to yourself so we can avoid duplicate efforts.
+.. note:: Please assign the issue you are working on to yourself so we can avoid duplicate efforts.
 
 Getting started
 -----------------

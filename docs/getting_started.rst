@@ -30,9 +30,7 @@ Alternatively, you can also run the “getting started” notebooks locally. To do s
 In this example, we assume you use `Anaconda <https://www.anaconda.com/>`__ to manage your environments. 
 To do this, run the following command::
 
-    cd examples conda env create -f environment.yml
-    activate sbti_getting_started
-    jupyter notebook
+    cd examples conda env create -f environment.yml activate sbti_getting_started jupyter notebook
 
 A tab should now open in your web browser. If you are using a virtual environment, you can install the required packages using the requirements.txt file in the examples directory. 
 Make sure that your Python version is at least 3.6.
