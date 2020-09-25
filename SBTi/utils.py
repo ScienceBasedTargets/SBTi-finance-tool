@@ -163,8 +163,12 @@ def get_data(data_providers: List[data.DataProvider], portfolio: List[PortfolioC
     company_data = get_company_data(data_providers, df_portfolio["company_id"].tolist())
     target_data = get_targets(data_providers, df_portfolio["company_id"].tolist())
 
+    if len(target_data) == 0:
+        raise ValueError("No targets found")
+
     # Supplement the company data with the SBTi target status
     company_data = SBTi().get_sbti_targets(company_data, _make_isin_map(df_portfolio))
+
 
     # Prepare the data
     portfolio_data = TargetProtocol().process(target_data, company_data)
