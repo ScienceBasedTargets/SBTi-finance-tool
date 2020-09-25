@@ -195,36 +195,36 @@
 </style>
 <div class="section" id="getting-started-using-rest-api-ui">
 <h1>Getting Started Using REST API &amp; UI<a class="headerlink" href="#getting-started-using-rest-api-ui" title="Permalink to this headline">¶</a></h1>
-<p>The provided REST API makes it easy to integrate the SBTi temperature alignment tool as a microservice in your current IT infrastructure.
-Optionally you can also run the REST API with a small frontend, that makes testing  easier.</p>
+<p>The provided REST API makes it easy to integrate the SBTi temperature alignment tool as a micro-service in your current IT infrastructure.
+Optionally you can also run the REST API with a small frontend, which makes testing easier.</p>
 <div class="section" id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
 <p>The complete REST API reference is available <a class="reference external" href="https://ofbdabv.github.io/SBTi/swagger/index.html">here</a>.</p>
 </div>
 <div class="section" id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
-<p>The tool is containerized in a Docker container. This enables easy cloud and on-premise deployments.
-We’ll provide instructions here for installing the REST API either on your local machine or on Amazon AWS.</p>
+<p>The tool is containerized in a Docker container, which enables easy cloud and on premise deployments.
+We will provide instructions here for installing the REST API either on your local machine or on Amazon AWS.</p>
 <div class="section" id="locally">
 <h3>Locally<a class="headerlink" href="#locally" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p><strong>Step 1</strong>: Install Docker desktop</p></li>
 </ul>
 <p>For testing locally on your own Windows or Mac PC you first need to have a Docker engine running.
-For Linux users, this is natively available in your OS and you can skip step 1. Docker provides installation
+For Linux users, this is natively available in your OS and you can skip step 1.  Docker provides installation
 instructions for <a class="reference external" href="https://docs.docker.com/docker-for-windows/install/">Windows</a> and
-<a class="reference external" href="https://docs.docker.com/docker-for-mac/install/">Mac</a>. After you have finished these installation guides, we’ll continue
-with step 2.</p>
+<a class="reference external" href="https://docs.docker.com/docker-for-mac/install/">Mac</a>. After you have finished these installation guides, continue
+to step 2.</p>
 <ul class="simple">
 <li><p><strong>Step 2</strong>: Download and run the SBTi container.</p></li>
 </ul>
-<p>The project consists of two containers, the <a class="reference external" href="https://hub.docker.com/r/sbti/api">API</a> and the <a class="reference external" href="https://hub.docker.com/r/sbti/ui">UI</a>, both of which can be found on Docker Hub.
+<p>The project consists of two containers, the <a class="reference external" href="https://hub.docker.com/r/sbti/api">API</a> and the <a class="reference external" href="https://hub.docker.com/r/sbti/ui">UI</a>, both of which are available on Docker Hub.
 You can choose whether you only want to run the API or also the UI. To run them, you need to download a compose file. If you only want to run the API, you need to use <a class="reference external" href="https://raw.githubusercontent.com/OFBDABV/SBTi_api/master/docker-compose.yml">this file</a>, if you also want the UI, you should use <a class="reference external" href="https://raw.githubusercontent.com/OFBDABV/SBTi_api/master/docker-compose-ui.yml">this file</a>.</p>
 <p>Now download the file of your choice and store it as <cite>docker-compose.yml</cite> in your home directory.</p>
 <p><em>For Windows users</em></p>
 <ol class="arabic simple">
 <li><p>Open Command Prompt from a Start Menu Search. Select “Run as administrator”.</p></li>
-<li><p>You can easily open the Command Prompt by clicking Start and then typing “cmd” into the search box.</p></li>
+<li><p>You can open the Command Prompt by clicking Start and then typing “cmd” into the search box.</p></li>
 </ol>
 <a class="reference internal image-reference" href="_images/restapi-deploy-windows-1.png"><img alt="alternate text" class="align-center" src="_images/restapi-deploy-windows-1.png" style="width: 500px;" /></a>
 <ol class="arabic" start="3">
@@ -241,7 +241,7 @@ You can choose whether you only want to run the API or also the UI. To run them,
 </div>
 <ol class="arabic simple" start="4">
 <li><p>This command starts retrieving the latest version of the tool and will expose it at localhost:5000</p></li>
-<li><p>Open your browser and go to <a class="reference external" href="http://localhost:5000">http://localhost:5000</a> to access the tool. If you’re running the UI, the UI will be on <a class="reference external" href="http://localhost:5000">http://localhost:5000</a> and the API on <a class="reference external" href="http://localhost:5001">http://localhost:5001</a></p></li>
+<li><p>Open your browser and go to <a class="reference external" href="http://localhost:5000">http://localhost:5000</a> to access the tool. If you are running the UI, the UI will be on <a class="reference external" href="http://localhost:5000">http://localhost:5000</a> and the API on <a class="reference external" href="http://localhost:5001">http://localhost:5001</a></p></li>
 </ol>
 <a class="reference internal image-reference" href="_images/restapi-deploy-windows-3.png"><img alt="alternate text" class="align-center" src="_images/restapi-deploy-windows-3.png" style="width: 500px;" /></a>
 <p><em>For Mac users</em></p>
@@ -262,13 +262,13 @@ You can choose whether you only want to run the API or also the UI. To run them,
 <p>This command assumes that your command prompt is currently in the same directory as the docker-compose.yml file that you downloaded earlier.</p>
 </div>
 <ol class="arabic simple" start="5">
-<li><p>This commando starts retrieving the latest version of the tool and will expose it at localhost:5000</p></li>
-<li><p>Open your browser and go to <a class="reference external" href="http://localhost:5000">http://localhost:5000</a> to access the tool. If you’re running the UI, the UI will be on <a class="reference external" href="http://localhost:5000">http://localhost:5000</a> and the API on <a class="reference external" href="http://localhost:5001">http://localhost:5001</a></p></li>
+<li><p>This command starts retrieving the latest version of the tool and will expose it at <a class="reference external" href="http://localhost:5000">http://localhost:5000</a></p></li>
+<li><p>Open your browser and go to <a class="reference external" href="http://localhost:5000">http://localhost:5000</a> to access the tool. If you are running the UI, the UI will be on <a class="reference external" href="http://localhost:5000">http://localhost:5000</a> and the API on <a class="reference external" href="http://localhost:5001">http://localhost:5001</a></p></li>
 </ol>
 </div>
 <div class="section" id="amazon-aws">
 <h3>Amazon AWS<a class="headerlink" href="#amazon-aws" title="Permalink to this headline">¶</a></h3>
-<p>These instructions assume that you’ve installed and configured the Amazon <a class="reference external" href="https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html)andthe[ECSCLItools](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ECS_CLI_Configuration.html">AWS CLI tools</a> with an IAM account that has at least write access to ECS and EC2 and the capability of creating AIM roles.</p>
+<p>These instructions assume that you have installed and configured the Amazon <a class="reference external" href="https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html)andthe[ECSCLItools](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ECS_CLI_Configuration.html">AWS CLI tools</a> with an IAM account that has at least write access to ECS and EC2 and the capability of creating AIM roles.</p>
 <ol class="arabic">
 <li><p>Configure the cluster. You can update the region and names as you see fit:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ecs</span><span class="o">-</span><span class="n">cli</span> <span class="n">configure</span> <span class="o">--</span><span class="n">cluster</span> <span class="n">sbti</span><span class="o">-</span><span class="n">ecs</span><span class="o">-</span><span class="n">cluster</span> <span class="o">--</span><span class="n">region</span> <span class="n">eu</span><span class="o">-</span><span class="n">central</span><span class="o">-</span><span class="mi">1</span> <span class="o">--</span><span class="n">config</span><span class="o">-</span><span class="n">name</span> <span class="n">sbti</span><span class="o">-</span><span class="n">ecs</span><span class="o">-</span><span class="n">conf</span> <span class="o">--</span><span class="n">cfn</span><span class="o">-</span><span class="n">stack</span><span class="o">-</span><span class="n">name</span> <span class="n">sbti</span><span class="o">-</span><span class="n">ecs</span><span class="o">-</span><span class="n">stack</span> <span class="o">--</span><span class="n">default</span><span class="o">-</span><span class="n">launch</span><span class="o">-</span><span class="nb">type</span> <span class="n">ec2</span>
@@ -280,7 +280,7 @@ You can choose whether you only want to run the API or also the UI. To run them,
 </pre></div>
 </div>
 </li>
-<li><p>Create the instance that’ll run the image. Here we used 1 server of type t2.medium. Change this as you see fit:</p>
+<li><p>Create the instance that will run the image. Here we used 1 server of type t2.medium. Change this as you see fit:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ecs</span><span class="o">-</span><span class="n">cli</span> <span class="n">up</span> <span class="o">--</span><span class="n">keypair</span> <span class="n">sbti</span> <span class="o">--</span><span class="n">capability</span><span class="o">-</span><span class="n">iam</span> <span class="o">--</span><span class="n">size</span> <span class="mi">1</span> <span class="o">--</span><span class="n">instance</span><span class="o">-</span><span class="nb">type</span> <span class="n">t2</span><span class="o">.</span><span class="n">medium</span> <span class="o">--</span><span class="n">cluster</span><span class="o">-</span><span class="n">config</span> <span class="n">sbti</span><span class="o">-</span><span class="n">ecs</span><span class="o">-</span><span class="n">conf</span>
 </pre></div>
 </div>
@@ -290,7 +290,7 @@ You can choose whether you only want to run the API or also the UI. To run them,
 </pre></div>
 </div>
 </li>
-<li><p>Now that the instance is running we can’t access it yet. That’s because NGINX only listens to localhost. We need to change this to make sure it’s accessible on the WWW.</p></li>
+<li><p>Now that the instance is running, we cannot access it yet. That is because NGINX only listens to localhost. We need to change this to make sure it is accessible on the WWW.</p></li>
 <li><p>Login to the Amazon AWS console</p></li>
 <li><p>Go to the EC2 service</p></li>
 <li><p>In the instance list find the instance running the Docker image</p></li>
@@ -307,7 +307,7 @@ You can choose whether you only want to run the API or also the UI. To run them,
 </ol>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>This will make the API publicly available on the world wide web! Please note that this API is not protected in any way. Therefore it’s recommended to run your instance in a private subnet and only access it through there. Alternatively you can change the security group settings to only allow incoming connections from your local IP or company VPN.</p>
+<p>This will make the API publicly available on the World Wide Web! Please note that this API is not protected in any way. Therefore, it is recommended to run your the data in a private subnet and only access it through there. Alternatively, you can change the security group settings to only allow incoming connections from your local IP or company VPN.</p>
 </div>
 <div class="toctree-wrapper compound">
 </div>

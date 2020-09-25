@@ -92,6 +92,7 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Data Requirements</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#portfolio-data">Portfolio data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#company-data">Company data</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#fundamental-data">Fundamental data</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#target-data">Target data</a></li>
 </ul>
 </li>
@@ -193,63 +194,70 @@
 </style>
 <div class="section" id="data-requirements">
 <h1>Data Requirements<a class="headerlink" href="#data-requirements" title="Permalink to this headline">¶</a></h1>
-<p>To calculate the temperature score and portfolio coverage the tool
-requires different types of data.</p>
+<p>To calculate your temperature score and portfolio coverage, the tool
+requires several types of data.</p>
 <ul class="simple">
 <li><p>Portfolio data: information on a security level about your
 investments such as name, identifiers, and investment values.</p></li>
-<li><p>Data about the invested companies</p>
+<li><p>Data about the investee companies</p>
 <ul>
-<li><p>Financial data</p></li>
-<li><p>reported GHG emissions</p></li>
-<li><p>Target data: information about targets set by individual
-companies.</p></li>
+<li><p>Fundamental data</p></li>
+<li><p>Reported GHG emissions</p></li>
+<li><p>Target data: information about GHG emissions reduction targets set
+by individual companies.</p></li>
 </ul>
 </li>
-<li><p>The SBTi status of the companies invested in (i.e. whether or not
-these companies have targets approved by the SBTi).</p></li>
+<li><p>SBTi status of the companies invested in (i.e. whether these
+companies have targets approved by the SBTi or not).</p></li>
 </ul>
 <div class="section" id="portfolio-data">
 <h2>Portfolio data<a class="headerlink" href="#portfolio-data" title="Permalink to this headline">¶</a></h2>
 <p>When using the SBTi-Finance Tool for Temperature Scoring and Portfolio
 Coverage, the user needs to supply information about the portfolio. This
-must be a list of all companies invested in on a security level
-including name, identifiers, ISIN codes and the value invested in each
-individual company. The company identifier is used to link the data from
-the portfolio, the company itself and the reported targets to each
-other. This can be any code the user wants to deploy, as long as the
-same code is used in all files. The ISIN codes are required to determine
-the SBTi status of the companies (i.e. whether or not they have a
-reduction target approved by the SBTi) in order to calculate the
-Portfolio Coverage.
+must be a list of all investee companies on a security level, including
+name, identifiers, ISIN codes, and the value invested in each individual
+company. The company identifier is used to link the data from the
+portfolio, the fundamental data and the reported targets to each other.
+This can be any identifier the user wants to deploy, if the same
+identifier is used in all files. The ISIN codes are required to
+determine the SBTi status of the companies to calculate the Portfolio
+Coverage.
 See <a class="reference download internal" download="" href="_downloads/0a2109fabb6479dc497333668ab0f132/PortfolioTemplate.xlsx"><code class="xref download docutils literal notranslate"><span class="pre">portfolio</span> <span class="pre">data</span> <span class="pre">template</span></code></a> for an example portfolio file.</p>
-<p>This data can be supplemented with extra fields that can be imported for
-additional analysis purposes. For example you can add the market cap
-buckets, investment strategies or asset class of each individual
-security and examine the aggregated temperature score per asset class.</p>
+<p>For additional analyses, you can supplement this data with additional
+fields, which are available for import. For example, you can add the
+market cap buckets, investment strategies or asset classes of each
+individual security and then analyze the aggregated temperature score
+per these additional fields/categories.</p>
 </div>
 <div class="section" id="company-data">
 <h2>Company data<a class="headerlink" href="#company-data" title="Permalink to this headline">¶</a></h2>
-<p>For each company in the portfolio the tool needs information about each
-individual company in the portfolio. We split this data in three
-categories: financial data, emissions and target data.</p>
-<p>These three categories can be imported via a single Excel file. For a
-template and example file see <a class="reference download internal" download="" href="_downloads/d16600f8589c0c47112a7407bd6f0c23/DataProviderTemplate.xlsx"><code class="xref download docutils literal notranslate"><span class="pre">here</span></code></a></p>
-<p>Fundamental data includes all company wide data. This includes GHG
-emissions per scope as well as ISIC codes. These classifications are
-used to map the targets to different regression models. For more
-information, see <a class="reference external" href="https://siccode.com/page/what-is-an-isic-code">https://siccode.com/page/what-is-an-isic-code</a>. Based on
-the chosen method to aggregate the temperature scores per company to a
-portfolio score different types of financial data are also required.
-Below table outlines required data for all aggregation methods.</p>
+<p>The tool needs information about each individual company in the
+portfolio. We split this data in three categories: financial data,
+emissions, and target data.</p>
+<p>All three categories are available for import via a single Excel file.
+Here is a template <a class="reference download internal" download="" href="_downloads/d16600f8589c0c47112a7407bd6f0c23/DataProviderTemplate.xlsx"><code class="xref download docutils literal notranslate"><span class="pre">here</span></code></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Please note that the tool requires the data in a specific format. For more detail, see the data provider template and the Data Legends for the required data formats and expect values.</p>
+</div>
+<div class="section" id="fundamental-data">
+<h3>Fundamental data<a class="headerlink" href="#fundamental-data" title="Permalink to this headline">¶</a></h3>
+<p>The fundamental data tab in Excel includes all company wide data
+including GHG emissions per scope and ISIC codes. This open source
+industry classification standard is used to map the targets to different
+regression models. For more information, see
+<a class="reference external" href="https://siccode.com/page/what-is-an-isic-code">https://siccode.com/page/what-is-an-isic-code</a>. Other financial data is
+required in order to aggregate individual temperature scores to a
+portfolio temperature score, which depends on the method you choose. The
+table below outlines required data for all aggregation methods.</p>
 <table class="docutils align-default">
 <colgroup>
 <col style="width: 50%" />
 <col style="width: 50%" />
 </colgroup>
 <thead>
-<tr class="row-odd"><th class="head"><p><strong>Aggregation method</strong></p></th>
-<th class="head"><p><strong>Required financial data</strong></p></th>
+<tr class="row-odd"><th class="head"><p><strong>Aggregation Method</strong></p></th>
+<th class="head"><p><strong>Required Financial Data</strong></p></th>
 </tr>
 </thead>
 <tbody>
@@ -288,43 +296,38 @@ temperature score (ROTS)</p></td>
 <p>The financial data used should be regarding the same period as the
 reported emissions. Preferably the latest reported. For more information
 about the requirements, go to <strong>[link to guidance doc]</strong></p>
+</div>
 <div class="section" id="target-data">
 <h3>Target data<a class="headerlink" href="#target-data" title="Permalink to this headline">¶</a></h3>
-<p>The target data should include all publicly announced GHG emissions
-reduction targets for each company in the portfolio. For each target,
-information is required about target type. Absolute or intensity based
-GHG emissions reduction targets are currently the only types scored. For
-intensity based targets, additional information is needed about the
-metric used. Additionally, for each target information about the covered
-scope(s), the level of coverage, the level of reduction ambition and
-begin and end year of the target must be disclosed.</p>
-<p>The temperature score is calculated for scope 1 + 2 and scope 3,
-therefore in order to convert targets that only cover scope 1 or scope 2
-additional information is required about the GHG emissions per scope at
-the base year for scope 1 and 2 to convert such targets to scope 1 + 2
-targets.</p>
-<p>This data is available by most data providers such as CDP or Urgentem.</p>
-<p>Please note that the tool requires the data in a specific format. For
-more detail, see the <a class="reference download internal" download="" href="_downloads/d16600f8589c0c47112a7407bd6f0c23/DataProviderTemplate.xlsx"><code class="xref download docutils literal notranslate"><span class="pre">data</span> <span class="pre">provider</span> <span class="pre">template</span></code></a> and the <a class="reference external" href="Legends.html#input-data">Data Legends</a> for the required
-data formats and expect values.</p>
-<p>Specific attention should be given to the intensity metrics. There is no
-general consensus on how these are reported. For the tool all different
-intensity metrics have to be mapped to 8 categories. Please refer to the
-<strong>[link to guidance]</strong> for more detail on how to do this.</p>
+<p>This should include all publicly announced GHG emissions reduction
+targets for each company in the portfolio. For each target, information
+is required on target type, currently we only score absolute or
+intensity-based GHG emissions reduction targets. For intensity-based
+targets, information is needed about the metric used. Additionally, for
+each target, information on scope(s), level of coverage, level of
+reduction ambition, and begin and end year of the target must be
+included in the file.</p>
+<p>The temperature score is calculated for Scopes 1 + 2 and 3. In order to
+convert targets that only cover scope 1 or scope 2, additional
+information is required on GHG emissions per scope at the base year for
+scope 1 and 2 to convert such targets to targets.</p>
+<p>Specific attention should be given to intensity metrics as there
+currently lacks consensus in reporting method. For the tool, all
+intensity metrics have to be mapped to one of eight categories. Please
+refer to the <strong>[link to guidance]</strong> for more detail on how to do this.</p>
 </div>
 </div>
 <div class="section" id="sbti-status">
 <h2>SBTi status<a class="headerlink" href="#sbti-status" title="Permalink to this headline">¶</a></h2>
 <p>The SBTi status of a company indicates whether or not the company has
-set a science based target that meets all criteria and is approved by
-the SBTi. The tool uses the Excel file that is generated when pressing
-the download button
-<a class="reference external" href="ttps://sciencebasedtargets.org/companies-taking-action/">here</a>. This
-list is updated weekly by the SBTi. To ensure this list is up to date,
-the user can download the latest list from the SBTi site here:
+set a science based target has been approved by the SBTi. This tool uses
+the Excel file that is generated when pressing the download button
+<a class="reference external" href="http://ttps://sciencebasedtargets.org/companies-taking-action/">here</a>.
+This list is updated weekly, to ensure your list is up to date, the user
+can download the latest list from the SBTi site here:
 <a class="reference external" href="https://sciencebasedtargets.org/companies-taking-action/">https://sciencebasedtargets.org/companies-taking-action/</a> and replace the
 Excel file in the tool with the downloaded file. To do this go to
-..\SBTi\inputs and replace the
+..\SBTi\inputs directory and replace the
 <em>current-Companies-Taking-Action-xxx.xslx</em> file with the newer file.</p>
 </div>
 </div>

@@ -89,8 +89,8 @@
 <li class="toctree-l1"><a class="reference internal" href="1_analysis_example.html">SBTi-Finance Tool for Temperature Scoring &amp; Portfolio Coverage</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Getting Started Using Python</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#google-colab">Google Colab</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#jupyter-notebooks">Jupyter notebooks</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#starting-from-scratch">Starting from scratch</a><ul class="simple">
+<li class="toctree-l2"><a class="reference internal" href="#jupyter-notebooks">Jupyter Notebooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#python-code">Python code</a><ul class="simple">
 </ul>
 </li>
 </ul>
@@ -192,43 +192,44 @@
 </style>
 <div class="section" id="getting-started-using-python">
 <h1>Getting Started Using Python<a class="headerlink" href="#getting-started-using-python" title="Permalink to this headline">¶</a></h1>
-<p>The most fundamental part of the project is the Python module. This takes care of all the heavy lifting.
+<p>The most fundamental part of the project is the Python module, which takes care of all the heavy lifting.
 You can install it easily through PIP. There are a couple ways to get started using the module.
-The easiest option is to run our getting started notebook on Google Colab. Alternatively you can also run the <a class="reference external" href="https://github.com/OFBDABV/SBTi/tree/master/examples">getting
-started notebooks</a> locally or start from scratch using the API reference.</p>
+The easiest option is to run our getting started notebook on <a class="reference external" href="https://colab.research.google.com/">Google Colab</a>.
+Alternatively, you can also run the <a class="reference external" href="https://github.com/OFBDABV/SBTi/tree/master/examples">notebooks</a> locally or start from scratch using the API reference.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This page only concerns itself with the Python module. The getting started documentation for the REST API can be found on its <a class="reference external" href="rest_api.html">dedicated page</a>. For a distinction between the different parts of the project, have a look at <a class="reference external" href="index.html">the homepage</a>.</p>
+<p>This page focuses on the Python module. The getting started documentation for the REST API can be found on its <a class="reference external" href="https://ofbdabv.github.io/SBTi/rest_api.html">dedicated page</a>. For a distinction between the different parts of the project, have a look at <a class="reference external" href="https://ofbdabv.github.io/SBTi/index.html">the homepage</a>.</p>
 </div>
 <div class="section" id="google-colab">
 <h2>Google Colab<a class="headerlink" href="#google-colab" title="Permalink to this headline">¶</a></h2>
 <p>The easiest way to get started is by using the getting started notebook on Google Colab.
-It guides you through all the steps involved in installing the module and consequently running it, i.e. calculating a portfolio score.
-There are five notebooks that go through the process, step-by-step:</p>
+It guides you through all the steps involved in installing the module and consequently running it, i.e. calculating a temperature scores and analyzing portfolios.
+There are five notebooks that go through the process step-by-step:</p>
+<p>We recommend that you start with notebook 1 analysis example, especially
+if you are new to Python and/or the <a class="reference external" href="https://sciencebasedtargets.org/wp-content/uploads/2020/07/Temperature-Scoring-Beta-Methodology.pdf">temperature scoring
+methodology</a>.</p>
 <ol class="arabic simple">
-<li><p><a class="reference external" href="https://colab.research.google.com/github/OFBDABV/SBTi/blob/master/examples/1_analysis_example.ipynb">Analysis</a></p></li>
-<li><p><a class="reference external" href="https://colab.research.google.com/github/OFBDABV/SBTi/blob/master/examples/2_getting_started.ipynb">Getting started</a></p></li>
-<li><p><a class="reference external" href="https://colab.research.google.com/github/OFBDABV/SBTi/blob/master/examples/3_scenarios.ipynb">Scenarios</a></p></li>
-<li><p><a class="reference external" href="https://colab.research.google.com/github/OFBDABV/SBTi/blob/master/examples/4_portfolio_aggregations.ipynb">Portfolio aggregations</a></p></li>
+<li><p><a class="reference external" href="https://colab.research.google.com/github/OFBDABV/SBTi/blob/master/examples/1_analysis_example.ipynb">Analysis example (with abbreviated methodology)</a></p></li>
+<li><p><a class="reference external" href="https://colab.research.google.com/github/OFBDABV/SBTi/blob/master/examples/2_getting_started.ipynb">Quick temperature calculation</a></p></li>
+<li><p><a class="reference external" href="https://colab.research.google.com/github/OFBDABV/SBTi/blob/master/examples/3_scenarios.ipynb">What-if analysis</a></p></li>
+<li><p><a class="reference external" href="https://colab.research.google.com/github/OFBDABV/SBTi/blob/master/examples/4_portfolio_aggregations.ipynb">Portfolio aggregation</a></p></li>
 <li><p><a class="reference external" href="https://colab.research.google.com/github/OFBDABV/SBTi/blob/master/examples/5_reporting.ipynb">Reporting</a></p></li>
 </ol>
 </div>
 <div class="section" id="jupyter-notebooks">
-<h2>Jupyter notebooks<a class="headerlink" href="#jupyter-notebooks" title="Permalink to this headline">¶</a></h2>
-<p>Alternatively, you can also run the getting started notebooks locally. To do so, you first need to setup a new environment.
-In the next examples, we’ll assume you use Anaconda to manage your environments:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">examples</span>
-<span class="n">conda</span> <span class="n">env</span> <span class="n">create</span> <span class="o">-</span><span class="n">f</span> <span class="n">environment</span><span class="o">.</span><span class="n">yml</span>
-<span class="n">activate</span> <span class="n">sbti_getting_started</span>
-<span class="n">jupyter</span> <span class="n">notebook</span>
+<h2>Jupyter Notebooks<a class="headerlink" href="#jupyter-notebooks" title="Permalink to this headline">¶</a></h2>
+<p>Alternatively, you can also run the notebooks locally. To do so, you first need to set-up a new environment.
+In this example, we assume you use <a class="reference external" href="https://www.anaconda.com/">Anaconda</a> to manage your environments.
+To do this, run the following command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">examples</span> <span class="n">conda</span> <span class="n">env</span> <span class="n">create</span> <span class="o">-</span><span class="n">f</span> <span class="n">environment</span><span class="o">.</span><span class="n">yml</span> <span class="n">activate</span> <span class="n">sbti_getting_started</span> <span class="n">jupyter</span> <span class="n">notebook</span>
 </pre></div>
 </div>
-<p>A tab should now open in your web browser. In case you use virtual env you can install the required packages using the requirements.txt file in the examples directory.
-Make sure that your Python version is at least 3.6.</p>
+<p>A tab should now open in your web browser. If you are using a virtual environment, you can install the required packages using the requirements.txt file in the examples directory.
+Make sure that your Python version is at least 3.7.</p>
 </div>
-<div class="section" id="starting-from-scratch">
-<h2>Starting from scratch<a class="headerlink" href="#starting-from-scratch" title="Permalink to this headline">¶</a></h2>
-<p>If you’re starting from scratch you can install the latest version of the package directly from Github as follows:</p>
+<div class="section" id="python-code">
+<h2>Python code<a class="headerlink" href="#python-code" title="Permalink to this headline">¶</a></h2>
+<p>If you are starting from scratch, you can install the latest version of the package directly from Github as follows:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">git</span><span class="o">+</span><span class="n">git</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">OFBDABV</span><span class="o">/</span><span class="n">SBTi</span>
 </pre></div>
 </div>
