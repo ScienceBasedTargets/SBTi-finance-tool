@@ -1,41 +1,43 @@
 ****************************
 Getting Started Using Python
 ****************************
-The most fundamental part of the project is the Python module. This takes care of all the heavy lifting.
-You can install it easily through PIP. There are a couple ways to get started using the module.
-The easiest option is to run our getting started notebook on Google Colab. Alternatively you can also run the `getting
-started notebooks <https://github.com/OFBDABV/SBTi/tree/master/examples>`_ locally or start from scratch using the API reference.
+The most fundamental part of the project is the Python module, which takes care of all the heavy lifting. 
+You can install it easily through PIP. There are a couple ways to get started using the module. 
+The easiest option is to run our getting started notebook on `Google Colab <https://colab.research.google.com/>`__.
+Alternatively, you can also run the `notebooks <https://github.com/OFBDABV/SBTi/tree/master/examples>`__ locally or start from scratch using the API reference.
 
-.. note:: This page only concerns itself with the Python module. The getting started documentation for the REST API can be found on its `dedicated page <rest_api.html>`_. For a distinction between the different parts of the project, have a look at `the homepage <index.html>`_.
+.. note:: This page focuses on the Python module. The getting started documentation for the REST API can be found on its `dedicated page <https://ofbdabv.github.io/SBTi/rest_api.html>`__. For a distinction between the different parts of the project, have a look at `the homepage <https://ofbdabv.github.io/SBTi/index.html>`__.
 
 Google Colab
 -------------
-The easiest way to get started is by using the getting started notebook on Google Colab.
-It guides you through all the steps involved in installing the module and consequently running it, i.e. calculating a portfolio score.
-There are five notebooks that go through the process, step-by-step:
+The easiest way to get started is by using the getting started notebook on Google Colab. 
+It guides you through all the steps involved in installing the module and consequently running it, i.e. calculating a temperature scores and analyzing portfolios. 
+There are five notebooks that go through the process step-by-step:
 
-1. `Analysis <https://colab.research.google.com/github/OFBDABV/SBTi/blob/master/examples/1_analysis_example.ipynb>`_
-2. `Getting started <https://colab.research.google.com/github/OFBDABV/SBTi/blob/master/examples/2_getting_started.ipynb>`_
-3. `Scenarios <https://colab.research.google.com/github/OFBDABV/SBTi/blob/master/examples/3_scenarios.ipynb>`_
-4. `Portfolio aggregations <https://colab.research.google.com/github/OFBDABV/SBTi/blob/master/examples/4_portfolio_aggregations.ipynb>`_
-5. `Reporting <https://colab.research.google.com/github/OFBDABV/SBTi/blob/master/examples/5_reporting.ipynb>`_
+We recommend that you start with notebook 1 analysis example, especially
+if you are new to Python and/or the `temperature scoring
+methodology <https://sciencebasedtargets.org/wp-content/uploads/2020/07/Temperature-Scoring-Beta-Methodology.pdf>`__.
 
-Jupyter notebooks
+1. `Analysis example (with abbreviated methodology) <https://colab.research.google.com/github/OFBDABV/SBTi/blob/master/examples/1_analysis_example.ipynb>`__
+2. `Quick temperature calculation <https://colab.research.google.com/github/OFBDABV/SBTi/blob/master/examples/2_getting_started.ipynb>`__
+3. `What-if analysis <https://colab.research.google.com/github/OFBDABV/SBTi/blob/master/examples/3_scenarios.ipynb>`__
+4. `Portfolio aggregation <https://colab.research.google.com/github/OFBDABV/SBTi/blob/master/examples/4_portfolio_aggregations.ipynb>`__
+5. `Reporting <https://colab.research.google.com/github/OFBDABV/SBTi/blob/master/examples/5_reporting.ipynb>`__
+
+Jupyter Notebooks
 -----------------
-Alternatively, you can also run the getting started notebooks locally. To do so, you first need to setup a new environment.
-In the next examples, we'll assume you use Anaconda to manage your environments::
+Alternatively, you can also run the notebooks locally. To do so, you first need to set-up a new environment.
+In this example, we assume you use `Anaconda <https://www.anaconda.com/>`__ to manage your environments. 
+To do this, run the following command::
 
-    cd examples
-    conda env create -f environment.yml
-    activate sbti_getting_started
-    jupyter notebook
+    cd examples conda env create -f environment.yml activate sbti_getting_started jupyter notebook
 
-A tab should now open in your web browser. In case you use virtual env you can install the required packages using the requirements.txt file in the examples directory.
-Make sure that your Python version is at least 3.6.
+A tab should now open in your web browser. If you are using a virtual environment, you can install the required packages using the requirements.txt file in the examples directory. 
+Make sure that your Python version is at least 3.7.
 
-Starting from scratch
+Python code
 ---------------------
-If you're starting from scratch you can install the latest version of the package directly from Github as follows::
+If you are starting from scratch, you can install the latest version of the package directly from Github as follows::
 
     pip install git+git://github.com/OFBDABV/SBTi
 
