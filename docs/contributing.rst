@@ -6,26 +6,25 @@ the documentation are also very welcome.
 
 Submitting a bug report or a feature request
 ==============================================
-To keep track of open issues and feature requests, we use `Github's issue tracker <https://github.com/OFBDABV/SBTi/issues/>`_.
+To keep track of open issues and feature requests, we will use `Github's issue tracker <https://github.com/OFBDABV/SBTi/issues/>`_.
 
-If you encounter any bugs or missing features, please don't hesitate to open a ticket. However, before submitting a new issue, please check that there isn't already another issue or pull request that addresses your issue.
-
-To make sure that others know exactly what the problem is, the ticket should have the following characteristics:
+If you encounter any bugs or missing features, please do not hesitate to open a ticket. Before submitting a report, please check that the issue hasn’t already been reported.
+For ease of comprehension, please ensure your report includes the following characteristics:
 
 * Reproducible: It should be possible for others to reproduce the issue, ideally through a small code snippet in the description of the issue
 * Labelled: Add a label that describes the contents of the ticket, e.g. "bug", "feature request" or "documentation"
 
 Contributing code
 ====================
-The preferred way for contributing code is to fork the repository, make changes on your personal fork and then create a pull request to merge your changes back into the main repository.
-Before a pull request can be approved it needs to be reviewed by two core contributors and the automated checks need to be passed (more on these checks can be found in the "Coding guidelines" section below).
+Our preferred way for contributing code is to fork the repository, make changes on your personal fork and then create a pull request to merge your changes back into the main repository. 
+Before a pull request can be approved it needs to be reviewed by two core contributors, then these automated checks need to be passed (see “Coding Guidelines” section below).
 
-.. note:: When you're starting work on an issue, assign yourself to it, this way we avoid duplicate work.
+.. note:: Please assign the issue you’re working on to yourself so we can avoid duplicate efforts.
 
 Getting started
 -----------------
-Before getting started it's important to have a clean Python environment. The recommended Python version is 3.6 or higher.
-An anaconda environment file is provided in the root of the project, as is a PIP requirements.txt file.
+Before getting started it is important to have a clean Python environment. The recommended Python version is 3.6 or higher. 
+An anaconda environment file is provided in the root of the project, as is a PIP requirements.txt file. 
 The easiest way to work on the Python module is by installing it in development mode. This can be done using the following command::
 
     pip install -e .[dev]
@@ -62,8 +61,8 @@ To generate the documentation, you should follow these steps in the "SBTi" repos
 
 Code of conduct
 ===============
-Everyone is here with the same goal, helping portfolio holders decrease their impact on climate change.
-The only way this goal can be achieved is in an inclusive and welcoming environment. Therefore, this project is governed by a `code of conduct <https://github.com/OFBDABV/SBTi/blob/master/CODE_OF_CONDUCT.md>`_. By participating, you are expected to uphold this code. If you encounter any violations, please report them.
+Everyone's goals here are aligned: to help asset owners and asset managers reduce their impact on climate change.
+The only way we can achieve this goal is by fostering an inclusive and welcome environment. Therefore, this project is governed by a `code of conduct <https://github.com/OFBDABV/SBTi/blob/master/CODE_OF_CONDUCT.md>`_. By participating, you are expected to uphold this code. If you encounter any violations, please report them.
 
 .. toctree::
    :maxdepth: 4
