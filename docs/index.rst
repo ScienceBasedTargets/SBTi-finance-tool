@@ -60,6 +60,7 @@ As shown above the API is dependent on the Python Repo, in the same way the UI r
    1_analysis_example
    getting_started
    rest_api
+   FunctionalOverview
    DataRequirements
    Legends
    contributing
