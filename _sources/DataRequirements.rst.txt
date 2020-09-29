@@ -94,7 +94,7 @@ table below outlines required data for all aggregation methods.
 
 The financial data used should be regarding the same period as the
 reported emissions. Preferably the latest reported. For more information
-about the requirements, go to **[link to guidance doc]**
+about the requirements, see the `guidance <https://sciencebasedtargets.org/financial-institutions>`__ documentation.
 
 Target data
 ~~~~~~~~~~~
