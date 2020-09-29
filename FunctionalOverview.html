@@ -1,0 +1,385 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Functional Overview &mdash; SBTi Temperature Alignment tool  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Data Requirements" href="DataRequirements.html" />
+    <link rel="prev" title="Getting Started Using REST API &amp; UI" href="rest_api.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> SBTi Temperature Alignment tool
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">SBTi-Finance Tool for Temperature Scoring &amp; Portfolio Coverage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started Using Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rest_api.html">Getting Started Using REST API &amp; UI</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Functional Overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#temperature-score">Temperature Score</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#time-frames">Time Frames</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#scopes">Scopes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aggregation-methods">Aggregation methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#grouping-data">Grouping data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#choose-fields-to-show">Choose fields to show</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#what-if-analyses">What-If Analyses</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#portfolio-coverage">Portfolio coverage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#output-options">Output options</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="DataRequirements.html">Data Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Legends.html">Data Legends</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="links.html">Project Links</a></li>
+<li class="toctree-l1"><a class="reference internal" href="terms.html">Terms of Use</a></li>
+<li class="toctree-l1"><a class="reference internal" href="autoapi/index.html">API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">SBTi Temperature Alignment tool</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Functional Overview</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/FunctionalOverview.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="functional-overview">
+<h1>Functional Overview<a class="headerlink" href="#functional-overview" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="temperature-score">
+<h2>Temperature Score<a class="headerlink" href="#temperature-score" title="Permalink to this headline">¶</a></h2>
+<p>Portfolio temperature scores are calculated through an aggregation of
+all companies’ temperature scores within your portfolio. For each
+company, the score is calculated based on the publicly announced
+targets, which are mapped to regression models based on IPCC climate
+scenarios. The company is then awarded a score for each period and scope
+based on the ambition and coverage of the relevant targets. For more
+information, refer to the methodology <a class="reference external" href="https://sciencebasedtargets.org/financial-institutions">here</a>.</p>
+<div class="section" id="time-frames">
+<h3>Time Frames<a class="headerlink" href="#time-frames" title="Permalink to this headline">¶</a></h3>
+<p>By default, the SBTi temperature scoring tool reports temperature scores
+on the mid-term time frames (i.e. based on emissions reduction targets
+aimed at 5-15 years into the future). However, it is also possible to
+inspect short (less than 5 years) and long-term time frames (15 to 30
+years).</p>
+</div>
+<div class="section" id="scopes">
+<h3>Scopes<a class="headerlink" href="#scopes" title="Permalink to this headline">¶</a></h3>
+<p>SBTi temperature scoring tool reports on the scores for Scope 1+2 and
+Scope 1+2+3, however it is also possible to inspect the Scope 3 score
+individually.</p>
+</div>
+<div class="section" id="aggregation-methods">
+<h3>Aggregation methods<a class="headerlink" href="#aggregation-methods" title="Permalink to this headline">¶</a></h3>
+<p>The portfolio temperature score can be calculated using different
+aggregation methods based on emission and financial data of the
+individual companies. The available options are:</p>
+<ul class="simple">
+<li><p>Weighted average temperature score (WATS)</p></li>
+<li><p>Total emissions weighted temperature score (TETS)</p></li>
+<li><p>Market Owned emissions weighted temperature score (MOTS)</p></li>
+<li><p>Enterprise Owned emissions weighted temperature score (EOTS).</p></li>
+<li><p>EV + Cash emissions weighted temperature score (ECOTS)</p></li>
+<li><p>Total Assets emissions weighted temperature score (AOTS)</p></li>
+<li><p>Revenue emissions weighted temperature score (ROTS)</p></li>
+</ul>
+<p>It is also possible to calculate scores of the individual companies
+without aggregating to a portfolio score.</p>
+</div>
+<div class="section" id="grouping-data">
+<h3>Grouping data<a class="headerlink" href="#grouping-data" title="Permalink to this headline">¶</a></h3>
+<p>This functionality enables the user to analyze (for examples see Jupyter
+notebook
+<a class="reference external" href="https://github.com/OFBDABV/SBTi/blob/master/examples/1_analysis_example.ipynb">analysis_example</a><strong>)</strong>
+the temperature score of the portfolio in depth by slicing and dicing
+through the portfolio. By choosing to “group by” a certain field (for
+example region or sector), the user receives output of temperature
+scores per category in the chosen field (so per region or sector). It is
+possible to group over region, country, sector, and industry level 1-4.
+Furthermore, it is also possible to add your own fields to group the
+score over (e.g. investments strategies, market cap buckets) via the
+portfolio data.</p>
+</div>
+<div class="section" id="choose-fields-to-show">
+<h3>Choose fields to show<a class="headerlink" href="#choose-fields-to-show" title="Permalink to this headline">¶</a></h3>
+<p>By default, the SBTi temperature scoring tool reports Company name,
+Company ID, Scope, Time frame and Temperature score for each individual
+combination. However, using this option allows the user to add
+additional columns to the output. It is possible to add all fields
+imported via either the portfolio data or the company data (fundamental
+and target).</p>
+</div>
+<div class="section" id="what-if-analyses">
+<h3>What-If Analyses<a class="headerlink" href="#what-if-analyses" title="Permalink to this headline">¶</a></h3>
+<p>To analyze the effect of engagement on your portfolio temperature score
+it is possible to run “what-if” analyses. In these scenarios, the
+temperature score is recalculated with the presumption that based on
+various engagements some or all companies decided to set different (more
+ambitious) targets.</p>
+<p>The possible scenarios are:</p>
+<ul class="simple">
+<li><p>Scenario 1: In this scenario, all companies in the portfolio that did
+not yet set a valid target have been persuaded to set 2.0<sup>o</sup>
+Celsius (C) targets. This is simulated by changing all scores that
+used the default score to a score of 2.0<sup>o</sup> C.</p></li>
+<li><p>Scenario 2: In this scenario, all companies that already set targets
+are persuaded to set “Well Below 2.0:sup:<cite>o</cite> C (WB2C) targets. This
+is simulated by setting all scores of the companies that have valid
+targets to at most 1.75<sup>o</sup> C.</p></li>
+<li><p>Scenario 3: In these scenarios, the top 10 contributors to the
+portfolio temperature score are persuaded to set 2.0<sup>o</sup> C
+targets.</p>
+<ul>
+<li><p>Scenario 3a: All top 10 contributors set 2.0<sup>o</sup> C targets.</p></li>
+<li><p>Scenario 3b: All top 10 contributors set WB2C, i.e. 1.75<sup>o</sup> C targets.</p></li>
+</ul>
+</li>
+<li><p>Scenario 4: In this scenario, the user can specify which companies it
+wants to engage with to influence to set 2.0<sup>o</sup> C or WB2C
+targets. The user selects companies to engage with in the portfolio
+input file by settings the <em>engagement_target</em> field to TRUE for
+these companies.</p>
+<ul>
+<li><p>Scenario 4a: All companies that are marked as engagement targets
+set 2.0<sup>o</sup> C targets</p></li>
+<li><p>Scenario 4b: All companies that are marked as engagement targets
+set WB2C targets.</p></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="portfolio-coverage">
+<h2>Portfolio coverage<a class="headerlink" href="#portfolio-coverage" title="Permalink to this headline">¶</a></h2>
+<p>The portfolio coverage calculates the percentage of the portfolio that
+is covered by companies with an approved SBTi target. This coverage is
+calculated using one of the aggregation methods above.</p>
+</div>
+<div class="section" id="output-options">
+<h2>Output options<a class="headerlink" href="#output-options" title="Permalink to this headline">¶</a></h2>
+<p>The temperature score can be requested for all time frames and scope
+combinations on the following levels.</p>
+<ul class="simple">
+<li><p>Portfolio temperature score: the aggregated score over all companies
+in the portfolio</p></li>
+<li><p>Company temperature score: the temperature score of an individual
+company</p></li>
+<li><p>Grouped temperature score: using the “group by” option, the user can
+get the aggregated temperature score per category in a chosen field
+(for example per region or per sector).</p></li>
+</ul>
+<p>For the portfolio temperature score and the temperature score grouped by
+some category, the following additional information is reported for the
+composition of the score</p>
+<ul class="simple">
+<li><p>Contributions: the level to which each company contributes to the
+total score based on the chosen aggregation method. This value is
+split into company temperature score and relative contribution.</p></li>
+<li><p>The percentage of the score that is based on reported targets vs. the
+percentage based on the default score</p></li>
+<li><p>For the grouped temperature scores: the percentage each group
+contributes to the portfolio temperature score. For example: how much
+each region or sector contributes to the total score.</p></li>
+</ul>
+<p>For the company temperature scores it is possible to request all
+underlying data.</p>
+<ul class="simple">
+<li><p>Portfolio data</p></li>
+<li><p>Financial data</p></li>
+<li><p>GHG emissions</p></li>
+<li><p>Used target and all its parameters</p></li>
+<li><p>Values used during calculation such as the Linear annual reduction
+(LAR), mapped regression scenario, and parameters for the formula to
+calculate the temperature score.</p></li>
+</ul>
+<p>Finally, it is possible to anonymize all names and identifiers, e.g. for
+submission to the SBTi Target Validation Team for approval.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="DataRequirements.html" class="btn btn-neutral float-right" title="Data Requirements" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="rest_api.html" class="btn btn-neutral float-left" title="Getting Started Using REST API &amp; UI" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Science Based Targets
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
