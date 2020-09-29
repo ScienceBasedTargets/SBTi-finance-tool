@@ -14,6 +14,16 @@ def print_aggregations(aggregations):
                     print("{:<10s} {:<10s} {:.2f}".format(time_frame, scope, scope_values["all"]["score"]))
 
 
+def print_percentage_default_scores(aggregations):
+    aggregations = aggregations.dict()
+    print("{:<10s} {:<10s} {}".format('Timeframe', 'Scope', '% Default score'))
+    for time_frame, time_frame_values in aggregations.items():
+        if time_frame_values:
+            for scope, scope_values in time_frame_values.items():
+                if scope_values:
+                    print("{:<10s} {:<10s} {:.2f}".format(time_frame, scope, scope_values['influence_percentage']))
+
+
 def print_scenario_gain(actual_aggregations, scenario_aggregations):
     print("Actual portfolio temperature score")
     print_aggregations(actual_aggregations)
