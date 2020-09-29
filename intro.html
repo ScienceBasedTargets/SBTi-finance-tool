@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>SBTi-Finance Tool for Temperature Scoring &amp; Portfolio Coverage &mdash; SBTi Temperature Alignment tool  documentation</title>
+  <title>Introduction to temperature scoring and portfolio coverage methods &mdash; SBTi Temperature Alignment tool  documentation</title>
   
 
   
@@ -85,9 +85,7 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">SBTi-Finance Tool for Temperature Scoring &amp; Portfolio Coverage</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#an-introduction-to-the-technical-documentation">An introduction to the technical documentation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#introduction-to-temperature-scoring-and-portfolio-coverage-methods">Introduction to temperature scoring and portfolio coverage methods</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Introduction to temperature scoring and portfolio coverage methods</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#why-has-sbti-built-this-tool">Why has SBTi built this tool?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#why-have-we-built-the-sbti-finance-tool-in-this-way">Why have we built the SBTi-Finance tool in this way?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#what-can-i-use-the-sbti-finance-tool-for">What can I use the SBTi-Finance tool for?</a></li>
@@ -152,7 +150,7 @@
     
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li>SBTi-Finance Tool for Temperature Scoring &amp; Portfolio Coverage</li>
+      <li>Introduction to temperature scoring and portfolio coverage methods</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -171,112 +169,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="sbti-finance-tool-for-temperature-scoring-portfolio-coverage">
-<h1>SBTi-Finance Tool for Temperature Scoring &amp; Portfolio Coverage<a class="headerlink" href="#sbti-finance-tool-for-temperature-scoring-portfolio-coverage" title="Permalink to this headline">¶</a></h1>
-<p><em>Do you want to understand what drives the temperature score of your
-portfolio to make better engagement and investment decisions?</em></p>
-<p><a class="reference internal" href="_images/image1.png"><img alt="image1" src="_images/image1.png" style="width: 6.47222in; height: 4.97682in;" /></a></p>
-<p>Based on the temperature scoring method, developed by CDP and WWF, this
-tool helps companies and financial institutions to assess the
-temperature alignment of current emission reduction targets,
-commitments, and investment and lending portfolios. They can for
-instance use this information to develop their own GHG emission
-reduction targets for official validation by the Science Based Targets
-initiative (SBTi), develop engagement strategies and help with strategic
-security selection and allocation decisions.</p>
-<p>This chapter provides a non-technical introduction and overview of what
-the tool is for, the types of outputs it delivers, what data is
-required, how it works, and where you can find more information and
-documentation to start using the tool.</p>
-<div class="section" id="an-introduction-to-the-technical-documentation">
-<h2>An introduction to the technical documentation<a class="headerlink" href="#an-introduction-to-the-technical-documentation" title="Permalink to this headline">¶</a></h2>
-<p>The SBTi-Finance tool has been built as an open-source, data-agnostic
-tool and works with input data from any data provider and in many
-different IT infrastructures.</p>
-<p>As such, the SBTi-Finance Tool for Temperature Scoring &amp; Portfolio
-Coverage can be used in several ways, depending on the specific
-preferences of the user.</p>
-<table class="docutils align-default">
-<colgroup>
-<col style="width: 100%" />
-</colgroup>
-<tbody>
-<tr class="row-odd"><td><p><strong>Quickstart</strong></p>
-<p>If you prefer to get up and running quickly, we’ve got a no-code and a Python option:</p>
-<ul class="simple">
-<li><p><strong>No-code</strong>: Run the project locally as a <a class="reference external" href="https://ofbdabv.github.io/SBTi/rest_api.html#locally">web application using Docker</a></p></li>
-<li><p><strong>Python</strong>: Run a Jupyter notebook, without any installation in <a class="reference external" href="https://ofbdabv.github.io/SBTi/getting_started.html#google-colab">Google Colab</a> or <a class="reference external" href="https://ofbdabv.github.io/SBTi/getting_started.html#jupyter-notebooks">locally</a>.</p></li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-<p>If you are unsure whether the tool will be useful for your application
-and workflow, or you would first like to run some examples to get a
-better idea of how the tool works and what types of outputs it
-generates, the <a class="reference external" href="https://colab.research.google.com/github/OFBDABV/SBTi/blob/master/examples/1_analysis_example.ipynb">Analysis notebook (with abbreviated methodology)</a>
-offers a quick and no-code opportunity for such testing. The notebook
-combines text and code to provide a testing environment for your
-research, to give you an understanding for how the tool can help you
-analyze companies’ and portfolios’ temperature scores, to aid your
-engagement and investment decisions.</p>
-<p>The notebook is loaded with example data, but you can also use your own
-data. For your first test, you can simply run the code cells one by one
-in the current sequence, to get an understanding of how it works. If you
-are not familiar with Notebooks, please refer to <a class="reference external" href="https://colab.research.google.com/notebooks/basic_features_overview.ipynb">this
-introduction</a>.</p>
-<p>The following diagram provides an overview of the different parts of the
-full toolkit and their dependencies:</p>
-<p><a class="reference internal" href="_images/image2.png"><img alt="image2" src="_images/image2.png" style="width: 3.71642in; height: 3.58652in;" /></a></p>
-<p>As shown above, the Python code forms the core codebase of the
-SBTi-Finance tool. It is recommended to use the Python package if the
-user would like to integrate the tool in their own codebase. In turn,
-the second option is running the tool via the API if the user’s
-preference is to include the tool as a Microservice in their existing IT
-infrastructure in the cloud or on premise. The development project also
-included the creation of a simple user interface (UI), which can be used
-for easier user interaction in combination with the API.</p>
-<p>The SBTi tool enables three main ways of installing and/or running the
-tool:</p>
-<ol class="arabic simple">
-<li><p>Users can integrate the <strong>Python package</strong> in their codebase. For
-more detailed and up-to-date information on how to run the tool via
-the Python package, please consult the ‘Getting Started Using Python’
-section.</p></li>
-<li><p>The tool can be included as a Microservice (<strong>containerized REST
-API</strong>) in any IT infrastructure (in the cloud or on premise). For
-more detailed and up-to-date information on how to run the tool via
-the API, please consult the ‘Getting Started Using REST API’ section.
-Optionally, the API can be run with a frontend (UI). This simple user
-interface makes testing by non-technical users easier. For more
-detailed and up-to-date information on how to use the UI as a
-frontend to the API, please consult the ‘Getting Started Using REST
-API’ section.</p></li>
-<li><p>During the development of this tool, we have worked with several data
-and service providers to the financial and ESG markets, some who have
-or are in the process of implementing the tool and methodology into
-their commercial solutions. These providers include Bloomberg, CDP,
-ISS, MSCI, Ortec Finance, TruCost and Urgentem. Making use of their
-solutions can for some users be the easiest way to integrate the tool
-into existing infrastructure and workflow, to analyze portfolios’ and
-companies’ temperature scores.</p></li>
-</ol>
-<p>Given the open source nature of the tool, the community is encouraged to
-make contributions (refer to ‘Contributing’ section to further develop
-and/or update the codebase. Contributions can range from submitting a
-bug report, to submitting a new feature request, all the way to further
-enhancing the tool’s functionalities by contributing code.</p>
-<p>The tool made available under the MIT License, an Open Source Initiative
-(OSI) approved license. © Copyright 2020, Science Based Targets.
-Permission is hereby granted, free of charge, to any person obtaining a
-copy of this software and associated documentation files (the
-“Software”), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so.</p>
-</div>
-<div class="section" id="introduction-to-temperature-scoring-and-portfolio-coverage-methods">
-<h2>Introduction to temperature scoring and portfolio coverage methods<a class="headerlink" href="#introduction-to-temperature-scoring-and-portfolio-coverage-methods" title="Permalink to this headline">¶</a></h2>
+  <div class="section" id="introduction-to-temperature-scoring-and-portfolio-coverage-methods">
+<h1>Introduction to temperature scoring and portfolio coverage methods<a class="headerlink" href="#introduction-to-temperature-scoring-and-portfolio-coverage-methods" title="Permalink to this headline">¶</a></h1>
 <p>Three methods are currently supported by
 the <a class="reference external" href="https://sciencebasedtargets.org/financial-institutions">SBTi</a> for
 setting targets on scope 3 portfolio emissions: the Sectoral
@@ -314,7 +208,6 @@ target level scores to generate a temperature rating for a company based
 on the ambition of its targets. Finally, the method defines a series of
 weighting options that can enable financial institutions and others to
 produce portfolio level temperature ratings.</p>
-</div>
 <div class="section" id="why-has-sbti-built-this-tool">
 <h2>Why has SBTi built this tool?<a class="headerlink" href="#why-has-sbti-built-this-tool" title="Permalink to this headline">¶</a></h2>
 <p>There has been a growing interest in methods to measure the alignment of
@@ -704,7 +597,7 @@ for submitting your temperature score to the Target Validation Team
 (TVT) at SBTi to get your own GHG emissions reduction target approved. At
 the same time, it provides the opportunity to audit the scores during
 the validation process.</p>
-<p>For a more detailed examples please see Jupyter notebook examples found
+<p>For a more detail please see Jupyter notebook examples found
 <a class="reference external" href="https://ofbdabv.github.io/SBTi/getting_started.html#google-colab">here</a>.</p>
 </div>
 </div>
