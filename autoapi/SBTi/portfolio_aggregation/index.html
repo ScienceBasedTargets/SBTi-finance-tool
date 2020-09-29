@@ -1,7 +1,8 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
   
@@ -11,19 +12,12 @@
   
 
   
-  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/theme_overrides.css" type="text/css" />
-
-  
   
   
   
 
   
-  <!--[if lt IE 9]>
-    <script src="../../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
@@ -36,6 +30,11 @@
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
     
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/theme_overrides.css" type="text/css" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
 </head>
@@ -51,7 +50,7 @@
           
 
           
-            <a href="../../../index.html" class="icon icon-home" alt="Documentation Home"> SBTi Temperature Alignment tool
+            <a href="../../../index.html" class="icon icon-home"> SBTi Temperature Alignment tool
           
 
           
@@ -74,7 +73,6 @@
           
         </div>
 
-        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -84,7 +82,6 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../1_analysis_example.html">SBTi-Finance Tool for Temperature Scoring &amp; Portfolio Coverage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started Using Python</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../rest_api.html">Getting Started Using REST API &amp; UI</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../DataRequirements.html">Data Requirements</a></li>
@@ -97,7 +94,6 @@
             
           
         </div>
-        
       </div>
     </nav>
 
@@ -136,7 +132,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
         
       <li><code class="xref py py-mod docutils literal notranslate"><span class="pre">SBTi.portfolio_aggregation</span></code></li>
     
@@ -185,22 +181,6 @@
 <span id="sbti-portfolio-aggregation"></span><h1><a class="reference internal" href="#module-SBTi.portfolio_aggregation" title="SBTi.portfolio_aggregation"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SBTi.portfolio_aggregation</span></code></a><a class="headerlink" href="#module-SBTi.portfolio_aggregation" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="classes">
-<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h3>
-<table class="longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#SBTi.portfolio_aggregation.PortfolioAggregationMethod" title="SBTi.portfolio_aggregation.PortfolioAggregationMethod"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PortfolioAggregationMethod</span></code></a></p></td>
-<td><p>The portfolio aggregation method determines how the temperature scores for the individual companies are aggregated</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#SBTi.portfolio_aggregation.PortfolioAggregation" title="SBTi.portfolio_aggregation.PortfolioAggregation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PortfolioAggregation</span></code></a></p></td>
-<td><p>This class is a base class that provides portfolio aggregation calculation.</p></td>
-</tr>
-</tbody>
-</table>
 <dl class="py class">
 <dt id="SBTi.portfolio_aggregation.PortfolioAggregationMethod">
 <em class="property">class </em><code class="sig-prename descclassname">SBTi.portfolio_aggregation.</code><code class="sig-name descname">PortfolioAggregationMethod</code><a class="headerlink" href="#SBTi.portfolio_aggregation.PortfolioAggregationMethod" title="Permalink to this definition">¶</a></dt>
@@ -244,7 +224,7 @@ into a single portfolio score.</p>
 
 <dl class="py method">
 <dt id="SBTi.portfolio_aggregation.PortfolioAggregationMethod.is_emissions_based">
-<em class="property">static </em><code class="sig-name descname">is_emissions_based</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">method</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#SBTi.portfolio_aggregation.PortfolioAggregationMethod" title="SBTi.portfolio_aggregation.PortfolioAggregationMethod">PortfolioAggregationMethod</a></span></em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#SBTi.portfolio_aggregation.PortfolioAggregationMethod.is_emissions_based" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="sig-name descname">is_emissions_based</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">method</span><span class="p">:</span> <span class="n">PortfolioAggregationMethod</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.portfolio_aggregation.PortfolioAggregationMethod.is_emissions_based" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check whether a given method is emissions-based (i.e. it uses the emissions to calculate the aggregation).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -258,7 +238,7 @@ into a single portfolio score.</p>
 
 <dl class="py method">
 <dt id="SBTi.portfolio_aggregation.PortfolioAggregationMethod.get_value_column">
-<em class="property">static </em><code class="sig-name descname">get_value_column</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">method</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#SBTi.portfolio_aggregation.PortfolioAggregationMethod" title="SBTi.portfolio_aggregation.PortfolioAggregationMethod">PortfolioAggregationMethod</a></span></em>, <em class="sig-param"><span class="n">column_config</span><span class="p">:</span> <span class="n">Type<span class="p">[</span>ColumnsConfig<span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#SBTi.portfolio_aggregation.PortfolioAggregationMethod.get_value_column" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="sig-name descname">get_value_column</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">method</span><span class="p">:</span> <span class="n">PortfolioAggregationMethod</span></em>, <em class="sig-param"><span class="n">column_config</span><span class="p">:</span> <span class="n">Type<span class="p">[</span>ColumnsConfig<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.portfolio_aggregation.PortfolioAggregationMethod.get_value_column" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -294,7 +274,7 @@ class and overwriting one of the parameters.</p>
 
 <dl class="py method">
 <dt id="SBTi.portfolio_aggregation.PortfolioAggregation._calculate_aggregate_score">
-<code class="sig-name descname">_calculate_aggregate_score</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">pd.DataFrame</span></em>, <em class="sig-param"><span class="n">input_column</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">portfolio_aggregation_method</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#SBTi.portfolio_aggregation.PortfolioAggregationMethod" title="SBTi.portfolio_aggregation.PortfolioAggregationMethod">PortfolioAggregationMethod</a></span></em><span class="sig-paren">)</span> &#x2192; pd.Series<a class="headerlink" href="#SBTi.portfolio_aggregation.PortfolioAggregation._calculate_aggregate_score" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">_calculate_aggregate_score</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">pd.DataFrame</span></em>, <em class="sig-param"><span class="n">input_column</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">portfolio_aggregation_method</span><span class="p">:</span> <span class="n">PortfolioAggregationMethod</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.portfolio_aggregation.PortfolioAggregation._calculate_aggregate_score" title="Permalink to this definition">¶</a></dt>
 <dd><p>Aggregate the scores in a given column based on a certain portfolio aggregation method.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -314,7 +294,6 @@ class and overwriting one of the parameters.</p>
 
 </div>
 </div>
-</div>
 
 
            </div>
@@ -327,19 +306,11 @@ class and overwriting one of the parameters.</p>
 
   <div role="contentinfo">
     <p>
-        
         &copy; Copyright 2020, Science Based Targets
 
     </p>
   </div>
-    
-    
-    
-    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
-    
-    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -350,6 +321,7 @@ class and overwriting one of the parameters.</p>
 
   </div>
   
+
 
   <script type="text/javascript">
       jQuery(function () {

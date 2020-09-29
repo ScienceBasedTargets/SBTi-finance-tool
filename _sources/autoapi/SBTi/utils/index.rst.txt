@@ -8,21 +8,6 @@ Module Contents
 ---------------
 
 
-Functions
-~~~~~~~~~
-
-.. autoapisummary::
-
-   SBTi.utils.get_data_providers
-   SBTi.utils.get_company_data
-   SBTi.utils.get_targets
-   SBTi.utils._flatten_user_fields
-   SBTi.utils._make_isin_map
-   SBTi.utils.dataframe_to_portfolio
-   SBTi.utils.get_data
-   SBTi.utils.calculate
-
-
 .. data:: DATA_PROVIDER_MAP
    :annotation: :Dict[str, Type[data.DataProvider]]
 

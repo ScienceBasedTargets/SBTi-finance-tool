@@ -7,25 +7,6 @@
 Module Contents
 ---------------
 
-Classes
-~~~~~~~
-
-.. autoapisummary::
-
-   SBTi.interfaces.AggregationContribution
-   SBTi.interfaces.Aggregation
-   SBTi.interfaces.ScoreAggregation
-   SBTi.interfaces.ScoreAggregationScopes
-   SBTi.interfaces.ScoreAggregations
-   SBTi.interfaces.ScenarioInterface
-   SBTi.interfaces.PortfolioCompany
-   SBTi.interfaces.IDataProviderCompany
-   SBTi.interfaces.SortableEnum
-   SBTi.interfaces.EScope
-   SBTi.interfaces.ETimeFrames
-   SBTi.interfaces.IDataProviderTarget
-
-
 
 .. py:class:: AggregationContribution
 
@@ -60,6 +41,7 @@ Classes
 
 
 
+
 .. py:class:: Aggregation
 
    Bases: :class:`pydantic.BaseModel`
@@ -80,6 +62,7 @@ Classes
       
 
    .. method:: __getitem__(self, item)
+
 
 
 
@@ -106,6 +89,7 @@ Classes
 
 
 
+
 .. py:class:: ScoreAggregationScopes
 
    Bases: :class:`pydantic.BaseModel`
@@ -129,6 +113,7 @@ Classes
 
 
 
+
 .. py:class:: ScoreAggregations
 
    Bases: :class:`pydantic.BaseModel`
@@ -149,6 +134,7 @@ Classes
       
 
    .. method:: __getitem__(self, item)
+
 
 
 
@@ -307,25 +293,30 @@ Classes
 
    .. method:: __str__(self)
 
+
       Return str(self).
 
 
    .. method:: __ge__(self, other)
+
 
       Return self>=value.
 
 
    .. method:: __gt__(self, other)
 
+
       Return self>value.
 
 
    .. method:: __le__(self, other)
 
+
       Return self<=value.
 
 
    .. method:: __lt__(self, other)
+
 
       Return self<value.
 
@@ -364,8 +355,9 @@ Classes
 
       
 
-   .. method:: get_result_scopes(cls) -> List['EScope']
+   .. method:: get_result_scopes(cls)
       :classmethod:
+
 
       Get a list of scopes that should be calculated if the user leaves it open.
 
@@ -482,6 +474,7 @@ Classes
       
 
    .. method:: validate_e(cls, val)
+
 
 
 

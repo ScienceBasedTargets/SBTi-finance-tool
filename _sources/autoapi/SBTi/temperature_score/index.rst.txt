@@ -7,17 +7,6 @@
 Module Contents
 ---------------
 
-Classes
-~~~~~~~
-
-.. autoapisummary::
-
-   SBTi.temperature_score.ScenarioType
-   SBTi.temperature_score.EngagementType
-   SBTi.temperature_score.Scenario
-   SBTi.temperature_score.TemperatureScore
-
-
 
 .. py:class:: ScenarioType
 
@@ -45,8 +34,9 @@ Classes
 
       
 
-   .. method:: from_int(value) -> Optional['ScenarioType']
+   .. method:: from_int(value)
       :staticmethod:
+
 
 
 
@@ -66,8 +56,9 @@ Classes
 
       
 
-   .. method:: from_int(value) -> 'EngagementType'
+   .. method:: from_int(value)
       :staticmethod:
+
 
       Convert an integer to an engagement type.
 
@@ -75,8 +66,9 @@ Classes
       :return:
 
 
-   .. method:: from_string(value: Optional[str]) -> 'EngagementType'
+   .. method:: from_string(value: Optional[str])
       :staticmethod:
+
 
       Convert a string to an engagement type.
 
@@ -99,14 +91,17 @@ Classes
 
       
 
-   .. method:: get_score_cap(self) -> float
+   .. method:: get_score_cap(self)
 
 
-   .. method:: get_fallback_score(self, fallback_score: float) -> float
+
+   .. method:: get_fallback_score(self, fallback_score: float)
 
 
-   .. method:: from_dict(scenario_values: dict) -> Optional['Scenario']
+
+   .. method:: from_dict(scenario_values: dict)
       :staticmethod:
+
 
       Convert a dictionary to a scenario. The dictionary should have the following keys:
 
@@ -117,8 +112,9 @@ Classes
       :return: A scenario object matching the input values or None, if no scenario could be matched
 
 
-   .. method:: from_interface(scenario_values: Optional[ScenarioInterface]) -> Optional['Scenario']
+   .. method:: from_interface(scenario_values: Optional[ScenarioInterface])
       :staticmethod:
+
 
       Convert a scenario interface to a scenario.
 
@@ -139,7 +135,8 @@ Classes
                    if you'd like to overwrite a constant. This can be done by extending the TemperatureScoreConfig
                    class and overwriting one of the parameters.
 
-   .. method:: get_target_mapping(self, target: pd.Series) -> Optional[str]
+   .. method:: get_target_mapping(self, target: pd.Series)
+
 
       Map the target onto an SR15 target (None if not available).
 
@@ -147,7 +144,8 @@ Classes
       :return: The mapped SR15 target
 
 
-   .. method:: get_annual_reduction_rate(self, target: pd.Series) -> Optional[float]
+   .. method:: get_annual_reduction_rate(self, target: pd.Series)
+
 
       Get the annual reduction rate (or None if not available).
 
@@ -155,7 +153,8 @@ Classes
       :return: The annual reduction
 
 
-   .. method:: get_regression(self, target: pd.Series) -> Tuple[Optional[float], Optional[float]]
+   .. method:: get_regression(self, target: pd.Series)
+
 
       Get the regression parameter and intercept from the model's output.
 
@@ -165,13 +164,15 @@ Classes
 
    .. method:: _merge_regression(self, data: pd.DataFrame)
 
+
       Merge the data with the regression parameters from the SBTi model.
 
       :param data: The data to merge
       :return: The data set, amended with the regression parameters
 
 
-   .. method:: get_score(self, target: pd.Series) -> Tuple[float, float]
+   .. method:: get_score(self, target: pd.Series)
+
 
       Get the temperature score for a certain target based on the annual reduction rate and the regression parameters.
 
@@ -179,7 +180,8 @@ Classes
       :return: The temperature score
 
 
-   .. method:: get_ghc_temperature_score(self, row: pd.Series, company_data: pd.DataFrame) -> Tuple[float, float]
+   .. method:: get_ghc_temperature_score(self, row: pd.Series, company_data: pd.DataFrame)
+
 
       Get the aggregated temperature score and a temperature result, which indicates how much of the score is based on the default score for a certain company based on the emissions of company.
 
@@ -188,7 +190,8 @@ Classes
       :return: The aggregated temperature score for a company
 
 
-   .. method:: get_default_score(self, target: pd.Series) -> int
+   .. method:: get_default_score(self, target: pd.Series)
+
 
       Get the temperature score for a certain target based on the annual reduction rate and the regression parameters.
 
@@ -198,6 +201,7 @@ Classes
 
    .. method:: _prepare_data(self, data: pd.DataFrame)
 
+
       Prepare the data such that it can be used to calculate the temperature score.
 
       :param data: The original data set as a pandas data frame
@@ -206,6 +210,7 @@ Classes
 
    .. method:: _calculate_company_score(self, data)
 
+
       Calculate the combined s1s2s3 scores for all companies.
 
       :param data: The original data set as a pandas data frame
@@ -213,6 +218,7 @@ Classes
 
 
    .. method:: calculate(self, data: Optional[pd.DataFrame] = None, data_providers: Optional[List[data.DataProvider]] = None, portfolio: Optional[List[PortfolioCompany]] = None)
+
 
       Calculate the temperature for a dataframe of company data. The columns in the data frame should be a combination
       of IDataProviderTarget and IDataProviderCompany.
@@ -223,7 +229,8 @@ Classes
       :return: A data frame containing all relevant information for the targets and companies
 
 
-   .. method:: _get_aggregations(self, data: pd.DataFrame, total_companies: int) -> Tuple[Aggregation, pd.Series, pd.Series]
+   .. method:: _get_aggregations(self, data: pd.DataFrame, total_companies: int)
+
 
       Get the aggregated score over a certain data set. Also calculate the (relative) contribution of each company
 
@@ -231,7 +238,8 @@ Classes
       :return: An aggregated score and the relative and absolute contribution of each company
 
 
-   .. method:: _get_score_aggregation(self, data: pd.DataFrame, time_frame: ETimeFrames, scope: EScope) -> Optional[ScoreAggregation]
+   .. method:: _get_score_aggregation(self, data: pd.DataFrame, time_frame: ETimeFrames, scope: EScope)
+
 
       Get a score aggregation for a certain time frame and scope, for the data set as a whole and for the different
       groupings.
@@ -242,7 +250,8 @@ Classes
       :return: A score aggregation, containing the aggregations for the whole data set and each individual group
 
 
-   .. method:: aggregate_scores(self, data: pd.DataFrame) -> ScoreAggregations
+   .. method:: aggregate_scores(self, data: pd.DataFrame)
+
 
       Aggregate scores to create a portfolio score per time_frame (short, mid, long).
 
@@ -250,7 +259,8 @@ Classes
       :return: A weighted temperature score for the portfolio
 
 
-   .. method:: cap_scores(self, scores: pd.DataFrame) -> pd.DataFrame
+   .. method:: cap_scores(self, scores: pd.DataFrame)
+
 
       Cap the temperature scores in the input data frame to a certain value, based on the scenario that's being used. 
       This can either be for the whole data set, or only for the top X contributors.
@@ -259,7 +269,8 @@ Classes
       :return: The input data frame, with capped scores
 
 
-   .. method:: anonymize_data_dump(self, scores: pd.DataFrame) -> pd.DataFrame
+   .. method:: anonymize_data_dump(self, scores: pd.DataFrame)
+
 
       Anonymize the scores by deleting the company IDs, ISIN and renaming the companies.
 

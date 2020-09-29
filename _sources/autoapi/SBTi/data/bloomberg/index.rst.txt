@@ -7,22 +7,15 @@
 Module Contents
 ---------------
 
-Classes
-~~~~~~~
 
-.. autoapisummary::
-
-   SBTi.data.bloomberg.Bloomberg
-
-
-
-.. py:class:: Bloomberg(**kwargs)
+.. py:class:: Bloomberg
 
    Bases: :class:`SBTi.data.data_provider.DataProvider`
 
    Data provider skeleton for Bloomberg.
 
-   .. method:: _request(self, endpoint: str, data: dict) -> Optional[object]
+   .. method:: _request(self, endpoint: str, data: dict)
+
 
       Request data from the server.
       Note: This request does in no way reflect the actual implementation, this is only a stub to show what a
@@ -33,8 +26,9 @@ Classes
       :return: The returned data, None in case of an error.
 
 
-   .. method:: get_targets(self, company_ids: List[str]) -> List[IDataProviderTarget]
+   .. method:: get_targets(self, company_ids: List[str])
       :abstractmethod:
+
 
       Get all relevant targets for a list of company ids (ISIN). This method should return a list of
       IDataProviderTarget instances.
@@ -43,8 +37,9 @@ Classes
       :return: A list containing the targets
 
 
-   .. method:: get_company_data(self, company_ids: List[str]) -> List[IDataProviderCompany]
+   .. method:: get_company_data(self, company_ids: List[str])
       :abstractmethod:
+
 
       Get all relevant data for a list of company ids (ISIN). This method should return a list of IDataProviderCompany
       instances.
@@ -53,8 +48,9 @@ Classes
       :return: A list containing the company data
 
 
-   .. method:: get_sbti_targets(self, companies: list) -> list
+   .. method:: get_sbti_targets(self, companies: list)
       :abstractmethod:
+
 
       For each of the companies, get the status of their target (Target set, Committed or No target) as it's known to
       the SBTi.

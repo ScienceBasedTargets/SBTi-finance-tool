@@ -1,7 +1,8 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
   
@@ -11,19 +12,12 @@
   
 
   
-  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/theme_overrides.css" type="text/css" />
-
-  
   
   
   
 
   
-  <!--[if lt IE 9]>
-    <script src="../../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
@@ -36,6 +30,11 @@
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
     
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/theme_overrides.css" type="text/css" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
 </head>
@@ -51,7 +50,7 @@
           
 
           
-            <a href="../../../index.html" class="icon icon-home" alt="Documentation Home"> SBTi Temperature Alignment tool
+            <a href="../../../index.html" class="icon icon-home"> SBTi Temperature Alignment tool
           
 
           
@@ -74,7 +73,6 @@
           
         </div>
 
-        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -84,7 +82,6 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../1_analysis_example.html">SBTi-Finance Tool for Temperature Scoring &amp; Portfolio Coverage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started Using Python</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../rest_api.html">Getting Started Using REST API &amp; UI</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../DataRequirements.html">Data Requirements</a></li>
@@ -97,7 +94,6 @@
             
           
         </div>
-        
       </div>
     </nav>
 
@@ -136,7 +132,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
         
       <li><code class="xref py py-mod docutils literal notranslate"><span class="pre">SBTi.temperature_score</span></code></li>
     
@@ -185,28 +181,6 @@
 <span id="sbti-temperature-score"></span><h1><a class="reference internal" href="#module-SBTi.temperature_score" title="SBTi.temperature_score"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SBTi.temperature_score</span></code></a><a class="headerlink" href="#module-SBTi.temperature_score" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="classes">
-<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h3>
-<table class="longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#SBTi.temperature_score.ScenarioType" title="SBTi.temperature_score.ScenarioType"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ScenarioType</span></code></a></p></td>
-<td><p>A scenario defines which scenario should be run.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#SBTi.temperature_score.EngagementType" title="SBTi.temperature_score.EngagementType"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EngagementType</span></code></a></p></td>
-<td><p>An engagement type defines how the companies will be engaged.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#SBTi.temperature_score.Scenario" title="SBTi.temperature_score.Scenario"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Scenario</span></code></a></p></td>
-<td><p>A scenario defines the action the portfolio holder will take to improve its temperature score.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#SBTi.temperature_score.TemperatureScore" title="SBTi.temperature_score.TemperatureScore"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TemperatureScore</span></code></a></p></td>
-<td><p>This class is provides a temperature score based on the climate goals.</p></td>
-</tr>
-</tbody>
-</table>
 <dl class="py class">
 <dt id="SBTi.temperature_score.ScenarioType">
 <em class="property">class </em><code class="sig-prename descclassname">SBTi.temperature_score.</code><code class="sig-name descname">ScenarioType</code><a class="headerlink" href="#SBTi.temperature_score.ScenarioType" title="Permalink to this definition">¶</a></dt>
@@ -234,7 +208,7 @@
 
 <dl class="py method">
 <dt id="SBTi.temperature_score.ScenarioType.from_int">
-<em class="property">static </em><code class="sig-name descname">from_int</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span> &#x2192; Optional[‘ScenarioType’]<a class="headerlink" href="#SBTi.temperature_score.ScenarioType.from_int" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="sig-name descname">from_int</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.temperature_score.ScenarioType.from_int" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -256,7 +230,7 @@
 
 <dl class="py method">
 <dt id="SBTi.temperature_score.EngagementType.from_int">
-<em class="property">static </em><code class="sig-name descname">from_int</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span> &#x2192; ’EngagementType’<a class="headerlink" href="#SBTi.temperature_score.EngagementType.from_int" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="sig-name descname">from_int</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.temperature_score.EngagementType.from_int" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert an integer to an engagement type.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -270,7 +244,7 @@
 
 <dl class="py method">
 <dt id="SBTi.temperature_score.EngagementType.from_string">
-<em class="property">static </em><code class="sig-name descname">from_string</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; ’EngagementType’<a class="headerlink" href="#SBTi.temperature_score.EngagementType.from_string" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="sig-name descname">from_string</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.temperature_score.EngagementType.from_string" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert a string to an engagement type.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -300,17 +274,17 @@
 
 <dl class="py method">
 <dt id="SBTi.temperature_score.Scenario.get_score_cap">
-<code class="sig-name descname">get_score_cap</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#SBTi.temperature_score.Scenario.get_score_cap" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_score_cap</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.temperature_score.Scenario.get_score_cap" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt id="SBTi.temperature_score.Scenario.get_fallback_score">
-<code class="sig-name descname">get_fallback_score</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">fallback_score</span><span class="p">:</span> <span class="n">float</span></em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#SBTi.temperature_score.Scenario.get_fallback_score" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_fallback_score</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">fallback_score</span><span class="p">:</span> <span class="n">float</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.temperature_score.Scenario.get_fallback_score" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt id="SBTi.temperature_score.Scenario.from_dict">
-<em class="property">static </em><code class="sig-name descname">from_dict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">scenario_values</span><span class="p">:</span> <span class="n">dict</span></em><span class="sig-paren">)</span> &#x2192; Optional[‘Scenario’]<a class="headerlink" href="#SBTi.temperature_score.Scenario.from_dict" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="sig-name descname">from_dict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">scenario_values</span><span class="p">:</span> <span class="n">dict</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.temperature_score.Scenario.from_dict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert a dictionary to a scenario. The dictionary should have the following keys:</p>
 <ul class="simple">
 <li><p>number: The scenario type as an integer</p></li>
@@ -328,7 +302,7 @@
 
 <dl class="py method">
 <dt id="SBTi.temperature_score.Scenario.from_interface">
-<em class="property">static </em><code class="sig-name descname">from_interface</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">scenario_values</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>ScenarioInterface<span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; Optional[‘Scenario’]<a class="headerlink" href="#SBTi.temperature_score.Scenario.from_interface" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="sig-name descname">from_interface</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">scenario_values</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>ScenarioInterface<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.temperature_score.Scenario.from_interface" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert a scenario interface to a scenario.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -344,7 +318,7 @@
 
 <dl class="py class">
 <dt id="SBTi.temperature_score.TemperatureScore">
-<em class="property">class </em><code class="sig-prename descclassname">SBTi.temperature_score.</code><code class="sig-name descname">TemperatureScore</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">time_frames</span><span class="p">:</span> <span class="n">List<span class="p">[</span>ETimeFrames<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">scopes</span><span class="p">:</span> <span class="n">List<span class="p">[</span>EScope<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">fallback_score</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="default_value">3.2</span></em>, <em class="sig-param"><span class="n">model</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">4</span></em>, <em class="sig-param"><span class="n">scenario</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span><a class="reference internal" href="#SBTi.temperature_score.Scenario" title="SBTi.temperature_score.Scenario">Scenario</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">aggregation_method</span><span class="p">:</span> <span class="n">PortfolioAggregationMethod</span> <span class="o">=</span> <span class="default_value">PortfolioAggregationMethod.WATS</span></em>, <em class="sig-param"><span class="n">grouping</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>List<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">config</span><span class="p">:</span> <span class="n">Type<span class="p">[</span>TemperatureScoreConfig<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">TemperatureScoreConfig</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.temperature_score.TemperatureScore" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">SBTi.temperature_score.</code><code class="sig-name descname">TemperatureScore</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">time_frames</span><span class="p">:</span> <span class="n">List<span class="p">[</span>ETimeFrames<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">scopes</span><span class="p">:</span> <span class="n">List<span class="p">[</span>EScope<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">fallback_score</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="default_value">3.2</span></em>, <em class="sig-param"><span class="n">model</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">4</span></em>, <em class="sig-param"><span class="n">scenario</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Scenario<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">aggregation_method</span><span class="p">:</span> <span class="n">PortfolioAggregationMethod</span> <span class="o">=</span> <span class="default_value">PortfolioAggregationMethod.WATS</span></em>, <em class="sig-param"><span class="n">grouping</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>List<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">config</span><span class="p">:</span> <span class="n">Type<span class="p">[</span>TemperatureScoreConfig<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">TemperatureScoreConfig</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.temperature_score.TemperatureScore" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="../portfolio_aggregation/index.html#SBTi.portfolio_aggregation.PortfolioAggregation" title="SBTi.portfolio_aggregation.PortfolioAggregation"><code class="xref py py-class docutils literal notranslate"><span class="pre">SBTi.portfolio_aggregation.PortfolioAggregation</span></code></a></p>
 <p>This class is provides a temperature score based on the climate goals.</p>
 <dl class="field-list simple">
@@ -360,7 +334,7 @@ class and overwriting one of the parameters.</p></li>
 </dl>
 <dl class="py method">
 <dt id="SBTi.temperature_score.TemperatureScore.get_target_mapping">
-<code class="sig-name descname">get_target_mapping</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n">pd.Series</span></em><span class="sig-paren">)</span> &#x2192; Optional<span class="p">[</span>str<span class="p">]</span><a class="headerlink" href="#SBTi.temperature_score.TemperatureScore.get_target_mapping" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_target_mapping</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n">pd.Series</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.temperature_score.TemperatureScore.get_target_mapping" title="Permalink to this definition">¶</a></dt>
 <dd><p>Map the target onto an SR15 target (None if not available).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -374,7 +348,7 @@ class and overwriting one of the parameters.</p></li>
 
 <dl class="py method">
 <dt id="SBTi.temperature_score.TemperatureScore.get_annual_reduction_rate">
-<code class="sig-name descname">get_annual_reduction_rate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n">pd.Series</span></em><span class="sig-paren">)</span> &#x2192; Optional<span class="p">[</span>float<span class="p">]</span><a class="headerlink" href="#SBTi.temperature_score.TemperatureScore.get_annual_reduction_rate" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_annual_reduction_rate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n">pd.Series</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.temperature_score.TemperatureScore.get_annual_reduction_rate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the annual reduction rate (or None if not available).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -388,7 +362,7 @@ class and overwriting one of the parameters.</p></li>
 
 <dl class="py method">
 <dt id="SBTi.temperature_score.TemperatureScore.get_regression">
-<code class="sig-name descname">get_regression</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n">pd.Series</span></em><span class="sig-paren">)</span> &#x2192; Tuple<span class="p">[</span>Optional<span class="p">[</span>float<span class="p">]</span><span class="p">, </span>Optional<span class="p">[</span>float<span class="p">]</span><span class="p">]</span><a class="headerlink" href="#SBTi.temperature_score.TemperatureScore.get_regression" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_regression</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n">pd.Series</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.temperature_score.TemperatureScore.get_regression" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the regression parameter and intercept from the model’s output.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -416,7 +390,7 @@ class and overwriting one of the parameters.</p></li>
 
 <dl class="py method">
 <dt id="SBTi.temperature_score.TemperatureScore.get_score">
-<code class="sig-name descname">get_score</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n">pd.Series</span></em><span class="sig-paren">)</span> &#x2192; Tuple<span class="p">[</span>float<span class="p">, </span>float<span class="p">]</span><a class="headerlink" href="#SBTi.temperature_score.TemperatureScore.get_score" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_score</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n">pd.Series</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.temperature_score.TemperatureScore.get_score" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the temperature score for a certain target based on the annual reduction rate and the regression parameters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -430,7 +404,7 @@ class and overwriting one of the parameters.</p></li>
 
 <dl class="py method">
 <dt id="SBTi.temperature_score.TemperatureScore.get_ghc_temperature_score">
-<code class="sig-name descname">get_ghc_temperature_score</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">row</span><span class="p">:</span> <span class="n">pd.Series</span></em>, <em class="sig-param"><span class="n">company_data</span><span class="p">:</span> <span class="n">pd.DataFrame</span></em><span class="sig-paren">)</span> &#x2192; Tuple<span class="p">[</span>float<span class="p">, </span>float<span class="p">]</span><a class="headerlink" href="#SBTi.temperature_score.TemperatureScore.get_ghc_temperature_score" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_ghc_temperature_score</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">row</span><span class="p">:</span> <span class="n">pd.Series</span></em>, <em class="sig-param"><span class="n">company_data</span><span class="p">:</span> <span class="n">pd.DataFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.temperature_score.TemperatureScore.get_ghc_temperature_score" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the aggregated temperature score and a temperature result, which indicates how much of the score is based on the default score for a certain company based on the emissions of company.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -447,7 +421,7 @@ class and overwriting one of the parameters.</p></li>
 
 <dl class="py method">
 <dt id="SBTi.temperature_score.TemperatureScore.get_default_score">
-<code class="sig-name descname">get_default_score</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n">pd.Series</span></em><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#SBTi.temperature_score.TemperatureScore.get_default_score" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_default_score</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n">pd.Series</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.temperature_score.TemperatureScore.get_default_score" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the temperature score for a certain target based on the annual reduction rate and the regression parameters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -508,7 +482,7 @@ of IDataProviderTarget and IDataProviderCompany.</p>
 
 <dl class="py method">
 <dt id="SBTi.temperature_score.TemperatureScore._get_aggregations">
-<code class="sig-name descname">_get_aggregations</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">pd.DataFrame</span></em>, <em class="sig-param"><span class="n">total_companies</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span> &#x2192; Tuple<span class="p">[</span>Aggregation<span class="p">, </span>pd.Series<span class="p">, </span>pd.Series<span class="p">]</span><a class="headerlink" href="#SBTi.temperature_score.TemperatureScore._get_aggregations" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">_get_aggregations</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">pd.DataFrame</span></em>, <em class="sig-param"><span class="n">total_companies</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.temperature_score.TemperatureScore._get_aggregations" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the aggregated score over a certain data set. Also calculate the (relative) contribution of each company</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -522,7 +496,7 @@ of IDataProviderTarget and IDataProviderCompany.</p>
 
 <dl class="py method">
 <dt id="SBTi.temperature_score.TemperatureScore._get_score_aggregation">
-<code class="sig-name descname">_get_score_aggregation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">pd.DataFrame</span></em>, <em class="sig-param"><span class="n">time_frame</span><span class="p">:</span> <span class="n">ETimeFrames</span></em>, <em class="sig-param"><span class="n">scope</span><span class="p">:</span> <span class="n">EScope</span></em><span class="sig-paren">)</span> &#x2192; Optional<span class="p">[</span>ScoreAggregation<span class="p">]</span><a class="headerlink" href="#SBTi.temperature_score.TemperatureScore._get_score_aggregation" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">_get_score_aggregation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">pd.DataFrame</span></em>, <em class="sig-param"><span class="n">time_frame</span><span class="p">:</span> <span class="n">ETimeFrames</span></em>, <em class="sig-param"><span class="n">scope</span><span class="p">:</span> <span class="n">EScope</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.temperature_score.TemperatureScore._get_score_aggregation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a score aggregation for a certain time frame and scope, for the data set as a whole and for the different
 groupings.</p>
 <dl class="field-list simple">
@@ -541,7 +515,7 @@ groupings.</p>
 
 <dl class="py method">
 <dt id="SBTi.temperature_score.TemperatureScore.aggregate_scores">
-<code class="sig-name descname">aggregate_scores</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">pd.DataFrame</span></em><span class="sig-paren">)</span> &#x2192; ScoreAggregations<a class="headerlink" href="#SBTi.temperature_score.TemperatureScore.aggregate_scores" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">aggregate_scores</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">pd.DataFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.temperature_score.TemperatureScore.aggregate_scores" title="Permalink to this definition">¶</a></dt>
 <dd><p>Aggregate scores to create a portfolio score per time_frame (short, mid, long).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -555,7 +529,7 @@ groupings.</p>
 
 <dl class="py method">
 <dt id="SBTi.temperature_score.TemperatureScore.cap_scores">
-<code class="sig-name descname">cap_scores</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">scores</span><span class="p">:</span> <span class="n">pd.DataFrame</span></em><span class="sig-paren">)</span> &#x2192; pd.DataFrame<a class="headerlink" href="#SBTi.temperature_score.TemperatureScore.cap_scores" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">cap_scores</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">scores</span><span class="p">:</span> <span class="n">pd.DataFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.temperature_score.TemperatureScore.cap_scores" title="Permalink to this definition">¶</a></dt>
 <dd><p>Cap the temperature scores in the input data frame to a certain value, based on the scenario that’s being used.
 This can either be for the whole data set, or only for the top X contributors.</p>
 <dl class="field-list simple">
@@ -570,7 +544,7 @@ This can either be for the whole data set, or only for the top X contributors.</
 
 <dl class="py method">
 <dt id="SBTi.temperature_score.TemperatureScore.anonymize_data_dump">
-<code class="sig-name descname">anonymize_data_dump</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">scores</span><span class="p">:</span> <span class="n">pd.DataFrame</span></em><span class="sig-paren">)</span> &#x2192; pd.DataFrame<a class="headerlink" href="#SBTi.temperature_score.TemperatureScore.anonymize_data_dump" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">anonymize_data_dump</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">scores</span><span class="p">:</span> <span class="n">pd.DataFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.temperature_score.TemperatureScore.anonymize_data_dump" title="Permalink to this definition">¶</a></dt>
 <dd><p>Anonymize the scores by deleting the company IDs, ISIN and renaming the companies.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -586,7 +560,6 @@ This can either be for the whole data set, or only for the top X contributors.</
 
 </div>
 </div>
-</div>
 
 
            </div>
@@ -599,19 +572,11 @@ This can either be for the whole data set, or only for the top X contributors.</
 
   <div role="contentinfo">
     <p>
-        
         &copy; Copyright 2020, Science Based Targets
 
     </p>
   </div>
-    
-    
-    
-    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
-    
-    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -622,6 +587,7 @@ This can either be for the whole data set, or only for the top X contributors.</
 
   </div>
   
+
 
   <script type="text/javascript">
       jQuery(function () {

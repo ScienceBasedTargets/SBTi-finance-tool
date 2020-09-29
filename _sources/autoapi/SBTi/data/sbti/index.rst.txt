@@ -7,20 +7,13 @@
 Module Contents
 ---------------
 
-Classes
-~~~~~~~
-
-.. autoapisummary::
-
-   SBTi.data.sbti.SBTi
-
-
 
 .. py:class:: SBTi(config: Type[PortfolioCoverageTVPConfig] = PortfolioCoverageTVPConfig)
 
    Data provider skeleton for SBTi. This class only provides the sbti_validated field for existing companies.
 
-   .. method:: get_sbti_targets(self, companies: List[IDataProviderCompany], isin_map: dict) -> List[IDataProviderCompany]
+   .. method:: get_sbti_targets(self, companies: List[IDataProviderCompany], isin_map: dict)
+
 
       Check for each company if they have an SBTi validated target.
 

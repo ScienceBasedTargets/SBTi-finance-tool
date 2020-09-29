@@ -7,14 +7,6 @@
 Module Contents
 ---------------
 
-Classes
-~~~~~~~
-
-.. autoapisummary::
-
-   SBTi.portfolio_coverage_tvp.PortfolioCoverageTVP
-
-
 
 .. py:class:: PortfolioCoverageTVP(config: Type[PortfolioCoverageTVPConfig] = PortfolioCoverageTVPConfig)
 
@@ -26,7 +18,8 @@ Classes
                    if you'd like to overwrite a constant. This can be done by extending the PortfolioCoverageTVPConfig
                    class and overwriting one of the parameters.
 
-   .. method:: get_portfolio_coverage(self, company_data: pd.DataFrame, portfolio_aggregation_method: PortfolioAggregationMethod) -> Optional[float]
+   .. method:: get_portfolio_coverage(self, company_data: pd.DataFrame, portfolio_aggregation_method: PortfolioAggregationMethod)
+
 
       Get the TVP portfolio coverage (i.e. what part of the portfolio has a SBTi validated target).
 

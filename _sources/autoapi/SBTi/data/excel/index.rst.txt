@@ -7,14 +7,6 @@
 Module Contents
 ---------------
 
-Classes
-~~~~~~~
-
-.. autoapisummary::
-
-   SBTi.data.excel.ExcelProvider
-
-
 
 .. py:class:: ExcelProvider(path: str, config: Type[ColumnsConfig] = ColumnsConfig)
 
@@ -24,7 +16,8 @@ Classes
 
    :param config: A dictionary containing a "path" field that leads to the path of the CSV file
 
-   .. method:: get_targets(self, company_ids: List[str]) -> List[IDataProviderTarget]
+   .. method:: get_targets(self, company_ids: List[str])
+
 
       Get all relevant targets for a list of company ids (ISIN). This method should return a list of
       IDataProviderTarget instances.
@@ -35,13 +28,15 @@ Classes
 
    .. method:: _target_df_to_model(self, df_targets)
 
+
       transforms target Dataframe into list of IDataProviderTarget instances
 
       :param df_targets: pandas Dataframe with targets
       :return: A list containing the targets
 
 
-   .. method:: get_company_data(self, company_ids: List[str]) -> List[IDataProviderCompany]
+   .. method:: get_company_data(self, company_ids: List[str])
+
 
       Get all relevant data for a list of company ids (ISIN). This method should return a list of IDataProviderCompany
       instances.
@@ -50,8 +45,9 @@ Classes
       :return: A list containing the company data
 
 
-   .. method:: get_sbti_targets(self, companies: list) -> list
+   .. method:: get_sbti_targets(self, companies: list)
       :abstractmethod:
+
 
       For each of the companies, get the status of their target (Target set, Committed or No target) as it's known to
       the SBTi.

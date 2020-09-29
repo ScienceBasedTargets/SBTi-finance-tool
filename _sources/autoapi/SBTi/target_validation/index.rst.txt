@@ -7,14 +7,6 @@
 Module Contents
 ---------------
 
-Classes
-~~~~~~~
-
-.. autoapisummary::
-
-   SBTi.target_validation.TargetProtocol
-
-
 
 .. py:class:: TargetProtocol(config: Type[PortfolioAggregationConfig] = PortfolioAggregationConfig)
 
@@ -22,7 +14,8 @@ Classes
 
    :param config: A Portfolio aggregation config
 
-   .. method:: process(self, targets: List[IDataProviderTarget], companies: List[IDataProviderCompany]) -> pd.DataFrame
+   .. method:: process(self, targets: List[IDataProviderTarget], companies: List[IDataProviderCompany])
+
 
       Process the targets and companies, validate all targets and return a data frame that combines all targets and company data into a 9-box grid.
 
@@ -31,7 +24,8 @@ Classes
       :return: A data frame that combines the processed data
 
 
-   .. method:: validate(self, target: IDataProviderTarget) -> bool
+   .. method:: validate(self, target: IDataProviderTarget)
+
 
       Validate a target, meaning it should:
 
@@ -43,7 +37,8 @@ Classes
       :return: True if it's a valid target, false if it isn't
 
 
-   .. method:: _split_s1s2s3(self, target: IDataProviderTarget) -> Tuple[IDataProviderTarget, Optional[IDataProviderTarget]]
+   .. method:: _split_s1s2s3(self, target: IDataProviderTarget)
+
 
       If there is a s1s2s3 scope, split it into two targets with s1s2 and s3
 
@@ -53,6 +48,7 @@ Classes
 
    .. method:: _combine_s1_s2(self, target: IDataProviderTarget)
 
+
       Check if there is an S2 target that matches this target exactly (if this is a S1 target) and combine them into one target.
 
       :param target: The input target
@@ -61,13 +57,15 @@ Classes
 
    .. method:: _convert_s1_s2(self, target: IDataProviderTarget)
 
+
       Convert a S1 or S2 target into a S1+S2 target.
 
       :param target: The input target
       :return: The converted target (or the original if no conversion was required)
 
 
-   .. method:: _boundary_coverage(self, target: IDataProviderTarget) -> IDataProviderTarget
+   .. method:: _boundary_coverage(self, target: IDataProviderTarget)
+
 
       Test on boundary coverage:
 
@@ -86,7 +84,8 @@ Classes
       :return: The original target with a weighted reduction ambition, if so required
 
 
-   .. method:: _time_frame(self, target: IDataProviderTarget) -> IDataProviderTarget
+   .. method:: _time_frame(self, target: IDataProviderTarget)
+
 
       Time frame is forward looking: target year - current year. Less than 5y = short, between 5 and 15 is mid, 15 to 30 is long
 
@@ -95,6 +94,7 @@ Classes
 
 
    .. method:: _prepare_target(self, target: IDataProviderTarget)
+
 
       Prepare a target for usage later on in the process.
 
@@ -105,7 +105,9 @@ Classes
    .. method:: prepare_targets(self, targets: List[IDataProviderTarget])
 
 
-   .. method:: _find_target(self, row: pd.Series, target_columns: List[str]) -> pd.Series
+
+   .. method:: _find_target(self, row: pd.Series, target_columns: List[str])
+
 
       Find the target that corresponds to a given row. If there are multiple targets available, filter them.
 
@@ -115,6 +117,7 @@ Classes
 
 
    .. method:: group_targets(self)
+
 
       Group the targets and create the 9-box grid (short, mid, long * s1s2, s3, s1s2s3).
       Group valid targets by category & filter multiple targets#
