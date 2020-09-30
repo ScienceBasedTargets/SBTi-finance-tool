@@ -19,8 +19,8 @@ if you are new to Python and/or the `temperature scoring
 methodology <https://sciencebasedtargets.org/wp-content/uploads/2020/07/Temperature-Scoring-Beta-Methodology.pdf>`__.
 
 1. `Analysis example (with abbreviated methodology) <https://colab.research.google.com/github/OFBDABV/SBTi/blob/master/examples/1_analysis_example.ipynb>`__
-2. `Quick temperature calculation <https://colab.research.google.com/github/OFBDABV/SBTi/blob/master/examples/2_getting_started.ipynb>`__
-3. `What-if analysis <https://colab.research.google.com/github/OFBDABV/SBTi/blob/master/examples/3_scenarios.ipynb>`__
+2. `Quick temperature calculation <https://colab.research.google.com/github/OFBDABV/SBTi/blob/master/examples/2_quick_temp_score_calculation.ipynb>`__
+3. `What-if analysis <https://colab.research.google.com/github/OFBDABV/SBTi/blob/master/examples/3_what-if-analysis.ipynb>`__
 4. `Portfolio aggregation <https://colab.research.google.com/github/OFBDABV/SBTi/blob/master/examples/4_portfolio_aggregations.ipynb>`__
 5. `Reporting <https://colab.research.google.com/github/OFBDABV/SBTi/blob/master/examples/5_reporting.ipynb>`__
 
