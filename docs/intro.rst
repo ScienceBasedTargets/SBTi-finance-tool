@@ -11,11 +11,11 @@ companies within a financial institution’s portfolio.
 
 Financial institutions may use the portfolio coverage
 and/or \ `temperature scoring
-methods <https://sciencebasedtargets.org/wp-content/uploads/2020/07/Temperature-Scoring-Beta-Methodology.pdf>`__ to
+methods <https://sciencebasedtargets.org/wp-content/uploads/2020/09/Temperature-Rating-Methodology-V1.pdf>`__ to
 set targets for their corporate instruments, including corporate debt,
 listed equity and bonds, and private equity and debt (See relevant
 “Required Activities” in Table 5-2 of the \ `SBTi
-guidance <https://sciencebasedtargets.org/wp-content/uploads/2020/07/Temperature-Scoring-Beta-Methodology.pdf>`__ to
+guidance <https://sciencebasedtargets.org/wp-content/uploads/2020/10/Financial-Sector-Science-Based-Targets-Guidance-Pilot-Version.pdf>`__ to
 drive adoption of science-based targets).
 
 To use the \ *portfolio coverage method*, financial institutions commit
@@ -61,7 +61,7 @@ setting and company emission reduction ambitions. It also gives users
 access to what-if analysis, to aid their decision-making process. The
 code reflects the logical steps that are outlined in the publicly
 available \ `*temperature scoring
-methodology* <https://sciencebasedtargets.org/wp-content/uploads/2020/07/Temperature-Scoring-Beta-Methodology.pdf>`__,
+methodology* <https://sciencebasedtargets.org/wp-content/uploads/2020/09/Temperature-Rating-Methodology-V1.pdf>`__,
 developed
 by \ `*CDP* <https://www.cdp.net/>`__ and `*WWF* <https://wwf.panda.org/>`__.
 
@@ -295,7 +295,7 @@ These are described in the table below.
 See `Data Requirements <https://ofbdabv.github.io/SBTi/DataRequirements.html>`__ section for more detailed information.
 
 Also refer to the full methodology for \ `temperature
-scoring <https://sciencebasedtargets.org/wp-content/uploads/2020/07/Temperature-Scoring-Beta-Methodology.pdf>`__.
+scoring <https://sciencebasedtargets.org/wp-content/uploads/2020/09/Temperature-Rating-Methodology-V1.pdf>`__.
 
 Where can I find the data?
 --------------------------
@@ -330,7 +330,7 @@ portfolio level.
 scores**. The targets are first filtered and are - if valid - translated
 to a specific temperature score, based on the relevant regression model
 [Section 1.3 in the
-`methodology <https://sciencebasedtargets.org/wp-content/uploads/2020/07/Temperature-Scoring-Beta-Methodology.pdf>`__].
+`methodology <https://sciencebasedtargets.org/wp-content/uploads/2020/09/Temperature-Rating-Methodology-V1.pdf>`__].
 The sector classification of the company is used to ensure that the
 target is correctly mapped to the appropriate regression model e.g. a
 target for power generation must be mapped to the power sector pathway
@@ -340,7 +340,7 @@ score. For example, a 30% reduction target in absolute GHG emissions
 over 10 years can be converted into a temperature score of 1.76°C. It
 should be noted that those companies without a valid target are assigned
 a default temperature score [Section 1.4 in the
-`methodology <https://sciencebasedtargets.org/wp-content/uploads/2020/07/Temperature-Scoring-Beta-Methodology.pdf>`__],
+`methodology <https://sciencebasedtargets.org/wp-content/uploads/2020/09/Temperature-Rating-Methodology-V1.pdf>`__],
 rather than being excluded from the analysis.
 
 **Step 2:** **Aggregate across targets (if applicable) to a company

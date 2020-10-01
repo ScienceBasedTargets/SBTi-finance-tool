@@ -11,4 +11,4 @@ Project Links
 - DockerHub:
     - `sbti/ui image <https://hub.docker.com/repository/docker/sbti/ui>`_
     - `sbti/api image <https://hub.docker.com/repository/docker/sbti/api>`_
-- `Science Based Targets initiative <https://sciencebasedtargets.org/financial-institutions-2/>`_
+- `Science Based Targets initiative <https://sciencebasedtargets.org/financial-institutions/>`_

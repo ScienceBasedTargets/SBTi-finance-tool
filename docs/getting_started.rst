@@ -16,7 +16,7 @@ There are five notebooks that go through the process step-by-step:
 
 We recommend that you start with notebook 1 analysis example, especially
 if you are new to Python and/or the `temperature scoring
-methodology <https://sciencebasedtargets.org/wp-content/uploads/2020/07/Temperature-Scoring-Beta-Methodology.pdf>`__.
+methodology <https://sciencebasedtargets.org/wp-content/uploads/2020/09/Temperature-Rating-Methodology-V1.pdf>`__.
 
 1. `Analysis example (with abbreviated methodology) <https://colab.research.google.com/github/OFBDABV/SBTi/blob/master/examples/1_analysis_example.ipynb>`__
 2. `Quick temperature calculation <https://colab.research.google.com/github/OFBDABV/SBTi/blob/master/examples/2_quick_temp_score_calculation.ipynb>`__
