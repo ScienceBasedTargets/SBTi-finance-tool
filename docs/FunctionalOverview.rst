@@ -10,7 +10,7 @@ company, the score is calculated based on the publicly announced
 targets, which are mapped to regression models based on IPCC climate
 scenarios. The company is then awarded a score for each period and scope
 based on the ambition and coverage of the relevant targets. For more
-information, refer to the methodology `here <https://sciencebasedtargets.org/financial-institutions>`__\ .
+information, refer to the methodology `here <https://sciencebasedtargets.org/wp-content/uploads/2020/10/Financial-Sector-Science-Based-Targets-Guidance-Pilot-Version.pdf>`__\ .
 
 Time Frames
 ~~~~~~~~~~~
