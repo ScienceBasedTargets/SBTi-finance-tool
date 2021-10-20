@@ -1,4 +1,4 @@
-> Visit  http://getting-started.sbti-tool.org/ for the full documentation
+> Visit  https://sciencebasedtargets.github.io/SBTi-finance-tool for the full documentation
 
 > If you have any additional questions or comments send a mail to: finance@sciencebasedtargets.org
 
