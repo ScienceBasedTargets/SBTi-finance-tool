@@ -22,18 +22,34 @@ class TestWaterfall(unittest.TestCase):
         ]
         self.data_providers = [
             CSVProvider(
-                path=os.path.join(os.path.dirname(os.path.realpath(__file__)), "../", "inputs",
-                                  "data_test_waterfall_a.csv"),
-                path_targets=os.path.join(os.path.dirname(os.path.realpath(__file__)), "../", "inputs",
-                                          "data_test_temperature_score_targets.csv"),
-                encoding="iso-8859-1"
+                path=os.path.join(
+                    os.path.dirname(os.path.realpath(__file__)),
+                    "../",
+                    "inputs",
+                    "data_test_waterfall_a.csv",
+                ),
+                path_targets=os.path.join(
+                    os.path.dirname(os.path.realpath(__file__)),
+                    "../",
+                    "inputs",
+                    "data_test_temperature_score_targets.csv",
+                ),
+                encoding="iso-8859-1",
             ),
             CSVProvider(
-                path=os.path.join(os.path.dirname(os.path.realpath(__file__)), "../", "inputs",
-                                  "data_test_waterfall_b.csv"),
-                path_targets=os.path.join(os.path.dirname(os.path.realpath(__file__)), "../", "inputs",
-                                          "data_test_temperature_score_targets.csv"),
-                encoding="iso-8859-1"
+                path=os.path.join(
+                    os.path.dirname(os.path.realpath(__file__)),
+                    "../",
+                    "inputs",
+                    "data_test_waterfall_b.csv",
+                ),
+                path_targets=os.path.join(
+                    os.path.dirname(os.path.realpath(__file__)),
+                    "../",
+                    "inputs",
+                    "data_test_temperature_score_targets.csv",
+                ),
+                encoding="iso-8859-1",
             ),
         ]
 
@@ -42,9 +58,11 @@ class TestWaterfall(unittest.TestCase):
         Test whether data is retrieved as expected.
         """
         company_data = SBTi.utils.get_company_data(
-            self.data_providers, [company["company_id"] for company in self.companies])
-        assert len(set([company.company_id for company in company_data])) == 3, \
-            "The numbers of companies does not match"
+            self.data_providers, [company["company_id"] for company in self.companies]
+        )
+        assert (
+            len(set([company.company_id for company in company_data])) == 3
+        ), "The numbers of companies does not match"
 
 
 if __name__ == "__main__":

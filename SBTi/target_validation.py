@@ -6,7 +6,12 @@ from typing import Type, List, Tuple, Optional
 from SBTi.configs import PortfolioAggregationConfig
 import logging
 
-from SBTi.interfaces import IDataProviderTarget, IDataProviderCompany, EScope, ETimeFrames
+from SBTi.interfaces import (
+    IDataProviderTarget,
+    IDataProviderCompany,
+    EScope,
+    ETimeFrames,
+)
 
 
 class TargetProtocol:
@@ -16,7 +21,9 @@ class TargetProtocol:
     :param config: A Portfolio aggregation config
     """
 
-    def __init__(self, config: Type[PortfolioAggregationConfig] = PortfolioAggregationConfig):
+    def __init__(
+        self, config: Type[PortfolioAggregationConfig] = PortfolioAggregationConfig
+    ):
         self.c = config
         self.logger = logging.getLogger(__name__)
         self.s2_targets: List[IDataProviderTarget] = []
@@ -24,7 +31,9 @@ class TargetProtocol:
         self.company_data: pd.DataFrame = pd.DataFrame()
         self.data: pd.DataFrame = pd.DataFrame()
 
-    def process(self, targets: List[IDataProviderTarget], companies: List[IDataProviderCompany]) -> pd.DataFrame:
+    def process(
+        self, targets: List[IDataProviderTarget], companies: List[IDataProviderCompany]
+    ) -> pd.DataFrame:
         """
         Process the targets and companies, validate all targets and return a data frame that combines all targets and company data into a 9-box grid.
 
@@ -37,13 +46,20 @@ class TargetProtocol:
         self.target_data = pd.DataFrame.from_records([c.dict() for c in targets])
 
         # Create an indexed DF for performance purposes
-        self.target_data.index = self.target_data.reset_index().set_index(
-            [self.c.COLS.COMPANY_ID, self.c.COLS.TIME_FRAME, self.c.COLS.SCOPE]).index
+        self.target_data.index = (
+            self.target_data.reset_index()
+            .set_index(
+                [self.c.COLS.COMPANY_ID, self.c.COLS.TIME_FRAME, self.c.COLS.SCOPE]
+            )
+            .index
+        )
         self.target_data = self.target_data.sort_index()
 
         self.company_data = pd.DataFrame.from_records([c.dict() for c in companies])
         self.group_targets()
-        return pd.merge(left=self.data, right=self.company_data, how='outer', on=['company_id'])
+        return pd.merge(
+            left=self.data, right=self.company_data, how="outer", on=["company_id"]
+        )
 
     def validate(self, target: IDataProviderTarget) -> bool:
         """
@@ -57,14 +73,17 @@ class TargetProtocol:
         :return: True if it's a valid target, false if it isn't
         """
         # Only absolute targets or intensity targets with a valid intensity metric are allowed.
-        target_type = "abs" in target.target_type.lower() or \
-                      ("int" in target.target_type.lower() and
-                       target.intensity_metric is not None and
-                       target.intensity_metric.lower() != "other")
+        target_type = "abs" in target.target_type.lower() or (
+            "int" in target.target_type.lower()
+            and target.intensity_metric is not None
+            and target.intensity_metric.lower() != "other"
+        )
         # The target should not have achieved it's reduction yet.
-        target_process = pd.isnull(target.achieved_reduction) or \
-                         target.achieved_reduction is None or \
-                         target.achieved_reduction < 1
+        target_process = (
+            pd.isnull(target.achieved_reduction)
+            or target.achieved_reduction is None
+            or target.achieved_reduction < 1
+        )
 
         # The end year should be greater than the start year.
         if target.start_year is None or pd.isnull(target.start_year):
@@ -72,13 +91,21 @@ class TargetProtocol:
 
         target_end_year = target.end_year > target.start_year
         # Delete all S1 or S2 targets we can't combine
-        s1 = target.scope != EScope.S1 or (not pd.isnull(target.coverage_s1) and not pd.isnull(target.base_year_ghg_s1)
-                                           and not pd.isnull(target.base_year_ghg_s2))
-        s2 = target.scope != EScope.S2 or (not pd.isnull(target.coverage_s2) and not pd.isnull(target.base_year_ghg_s1)
-                                           and not pd.isnull(target.base_year_ghg_s2))
+        s1 = target.scope != EScope.S1 or (
+            not pd.isnull(target.coverage_s1)
+            and not pd.isnull(target.base_year_ghg_s1)
+            and not pd.isnull(target.base_year_ghg_s2)
+        )
+        s2 = target.scope != EScope.S2 or (
+            not pd.isnull(target.coverage_s2)
+            and not pd.isnull(target.base_year_ghg_s1)
+            and not pd.isnull(target.base_year_ghg_s2)
+        )
         return target_type and target_process and target_end_year and s1 and s2
 
-    def _split_s1s2s3(self, target: IDataProviderTarget) -> Tuple[IDataProviderTarget, Optional[IDataProviderTarget]]:
+    def _split_s1s2s3(
+        self, target: IDataProviderTarget
+    ) -> Tuple[IDataProviderTarget, Optional[IDataProviderTarget]]:
         """
         If there is a s1s2s3 scope, split it into two targets with s1s2 and s3
 
@@ -87,14 +114,20 @@ class TargetProtocol:
         """
         if target.scope == EScope.S1S2S3:
             s1s2, s3 = target.copy(), None
-            if (not pd.isnull(target.base_year_ghg_s1) and not pd.isnull(target.base_year_ghg_s1)) or \
-                    target.coverage_s1 == target.coverage_s2:
+            if (
+                not pd.isnull(target.base_year_ghg_s1)
+                and not pd.isnull(target.base_year_ghg_s1)
+            ) or target.coverage_s1 == target.coverage_s2:
                 s1s2.scope = EScope.S1S2
-                if not pd.isnull(target.base_year_ghg_s1) and not pd.isnull(target.base_year_ghg_s2) and \
-                        target.base_year_ghg_s1 + target.base_year_ghg_s2 != 0:
-                    coverage_percentage = (s1s2.coverage_s1 * s1s2.base_year_ghg_s1 +
-                                           s1s2.coverage_s2 * s1s2.base_year_ghg_s2) / \
-                                          (s1s2.base_year_ghg_s1 + s1s2.base_year_ghg_s2)
+                if (
+                    not pd.isnull(target.base_year_ghg_s1)
+                    and not pd.isnull(target.base_year_ghg_s2)
+                    and target.base_year_ghg_s1 + target.base_year_ghg_s2 != 0
+                ):
+                    coverage_percentage = (
+                        s1s2.coverage_s1 * s1s2.base_year_ghg_s1
+                        + s1s2.coverage_s2 * s1s2.base_year_ghg_s2
+                    ) / (s1s2.base_year_ghg_s1 + s1s2.base_year_ghg_s2)
                     s1s2.coverage_s1 = coverage_percentage
                     s1s2.coverage_s2 = coverage_percentage
 
@@ -113,22 +146,33 @@ class TargetProtocol:
         :return: The combined target (or the original if no combining was required)
         """
         if target.scope == EScope.S1 and not pd.isnull(target.base_year_ghg_s1):
-            matches = [t for t in self.s2_targets
-                       if t.company_id == target.company_id
-                       and t.base_year == target.base_year
-                       and t.start_year == target.start_year
-                       and t.end_year == target.end_year
-                       and t.target_type == target.target_type
-                       and t.intensity_metric == target.intensity_metric]
+            matches = [
+                t
+                for t in self.s2_targets
+                if t.company_id == target.company_id
+                and t.base_year == target.base_year
+                and t.start_year == target.start_year
+                and t.end_year == target.end_year
+                and t.target_type == target.target_type
+                and t.intensity_metric == target.intensity_metric
+            ]
             if len(matches) > 0:
                 matches.sort(key=lambda t: t.coverage_s2, reverse=True)
                 s2 = matches[0]
-                combined_coverage = (target.coverage_s1 * target.base_year_ghg_s1 +
-                                     s2.coverage_s2 * s2.base_year_ghg_s2) / \
-                                    (target.base_year_ghg_s1 + s2.base_year_ghg_s2)
-                target.reduction_ambition = target.reduction_ambition * target.coverage_s1 * target.base_year_ghg_s1 + \
-                                            s2.reduction_ambition * s2.coverage_s1 * s2.base_year_ghg_s2 / \
-                                            (target.base_year_ghg_s1 + s2.base_year_ghg_s1) / combined_coverage
+                combined_coverage = (
+                    target.coverage_s1 * target.base_year_ghg_s1
+                    + s2.coverage_s2 * s2.base_year_ghg_s2
+                ) / (target.base_year_ghg_s1 + s2.base_year_ghg_s2)
+                target.reduction_ambition = (
+                    target.reduction_ambition
+                    * target.coverage_s1
+                    * target.base_year_ghg_s1
+                    + s2.reduction_ambition
+                    * s2.coverage_s1
+                    * s2.base_year_ghg_s2
+                    / (target.base_year_ghg_s1 + s2.base_year_ghg_s1)
+                    / combined_coverage
+                )
                 target.coverage_s1 = combined_coverage
                 target.coverage_s2 = combined_coverage
                 # We don't need to delete the S2 target as it'll be definition have a lower coverage than the combined
@@ -145,14 +189,20 @@ class TargetProtocol:
         # In both cases the base_year_ghg s1 + s2 should not be zero
         if target.base_year_ghg_s1 + target.base_year_ghg_s2 != 0:
             if target.scope == EScope.S1:
-                coverage = target.coverage_s1 * target.base_year_ghg_s1 / (
-                        target.base_year_ghg_s1 + target.base_year_ghg_s2)
+                coverage = (
+                    target.coverage_s1
+                    * target.base_year_ghg_s1
+                    / (target.base_year_ghg_s1 + target.base_year_ghg_s2)
+                )
                 target.coverage_s1 = coverage
                 target.coverage_s2 = coverage
                 target.scope = EScope.S1S2
             elif target.scope == EScope.S2:
-                coverage = target.coverage_s2 * target.base_year_ghg_s2 / (
-                        target.base_year_ghg_s1 + target.base_year_ghg_s2)
+                coverage = (
+                    target.coverage_s2
+                    * target.base_year_ghg_s2
+                    / (target.base_year_ghg_s1 + target.base_year_ghg_s2)
+                )
                 target.coverage_s1 = coverage
                 target.coverage_s2 = coverage
                 target.scope = EScope.S1S2
@@ -178,10 +228,14 @@ class TargetProtocol:
         """
         if target.scope == EScope.S1S2:
             if target.coverage_s1 < 0.95:
-                target.reduction_ambition = target.reduction_ambition * target.coverage_s1
+                target.reduction_ambition = (
+                    target.reduction_ambition * target.coverage_s1
+                )
         elif target.scope == EScope.S3:
             if target.coverage_s3 < 0.67:
-                target.reduction_ambition = target.reduction_ambition * target.coverage_s3
+                target.reduction_ambition = (
+                    target.reduction_ambition * target.coverage_s3
+                )
         return target
 
     def _time_frame(self, target: IDataProviderTarget) -> IDataProviderTarget:
@@ -217,12 +271,20 @@ class TargetProtocol:
 
     def prepare_targets(self, targets: List[IDataProviderTarget]):
         targets = list(filter(self.validate, targets))
-        self.s2_targets = list(filter(
-            lambda target: target.scope == EScope.S2 and not pd.isnull(target.base_year_ghg_s2) and
-                           not pd.isnull(target.coverage_s2), targets)
+        self.s2_targets = list(
+            filter(
+                lambda target: target.scope == EScope.S2
+                and not pd.isnull(target.base_year_ghg_s2)
+                and not pd.isnull(target.coverage_s2),
+                targets,
+            )
         )
 
-        targets = list(filter(None, itertools.chain.from_iterable(map(self._split_s1s2s3, targets))))
+        targets = list(
+            filter(
+                None, itertools.chain.from_iterable(map(self._split_s1s2s3, targets))
+            )
+        )
         targets = [self._prepare_target(target) for target in targets]
 
         return targets
@@ -239,7 +301,12 @@ class TargetProtocol:
         # Find all targets that correspond to the given row
         try:
             target_data = self.target_data.loc[
-                (row[self.c.COLS.COMPANY_ID], row[self.c.COLS.TIME_FRAME], row[self.c.COLS.SCOPE])].copy()
+                (
+                    row[self.c.COLS.COMPANY_ID],
+                    row[self.c.COLS.TIME_FRAME],
+                    row[self.c.COLS.SCOPE],
+                )
+            ].copy()
             if isinstance(target_data, pd.Series):
                 # One match with Target data
                 return target_data[target_columns]
@@ -250,9 +317,14 @@ class TargetProtocol:
                     coverage_column = self.c.COLS.COVERAGE_S1
                 # In case more than one target is available; we prefer targets with higher coverage, later end year, and target type 'absolute'
                 return target_data.sort_values(
-                    by=[coverage_column, self.c.COLS.END_YEAR, self.c.COLS.TARGET_REFERENCE_NUMBER],
+                    by=[
+                        coverage_column,
+                        self.c.COLS.END_YEAR,
+                        self.c.COLS.TARGET_REFERENCE_NUMBER,
+                    ],
                     axis=0,
-                    ascending=[False, False, True]).iloc[0][target_columns]
+                    ascending=[False, False, True],
+                ).iloc[0][target_columns]
         except KeyError:
             # No target found
             return row
@@ -274,12 +346,25 @@ class TargetProtocol:
         -- If all else is equal: average the ambition of targets
         """
 
-        grid_columns = [self.c.COLS.COMPANY_ID, self.c.COLS.TIME_FRAME, self.c.COLS.SCOPE]
+        grid_columns = [
+            self.c.COLS.COMPANY_ID,
+            self.c.COLS.TIME_FRAME,
+            self.c.COLS.SCOPE,
+        ]
         companies = self.company_data[self.c.COLS.COMPANY_ID].unique()
         scopes = [EScope.S1S2, EScope.S3, EScope.S1S2S3]
-        empty_columns = [column for column in self.target_data.columns if column not in grid_columns]
+        empty_columns = [
+            column for column in self.target_data.columns if column not in grid_columns
+        ]
         extended_data = pd.DataFrame(
-            list(itertools.product(*[companies, ETimeFrames, scopes] + [[None]] * len(empty_columns))),
-            columns=grid_columns + empty_columns)
+            list(
+                itertools.product(
+                    *[companies, ETimeFrames, scopes] + [[None]] * len(empty_columns)
+                )
+            ),
+            columns=grid_columns + empty_columns,
+        )
         target_columns = extended_data.columns
-        self.data = extended_data.apply(lambda row: self._find_target(row, target_columns), axis=1)
+        self.data = extended_data.apply(
+            lambda row: self._find_target(row, target_columns), axis=1
+        )

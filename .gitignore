@@ -138,8 +138,6 @@ docker-compose_aws.yml
 *.exe
 %USERPROFILE%/*
 
-# vscode
-.vscode
 
 # Misc
 .noseids

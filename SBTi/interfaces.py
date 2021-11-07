@@ -87,7 +87,10 @@ class IDataProviderCompany(BaseModel):
     company_total_assets: Optional[float]
     company_cash_equivalents: Optional[float]
 
-    sbti_validated: bool = Field(False, description='True if the SBTi target status is "Target set", false otherwise')
+    sbti_validated: bool = Field(
+        False,
+        description='True if the SBTi target status is "Target set", false otherwise',
+    )
 
 
 class SortableEnum(Enum):
@@ -127,7 +130,7 @@ class EScope(SortableEnum):
     S1S2S3 = "S1+S2+S3"
 
     @classmethod
-    def get_result_scopes(cls) -> List['EScope']:
+    def get_result_scopes(cls) -> List["EScope"]:
         """
         Get a list of scopes that should be calculated if the user leaves it open.
 
@@ -160,7 +163,7 @@ class IDataProviderTarget(BaseModel):
     time_frame: Optional[ETimeFrames]
     achieved_reduction: Optional[float] = 0
 
-    @validator('start_year', pre=True, always=False)
+    @validator("start_year", pre=True, always=False)
     def validate_e(cls, val):
         if val == "" or val == "nan" or pd.isnull(val):
             return None

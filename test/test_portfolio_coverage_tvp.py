@@ -18,8 +18,13 @@ class TestPortfolioCoverageTVP(unittest.TestCase):
         :return:
         """
         self.portfolio_coverage_tvp = PortfolioCoverageTVP()
-        self.data = pd.read_csv(os.path.join(os.path.dirname(os.path.realpath(__file__)), "inputs",
-                                             "data_test_portfolio_coverage.csv"))
+        self.data = pd.read_csv(
+            os.path.join(
+                os.path.dirname(os.path.realpath(__file__)),
+                "inputs",
+                "data_test_portfolio_coverage.csv",
+            )
+        )
 
     def test_coverage(self) -> None:
         """
@@ -27,9 +32,12 @@ class TestPortfolioCoverageTVP(unittest.TestCase):
 
         :return:
         """
-        coverage = self.portfolio_coverage_tvp.get_portfolio_coverage(self.data, PortfolioAggregationMethod.WATS)
-        self.assertAlmostEqual(coverage, 32.0663, places=4,
-                               msg="The portfolio coverage was not correct")
+        coverage = self.portfolio_coverage_tvp.get_portfolio_coverage(
+            self.data, PortfolioAggregationMethod.WATS
+        )
+        self.assertAlmostEqual(
+            coverage, 32.0663, places=4, msg="The portfolio coverage was not correct"
+        )
 
 
 if __name__ == "__main__":

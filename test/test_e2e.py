@@ -8,19 +8,24 @@ from SBTi.interfaces import (
     PortfolioCompany,
 )
 
-from SBTi.temperature_score import EngagementType, Scenario, ScenarioType, TemperatureScore
+from SBTi.temperature_score import (
+    EngagementType,
+    Scenario,
+    ScenarioType,
+    TemperatureScore,
+)
 from SBTi.portfolio_aggregation import PortfolioAggregationMethod
 import copy
 import SBTi
 from typing import List
 from SBTi.data.data_provider import DataProvider
 from typing import List
-from SBTi.interfaces import IDataProviderCompany,IDataProviderTarget
+from SBTi.interfaces import IDataProviderCompany, IDataProviderTarget
 
 
 class TestDataProvider(DataProvider):
     def __init__(
-            self, targets: List[IDataProviderTarget], companies: List[IDataProviderCompany]
+        self, targets: List[IDataProviderTarget], companies: List[IDataProviderCompany]
     ):
         self.targets = targets
         self.companies = companies
@@ -33,7 +38,6 @@ class TestDataProvider(DataProvider):
 
     def get_company_data(self, company_ids: List[str]) -> List[IDataProviderCompany]:
         return self.companies
-
 
 
 class EndToEndTest(unittest.TestCase):
@@ -58,7 +62,7 @@ class EndToEndTest(unittest.TestCase):
             company_enterprise_value=100,
             company_total_assets=100,
             company_cash_equivalents=100,
-            isic='A12'
+            isic="A12",
         )
         # define targets
         self.target_base = IDataProviderTarget(
@@ -119,23 +123,25 @@ class EndToEndTest(unittest.TestCase):
         This test is checking the target grouping in the target validation from begin to end.
         """
 
-        companies, targets, pf_companies = self.create_base_companies(["A", "B", "C", "D"])
+        companies, targets, pf_companies = self.create_base_companies(
+            ["A", "B", "C", "D"]
+        )
         target = copy.deepcopy(self.target_base)
-        target.company_id = 'A'
+        target.company_id = "A"
         target.coverage_s1 = 0.75
         target.coverage_s2 = 0.75
         target.coverage_s3 = 0.75
         targets.append(target)
 
         target = copy.deepcopy(self.target_base)
-        target.company_id = 'A'
+        target.company_id = "A"
         target.coverage_s1 = 0.99
         target.coverage_s2 = 0.99
         target.coverage_s3 = 0.99
         targets.append(target)
 
         target = copy.deepcopy(self.target_base)
-        target.company_id = 'B'
+        target.company_id = "B"
         target.scope = EScope.S3
         target.coverage_s1 = 0.75
         target.coverage_s2 = 0.75
@@ -143,7 +149,7 @@ class EndToEndTest(unittest.TestCase):
         targets.append(target)
 
         target = copy.deepcopy(self.target_base)
-        target.company_id = 'B'
+        target.company_id = "B"
         target.scope = EScope.S3
         target.coverage_s1 = 0.99
         target.coverage_s2 = 0.99
@@ -152,11 +158,11 @@ class EndToEndTest(unittest.TestCase):
         targets.append(target)
 
         target = copy.deepcopy(self.target_base)
-        target.company_id = 'D'
+        target.company_id = "D"
         target.coverage_s1 = 0.95
         target.coverage_s2 = 0.95
-        target.target_type = 'int'
-        target.intensity_metric = 'Revenue'
+        target.target_type = "int"
+        target.intensity_metric = "Revenue"
         targets.append(target)
 
         data_provider = TestDataProvider(companies=companies, targets=targets)
@@ -173,7 +179,9 @@ class EndToEndTest(unittest.TestCase):
         agg_scores = temp_score.aggregate_scores(scores)
 
         # verify that results exist
-        self.assertAlmostEqual(agg_scores.mid.S1S2.all.score, self.BASE_COMP_SCORE, places=4)
+        self.assertAlmostEqual(
+            agg_scores.mid.S1S2.all.score, self.BASE_COMP_SCORE, places=4
+        )
 
     def test_basic_flow(self):
         """
@@ -258,9 +266,13 @@ class EndToEndTest(unittest.TestCase):
 
         for ind_level in industry_levels:
 
-            company_ids_with_level = [f"{ind_level}_{company_id}" for company_id in company_ids]
+            company_ids_with_level = [
+                f"{ind_level}_{company_id}" for company_id in company_ids
+            ]
 
-            companies, targets, pf_companies = self.create_base_companies(company_ids_with_level)
+            companies, targets, pf_companies = self.create_base_companies(
+                company_ids_with_level
+            )
             for company in companies:
                 company.industry_level_1 = ind_level
 
@@ -274,7 +286,7 @@ class EndToEndTest(unittest.TestCase):
             time_frames=[ETimeFrames.MID],
             scopes=[EScope.S1S2],
             aggregation_method=PortfolioAggregationMethod.WATS,
-            grouping=["industry_level_1"]
+            grouping=["industry_level_1"],
         )
 
         portfolio_data = SBTi.utils.get_data([data_provider], pf_companies_all)
@@ -282,7 +294,9 @@ class EndToEndTest(unittest.TestCase):
         agg_scores = temp_score.aggregate_scores(scores)
 
         for ind_level in industry_levels:
-            self.assertAlmostEqual(agg_scores.mid.S1S2.grouped[ind_level].score, self.BASE_COMP_SCORE)
+            self.assertAlmostEqual(
+                agg_scores.mid.S1S2.grouped[ind_level].score, self.BASE_COMP_SCORE
+            )
 
     def test_score_cap(self):
 
@@ -298,7 +312,7 @@ class EndToEndTest(unittest.TestCase):
             time_frames=[ETimeFrames.MID],
             scopes=[EScope.S1S2],
             aggregation_method=PortfolioAggregationMethod.WATS,
-            scenario=scenario
+            scenario=scenario,
         )
 
         portfolio_data = SBTi.utils.get_data([data_provider], pf_companies)
