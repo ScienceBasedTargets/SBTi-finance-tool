@@ -1,0 +1,48 @@
+[tool.poetry]
+name = "sbti-finance-tool"
+version = "1.0.0"
+description = "This package helps companies and financial institutions to assess the temperature alignment of current targets, commitments, and investment and lending portfolios, and to use this information to develop targets for official validation by the SBTi.'"
+authors = ["sbti <finance@sciencebasedtargets.org>"]
+license = "MIT"
+readme = "README.md"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: Unix",
+    "Operating System :: MacOS",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3 :: Only",
+    "Topic :: Software Development",
+    "Topic :: Scientific/Engineering",
+
+]
+keywords = ['Climate', 'SBTi', 'Finance']
+
+[tool.poetry.urls]
+"Bug Tracker" = "https://github.com/ScienceBasedTargets/SBTi-finance-tool/issues"
+"Documentation" = 'https://sciencebasedtargets.github.io/SBTi-finance-tool'
+"Source Code" = "https://github.com/ScienceBasedTargets/SBTi-finance-tool"
+
+
+[tool.poetry.dependencies]
+python = "^3.8"
+pydantic = "1.8.2"
+six = "1.15.0"
+pandas = "1.3.4"
+xlrd = "1.2.0"
+requests = "2.26.0"
+openpyxl = "3.0.9"
+
+
+[tool.poetry.dev-dependencies]
+black = "21.10b0"
+pylint = "^2.10.2"
+ipykernel = "6.5.0"
+
+[tool.pyright]
+venv = ".venv"

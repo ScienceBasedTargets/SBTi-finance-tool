@@ -27,7 +27,9 @@ DATA_PROVIDER_MAP: Dict[str, Type[data.DataProvider]] = {
 }
 
 
-def get_data_providers(data_providers_configs: List[dict], data_providers_input: List[str]) -> List[data.DataProvider]:
+def get_data_providers(
+    data_providers_configs: List[dict], data_providers_input: List[str]
+) -> List[data.DataProvider]:
     """
     Determines which data provider and in which order should be used.
 
@@ -38,7 +40,9 @@ def get_data_providers(data_providers_configs: List[dict], data_providers_input:
     logger = logging.getLogger(__name__)
     data_providers = []
     for data_provider_config in data_providers_configs:
-        data_provider_config["class"] = DATA_PROVIDER_MAP[data_provider_config["type"]](**data_provider_config["parameters"])
+        data_provider_config["class"] = DATA_PROVIDER_MAP[data_provider_config["type"]](
+            **data_provider_config["parameters"]
+        )
         data_providers.append(data_provider_config)
 
     selected_data_providers = []
@@ -50,15 +54,26 @@ def get_data_providers(data_providers_configs: List[dict], data_providers_input:
                 found = True
                 break
         if not found:
-            logger.warning("The following data provider could not be found: {}".format(data_provider_name))
+            logger.warning(
+                "The following data provider could not be found: {}".format(
+                    data_provider_name
+                )
+            )
 
     if len(selected_data_providers) == 0:
-        raise ValueError("None of the selected data providers are available. The following data providers are valid "
-                         "options: " + ", ".join(data_provider["name"] for data_provider in data_providers_configs))
+        raise ValueError(
+            "None of the selected data providers are available. The following data providers are valid "
+            "options: "
+            + ", ".join(
+                data_provider["name"] for data_provider in data_providers_configs
+            )
+        )
     return selected_data_providers
 
 
-def get_company_data(data_providers: list, company_ids: List[str]) -> List[IDataProviderCompany]:
+def get_company_data(
+    data_providers: list, company_ids: List[str]
+) -> List[IDataProviderCompany]:
     """
     Get the company data in a waterfall method, given a list of companies and a list of data providers. This will go
     through the list of data providers and retrieve the required info until either there are no companies left or there
@@ -74,8 +89,11 @@ def get_company_data(data_providers: list, company_ids: List[str]) -> List[IData
         try:
             company_data_provider = dp.get_company_data(company_ids)
             company_data += company_data_provider
-            company_ids = [company for company in company_ids
-                           if company not in [c.company_id for c in company_data_provider]]
+            company_ids = [
+                company
+                for company in company_ids
+                if company not in [c.company_id for c in company_data_provider]
+            ]
             if len(company_ids) == 0:
                 break
         except NotImplementedError:
@@ -100,8 +118,11 @@ def get_targets(data_providers: list, companies: list) -> List[IDataProviderTarg
         try:
             targets_data_provider = dp.get_targets(companies)
             target_data += targets_data_provider
-            companies = [company for company in companies
-                         if company not in [t.company_id for t in targets_data_provider]]
+            companies = [
+                company
+                for company in companies
+                if company not in [t.company_id for t in targets_data_provider]
+            ]
             if len(companies) == 0:
                 break
         except NotImplementedError:
@@ -133,10 +154,15 @@ def _make_isin_map(df_portfolio: pd.DataFrame) -> dict:
     :param df_portfolio: The complete portfolio
     :return: A mapping from company_id to ISIN
     """
-    return {company_id: company[ColumnsConfig.COMPANY_ISIN]
-            for company_id, company in df_portfolio[[ColumnsConfig.COMPANY_ID, ColumnsConfig.COMPANY_ISIN]]
-                .set_index(ColumnsConfig.COMPANY_ID)
-                .to_dict(orient='index').items()}
+    return {
+        company_id: company[ColumnsConfig.COMPANY_ISIN]
+        for company_id, company in df_portfolio[
+            [ColumnsConfig.COMPANY_ID, ColumnsConfig.COMPANY_ISIN]
+        ]
+        .set_index(ColumnsConfig.COMPANY_ID)
+        .to_dict(orient="index")
+        .items()
+    }
 
 
 def dataframe_to_portfolio(df_portfolio: pd.DataFrame) -> List[PortfolioCompany]:
@@ -147,11 +173,18 @@ def dataframe_to_portfolio(df_portfolio: pd.DataFrame) -> List[PortfolioCompany]
     PortfolioCompany model.
     :return: A list of portfolio companies
     """
-    df_portfolio[ColumnsConfig.ENGAGEMENT_TARGET] = df_portfolio[ColumnsConfig.ENGAGEMENT_TARGET].fillna(False).astype('bool')
-    return [PortfolioCompany.parse_obj(company) for company in df_portfolio.to_dict(orient="records")]
+    df_portfolio[ColumnsConfig.ENGAGEMENT_TARGET] = (
+        df_portfolio[ColumnsConfig.ENGAGEMENT_TARGET].fillna(False).astype("bool")
+    )
+    return [
+        PortfolioCompany.parse_obj(company)
+        for company in df_portfolio.to_dict(orient="records")
+    ]
 
 
-def get_data(data_providers: List[data.DataProvider], portfolio: List[PortfolioCompany]) -> pd.DataFrame:
+def get_data(
+    data_providers: List[data.DataProvider], portfolio: List[PortfolioCompany]
+) -> pd.DataFrame:
     """
     Get the required data from the data provider(s), validate the targets and return a 9-box grid for each company.
 
@@ -159,7 +192,9 @@ def get_data(data_providers: List[data.DataProvider], portfolio: List[PortfolioC
     :param portfolio: A list of PortfolioCompany models
     :return: A data frame containing the relevant company-target data
     """
-    df_portfolio = pd.DataFrame.from_records([_flatten_user_fields(c) for c in portfolio])
+    df_portfolio = pd.DataFrame.from_records(
+        [_flatten_user_fields(c) for c in portfolio]
+    )
     company_data = get_company_data(data_providers, df_portfolio["company_id"].tolist())
     target_data = get_targets(data_providers, df_portfolio["company_id"].tolist())
 
@@ -169,22 +204,34 @@ def get_data(data_providers: List[data.DataProvider], portfolio: List[PortfolioC
     # Supplement the company data with the SBTi target status
     company_data = SBTi().get_sbti_targets(company_data, _make_isin_map(df_portfolio))
 
-
     # Prepare the data
     portfolio_data = TargetProtocol().process(target_data, company_data)
-    portfolio_data = pd.merge(left=portfolio_data, right=df_portfolio.drop("company_name", axis=1), how="left",
-                              on=["company_id"])
+    portfolio_data = pd.merge(
+        left=portfolio_data,
+        right=df_portfolio.drop("company_name", axis=1),
+        how="left",
+        on=["company_id"],
+    )
 
     if len(company_data) == 0:
-        raise ValueError("None of the companies in your portfolio could be found by the data providers")
+        raise ValueError(
+            "None of the companies in your portfolio could be found by the data providers"
+        )
 
     return portfolio_data
 
 
-def calculate(portfolio_data: pd.DataFrame, fallback_score: float, aggregation_method: PortfolioAggregationMethod,
-              grouping: Optional[List[str]], scenario: Optional[Scenario], time_frames: List[ETimeFrames],
-              scopes: List[EScope], anonymize: bool, aggregate: bool = True) -> Tuple[pd.DataFrame,
-                                                                                      Optional[ScoreAggregations]]:
+def calculate(
+    portfolio_data: pd.DataFrame,
+    fallback_score: float,
+    aggregation_method: PortfolioAggregationMethod,
+    grouping: Optional[List[str]],
+    scenario: Optional[Scenario],
+    time_frames: List[ETimeFrames],
+    scopes: List[EScope],
+    anonymize: bool,
+    aggregate: bool = True,
+) -> Tuple[pd.DataFrame, Optional[ScoreAggregations]]:
     """
     Calculate the different parts of the temperature score (actual scores, aggregations, column distribution).
 
@@ -199,8 +246,14 @@ def calculate(portfolio_data: pd.DataFrame, fallback_score: float, aggregation_m
     :param aggregate: Whether to aggregate the scores or not
     :return: The scores, the aggregations and the column distribution (if a
     """
-    ts = TemperatureScore(time_frames=time_frames, scopes=scopes, fallback_score=fallback_score, scenario=scenario,
-                          grouping=grouping, aggregation_method=aggregation_method)
+    ts = TemperatureScore(
+        time_frames=time_frames,
+        scopes=scopes,
+        fallback_score=fallback_score,
+        scenario=scenario,
+        grouping=grouping,
+        aggregation_method=aggregation_method,
+    )
 
     scores = ts.calculate(portfolio_data)
     aggregations = None

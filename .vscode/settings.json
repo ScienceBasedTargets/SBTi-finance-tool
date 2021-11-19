@@ -1,0 +1,12 @@
+{
+  "editor.formatOnSave": true,
+  "python.linting.enabled": true,
+  "python.linting.lintOnSave": true,
+  "python.testing.unittestEnabled": true,
+  "python.testing.pytestEnabled": false,
+  "jupyter.notebookFileRoot": "${workspaceFolder}",
+  "python.testing.cwd": "${cwd}",
+  "python.defaultInterpreterPath": ".venv/bin/python",
+  "python.formatting.provider": "black",
+  "python.testing.unittestArgs": ["-v", "-s", "./test", "-p", "*test*.py"]
+}
