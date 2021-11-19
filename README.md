@@ -31,7 +31,8 @@ To following diagram provides an overview of the different parts of the toolkit:
     | | +---------------------------------+     |     |
     | | |                                 |     |     |
     | | |Core   : Python Module           |     |     |
-    | | |Source : github.com/OFBDABV/SBTi |     |     |
+    | | |Source : github.com/ScienceBasedTargets/     |
+    | | |               SBTi-finance-tool |     |     |
     | | |Install: via source or PyPi      |     |     |
     | | |                                 |     |     |
     | | +---------------------------------+     |     |
@@ -40,7 +41,7 @@ To following diagram provides an overview of the different parts of the toolkit:
 
 As shown above the API is dependent on the Python Repo, in the same way the UI requires the API backend. These dependencies are scripted in the Docker files.
 
-> This repository only contains the Python module. If you'd like to use the REST API, please refer to [this repository](https://github.com/OFBDABV/SBTi_api) or the same repository on [Dockerhub](https://docker.io/sbti/sbti/api:latest).
+> This repository only contains the Python module. If you'd like to use the REST API, please refer to [this repository](https://github.com/ScienceBasedTargets/SBTi-finance-tool_api) or the same repository on [Dockerhub](https://docker.io/sbti/sbti/api:latest).
 
 ## Structure
 

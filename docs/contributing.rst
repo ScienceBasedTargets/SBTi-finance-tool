@@ -6,7 +6,7 @@ the documentation are also very welcome.
 
 Submitting a bug report or a feature request
 ==============================================
-To keep track of open issues and feature requests, we will use `Github's issue tracker <https://github.com/OFBDABV/SBTi/issues/>`_.
+To keep track of open issues and feature requests, we will use `Github's issue tracker <https://github.com/ScienceBasedTargets/SBTi-finance-tool/issues/>`_.
 
 If you encounter any bugs or missing features, please do not hesitate to open a ticket. Before submitting a report, please check that the issue has not already been reported.
 For ease of comprehension, please ensure your report includes the following characteristics:
@@ -62,7 +62,7 @@ To generate the documentation, you should follow these steps in the "SBTi" repos
 Code of conduct
 ===============
 Everyone's goals here are aligned: to help asset owners and asset managers reduce their impact on climate change.
-The only way we can achieve this goal is by fostering an inclusive and welcome environment. Therefore, this project is governed by a `code of conduct <https://github.com/OFBDABV/SBTi/blob/master/CODE_OF_CONDUCT.md>`_. By participating, you are expected to uphold this code. If you encounter any violations, please report them.
+The only way we can achieve this goal is by fostering an inclusive and welcome environment. Therefore, this project is governed by a `code of conduct <https://github.com/ScienceBasedTargets/SBTi-finance-tool/blob/master/CODE_OF_CONDUCT.md>`_. By participating, you are expected to uphold this code. If you encounter any violations, please report them.
 
 .. toctree::
    :maxdepth: 4
