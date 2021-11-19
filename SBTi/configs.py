@@ -86,6 +86,7 @@ class TemperatureScoreConfig(PortfolioAggregationConfig):
     """
 
     SBTI_FACTOR = 1
+    FALLBACK_SCORE: float = 3.2
     FILE_SR15_MAPPING = os.path.join(
         os.path.dirname(os.path.realpath(__file__)), "inputs", "sr15_mapping.xlsx"
     )

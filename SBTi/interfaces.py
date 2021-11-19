@@ -70,8 +70,8 @@ class IDataProviderCompany(BaseModel):
     company_name: str
     company_id: str
     isic: str
-    ghg_s1s2: float
-    ghg_s3: float
+    ghg_s1s2: Optional[float]
+    ghg_s3: Optional[float]
 
     country: Optional[str]
     region: Optional[str]

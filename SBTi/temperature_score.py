@@ -346,6 +346,7 @@ class TemperatureScore(PortfolioAggregation):
         ]
 
         try:
+            # TODO: what is TEMPERATURE_SCORE and what is TEMPERATURE_RESULTS?
             # If the s3 emissions are less than 40 percent, we'll ignore them altogether, if not, we'll weigh them
             if (
                 s3[self.c.COLS.GHG_SCOPE3]
