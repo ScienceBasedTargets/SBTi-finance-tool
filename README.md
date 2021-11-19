@@ -24,14 +24,15 @@ To following diagram provides an overview of the different parts of the toolkit:
     |                                                 |
     | +-----------------------------------------+     |
     | | REST API: Dockerized FastAPI/NGINX      |     |
-    | | Source : github.com/ScienceBasedTargets/SBTi-finance-tool_api    |     |
+    | | Source : github.com/OFBDABV/SBTi_api    |     |
     | | Install: via source or dockerhub        |     |
     | |          docker.io/sbti/sbti/api:latest |     |
     | |                                         |     |
     | | +---------------------------------+     |     |
     | | |                                 |     |     |
     | | |Core   : Python Module           |     |     |
-    | | |Source : github.com/ScienceBasedTargets/SBTi-finance-tool |     |     |
+    | | |Source : github.com/ScienceBasedTargets/     |
+    | | |               SBTi-finance-tool |     |     |
     | | |Install: via source or PyPi      |     |     |
     | | |                                 |     |     |
     | | +---------------------------------+     |     |
