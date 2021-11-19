@@ -57,7 +57,7 @@ Grouping data
 
 This functionality enables the user to analyze (for examples see Jupyter
 notebook
-`analysis_example <https://github.com/OFBDABV/SBTi/blob/master/examples/1_analysis_example.ipynb>`__\ **)**
+`analysis_example <https://github.com/ScienceBasedTargets/SBTi-finance-tool/blob/master/examples/1_analysis_example.ipynb>`__\ **)**
 the temperature score of the portfolio in depth by slicing and dicing
 through the portfolio. By choosing to “group by” a certain field (for
 example region or sector), the user receives output of temperature
