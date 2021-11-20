@@ -87,3 +87,18 @@ The setup.py script should have already installed Nose2, so now you may run the 
 ```bash
 nose2 -v
 ```
+
+### Publish to PyPi
+
+The package should be published to PyPi when any changes to main are merged.
+
+Update package
+
+1. bump version in `pyproject.toml` based on semantic versioning principles
+2. run `poetry build`
+3. run `poetry publish`
+4. check whether package has been successfully uploaded
+
+**Initial Setup**
+
+- Create account on [PyPi](https://pypi.org/) 
