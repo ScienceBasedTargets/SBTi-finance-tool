@@ -71,11 +71,13 @@ pip install sbti
 
 ## Development
 
-For development purposes, install the SBTi package using the following command:
+To set up the local dev environment with all dependencies, [install poetry](https://python-poetry.org/docs/#osx--linux--bashonwindows-install-instructions) and run
 
 ```bash
-pip install -e .[dev]
+poetry install
 ```
+
+This will create a virtual environment inside the project folder under `.venv`.
 
 ### Testing
 
