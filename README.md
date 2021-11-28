@@ -71,11 +71,13 @@ pip install sbti
 
 ## Development
 
-For development purposes, install the SBTi package using the following command:
+To set up the local dev environment with all dependencies, [install poetry](https://python-poetry.org/docs/#osx--linux--bashonwindows-install-instructions) and run
 
 ```bash
-pip install -e .[dev]
+poetry install
 ```
+
+This will create a virtual environment inside the project folder under `.venv`.
 
 ### Testing
 
@@ -85,3 +87,18 @@ The setup.py script should have already installed Nose2, so now you may run the 
 ```bash
 nose2 -v
 ```
+
+### Publish to PyPi
+
+The package should be published to PyPi when any changes to main are merged.
+
+Update package
+
+1. bump version in `pyproject.toml` based on semantic versioning principles
+2. run `poetry build`
+3. run `poetry publish`
+4. check whether package has been successfully uploaded
+
+**Initial Setup**
+
+- Create account on [PyPi](https://pypi.org/) 
