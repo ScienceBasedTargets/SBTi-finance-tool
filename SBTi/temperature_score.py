@@ -345,6 +345,13 @@ class TemperatureScore(PortfolioAggregation):
             (row[self.c.COLS.COMPANY_ID], row[self.c.COLS.TIME_FRAME], EScope.S3)
         ]
 
+        # return default score if ghg scope12 or 3 is empty
+        if row[self.c.COLS.GHG_SCOPE12] is None or row[self.c.COLS.GHG_SCOPE3] is None:
+            return (
+                TemperatureScoreConfig.FALLBACK_SCORE,
+                TemperatureScoreConfig.FALLBACK_SCORE,
+            )
+
         try:
             # TODO: what is TEMPERATURE_SCORE and what is TEMPERATURE_RESULTS?
             # If the s3 emissions are less than 40 percent, we'll ignore them altogether, if not, we'll weigh them
@@ -489,8 +496,8 @@ class TemperatureScore(PortfolioAggregation):
         data = self._prepare_data(data)
 
         if EScope.S1S2S3 in self.scopes:
-            self._check_column(data, self.c.COLS.GHG_SCOPE12)
-            self._check_column(data, self.c.COLS.GHG_SCOPE3)
+            # self._check_column(data, self.c.COLS.GHG_SCOPE12)
+            # self._check_column(data, self.c.COLS.GHG_SCOPE3)
             data = self._calculate_company_score(data)
 
         # We need to filter the scopes again, because we might have had to add a scope in te preparation step

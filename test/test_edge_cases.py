@@ -40,14 +40,6 @@ class TestDataProvider(DataProvider):
 
 
 class EdgeCasesTest(unittest.TestCase):
-    """
-    This class is containing a set of end to end tests:
-    - basic flow from creating companies/targets up to calculating aggregated values
-    - edge cases for scenarios and grouping
-    - high load tests (>1000 targets)
-    - testing of all different input values and running thru the whole process (tbd)
-    """
-
     def setUp(self):
         company_id = "BaseCompany"
         self.BASE_COMP_SCORE = 0.43
@@ -87,7 +79,7 @@ class EdgeCasesTest(unittest.TestCase):
             company_isin=company_id,
         )
 
-    def test_basic_flow(self):
+    def test_missing_s1s2s3_values(self):
         """
         This test is going all the way to the aggregated calculations
         """
@@ -143,4 +135,4 @@ class EdgeCasesTest(unittest.TestCase):
 if __name__ == "__main__":
     test = EdgeCasesTest()
     test.setUp()
-    test.test_basic_flow()
+    test.test_missing_s2s3_values()
