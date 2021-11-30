@@ -28,8 +28,10 @@ class ExcelProvider(DataProvider):
         :param company_ids: A list of company IDs (ISINs)
         :return: A list containing the targets
         """
-        model_targets = self._target_df_to_model(self.data['target_data'])
-        model_targets = [target for target in model_targets if target.company_id in company_ids]
+        model_targets = self._target_df_to_model(self.data["target_data"])
+        model_targets = [
+            target for target in model_targets if target.company_id in company_ids
+        ]
         return model_targets
 
     def _target_df_to_model(self, df_targets):
@@ -47,7 +49,9 @@ class ExcelProvider(DataProvider):
                 model_targets.append(IDataProviderTarget.parse_obj(target))
             except ValidationError as e:
                 logger.warning(
-                    "(one of) the target(s) of company %s is invalid and will be skipped" % target[self.c.COMPANY_NAME])
+                    "(one of) the target(s) of company %s is invalid and will be skipped"
+                    % target[self.c.COMPANY_NAME]
+                )
                 pass
         return model_targets
 
@@ -59,10 +63,14 @@ class ExcelProvider(DataProvider):
         :param company_ids: A list of company IDs (ISINs)
         :return: A list containing the company data
         """
-        data_company = self.data['fundamental_data']
+        data_company = self.data["fundamental_data"]
         companies = data_company.to_dict(orient="records")
-        model_companies: List[IDataProviderCompany] = [IDataProviderCompany.parse_obj(company) for company in companies]
-        model_companies = [target for target in model_companies if target.company_id in company_ids]
+        model_companies: List[IDataProviderCompany] = [
+            IDataProviderCompany.parse_obj(company) for company in companies
+        ]
+        model_companies = [
+            target for target in model_companies if target.company_id in company_ids
+        ]
         return model_companies
 
     def get_sbti_targets(self, companies: list) -> list:
