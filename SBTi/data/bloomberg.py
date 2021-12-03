@@ -22,8 +22,10 @@ class Bloomberg(DataProvider):
         :return: The returned data, None in case of an error.
         """
         try:
-            headers = {'Authorization': 'Basic: {}:{}'.format("username", "password")}
-            r = requests.post("{}{}".format("host", endpoint), json=data, headers=headers)
+            headers = {"Authorization": "Basic: {}:{}".format("username", "password")}
+            r = requests.post(
+                "{}{}".format("host", endpoint), json=data, headers=headers
+            )
             if r.status_code == 200:
                 return r.json()
         except Exception as e:

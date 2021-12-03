@@ -28,7 +28,9 @@ class CSVProvider(DataProvider):
         :return: A list containing the targets
         """
         model_targets = self._target_df_to_model(self.data_targets)
-        model_targets = [target for target in model_targets if target.company_id in company_ids]
+        model_targets = [
+            target for target in model_targets if target.company_id in company_ids
+        ]
         return model_targets
 
     def _target_df_to_model(self, df_targets):
@@ -46,7 +48,9 @@ class CSVProvider(DataProvider):
                 model_targets.append(IDataProviderTarget.parse_obj(target))
             except ValidationError as e:
                 logger.warning(
-                    "(one of) the target(s) of company %s is invalid and will be skipped" % target[self.c.COMPANY_NAME])
+                    "(one of) the target(s) of company %s is invalid and will be skipped"
+                    % target[self.c.COMPANY_NAME]
+                )
                 pass
         return model_targets
 
@@ -59,8 +63,12 @@ class CSVProvider(DataProvider):
         :return: A list containing the company data
         """
         companies = self.data.to_dict(orient="records")
-        model_companies: List[IDataProviderCompany] = [IDataProviderCompany.parse_obj(company) for company in companies]
-        model_companies = [target for target in model_companies if target.company_id in company_ids]
+        model_companies: List[IDataProviderCompany] = [
+            IDataProviderCompany.parse_obj(company) for company in companies
+        ]
+        model_companies = [
+            target for target in model_companies if target.company_id in company_ids
+        ]
         return model_companies
 
     def get_sbti_targets(self, companies: list) -> list:
@@ -73,5 +81,10 @@ class CSVProvider(DataProvider):
         :return: The original list, enriched with a field called "sbti_target_status"
         """
         return self.data[
-            (self.data["company_id"].isin([company["company_id"] for company in companies]) &
-             self.data["company_id"].notnull())].copy()
+            (
+                self.data["company_id"].isin(
+                    [company["company_id"] for company in companies]
+                )
+                & self.data["company_id"].notnull()
+            )
+        ].copy()
