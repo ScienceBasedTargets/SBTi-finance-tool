@@ -31,23 +31,23 @@ As such, the SBTi-Finance Tool for Temperature Scoring & Portfolio
 Coverage can be used in several ways, depending on the specific
 preferences of the user.
 
-+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| **Quickstart**                                                                                                                                                                                                                                    |
-|                                                                                                                                                                                                                                                   |
-| If you prefer to get up and running quickly, we’ve got a no-code and a Python option:                                                                                                                                                             |
-|                                                                                                                                                                                                                                                   |
-| -  **No-code**: Run the project locally as a \ `web application using Docker <https://ofbdabv.github.io/SBTi/rest_api.html#locally>`__                                                                                                            |
-|                                                                                                                                                                                                                                                   |
-| -  **Python**: Run a Jupyter notebook, without any installation in \ `Google Colab <https://ofbdabv.github.io/SBTi/getting_started.html#google-colab>`__ or `locally <https://ofbdabv.github.io/SBTi/getting_started.html#jupyter-notebooks>`__.  |
-|                                                                                                                                                                                                                                                   |
-| .. rubric::                                                                                                                                                                                                                                       |
-|    :name: section                                                                                                                                                                                                                                 |
-+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| **Quickstart**                                                                                                                                                                                                                                                                                      |
+|                                                                                                                                                                                                                                                                                                     |
+| If you prefer to get up and running quickly, we’ve got a no-code and a Python option:                                                                                                                                                                                                               |
+|                                                                                                                                                                                                                                                                                                     |
+| -  **No-code**: Run the project locally as a \ `web application using Docker <https://sciencebasedtargets.github.io/SBTi-finance-Tool/rest_api.html#locally>`__                                                                                                                                     |
+|                                                                                                                                                                                                                                                                                                     |
+| -  **Python**: Run a Jupyter notebook, without any installation in \ `Google Colab <https://sciencebasedtargets.github.io/SBTi-finance-tool/getting_started.html#google-colab>`__ or `locally <https://sciencebasedtargets.github.io/SBTi-finance-tool/getting_started.html#jupyter-notebooks>`__.  |
+|                                                                                                                                                                                                                                                                                                     |
+| .. rubric::                                                                                                                                                                                                                                                                                         |
+|    :name: section                                                                                                                                                                                                                                                                                   |
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
 If you are unsure whether the tool will be useful for your application
 and workflow, or you would first like to run some examples to get a
 better idea of how the tool works and what types of outputs it
-generates, the `Analysis notebook (with abbreviated methodology) <https://colab.research.google.com/github/OFBDABV/SBTi/blob/master/examples/1_analysis_example.ipynb>`__
+generates, the `Analysis notebook (with abbreviated methodology) <https://colab.research.google.com/github/sciencebasedtargets/SBTi-finance-tool/blob/master/examples/1_analysis_example.ipynb>`__
 offers a quick and no-code opportunity for such testing. The notebook
 combines text and code to provide a testing environment for your
 research, to give you an understanding for how the tool can help you
@@ -102,7 +102,7 @@ tool:  
    companies’ temperature scores.
 
 Given the open source nature of the tool, the community is encouraged to
-make contributions (refer to `Contributing <https://ofbdabv.github.io/SBTi/contributing.html>`__ section to further develop
+make contributions (refer to `Contributing <https://sciencebasedtargets.github.io/SBTi-finance-tool/contributing.html>`__ section to further develop
 and/or update the codebase. Contributions can range from submitting a
 bug report, to submitting a new feature request, all the way to further
 enhancing the tool’s functionalities by contributing code.
