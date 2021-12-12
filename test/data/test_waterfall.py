@@ -1,4 +1,5 @@
 import SBTi.data
+from SBTi import utils
 from SBTi.data.csv import CSVProvider
 
 import os
@@ -57,7 +58,7 @@ class TestWaterfall(unittest.TestCase):
         """
         Test whether data is retrieved as expected.
         """
-        company_data = SBTi.utils.get_company_data(
+        company_data = utils.get_company_data(
             self.data_providers, [company["company_id"] for company in self.companies]
         )
         assert (
