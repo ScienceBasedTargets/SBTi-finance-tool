@@ -1,3 +1,5 @@
+import sphinx_rtd_theme
+
 # Configuration file for the Sphinx documentation builder.
 #
 # This file only contains a selection of the most common options. For a full
@@ -43,6 +45,7 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
+
 html_theme = "sphinx_rtd_theme"
 html_theme_options = {
     # Toc options
