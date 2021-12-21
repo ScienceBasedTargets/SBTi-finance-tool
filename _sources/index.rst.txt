@@ -101,6 +101,7 @@ tool:  
    into existing infrastructure and workflow, to analyze portfolios’ and
    companies’ temperature scores.
 
+
 Given the open source nature of the tool, the community is encouraged to
 make contributions (refer to `Contributing <https://sciencebasedtargets.github.io/SBTi-finance-tool/contributing.html>`__ section to further develop
 and/or update the codebase. Contributions can range from submitting a
