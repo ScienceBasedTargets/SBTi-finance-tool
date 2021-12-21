@@ -44,6 +44,7 @@ openpyxl = "3.0.9"
 black = "21.10b0"
 pylint = "^2.10.2"
 ipykernel = "6.5.0"
+Sphinx = "4.3.2"
 
 [tool.pyright]
 venv = ".venv"
