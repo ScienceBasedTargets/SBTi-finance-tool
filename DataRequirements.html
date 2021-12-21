@@ -1,69 +1,33 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Data Requirements &mdash; SBTi Temperature Alignment tool  documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
-
-  
-  
-  
-  
-
-  
+      <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/language_data.js"></script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-
-    
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Data Legends" href="Legends.html" />
     <link rel="prev" title="Functional Overview" href="FunctionalOverview.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
-            <a href="index.html" class="icon icon-home" alt="Documentation Home"> SBTi Temperature Alignment tool
-          
-
-          
+            <a href="index.html" class="icon icon-home"> SBTi Temperature Alignment tool
           </a>
-
-          
-            
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -71,19 +35,8 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <p class="caption"><span class="caption-text">Contents:</span></p>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction to temperature scoring and portfolio coverage methods</a></li>
 <li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started Using Python</a></li>
@@ -106,71 +59,32 @@
 <li class="toctree-l1"><a class="reference internal" href="autoapi/index.html">API Reference</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">SBTi Temperature Alignment tool</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-        
       <li>Data Requirements</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-            
             <a href="_sources/DataRequirements.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="data-requirements">
-<h1>Data Requirements<a class="headerlink" href="#data-requirements" title="Permalink to this headline">¶</a></h1>
+             
+  <section id="data-requirements">
+<h1>Data Requirements<a class="headerlink" href="#data-requirements" title="Permalink to this headline"></a></h1>
 <p>To calculate your temperature score and portfolio coverage, the tool
 requires several types of data.</p>
 <ul class="simple">
@@ -187,8 +101,8 @@ by individual companies.</p></li>
 <li><p>SBTi status of the companies invested in (i.e. whether these
 companies have targets approved by the SBTi or not).</p></li>
 </ul>
-<div class="section" id="portfolio-data">
-<h2>Portfolio data<a class="headerlink" href="#portfolio-data" title="Permalink to this headline">¶</a></h2>
+<section id="portfolio-data">
+<h2>Portfolio data<a class="headerlink" href="#portfolio-data" title="Permalink to this headline"></a></h2>
 <p>When using the SBTi-Finance Tool for Temperature Scoring and Portfolio
 Coverage, the user needs to supply information about the portfolio. This
 must be a list of all investee companies on a security level, including
@@ -205,9 +119,9 @@ fields, which are available for import. For example, you can add the
 market cap buckets, investment strategies or asset classes of each
 individual security and then analyze the aggregated temperature score
 per these additional fields/categories.</p>
-</div>
-<div class="section" id="company-data">
-<h2>Company data<a class="headerlink" href="#company-data" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="company-data">
+<h2>Company data<a class="headerlink" href="#company-data" title="Permalink to this headline"></a></h2>
 <p>The tool needs information about each individual company in the
 portfolio. We split this data in three categories: financial data,
 emissions, and target data.</p>
@@ -217,8 +131,8 @@ Here is a template <a class="reference download internal" download="" href="_dow
 <p class="admonition-title">Note</p>
 <p>Please note that the tool requires the data in a specific format. For more detail, see the data provider template and the Data Legends for the required data formats and expect values.</p>
 </div>
-<div class="section" id="fundamental-data">
-<h3>Fundamental data<a class="headerlink" href="#fundamental-data" title="Permalink to this headline">¶</a></h3>
+<section id="fundamental-data">
+<h3>Fundamental data<a class="headerlink" href="#fundamental-data" title="Permalink to this headline"></a></h3>
 <p>The fundamental data tab in Excel includes all company wide data
 including GHG emissions per scope and ISIC codes. This open source
 industry classification standard is used to map the targets to different
@@ -273,9 +187,9 @@ temperature score (ROTS)</p></td>
 <p>The financial data used should be regarding the same period as the
 reported emissions. Preferably the latest reported. For more information
 about the requirements, see the <a class="reference external" href="https://sciencebasedtargets.org/wp-content/uploads/2020/10/Financial-Sector-Science-Based-Targets-Guidance-Pilot-Version.pdf">guidance</a> documentation.</p>
-</div>
-<div class="section" id="target-data">
-<h3>Target data<a class="headerlink" href="#target-data" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="target-data">
+<h3>Target data<a class="headerlink" href="#target-data" title="Permalink to this headline"></a></h3>
 <p>This should include all publicly announced GHG emissions reduction
 targets for each company in the portfolio. For each target, information
 is required on target type, currently we only score absolute or
@@ -292,10 +206,10 @@ scope 1 and 2 to convert such targets to targets.</p>
 currently lacks consensus in reporting method. For the tool, all
 intensity metrics have to be mapped to one of eight categories. Please
 refer to the <strong>[link to guidance]</strong> for more detail on how to do this.</p>
-</div>
-</div>
-<div class="section" id="sbti-status">
-<h2>SBTi status<a class="headerlink" href="#sbti-status" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="sbti-status">
+<h2>SBTi status<a class="headerlink" href="#sbti-status" title="Permalink to this headline"></a></h2>
 <p>The SBTi status of a company indicates whether or not the company has
 set a science based target has been approved by the SBTi. This tool uses
 the Excel file that is generated when pressing the download button
@@ -306,63 +220,38 @@ can download the latest list from the SBTi site here:
 Excel file in the tool with the downloaded file. To do this go to
 ..\SBTi\inputs directory and replace the
 <em>current-Companies-Taking-Action-xxx.xslx</em> file with the newer file.</p>
-</div>
-</div>
+</section>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="Legends.html" class="btn btn-neutral float-right" title="Data Legends" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="FunctionalOverview.html" class="btn btn-neutral float-left" title="Functional Overview" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="FunctionalOverview.html" class="btn btn-neutral float-left" title="Functional Overview" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Legends.html" class="btn btn-neutral float-right" title="Data Legends" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        
-        &copy; Copyright 2020, Science Based Targets
-
-    </p>
+    <p>&#169; Copyright 2020, Science Based Targets.</p>
   </div>
-    
-    
-    
-    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
-    
-    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

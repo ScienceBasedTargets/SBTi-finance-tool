@@ -1,5 +1,5 @@
-:mod:`SBTi.portfolio_aggregation`
-=================================
+:py:mod:`SBTi.portfolio_aggregation`
+====================================
 
 .. py:module:: SBTi.portfolio_aggregation
 
@@ -17,49 +17,50 @@ Classes
 
 
 
+
 .. py:class:: PortfolioAggregationMethod
 
-   Bases: :class:`enum.Enum`
+   Bases: :py:obj:`enum.Enum`
 
    The portfolio aggregation method determines how the temperature scores for the individual companies are aggregated
    into a single portfolio score.
 
-   .. attribute:: WATS
+   .. py:attribute:: WATS
       :annotation: = WATS
 
       
 
-   .. attribute:: TETS
+   .. py:attribute:: TETS
       :annotation: = TETS
 
       
 
-   .. attribute:: MOTS
+   .. py:attribute:: MOTS
       :annotation: = MOTS
 
       
 
-   .. attribute:: EOTS
+   .. py:attribute:: EOTS
       :annotation: = EOTS
 
       
 
-   .. attribute:: ECOTS
+   .. py:attribute:: ECOTS
       :annotation: = ECOTS
 
       
 
-   .. attribute:: AOTS
+   .. py:attribute:: AOTS
       :annotation: = AOTS
 
       
 
-   .. attribute:: ROTS
+   .. py:attribute:: ROTS
       :annotation: = ROTS
 
       
 
-   .. method:: is_emissions_based(method: PortfolioAggregationMethod) -> bool
+   .. py:method:: is_emissions_based(method: PortfolioAggregationMethod) -> bool
       :staticmethod:
 
       Check whether a given method is emissions-based (i.e. it uses the emissions to calculate the aggregation).
@@ -68,14 +69,14 @@ Classes
       :return:
 
 
-   .. method:: get_value_column(method: PortfolioAggregationMethod, column_config: Type[ColumnsConfig]) -> str
+   .. py:method:: get_value_column(method: PortfolioAggregationMethod, column_config: Type[SBTi.configs.ColumnsConfig]) -> str
       :staticmethod:
 
 
 
-.. py:class:: PortfolioAggregation(config: Type[PortfolioAggregationConfig] = PortfolioAggregationConfig)
+.. py:class:: PortfolioAggregation(config: Type[SBTi.configs.PortfolioAggregationConfig] = PortfolioAggregationConfig)
 
-   Bases: :class:`abc.ABC`
+   Bases: :py:obj:`abc.ABC`
 
    This class is a base class that provides portfolio aggregation calculation.
 
@@ -83,7 +84,7 @@ Classes
                    if you'd like to overwrite a constant. This can be done by extending the PortfolioAggregationConfig
                    class and overwriting one of the parameters.
 
-   .. method:: _check_column(self, data: pd.DataFrame, column: str)
+   .. py:method:: _check_column(self, data: pandas.DataFrame, column: str)
 
       Check if a certain column is filled for all companies. If not throw an error.
 
@@ -92,7 +93,7 @@ Classes
       :return:
 
 
-   .. method:: _calculate_aggregate_score(self, data: pd.DataFrame, input_column: str, portfolio_aggregation_method: PortfolioAggregationMethod) -> pd.Series
+   .. py:method:: _calculate_aggregate_score(self, data: pandas.DataFrame, input_column: str, portfolio_aggregation_method: PortfolioAggregationMethod) -> pandas.Series
 
       Aggregate the scores in a given column based on a certain portfolio aggregation method.
 

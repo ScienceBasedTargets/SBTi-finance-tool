@@ -1,69 +1,33 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Introduction to temperature scoring and portfolio coverage methods &mdash; SBTi Temperature Alignment tool  documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
-
-  
-  
-  
-  
-
-  
+      <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/language_data.js"></script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-
-    
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Getting Started Using Python" href="getting_started.html" />
     <link rel="prev" title="SBTi-Finance Tool for Temperature Scoring &amp; Portfolio Coverage" href="index.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
-            <a href="index.html" class="icon icon-home" alt="Documentation Home"> SBTi Temperature Alignment tool
-          
-
-          
+            <a href="index.html" class="icon icon-home"> SBTi Temperature Alignment tool
           </a>
-
-          
-            
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -71,19 +35,8 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <p class="caption"><span class="caption-text">Contents:</span></p>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Introduction to temperature scoring and portfolio coverage methods</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#why-has-sbti-built-this-tool">Why has SBTi built this tool?</a></li>
@@ -106,71 +59,32 @@
 <li class="toctree-l1"><a class="reference internal" href="autoapi/index.html">API Reference</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">SBTi Temperature Alignment tool</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-        
       <li>Introduction to temperature scoring and portfolio coverage methods</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-            
             <a href="_sources/intro.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="introduction-to-temperature-scoring-and-portfolio-coverage-methods">
-<h1>Introduction to temperature scoring and portfolio coverage methods<a class="headerlink" href="#introduction-to-temperature-scoring-and-portfolio-coverage-methods" title="Permalink to this headline">¶</a></h1>
+             
+  <section id="introduction-to-temperature-scoring-and-portfolio-coverage-methods">
+<h1>Introduction to temperature scoring and portfolio coverage methods<a class="headerlink" href="#introduction-to-temperature-scoring-and-portfolio-coverage-methods" title="Permalink to this headline"></a></h1>
 <p>Three methods are currently supported by
 the <a class="reference external" href="https://sciencebasedtargets.org/financial-institutions">SBTi</a> for
 setting targets on scope 3 portfolio emissions: the Sectoral
@@ -208,8 +122,8 @@ target level scores to generate a temperature rating for a company based
 on the ambition of its targets. Finally, the method defines a series of
 weighting options that can enable financial institutions and others to
 produce portfolio level temperature ratings.</p>
-<div class="section" id="why-has-sbti-built-this-tool">
-<h2>Why has SBTi built this tool?<a class="headerlink" href="#why-has-sbti-built-this-tool" title="Permalink to this headline">¶</a></h2>
+<section id="why-has-sbti-built-this-tool">
+<h2>Why has SBTi built this tool?<a class="headerlink" href="#why-has-sbti-built-this-tool" title="Permalink to this headline"></a></h2>
 <p>There has been a growing interest in methods to measure the alignment of
 companies and investment portfolios with the Paris Agreement. The
 success of the Science Based Targets initiative has seen a rapid growth
@@ -241,9 +155,9 @@ portfolio companies). It also enables the generation of a series of
 what-if scenarios to showcase how this temperature score could be
 reduced.</p></li>
 </ul>
-</div>
-<div class="section" id="why-have-we-built-the-sbti-finance-tool-in-this-way">
-<h2>Why have we built the SBTi-Finance tool in this way?<a class="headerlink" href="#why-have-we-built-the-sbti-finance-tool-in-this-way" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="why-have-we-built-the-sbti-finance-tool-in-this-way">
+<h2>Why have we built the SBTi-Finance tool in this way?<a class="headerlink" href="#why-have-we-built-the-sbti-finance-tool-in-this-way" title="Permalink to this headline"></a></h2>
 <p>To help financial institutions fight climate change, SBTi wants the tool
 to be accessible, useful, and used by as many finance professionals and
 other users as possible. If it is easy to access, not seen as a
@@ -327,9 +241,9 @@ report. In turn, this should ensure that portfolio and company
 temperature scores stay top-of-mind for finance professionals and that
 this ultimately leads to more efficient engagement processes and GHG
 emissions reductions in the real economy.</p>
-</div>
-<div class="section" id="what-can-i-use-the-sbti-finance-tool-for">
-<h2>What can I use the SBTi-Finance tool for?<a class="headerlink" href="#what-can-i-use-the-sbti-finance-tool-for" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="what-can-i-use-the-sbti-finance-tool-for">
+<h2>What can I use the SBTi-Finance tool for?<a class="headerlink" href="#what-can-i-use-the-sbti-finance-tool-for" title="Permalink to this headline"></a></h2>
 <p>The SBTi-Finance Temperature Scoring and Portfolio Coverage tool enables
 analysis of companies, sectors, countries, investment strategies and
 portfolios to understand how they contribute to climate change. You can
@@ -370,9 +284,9 @@ and portfolio analytics for their users</p></li>
 <li><p>CIOs – to help to understand the portfolios’ ESG position</p></li>
 <li><p>NGOs – for further research to enhance climate related methodologies</p></li>
 </ul>
-</div>
-<div class="section" id="what-data-do-i-need-to-use-the-tool">
-<h2>What data do I need to use the tool?<a class="headerlink" href="#what-data-do-i-need-to-use-the-tool" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="what-data-do-i-need-to-use-the-tool">
+<h2>What data do I need to use the tool?<a class="headerlink" href="#what-data-do-i-need-to-use-the-tool" title="Permalink to this headline"></a></h2>
 <p>The tool itself is data agnostic and has no built-in databases. This
 means that users need to import all needed data to perform the analysis
 and can use any data source with the necessary data available. This data
@@ -426,12 +340,12 @@ These are described in the table below.</p>
 </tr>
 </tbody>
 </table>
-<p>See <a class="reference external" href="https://ofbdabv.github.io/SBTi/DataRequirements.html">Data Requirements</a> section for more detailed information.</p>
+<p>See <a class="reference external" href="https://sciencebasedtargets.github.io/SBTi-finance-tool/DataRequirements.html">Data Requirements</a> section for more detailed information.</p>
 <p>Also refer to the full methodology for <a class="reference external" href="https://sciencebasedtargets.org/wp-content/uploads/2020/09/Temperature-Rating-Methodology-V1.pdf">temperature
 scoring</a>.</p>
-</div>
-<div class="section" id="where-can-i-find-the-data">
-<h2>Where can I find the data?<a class="headerlink" href="#where-can-i-find-the-data" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="where-can-i-find-the-data">
+<h2>Where can I find the data?<a class="headerlink" href="#where-can-i-find-the-data" title="Permalink to this headline"></a></h2>
 <p>Commercial data providers such as Bloomberg, CDP, ISS, MSCI, TruCost and
 Urgentem can provide some or all the data needed for the SBTi-Finance
 Tool.</p>
@@ -444,9 +358,9 @@ here: <a class="reference external" href="https://sciencebasedtargets.org/compa
 list of companies with SBTi-approved targets, but that have publicly
 announced targets. Commercial data providers such as those listed above
 can provide target data for these companies.</p>
-</div>
-<div class="section" id="overview-of-how-the-tool-works">
-<h2>Overview of how the tool works<a class="headerlink" href="#overview-of-how-the-tool-works" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="overview-of-how-the-tool-works">
+<h2>Overview of how the tool works<a class="headerlink" href="#overview-of-how-the-tool-works" title="Permalink to this headline"></a></h2>
 <p>The calculation methodology consists of four key steps, each requiring
 specific data points that are inputted at the beginning of the process.
 These data points are then used to convert the corporate GHG emission
@@ -514,9 +428,9 @@ included in the tool:</p>
 </tr>
 </tbody>
 </table>
-</div>
-<div class="section" id="what-are-the-outputs-the-tool-generates">
-<h2>What are the outputs the tool generates?<a class="headerlink" href="#what-are-the-outputs-the-tool-generates" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="what-are-the-outputs-the-tool-generates">
+<h2>What are the outputs the tool generates?<a class="headerlink" href="#what-are-the-outputs-the-tool-generates" title="Permalink to this headline"></a></h2>
 <p>The temperature score can be calculated for all time frames (short,
 medium, long term) and scope (Scope 1, 2, 3) combinations covered by the
 SBTi methodology. The table below provides an overview of these:</p>
@@ -598,64 +512,39 @@ for submitting your temperature score to the Target Validation Team
 the same time, it provides the opportunity to audit the scores during
 the validation process.</p>
 <p>For a more detail please see Jupyter notebook examples found
-<a class="reference external" href="https://ofbdabv.github.io/SBTi/getting_started.html#google-colab">here</a>.</p>
-</div>
-</div>
+<a class="reference external" href="https://sciencebasedtargets.github.io/SBTi-finance-tool/getting_started.html#google-colab">here</a>.</p>
+</section>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="getting_started.html" class="btn btn-neutral float-right" title="Getting Started Using Python" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="index.html" class="btn btn-neutral float-left" title="SBTi-Finance Tool for Temperature Scoring &amp; Portfolio Coverage" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="SBTi-Finance Tool for Temperature Scoring &amp; Portfolio Coverage" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="getting_started.html" class="btn btn-neutral float-right" title="Getting Started Using Python" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        
-        &copy; Copyright 2020, Science Based Targets
-
-    </p>
+    <p>&#169; Copyright 2020, Science Based Targets.</p>
   </div>
-    
-    
-    
-    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
-    
-    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

@@ -4,7 +4,7 @@ Getting Started Using Python
 The most fundamental part of the project is the Python module, which takes care of all the heavy lifting. 
 You can install it easily through PIP. There are a couple ways to get started using the module. 
 The easiest option is to run our getting started notebook on `Google Colab <https://colab.research.google.com/>`__.
-Alternatively, you can also run the `notebooks <https://github.com/OFBDABV/SBTi/tree/master/examples>`__ locally or start from scratch using the API reference.
+Alternatively, you can also run the `notebooks <https://github.com/ScienceBasedTargets/SBTi-finance-tool/tree/master/examples>`__ locally or start from scratch using the API reference.
 
 .. note:: This page focuses on the Python module. The getting started documentation for the REST API can be found on its `dedicated page <https://ofbdabv.github.io/SBTi/rest_api.html>`__. For a distinction between the different parts of the project, have a look at `the homepage <https://ofbdabv.github.io/SBTi/index.html>`__.
 
@@ -39,7 +39,7 @@ Python code
 ---------------------
 If you are starting from scratch, you can install the latest version of the package directly from Github as follows::
 
-    pip install git+git://github.com/OFBDABV/SBTi
+    pip install git+git://github.com/ScienceBasedTargets/SBTi-finance-tool
 
 Or you can install the latest stable release from PyPi
 

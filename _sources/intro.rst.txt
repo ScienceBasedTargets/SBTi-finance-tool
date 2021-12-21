@@ -292,7 +292,7 @@ These are described in the table below.
 |                                | f. Revenue                                                                                                                                                                           |
 +--------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
-See `Data Requirements <https://ofbdabv.github.io/SBTi/DataRequirements.html>`__ section for more detailed information.
+See `Data Requirements <https://sciencebasedtargets.github.io/SBTi-finance-tool/DataRequirements.html>`__ section for more detailed information.
 
 Also refer to the full methodology for \ `temperature
 scoring <https://sciencebasedtargets.org/wp-content/uploads/2020/09/Temperature-Rating-Methodology-V1.pdf>`__.
@@ -486,7 +486,7 @@ the same time, it provides the opportunity to audit the scores during
 the validation process.
 
 For a more detail please see Jupyter notebook examples found
-`here <https://ofbdabv.github.io/SBTi/getting_started.html#google-colab>`__.
+`here <https://sciencebasedtargets.github.io/SBTi-finance-tool/getting_started.html#google-colab>`__.
 
 
 .. |image3| image:: image3.png

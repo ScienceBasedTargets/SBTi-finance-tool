@@ -1,5 +1,5 @@
-:mod:`SBTi.data.trucost`
-========================
+:py:mod:`SBTi.data.trucost`
+===========================
 
 .. py:module:: SBTi.data.trucost
 
@@ -16,13 +16,14 @@ Classes
 
 
 
+
 .. py:class:: Trucost(**kwargs)
 
-   Bases: :class:`SBTi.data.data_provider.DataProvider`
+   Bases: :py:obj:`SBTi.data.data_provider.DataProvider`
 
    Data provider skeleton for Trucost.
 
-   .. method:: get_targets(self, company_ids: List[str]) -> List[IDataProviderTarget]
+   .. py:method:: get_targets(self, company_ids: List[str]) -> List[SBTi.interfaces.IDataProviderTarget]
       :abstractmethod:
 
       Get all relevant targets for a list of company ids (ISIN). This method should return a list of
@@ -32,7 +33,7 @@ Classes
       :return: A list containing the targets
 
 
-   .. method:: get_company_data(self, company_ids: List[str]) -> List[IDataProviderCompany]
+   .. py:method:: get_company_data(self, company_ids: List[str]) -> List[SBTi.interfaces.IDataProviderCompany]
       :abstractmethod:
 
       Get all relevant data for a list of company ids (ISIN). This method should return a list of IDataProviderCompany
@@ -42,7 +43,7 @@ Classes
       :return: A list containing the company data
 
 
-   .. method:: get_sbti_targets(self, companies: list) -> list
+   .. py:method:: get_sbti_targets(self, companies: list) -> list
       :abstractmethod:
 
       For each of the companies, get the status of their target (Target set, Committed or No target) as it's known to
