@@ -164,12 +164,12 @@ class TargetProtocol:
                     + s2.coverage_s2 * s2.base_year_ghg_s2
                 ) / (target.base_year_ghg_s1 + s2.base_year_ghg_s2)
                 target.reduction_ambition = (
-                    target.reduction_ambition
-                    * target.coverage_s1
-                    * target.base_year_ghg_s1
-                    + s2.reduction_ambition
-                    * s2.coverage_s1
-                    * s2.base_year_ghg_s2
+                    (
+                        target.reduction_ambition
+                        * target.coverage_s1
+                        * target.base_year_ghg_s1
+                        + s2.reduction_ambition * s2.coverage_s1 * s2.base_year_ghg_s2
+                    )
                     / (target.base_year_ghg_s1 + s2.base_year_ghg_s1)
                     / combined_coverage
                 )

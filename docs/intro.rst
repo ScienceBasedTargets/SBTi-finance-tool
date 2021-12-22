@@ -439,7 +439,7 @@ of the score:
    each region or sector contributes to the total score. 
 
 The table below, taken from a Jupyter Notebook implementation of the
-tool (see ,http://getting-started.sbti-tool.org/ for executing your own
+tool (see ,https://sciencebasedtargets.github.io/SBTi-finance-tool/ for executing your own
 rungs of the Jupyter Notebook), highlights the companies with the
 highest contribution to the portfolio temperature score and at the same
 time displays ownership and portfolio weight to give the user an
