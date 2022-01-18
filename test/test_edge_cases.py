@@ -59,7 +59,7 @@ class EdgeCasesTest(unittest.TestCase):
         self.target_base = IDataProviderTarget(
             company_id=company_id,
             target_type="abs",
-            scope=EScope.S1S2,
+            scope=EScope.S1,
             coverage_s1=0.95,
             coverage_s2=0.95,
             coverage_s3=0,

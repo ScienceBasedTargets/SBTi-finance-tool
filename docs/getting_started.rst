@@ -18,11 +18,11 @@ We recommend that you start with notebook 1 analysis example, especially
 if you are new to Python and/or the `temperature scoring
 methodology <https://sciencebasedtargets.org/wp-content/uploads/2020/09/Temperature-Rating-Methodology-V1.pdf>`__.
 
-1. `Analysis example (with abbreviated methodology) <https://colab.research.google.com/github/OFBDABV/SBTi/blob/master/examples/1_analysis_example.ipynb>`__
-2. `Quick temperature calculation <https://colab.research.google.com/github/OFBDABV/SBTi/blob/master/examples/2_quick_temp_score_calculation.ipynb>`__
-3. `What-if analysis <https://colab.research.google.com/github/OFBDABV/SBTi/blob/master/examples/3_what-if-analysis.ipynb>`__
-4. `Portfolio aggregation <https://colab.research.google.com/github/OFBDABV/SBTi/blob/master/examples/4_portfolio_aggregations.ipynb>`__
-5. `Reporting <https://colab.research.google.com/github/OFBDABV/SBTi/blob/master/examples/5_reporting.ipynb>`__
+1. `Analysis example (with abbreviated methodology) <https://colab.research.google.com/github/ScienceBasedTargets/SBTi-finance-tool/blob/main/examples/1_analysis_example.ipynb>`__
+2. `Quick temperature calculation <https://colab.research.google.com/github/ScienceBasedTargets/SBTi-finance-tool/blob/main/examples/2_quick_temp_score_calculation.ipynb>`__
+3. `What-if analysis <https://colab.research.google.com/github/ScienceBasedTargets/SBTi-finance-tool/blob/main/examples/3_what-if-analysis.ipynb>`__
+4. `Portfolio aggregation <https://colab.research.google.com/github/ScienceBasedTargets/SBTi-finance-tool/blob/main/examples/4_portfolio_aggregations.ipynb>`__
+5. `Reporting <https://colab.research.google.com/github/ScienceBasedTargets/SBTi-finance-tool/blob/main/examples/5_reporting.ipynb>`__
 
 Jupyter Notebooks
 -----------------
