@@ -455,7 +455,7 @@ Classes
       
 
    .. py:attribute:: COL_TARGET_STATUS
-      :annotation: = Status
+      :annotation: = Near term - Target Status
 
       
 

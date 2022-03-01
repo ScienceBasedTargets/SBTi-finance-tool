@@ -10,7 +10,7 @@ company, the score is calculated based on the publicly announced
 targets, which are mapped to regression models based on IPCC climate
 scenarios. The company is then awarded a score for each period and scope
 based on the ambition and coverage of the relevant targets. For more
-information, refer to the methodology `here <https://sciencebasedtargets.org/wp-content/uploads/2020/10/Financial-Sector-Science-Based-Targets-Guidance-Pilot-Version.pdf>`__\ .
+information, refer to the methodology `here <https://sciencebasedtargets.org/resources/files/Financial-Sector-Science-Based-Targets-Guidance-Pilot-Version.pdf>`__\ .
 
 Time Frames
 ~~~~~~~~~~~
@@ -94,7 +94,7 @@ The possible scenarios are:
    used the default score to a score of 2.0\ :sup:`o` C.
 
 -  Scenario 2: In this scenario, all companies that already set targets
-   are persuaded to set “Well Below 2.0\:sup:`o` C (WB2C) targets. This
+   are persuaded to set “Well Below 2.0\ :sup:`o` C (WB2C) targets. This
    is simulated by setting all scores of the companies that have valid
    targets to at most 1.75\ :sup:`o` C.
 
