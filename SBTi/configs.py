@@ -173,4 +173,4 @@ class PortfolioCoverageTVPConfig(PortfolioAggregationConfig):
     # SBTi targets overview (TVP coverage)
     COL_COMPANY_NAME = "Company Name"
     COL_COMPANY_ISIN = "ISIN"
-    COL_TARGET_STATUS = "Status"
+    COL_TARGET_STATUS = "Near term - Target Status"
