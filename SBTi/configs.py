@@ -83,10 +83,13 @@ class TemperatureScoreConfig(PortfolioAggregationConfig):
     """
     This factor determines what part of the temperature for a not SBTi-validated company should be the TS and what part
     should be the default score.
+    The calculated temperature score should not be lower than the current level of
+    global warning which is expressed through the temperature floor constant.
     """
 
     SBTI_FACTOR = 1
     FALLBACK_SCORE: float = 3.2
+    TEMPERATURE_FLOOR: float = 1.3
     FILE_SR15_MAPPING = os.path.join(
         os.path.dirname(os.path.realpath(__file__)), "inputs", "sr15_mapping.xlsx"
     )
