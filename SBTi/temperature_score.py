@@ -315,7 +315,7 @@ class TemperatureScore(PortfolioAggregation):
             * target[self.c.COLS.ANNUAL_REDUCTION_RATE]
             * 100
             + target[self.c.COLS.REGRESSION_INTERCEPT],
-            0,
+            self.c.TEMPERATURE_FLOOR,
         )
         if target[self.c.COLS.SBTI_VALIDATED]:
             return ts, 0
