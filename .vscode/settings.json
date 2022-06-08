@@ -9,5 +9,6 @@
   "python.defaultInterpreterPath": ".venv/bin/python",
   "python.formatting.provider": "black",
   "python.testing.unittestArgs": ["-v", "-s", "./test", "-p", "*test*.py"],
-  "restructuredtext.confPath": "${workspaceFolder}/docs"
+  "restructuredtext.confPath": "${workspaceFolder}/docs",
+  "esbonio.sphinx.confDir": "${workspaceFolder}/docs"
 }
