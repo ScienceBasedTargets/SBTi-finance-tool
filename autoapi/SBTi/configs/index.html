@@ -417,7 +417,9 @@ the module, extend the respective config class and pass it to the class as the �
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">SBTi.configs.</span></span><span class="sig-name descname"><span class="pre">TemperatureScoreConfig</span></span><a class="headerlink" href="#SBTi.configs.TemperatureScoreConfig" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#SBTi.configs.PortfolioAggregationConfig" title="SBTi.configs.PortfolioAggregationConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PortfolioAggregationConfig</span></code></a></p>
 <p>This factor determines what part of the temperature for a not SBTi-validated company should be the TS and what part
-should be the default score.</p>
+should be the default score.
+The calculated temperature score should not be lower than the current level of
+global warning which is expressed through the temperature floor constant.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="SBTi.configs.TemperatureScoreConfig.SBTI_FACTOR">
 <span class="sig-name descname"><span class="pre">SBTI_FACTOR</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">1</span></em><a class="headerlink" href="#SBTi.configs.TemperatureScoreConfig.SBTI_FACTOR" title="Permalink to this definition"></a></dt>
@@ -426,6 +428,11 @@ should be the default score.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="SBTi.configs.TemperatureScoreConfig.FALLBACK_SCORE">
 <span class="sig-name descname"><span class="pre">FALLBACK_SCORE</span></span><em class="property"><span class="w"> </span><span class="pre">:float</span> <span class="pre">=</span> <span class="pre">3.2</span></em><a class="headerlink" href="#SBTi.configs.TemperatureScoreConfig.FALLBACK_SCORE" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SBTi.configs.TemperatureScoreConfig.TEMPERATURE_FLOOR">
+<span class="sig-name descname"><span class="pre">TEMPERATURE_FLOOR</span></span><em class="property"><span class="w"> </span><span class="pre">:float</span> <span class="pre">=</span> <span class="pre">1.3</span></em><a class="headerlink" href="#SBTi.configs.TemperatureScoreConfig.TEMPERATURE_FLOOR" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">

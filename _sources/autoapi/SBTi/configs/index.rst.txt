@@ -338,6 +338,8 @@ Classes
 
    This factor determines what part of the temperature for a not SBTi-validated company should be the TS and what part
    should be the default score.
+   The calculated temperature score should not be lower than the current level of
+   global warning which is expressed through the temperature floor constant.
 
    .. py:attribute:: SBTI_FACTOR
       :annotation: = 1
@@ -346,6 +348,11 @@ Classes
 
    .. py:attribute:: FALLBACK_SCORE
       :annotation: :float = 3.2
+
+      
+
+   .. py:attribute:: TEMPERATURE_FLOOR
+      :annotation: :float = 1.3
 
       
 
