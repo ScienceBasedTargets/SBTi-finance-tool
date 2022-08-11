@@ -192,11 +192,11 @@ python-versions = ">=3.6"
 
 [[package]]
 name = "idna"
-version = "3.3"
+version = "2.10"
 description = "Internationalized Domain Names in Applications (IDNA)"
 category = "main"
 optional = false
-python-versions = ">=3.5"
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 
 [[package]]
 name = "imagesize"
