@@ -352,7 +352,7 @@ Classes
       
 
    .. py:attribute:: TEMPERATURE_FLOOR
-      :annotation: :float = 1.3
+      :annotation: :float = 0.0
 
       
 
