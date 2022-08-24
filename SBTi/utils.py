@@ -183,7 +183,7 @@ def dataframe_to_portfolio(df_portfolio: pd.DataFrame) -> List[PortfolioCompany]
 
 
 def get_data(
-    data_providers: List[data.DataProvider], portfolio: List[PortfolioCompany]
+    data_providers: List[data.DataProvider], portfolio: List[PortfolioCompany], year_time_frame: str
 ) -> pd.DataFrame:
     """
     Get the required data from the data provider(s), validate the targets and return a 9-box grid for each company.
@@ -205,7 +205,7 @@ def get_data(
     company_data = SBTi().get_sbti_targets(company_data, _make_isin_map(df_portfolio))
 
     # Prepare the data
-    portfolio_data = TargetProtocol().process(target_data, company_data)
+    portfolio_data = TargetProtocol().process(target_data, company_data, year_time_frame)
     portfolio_data = pd.merge(
         left=portfolio_data,
         right=df_portfolio.drop("company_name", axis=1),
