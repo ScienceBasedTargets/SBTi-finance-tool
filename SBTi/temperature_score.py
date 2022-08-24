@@ -170,6 +170,7 @@ class TemperatureScore(PortfolioAggregation):
         self,
         time_frames: List[ETimeFrames],
         scopes: List[EScope],
+        year_time_frame: str = 'current',
         fallback_score: float = 3.2,
         model: int = 4,
         scenario: Optional[Scenario] = None,
@@ -184,6 +185,7 @@ class TemperatureScore(PortfolioAggregation):
         self.fallback_score = fallback_score
 
         self.time_frames = time_frames
+        self.year_time_frame = year_time_frame
         self.scopes = scopes
 
         if self.scenario is not None:
@@ -487,7 +489,7 @@ class TemperatureScore(PortfolioAggregation):
         """
         if data is None:
             if data_providers is not None and portfolio is not None:
-                data = utils.get_data(data_providers, portfolio)
+                data = utils.get_data(data_providers, portfolio, self.year_time_frame)
             else:
                 raise ValueError(
                     "You need to pass and either a data set or a list of data providers and companies"
