@@ -32,7 +32,7 @@ class TargetProtocol:
         self.data: pd.DataFrame = pd.DataFrame()
 
     def process(
-        self, targets: List[IDataProviderTarget], companies: List[IDataProviderCompany]
+        self, targets: List[IDataProviderTarget], companies: List[IDataProviderCompany], year_time_frame: str
     ) -> pd.DataFrame:
         """
         Process the targets and companies, validate all targets and return a data frame that combines all targets and company data into a 9-box grid.
@@ -42,7 +42,7 @@ class TargetProtocol:
         :return: A data frame that combines the processed data
         """
         # Create multiindex on company, timeframe and scope for performance later on
-        targets = self.prepare_targets(targets)
+        targets = self.prepare_targets(targets, year_time_frame)
         self.target_data = pd.DataFrame.from_records([c.dict() for c in targets])
 
         # Create an indexed DF for performance purposes
@@ -238,15 +238,24 @@ class TargetProtocol:
                 )
         return target
 
-    def _time_frame(self, target: IDataProviderTarget) -> IDataProviderTarget:
+    def _time_frame(self, target: IDataProviderTarget, year: str = 'current') -> IDataProviderTarget:
         """
         Time frame is forward looking: target year - current year. Less than 5y = short, between 5 and 15 is mid, 15 to 30 is long
 
         :param target: The input target
+        :param year: can take value 'current' (by default) or 'start'. 
+        If 'start' is provided, the time frame is end_year - start_year instead of end_year - current_year
         :return: The original target with the time_frame field filled out (if so required)
         """
-        now = datetime.datetime.now()
-        time_frame = target.end_year - now.year
+        if year == 'current':
+            now = datetime.datetime.now()
+            time_frame = target.end_year - now.year
+        elif year == 'start':
+            time_frame = target.end_year - target.start_year
+        else:
+            tf_error = "'optional parameter year can only take value 'current' or 'start'"
+            raise ValueError(tf_error)
+             
         if time_frame <= 4:
             target.time_frame = ETimeFrames.SHORT
         elif time_frame <= 15:
@@ -256,7 +265,7 @@ class TargetProtocol:
 
         return target
 
-    def _prepare_target(self, target: IDataProviderTarget):
+    def _prepare_target(self, target: IDataProviderTarget, year_time_frame: str):
         """
         Prepare a target for usage later on in the process.
 
@@ -266,10 +275,10 @@ class TargetProtocol:
         target = self._combine_s1_s2(target)
         target = self._convert_s1_s2(target)
         target = self._boundary_coverage(target)
-        target = self._time_frame(target)
+        target = self._time_frame(target, year_time_frame)
         return target
 
-    def prepare_targets(self, targets: List[IDataProviderTarget]):
+    def prepare_targets(self, targets: List[IDataProviderTarget], year_time_frame: str):
         targets = list(filter(self.validate, targets))
         self.s2_targets = list(
             filter(
@@ -285,7 +294,7 @@ class TargetProtocol:
                 None, itertools.chain.from_iterable(map(self._split_s1s2s3, targets))
             )
         )
-        targets = [self._prepare_target(target) for target in targets]
+        targets = [self._prepare_target(target, year_time_frame) for target in targets]
 
         return targets
 
