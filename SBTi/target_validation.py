@@ -170,9 +170,11 @@ class TargetProtocol:
                         * target.base_year_ghg_s1
                         + s2.reduction_ambition * s2.coverage_s2 * s2.base_year_ghg_s2
                     )
-                    / (target.base_year_ghg_s1 + s2.base_year_ghg_s2)
-                    / combined_coverage
+                ) / (
+                    target.coverage_s1 * target.base_year_ghg_s1
+                    + s2.coverage_s2 * s2.base_year_ghg_s2
                 )
+
                 target.coverage_s1 = combined_coverage
                 target.coverage_s2 = combined_coverage
                 # We don't need to delete the S2 target as it'll be definition have a lower coverage than the combined
