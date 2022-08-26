@@ -101,7 +101,12 @@ class TargetProtocol:
             and not pd.isnull(target.base_year_ghg_s1)
             and not pd.isnull(target.base_year_ghg_s2)
         )
-        return target_type and target_process and target_end_year and s1 and s2
+        s1s2 = target.scope != EScope.S1S2 or (
+            target.coverage_s1 == target.coverage_s2 or (
+            not pd.isnull(target.base_year_ghg_s1)
+            and not pd.isnull(target.base_year_ghg_s2)
+        ))
+        return target_type and target_process and target_end_year and s1 and s2 and s1s2
 
     def _split_s1s2s3(
         self, target: IDataProviderTarget
@@ -179,6 +184,22 @@ class TargetProtocol:
                 # target, therefore it won't be picked for our 9-box grid
         return target
 
+    def _cover_s1_s2(self, target: IDataProviderTarget):
+        """
+        Set the S1 and S2 coverage of a S1+S2 target to the same value.
+
+        :param target: The input target
+        :return: The modified target (or the original if no modification was required)
+        """
+        if target.scope == EScope.S1S2 and target.coverage_s1 != target.coverage_s2:
+            combined_coverage = (
+                target.coverage_s1 * target.base_year_ghg_s1
+                + target.coverage_s2 * target.base_year_ghg_s2
+            ) / (target.base_year_ghg_s1 + target.base_year_ghg_s2)
+            target.coverage_s1 = combined_coverage
+            target.coverage_s2 = combined_coverage
+        return target
+    
     def _convert_s1_s2(self, target: IDataProviderTarget):
         """
         Convert a S1 or S2 target into a S1+S2 target.
@@ -264,6 +285,7 @@ class TargetProtocol:
         :return:
         """
         target = self._combine_s1_s2(target)
+        target = self._cover_s1_s2(target)
         target = self._convert_s1_s2(target)
         target = self._boundary_coverage(target)
         target = self._time_frame(target)
@@ -368,3 +390,4 @@ class TargetProtocol:
         self.data = extended_data.apply(
             lambda row: self._find_target(row, target_columns), axis=1
         )
+
