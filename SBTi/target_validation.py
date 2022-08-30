@@ -86,10 +86,14 @@ class TargetProtocol:
         )
 
         # The end year should be greater than the start year.
+        # The end year should be less than the current year.
         if target.start_year is None or pd.isnull(target.start_year):
             target.start_year = target.base_year
 
-        target_end_year = target.end_year > target.start_year
+        now = datetime.datetime.now()
+        target_end_year = (target.end_year > target.start_year) and (
+            target_end_year > now
+        )
         # Delete all S1 or S2 targets we can't combine
         s1 = target.scope != EScope.S1 or (
             not pd.isnull(target.coverage_s1)
