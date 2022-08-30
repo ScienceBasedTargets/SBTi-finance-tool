@@ -346,7 +346,7 @@ class TemperatureScore(PortfolioAggregation):
         ]
 
         # return default score if ghg scope12 or 3 is empty
-        if row[self.c.COLS.GHG_SCOPE12] is None or row[self.c.COLS.GHG_SCOPE3] is None:
+        if pd.isna(row[self.c.COLS.GHG_SCOPE12]) or pd.isna(row[self.c.COLS.GHG_SCOPE3]):
             return (
                 TemperatureScoreConfig.FALLBACK_SCORE,
                 TemperatureScoreConfig.FALLBACK_SCORE,
