@@ -92,7 +92,7 @@ class TargetProtocol:
 
         now = datetime.datetime.now()
         target_end_year = (target.end_year > target.start_year) and (
-            target_end_year > now
+            target.end_year > now
         )
         # Delete all S1 or S2 targets we can't combine
         s1 = target.scope != EScope.S1 or (
