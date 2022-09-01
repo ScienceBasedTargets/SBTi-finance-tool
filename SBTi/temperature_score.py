@@ -233,18 +233,33 @@ class TemperatureScore(PortfolioAggregation):
         :param target: The target as a row of a dataframe
         :return: The annual reduction
         """
-        if pd.isnull(target[self.c.COLS.REDUCTION_AMBITION]):
-            return None
 
-        try:
-            return target[self.c.COLS.REDUCTION_AMBITION] / float(
-                target[self.c.COLS.END_YEAR] - target[self.c.COLS.BASE_YEAR]
-            )
-        except ZeroDivisionError:
-            raise ValueError(
-                "Couldn't calculate the annual reduction rate because the start and target year are the "
-                "same"
-            )
+        # 2022-09-01 Bloomberg pointe out need for additional checks in input
+        # Here is the original code:
+        # if pd.isnull(target[self.c.COLS.REDUCTION_AMBITION]):
+        #     return None
+
+        # try:
+        #     return target[self.c.COLS.REDUCTION_AMBITION] / float(
+        #         target[self.c.COLS.END_YEAR] - target[self.c.COLS.BASE_YEAR]
+        #     )
+        # except ZeroDivisionError:
+        #     raise ValueError(
+        #         "Couldn't calculate the annual reduction rate because the start and target year are the "
+        #         "same"
+        #     )
+
+        # Bloombergs proposal - changed 2022-09-01
+        check = pd.isnull(target[self.c.COLS.REDUCTION_AMBITION])
+        check = check or pd.isnull(target[self.c.COLS.END_YEAR])
+        check = check or pd.isnull(target[self.c.COLS.BASE_YEAR])
+        check = check or (target[self.c.COLS.END_YEAR] <= target[self.c.COLS.BASE_YEAR])
+        if check:
+            return None
+        return target[self.c.COLS.REDUCTION_AMBITION] / float(
+            target[self.c.COLS.END_YEAR] - target[self.c.COLS.BASE_YEAR]
+        )
+        # End of BBGs code
 
     def get_regression(
         self, target: pd.Series
@@ -349,10 +364,12 @@ class TemperatureScore(PortfolioAggregation):
         if pd.isnull(s1s2[self.c.COLS.GHG_SCOPE12]) or pd.isnull(
             s3[self.c.COLS.GHG_SCOPE3]
         ):
-            return (
-                TemperatureScoreConfig.FALLBACK_SCORE,
-                TemperatureScoreConfig.FALLBACK_SCORE,
-            )
+            # return (
+            #     TemperatureScoreConfig.FALLBACK_SCORE,
+            #     TemperatureScoreConfig.FALLBACK_SCORE,
+            # )
+            # Bloomberg proposal to return original score (changed 2022-09-01):
+            return row[self.c.COLS.TEMPERATURE_SCORE], row[self.c.TEMPERATURE_RESULTS]
 
         try:
             # TODO: what is TEMPERATURE_SCORE and what is TEMPERATURE_RESULTS?
