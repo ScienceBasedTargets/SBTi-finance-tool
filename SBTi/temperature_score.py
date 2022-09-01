@@ -3,6 +3,7 @@ from typing import Optional, Tuple, Type, List
 
 import pandas as pd
 import numpy as np
+import datetime
 
 from .interfaces import (
     ScenarioInterface,
@@ -254,6 +255,8 @@ class TemperatureScore(PortfolioAggregation):
         check = check or pd.isnull(target[self.c.COLS.END_YEAR])
         check = check or pd.isnull(target[self.c.COLS.BASE_YEAR])
         check = check or (target[self.c.COLS.END_YEAR] <= target[self.c.COLS.BASE_YEAR])
+        # add check that target is not too old
+        check = check or (target[self.c.COLS.END_YEAR] < datetime.date.year)
         if check:
             return None
         return target[self.c.COLS.REDUCTION_AMBITION] / float(
