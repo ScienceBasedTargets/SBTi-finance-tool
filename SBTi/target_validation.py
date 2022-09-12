@@ -116,7 +116,7 @@ class TargetProtocol:
             s1s2, s3 = target.copy(), None
             if (
                 not pd.isnull(target.base_year_ghg_s1)
-                and not pd.isnull(target.base_year_ghg_s1)
+                and not pd.isnull(target.base_year_ghg_s2)
             ) or target.coverage_s1 == target.coverage_s2:
                 s1s2.scope = EScope.S1S2
                 if (
