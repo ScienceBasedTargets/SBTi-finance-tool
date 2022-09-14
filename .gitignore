@@ -144,3 +144,5 @@ docker-compose_aws.yml
 
 #Proprietary data used in data provider validation
 examples/data/BBG*
+
+examples/6_compare_temps_SP.ipynb 
