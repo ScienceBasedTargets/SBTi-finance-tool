@@ -374,6 +374,7 @@ class TemperatureScore(PortfolioAggregation):
             # Bloomberg proposal to return original score (changed 2022-09-01):
             return row[self.c.COLS.TEMPERATURE_SCORE], row[self.c.TEMPERATURE_RESULTS]
 
+
         try:
             # TODO: what is TEMPERATURE_SCORE and what is TEMPERATURE_RESULTS?
             # If the s3 emissions are less than 40 percent, we'll ignore them altogether, if not, we'll weigh them
