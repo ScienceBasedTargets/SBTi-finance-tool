@@ -235,7 +235,7 @@ class TemperatureScore(PortfolioAggregation):
         :return: The annual reduction
         """
 
-        # 2022-09-01 Bloomberg pointe out need for additional checks in input
+        # 2022-09-01 Bloomberg pointed out need for additional checks in input
         # Here is the original code:
         # if pd.isnull(target[self.c.COLS.REDUCTION_AMBITION]):
         #     return None
@@ -373,7 +373,6 @@ class TemperatureScore(PortfolioAggregation):
             # )
             # Bloomberg proposal to return original score (changed 2022-09-01):
             return row[self.c.COLS.TEMPERATURE_SCORE], row[self.c.TEMPERATURE_RESULTS]
-
 
         try:
             # TODO: what is TEMPERATURE_SCORE and what is TEMPERATURE_RESULTS?
