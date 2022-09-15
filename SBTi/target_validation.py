@@ -86,10 +86,12 @@ class TargetProtocol:
         )
 
         # The end year should be greater than the start year.
+
         if target.start_year is None or pd.isnull(target.start_year):
             target.start_year = target.base_year
 
         target_end_year = target.end_year > target.start_year
+
         # Delete all S1 or S2 targets we can't combine
         s1 = target.scope != EScope.S1 or (
             not pd.isnull(target.coverage_s1)
@@ -170,11 +172,15 @@ class TargetProtocol:
                         * target.base_year_ghg_s1
                         + s2.reduction_ambition * s2.coverage_s2 * s2.base_year_ghg_s2
                     )
-                    / (target.base_year_ghg_s1 + s2.base_year_ghg_s2)
-                    / combined_coverage
+                ) / (
+                    target.coverage_s1 * target.base_year_ghg_s1
+                    + s2.coverage_s2 * s2.base_year_ghg_s2
                 )
+
                 target.coverage_s1 = combined_coverage
                 target.coverage_s2 = combined_coverage
+                # Enforce that we use the combined target - changed 2022-09-01/BBG input
+                target.scope = EScope.S1S2.value
                 # We don't need to delete the S2 target as it'll be definition have a lower coverage than the combined
                 # target, therefore it won't be picked for our 9-box grid
         return target
@@ -285,7 +291,15 @@ class TargetProtocol:
                 None, itertools.chain.from_iterable(map(self._split_s1s2s3, targets))
             )
         )
-        targets = [self._prepare_target(target) for target in targets]
+        # BBG proposal - changed 2022-09-01
+        # targets = [self._prepare_target(target) for target in targets]
+        # Apply the four APIs on all targets one API at a time
+        # instead of all running each target through all four APIs.
+        # This means that we don't have to call _prepare_target.
+        targets = [self._combine_s1_s2(target) for target in targets]
+        targets = [self._convert_s1_s2(target) for target in targets]
+        targets = [self._boundary_coverage(target) for target in targets]
+        targets = [self._time_frame(target) for target in targets]
 
         return targets
 
