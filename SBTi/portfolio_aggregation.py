@@ -78,7 +78,7 @@ class PortfolioAggregation(ABC):
         if len(missing_data):
             if column == self.c.COLS.GHG_SCOPE12 or column == self.c.COLS.GHG_SCOPE3:
                 raise ValueError(
-                    "A value for {} is needed for all aggregation methods except for TETS. \nSo please try to estimate appropriate values or remove these companies from the aggregation calculation: {}".format(
+                    "A value for {} is needed for all aggregation methods except for WATS. \nSo please try to estimate appropriate values or remove these companies from the aggregation calculation: {}".format(
                         column, ", ".join(missing_data)
                     )
                 )
