@@ -180,7 +180,8 @@ class TargetProtocol:
                 target.coverage_s1 = combined_coverage
                 target.coverage_s2 = combined_coverage
                 # Enforce that we use the combined target - changed 2022-09-01/BBG input
-                target.scope = EScope.S1S2.value
+                # Note removed ".value" on 2022-11-23
+                target.scope = EScope.S1S2
                 # We don't need to delete the S2 target as it'll be definition have a lower coverage than the combined
                 # target, therefore it won't be picked for our 9-box grid
         return target
