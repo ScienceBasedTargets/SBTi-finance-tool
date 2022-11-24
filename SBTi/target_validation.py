@@ -92,6 +92,10 @@ class TargetProtocol:
 
         target_end_year = target.end_year > target.start_year
 
+        # The end year should be greater than or equal to the current year
+        # Added in update Oct 22
+        target_current = target.end_year >= datetime.datetime.now().year
+
         # Delete all S1 or S2 targets we can't combine
         s1 = target.scope != EScope.S1 or (
             not pd.isnull(target.coverage_s1)
@@ -103,7 +107,7 @@ class TargetProtocol:
             and not pd.isnull(target.base_year_ghg_s1)
             and not pd.isnull(target.base_year_ghg_s2)
         )
-        return target_type and target_process and target_end_year and s1 and s2
+        return target_type and target_process and target_end_year and target_current and s1 and s2
 
     def _split_s1s2s3(
         self, target: IDataProviderTarget

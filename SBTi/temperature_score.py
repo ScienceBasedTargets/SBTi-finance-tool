@@ -255,8 +255,8 @@ class TemperatureScore(PortfolioAggregation):
         check = check or pd.isnull(target[self.c.COLS.END_YEAR])
         check = check or pd.isnull(target[self.c.COLS.BASE_YEAR])
         check = check or (target[self.c.COLS.END_YEAR] <= target[self.c.COLS.BASE_YEAR])
-        # add check that target is not too old
-        check = check or (target[self.c.COLS.END_YEAR] < datetime.datetime.now().year)
+        # add check that target is not too old - moved to target_validation Nov22
+        # check = check or (target[self.c.COLS.END_YEAR] < datetime.datetime.now().year)
         if check:
             return None
         return target[self.c.COLS.REDUCTION_AMBITION] / float(
