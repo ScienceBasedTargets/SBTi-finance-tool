@@ -26,7 +26,7 @@ to step 2.
 
 * **Step 2**: Download and run the SBTi container.
 The project consists of two containers, the `API <https://hub.docker.com/r/sbti/api>`_ and the `UI <https://hub.docker.com/r/sbti/ui>`_, both of which are available on Docker Hub.
-You can choose whether you only want to run the API or also the UI. To run them, you need to download a compose file. If you only want to run the API, you need to use `this file <https://raw.githubusercontent.com/OFBDABV/SBTi_api/master/docker-compose.yml>`_, if you also want the UI, you should use `this file <https://raw.githubusercontent.com/OFBDABV/SBTi_api/master/docker-compose-ui.yml>`_.
+You can choose whether you only want to run the API or also the UI. To run them, you need to download a compose file. If you only want to run the API, you need to use `this file <https://raw.githubusercontent.com/ScienceBasedTargets/SBTi-finance-tool-api/master/docker-compose.yml>`_, if you also want the UI, you should use `this file <https://raw.githubusercontent.com/ScienceBasedTargets/SBTi-finance-tool-api/master/docker-compose-ui.yml>`_.
 
 Now download the file of your choice and store it as `docker-compose.yml` in your home directory.
 
