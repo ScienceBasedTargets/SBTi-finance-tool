@@ -92,6 +92,10 @@ class TargetProtocol:
 
         target_end_year = target.end_year > target.start_year
 
+        # The end year should be greater than or equal to the current year
+        # Added in update Oct 22
+        target_current = target.end_year >= datetime.datetime.now().year
+
         # Delete all S1 or S2 targets we can't combine
         s1 = target.scope != EScope.S1 or (
             not pd.isnull(target.coverage_s1)
@@ -103,7 +107,7 @@ class TargetProtocol:
             and not pd.isnull(target.base_year_ghg_s1)
             and not pd.isnull(target.base_year_ghg_s2)
         )
-        return target_type and target_process and target_end_year and s1 and s2
+        return target_type and target_process and target_end_year and target_current and s1 and s2
 
     def _split_s1s2s3(
         self, target: IDataProviderTarget
@@ -180,7 +184,8 @@ class TargetProtocol:
                 target.coverage_s1 = combined_coverage
                 target.coverage_s2 = combined_coverage
                 # Enforce that we use the combined target - changed 2022-09-01/BBG input
-                target.scope = EScope.S1S2.value
+                # Note removed ".value" on 2022-11-23
+                target.scope = EScope.S1S2
                 # We don't need to delete the S2 target as it'll be definition have a lower coverage than the combined
                 # target, therefore it won't be picked for our 9-box grid
         return target
