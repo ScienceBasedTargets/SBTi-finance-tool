@@ -61,6 +61,7 @@ class PortfolioCompany(BaseModel):
     company_name: str
     company_id: str
     company_isin: Optional[str]
+    company_lei: Optional[str]
     investment_value: float
     engagement_target: Optional[bool] = False
     user_fields: Optional[dict]
