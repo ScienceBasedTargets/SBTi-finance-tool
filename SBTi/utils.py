@@ -146,23 +146,40 @@ def _flatten_user_fields(record: PortfolioCompany):
 
     return record_dict
 
-
-def _make_isin_map(df_portfolio: pd.DataFrame) -> dict:
+def _make_id_map(df_portfolio: pd.DataFrame) -> dict:
     """
-    Create a mapping from company_id to ISIN (required for the SBTi matching).
+    Create a mapping from company_id to ISIN and LEI (required for the SBTi matching).
 
     :param df_portfolio: The complete portfolio
-    :return: A mapping from company_id to ISIN
+    :return: A mapping from company_id to (ISIN, LEI) tuple
     """
     return {
-        company_id: company[ColumnsConfig.COMPANY_ISIN]
+        company_id: (company[ColumnsConfig.COMPANY_ISIN], company[ColumnsConfig.COMPANY_LEI])
         for company_id, company in df_portfolio[
-            [ColumnsConfig.COMPANY_ID, ColumnsConfig.COMPANY_ISIN]
+            [ColumnsConfig.COMPANY_ID, ColumnsConfig.COMPANY_ISIN, ColumnsConfig.COMPANY_LEI]
         ]
         .set_index(ColumnsConfig.COMPANY_ID)
         .to_dict(orient="index")
         .items()
     }
+
+
+# def _make_isin_map(df_portfolio: pd.DataFrame) -> dict:
+#     """
+#     Create a mapping from company_id to ISIN (required for the SBTi matching).
+
+#     :param df_portfolio: The complete portfolio
+#     :return: A mapping from company_id to ISIN
+#     """
+#     return {
+#         company_id: company[ColumnsConfig.COMPANY_ISIN]
+#         for company_id, company in df_portfolio[
+#             [ColumnsConfig.COMPANY_ID, ColumnsConfig.COMPANY_ISIN]
+#         ]
+#         .set_index(ColumnsConfig.COMPANY_ID)
+#         .to_dict(orient="index")
+#         .items()
+#     }
 
 
 def dataframe_to_portfolio(df_portfolio: pd.DataFrame) -> List[PortfolioCompany]:
@@ -202,7 +219,7 @@ def get_data(
         raise ValueError("No targets found")
 
     # Supplement the company data with the SBTi target status
-    company_data = SBTi().get_sbti_targets(company_data, _make_isin_map(df_portfolio))
+    company_data = SBTi().get_sbti_targets(company_data, _make_id_map(df_portfolio))
 
     # Prepare the data
     portfolio_data = TargetProtocol().process(target_data, company_data)
