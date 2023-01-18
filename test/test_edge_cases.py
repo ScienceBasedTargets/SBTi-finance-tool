@@ -46,8 +46,8 @@ class EdgeCasesTest(unittest.TestCase):
         self.company_base = IDataProviderCompany(
             company_name=company_id,
             company_id=company_id,
-            # ghg_s1s2=100,
-            # ghg_s3=0,
+            ghg_s1s2=100,
+            ghg_s3=0,
             company_revenue=100,
             company_market_cap=100,
             company_enterprise_value=100,

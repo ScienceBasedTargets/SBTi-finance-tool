@@ -1,5 +1,5 @@
 from typing import List, Type
-
+import requests
 import pandas as pd
 
 from SBTi.configs import PortfolioCoverageTVPConfig
@@ -15,6 +15,13 @@ class SBTi:
         self, config: Type[PortfolioCoverageTVPConfig] = PortfolioCoverageTVPConfig
     ):
         self.c = config
+        # Fetch CTA file from SBTi website
+        resp = requests.get(self.c.CTA_FILE_URL)
+        # Write CTA file to disk
+        with open(self.c.FILE_TARGETS, 'wb') as output:
+            output.write(resp.content)
+            print(resp.status_code)
+        # Read CTA file into pandas dataframe
         self.targets = pd.read_excel(self.c.FILE_TARGETS)
 
     # def get_sbti_targets(
@@ -52,11 +59,11 @@ class SBTi:
         """
         for company in companies:
             isin, lei = id_map.get(company.company_id)
-            if lei:
+            if not lei.lower() == 'nan':
                 targets = self.targets[
                     self.targets[self.c.COL_COMPANY_LEI] == lei
                 ]
-            elif isin:
+            elif not isin.lower() == 'nan':
                 targets = self.targets[
                     self.targets[self.c.COL_COMPANY_ISIN] == isin
                 ]

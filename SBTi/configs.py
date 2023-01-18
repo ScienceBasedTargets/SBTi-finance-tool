@@ -161,7 +161,7 @@ class PortfolioCoverageTVPConfig(PortfolioAggregationConfig):
         "inputs",
         "current-Companies-Taking-Action-191.xlsx",
     )
-
+    CTA_FILE_URL = "https://sciencebasedtargets.org/download/excel"
     OUTPUT_TARGET_STATUS = "sbti_target_status"
     OUTPUT_WEIGHTED_TARGET_STATUS = "weighted_sbti_target_status"
     VALUE_TARGET_NO = "No target"
