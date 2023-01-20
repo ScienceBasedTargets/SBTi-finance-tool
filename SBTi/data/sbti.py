@@ -59,7 +59,8 @@ class SBTi:
         """
         for company in companies:
             isin, lei = id_map.get(company.company_id)
-            if not lei.lower() == 'nan':
+            # Check lei and length of lei to avoid zeros 
+            if not lei.lower() == 'nan' and len(lei) > 3:
                 targets = self.targets[
                     self.targets[self.c.COL_COMPANY_LEI] == lei
                 ]
