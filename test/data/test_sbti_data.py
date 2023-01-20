@@ -42,7 +42,7 @@ class TestSBTiData(unittest.TestCase):
     def test_sbti_data(self) -> None:
         """
         Test whether data is retrieved as expected from the SBTi wbesite.
-        Also test that ISIN and LEI data are treted correctly in _make_id_map.
+        Also test that ISIN and LEI data are treated correctly in _make_id_map.
         """
         for portfolio in self.portfolios:
             # Read portfolio from csv file into dataframe
