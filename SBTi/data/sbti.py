@@ -20,7 +20,7 @@ class SBTi:
         # Write CTA file to disk
         with open(self.c.FILE_TARGETS, 'wb') as output:
             output.write(resp.content)
-            print(resp.status_code)
+            print(f'Status code from fetching the CTA file: {resp.status_code}, 200 = OK')
         # Read CTA file into pandas dataframe
         self.targets = pd.read_excel(self.c.FILE_TARGETS)
 
