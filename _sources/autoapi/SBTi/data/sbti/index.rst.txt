@@ -21,12 +21,13 @@ Classes
 
    Data provider skeleton for SBTi. This class only provides the sbti_validated field for existing companies.
 
-   .. py:method:: get_sbti_targets(self, companies: List[SBTi.interfaces.IDataProviderCompany], isin_map: dict) -> List[SBTi.interfaces.IDataProviderCompany]
+   .. py:method:: get_sbti_targets(self, companies: List[SBTi.interfaces.IDataProviderCompany], id_map: dict) -> List[SBTi.interfaces.IDataProviderCompany]
 
-      Check for each company if they have an SBTi validated target.
+      Check for each company if they have an SBTi validated target, first using the company LEI, 
+      if available, and then using the ISIN.
 
       :param companies: A list of IDataProviderCompany instances
-      :param isin_map: A map from company id to ISIN
+      :param id_map: A map from company id to a tuple of (ISIN, LEI)
       :return: A list of IDataProviderCompany instances, supplemented with the SBTi information
 
 

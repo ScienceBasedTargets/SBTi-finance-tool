@@ -38,6 +38,11 @@ Classes
 
       
 
+   .. py:attribute:: COMPANY_LEI
+      :annotation: = company_lei
+
+      
+
    .. py:attribute:: COMPANY_ISIC
       :annotation: = isic
 
@@ -421,6 +426,11 @@ Classes
 
       
 
+   .. py:attribute:: CTA_FILE_URL
+      :annotation: = https://sciencebasedtargets.org/download/excel
+
+      
+
    .. py:attribute:: OUTPUT_TARGET_STATUS
       :annotation: = sbti_target_status
 
@@ -458,6 +468,11 @@ Classes
 
    .. py:attribute:: COL_COMPANY_ISIN
       :annotation: = ISIN
+
+      
+
+   .. py:attribute:: COL_COMPANY_LEI
+      :annotation: = LEI
 
       
 

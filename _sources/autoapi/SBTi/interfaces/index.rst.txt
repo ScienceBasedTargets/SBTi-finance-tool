@@ -187,6 +187,11 @@ Classes
 
       
 
+   .. py:attribute:: company_lei
+      :annotation: :Optional[str] = nan
+
+      
+
    .. py:attribute:: investment_value
       :annotation: :float
 

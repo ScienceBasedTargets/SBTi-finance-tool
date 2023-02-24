@@ -120,23 +120,29 @@
 </tr>
 <tr class="row-even"><td><p>company_isin</p></td>
 <td><p>Text</p></td>
-<td><p>Identifier for the company in your portfolio, used to get the SBTi status of the company (i.e. whether or not the company has a target approved by the SBTi)</p></td>
+<td><p>Identifier for the company in your portfolio, used to identify the company e.g. for SBTi status</p></td>
 <td><p>Required, for portfolio coverage and temperature score.</p></td>
-<td></td>
+<td><p>The column is needed in the file even if data is missing</p></td>
 </tr>
-<tr class="row-odd"><td><p>Investment_value</p></td>
+<tr class="row-odd"><td><p>company_lei</p></td>
+<td><p>Text</p></td>
+<td><p>Legal Entity Identifier for the company in your portfolio, used identify the company e.g. for SBTi status</p></td>
+<td><p>Required, for portfolio coverage and temperature score.</p></td>
+<td><p>The column is needed in the file even if data is missing</p></td>
+</tr>
+<tr class="row-even"><td><p>Investment_value</p></td>
 <td><p>Monetary value</p></td>
 <td><p>The monetary value invested in the company. Used for aggregation</p></td>
 <td><p>Required</p></td>
 <td><p>Make sure all values are in the same currency.</p></td>
 </tr>
-<tr class="row-even"><td><p>engagement_target</p></td>
+<tr class="row-odd"><td><p>engagement_target</p></td>
 <td><p>TRUE, FALSE or empty</p></td>
 <td><p>Used for engagement analysis. When set to TRUE for a company it is possible to analyze what it would do for your portfolio temperature score if this company would set a well below 2 degree   Celsius (C) or a 2C target.</p></td>
 <td><p>Optional</p></td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><p>Additional_field</p></td>
+<tr class="row-even"><td><p>Additional_field</p></td>
 <td><p>Text</p></td>
 <td><p>It is possible to add additional fields to your portfolio data. These fields can be used to group companies by other categories than sectors, industries, regions and countries, e.g. market   cap bucket, investment strategy, asset class, etc.</p></td>
 <td><p>Optional</p></td>

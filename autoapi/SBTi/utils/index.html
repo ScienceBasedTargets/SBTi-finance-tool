@@ -98,8 +98,8 @@
 <tr class="row-even"><td><p><a class="reference internal" href="#SBTi.utils._flatten_user_fields" title="SBTi.utils._flatten_user_fields"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_flatten_user_fields</span></code></a>(record: SBTi.interfaces.PortfolioCompany)</p></td>
 <td><p>Flatten the user fields in a portfolio company and return it as a dictionary.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#SBTi.utils._make_isin_map" title="SBTi.utils._make_isin_map"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_make_isin_map</span></code></a>(df_portfolio: pandas.DataFrame) → dict</p></td>
-<td><p>Create a mapping from company_id to ISIN (required for the SBTi matching).</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#SBTi.utils._make_id_map" title="SBTi.utils._make_id_map"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_make_id_map</span></code></a>(df_portfolio: pandas.DataFrame) → dict</p></td>
+<td><p>Create a mapping from company_id to ISIN and LEI (required for the SBTi matching).</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#SBTi.utils.dataframe_to_portfolio" title="SBTi.utils.dataframe_to_portfolio"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dataframe_to_portfolio</span></code></a>(df_portfolio: pandas.DataFrame) → List[SBTi.interfaces.PortfolioCompany]</p></td>
 <td><p>Convert a data frame to a list of portfolio company objects.</p></td>
@@ -201,15 +201,15 @@ data providers left.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="SBTi.utils._make_isin_map">
-<span class="sig-prename descclassname"><span class="pre">SBTi.utils.</span></span><span class="sig-name descname"><span class="pre">_make_isin_map</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df_portfolio</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#SBTi.utils._make_isin_map" title="Permalink to this definition"></a></dt>
-<dd><p>Create a mapping from company_id to ISIN (required for the SBTi matching).</p>
+<dt class="sig sig-object py" id="SBTi.utils._make_id_map">
+<span class="sig-prename descclassname"><span class="pre">SBTi.utils.</span></span><span class="sig-name descname"><span class="pre">_make_id_map</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df_portfolio</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#SBTi.utils._make_id_map" title="Permalink to this definition"></a></dt>
+<dd><p>Create a mapping from company_id to ISIN and LEI (required for the SBTi matching).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>df_portfolio</strong> – The complete portfolio</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A mapping from company_id to ISIN</p>
+<dd class="field-even"><p>A mapping from company_id to (ISIN, LEI) tuple</p>
 </dd>
 </dl>
 </dd></dl>

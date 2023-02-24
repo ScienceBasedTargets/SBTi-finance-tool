@@ -17,7 +17,7 @@ Functions
    SBTi.utils.get_company_data
    SBTi.utils.get_targets
    SBTi.utils._flatten_user_fields
-   SBTi.utils._make_isin_map
+   SBTi.utils._make_id_map
    SBTi.utils.dataframe_to_portfolio
    SBTi.utils.get_data
    SBTi.utils.calculate
@@ -76,12 +76,12 @@ Attributes
    :return:
 
 
-.. py:function:: _make_isin_map(df_portfolio: pandas.DataFrame) -> dict
+.. py:function:: _make_id_map(df_portfolio: pandas.DataFrame) -> dict
 
-   Create a mapping from company_id to ISIN (required for the SBTi matching).
+   Create a mapping from company_id to ISIN and LEI (required for the SBTi matching).
 
    :param df_portfolio: The complete portfolio
-   :return: A mapping from company_id to ISIN
+   :return: A mapping from company_id to (ISIN, LEI) tuple
 
 
 .. py:function:: dataframe_to_portfolio(df_portfolio: pandas.DataFrame) -> List[SBTi.interfaces.PortfolioCompany]
