@@ -12,7 +12,7 @@ Google Colab
 -------------
 The easiest way to get started is by using the getting started notebook on Google Colab. 
 It guides you through all the steps involved in installing the module and consequently running it, i.e. calculating a temperature scores and analyzing portfolios. 
-There are five notebooks that go through the process step-by-step:
+There are five (+1) notebooks that go through the process step-by-step:
 
 We recommend that you start with notebook 1 analysis example, especially
 if you are new to Python and/or the `temperature scoring
@@ -22,7 +22,8 @@ methodology <https://sciencebasedtargets.org/wp-content/uploads/2020/09/Temperat
 2. `Quick temperature calculation <https://colab.research.google.com/github/ScienceBasedTargets/SBTi-finance-tool/blob/main/examples/2_quick_temp_score_calculation.ipynb>`__
 3. `What-if analysis <https://colab.research.google.com/github/ScienceBasedTargets/SBTi-finance-tool/blob/main/examples/3_what-if-analysis.ipynb>`__
 4. `Portfolio aggregation <https://colab.research.google.com/github/ScienceBasedTargets/SBTi-finance-tool/blob/main/examples/4_portfolio_aggregations.ipynb>`__
-5. `Reporting <https://colab.research.google.com/github/ScienceBasedTargets/SBTi-finance-tool/blob/main/examples/5_reporting.ipynb>`__
+5. `Aggregation of ready made scores <https://colab.research.google.com/github/ScienceBasedTargets/SBTi-finance-tool/blob/main/examples/4b_portfolio_agg_readymade_TS.ipynb>`__
+6. `Reporting <https://colab.research.google.com/github/ScienceBasedTargets/SBTi-finance-tool/blob/main/examples/5_reporting.ipynb>`__
 
 Jupyter Notebooks
 -----------------

@@ -11,6 +11,7 @@ class ColumnsConfig:
     # Define a constant for each column used in the
     COMPANY_ID = "company_id"
     COMPANY_ISIN = "company_isin"
+    COMPANY_LEI = "company_lei"
     COMPANY_ISIC = "isic"
     REGRESSION_PARAM = "param"
     REGRESSION_INTERCEPT = "intercept"
@@ -160,7 +161,7 @@ class PortfolioCoverageTVPConfig(PortfolioAggregationConfig):
         "inputs",
         "current-Companies-Taking-Action-191.xlsx",
     )
-
+    CTA_FILE_URL = "https://sciencebasedtargets.org/download/excel"
     OUTPUT_TARGET_STATUS = "sbti_target_status"
     OUTPUT_WEIGHTED_TARGET_STATUS = "weighted_sbti_target_status"
     VALUE_TARGET_NO = "No target"
@@ -176,4 +177,5 @@ class PortfolioCoverageTVPConfig(PortfolioAggregationConfig):
     # SBTi targets overview (TVP coverage)
     COL_COMPANY_NAME = "Company Name"
     COL_COMPANY_ISIN = "ISIN"
+    COL_COMPANY_LEI = "LEI"
     COL_TARGET_STATUS = "Near term - Target Status"
