@@ -159,18 +159,20 @@ class PortfolioCoverageTVPConfig(PortfolioAggregationConfig):
     FILE_TARGETS = os.path.join(
         os.path.dirname(os.path.realpath(__file__)),
         "inputs",
-        "current-Companies-Taking-Action-191.xlsx",
+        "current-Companies-Taking-Action.xlsx",
     )
-    CTA_FILE_URL = "https://sciencebasedtargets.org/download/excel"
+    # Temporary URL until the SBTi website is updated
+    CTA_FILE_URL = "https://sciencebasedtargets.org/resources/files/SBTiCTARestucturedSample202303.xlsx"
     OUTPUT_TARGET_STATUS = "sbti_target_status"
     OUTPUT_WEIGHTED_TARGET_STATUS = "weighted_sbti_target_status"
     VALUE_TARGET_NO = "No target"
-    VALUE_TARGET_COMMITTED = "Committed"
-    VALUE_TARGET_SET = "Targets Set"
+    VALUE_TARGET_SET = "Near-term"
+    VALUE_ACTION_COMMITTED = "Committed"
+    VALUE_ACTION_TARGET = "Target"
 
     TARGET_SCORE_MAP = {
         VALUE_TARGET_NO: 0,
-        VALUE_TARGET_COMMITTED: 0,
+        VALUE_ACTION_COMMITTED: 0,
         VALUE_TARGET_SET: 100,
     }
 
@@ -178,4 +180,5 @@ class PortfolioCoverageTVPConfig(PortfolioAggregationConfig):
     COL_COMPANY_NAME = "Company Name"
     COL_COMPANY_ISIN = "ISIN"
     COL_COMPANY_LEI = "LEI"
-    COL_TARGET_STATUS = "Near term - Target Status"
+    COL_ACTION = "Action"
+    COL_TARGET = "Target"
