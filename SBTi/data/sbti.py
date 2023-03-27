@@ -1,6 +1,7 @@
 from typing import List, Type
 import requests
 import pandas as pd
+import warnings
 
 from SBTi.configs import PortfolioCoverageTVPConfig
 from SBTi.interfaces import IDataProviderCompany
@@ -22,6 +23,8 @@ class SBTi:
             output.write(resp.content)
             print(f'Status code from fetching the CTA file: {resp.status_code}, 200 = OK')
         # Read CTA file into pandas dataframe
+        # Suppress warning about openpyxl - check if this is still needed in the released version.
+        warnings.filterwarnings('ignore', category=UserWarning, module='openpyxl')
         self.targets = pd.read_excel(self.c.FILE_TARGETS)
         
     
