@@ -34,6 +34,7 @@ class SBTi:
         # Create a new dataframe with only the columns "Action" and "Target"
         targets = targets[[self.c.COL_COMPANY_NAME, self.c.COL_COMPANY_ISIN, self.c.COL_COMPANY_LEI, self.c.COL_ACTION, self.c.COL_TARGET]]
         # Drop duplicates
+        targets = targets.copy()
         targets.drop_duplicates(subset=self.c.COL_COMPANY_NAME, inplace=True)
     
         # Filter based on "Target" column
