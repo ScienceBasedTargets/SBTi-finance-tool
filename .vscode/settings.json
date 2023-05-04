@@ -7,8 +7,17 @@
   "jupyter.notebookFileRoot": "${workspaceFolder}",
   "python.testing.cwd": "${cwd}",
   "python.defaultInterpreterPath": ".venv/bin/python",
-  "python.formatting.provider": "black",
-  "python.testing.unittestArgs": ["-v", "-s", "./test", "-p", "*test*.py"],
+  "python.formatting.provider": "none",
+  "python.testing.unittestArgs": [
+    "-v",
+    "-s",
+    "./test",
+    "-p",
+    "*test*.py"
+  ],
   "restructuredtext.confPath": "${workspaceFolder}/docs",
-  "esbonio.sphinx.confDir": "${workspaceFolder}/docs"
+  "esbonio.sphinx.confDir": "${workspaceFolder}/docs",
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.black-formatter"
+  }
 }
