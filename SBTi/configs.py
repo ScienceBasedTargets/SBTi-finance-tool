@@ -167,7 +167,7 @@ class PortfolioCoverageTVPConfig(PortfolioAggregationConfig):
     OUTPUT_WEIGHTED_TARGET_STATUS = "weighted_sbti_target_status"
     VALUE_TARGET_NO = "No target"
     VALUE_TARGET_SET = "Near-term"
-    VALUE_ACTION_COMMITTED = "Committed"
+    VALUE_ACTION_COMMITTED = "Commitment"
     VALUE_ACTION_TARGET = "Target"
 
     TARGET_SCORE_MAP = {
