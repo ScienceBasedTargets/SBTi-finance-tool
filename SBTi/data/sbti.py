@@ -49,6 +49,8 @@ class SBTi:
         df = pd.concat([df[~df[self.c.COL_COMPANY_ISIN].isnull()].drop_duplicates(subset=self.c.COL_COMPANY_ISIN, keep='first'), df[df[self.c.COL_COMPANY_ISIN].isnull()]])
         df.drop_duplicates(subset=self.c.COL_COMPANY_NAME, inplace=True)
 
+        """
+        Code to validate the ISIN and LEI. This is not needed for the regular users.
         #validate ISIN
         ISIN_check = df[self.c.COL_COMPANY_ISIN].str.match(isin_regex)
         ISIN_check = ISIN_check.fillna(True)
@@ -63,6 +65,7 @@ class SBTi:
         for co in invalid_LEI:
             print('invalid LEI in CTA file: ', co)
             # Filter based on "Target" column
+        """
   
         return df
     
