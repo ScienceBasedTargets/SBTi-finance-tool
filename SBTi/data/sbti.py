@@ -42,8 +42,8 @@ class SBTi:
         # Create a new dataframe with only the columns "Action" and "Target"
         targets = targets[[self.c.COL_COMPANY_NAME, self.c.COL_COMPANY_ISIN, self.c.COL_COMPANY_LEI, self.c.COL_ACTION, self.c.COL_TARGET]]
         #
-        # Keep rows where Action = Target and Target = Near-term or Action = Committed
-        df = targets[(targets[self.c.COL_ACTION] != self.c.VALUE_ACTION_TARGET) | (targets[self.c.COL_TARGET] == self.c.VALUE_TARGET_SET)]
+        # Keep rows where Action = Target and Target = Near-term or Action = Commitment 
+        df = targets[(targets[self.c.COL_ACTION] == self.c.VALUE_ACTION_TARGET) & (targets[self.c.COL_TARGET] == self.c.VALUE_TARGET_SET)]
         # Drop duplicates in the dataframe by waterfall. Do company name last due to risk of misspelled names
         df = pd.concat([df[~df[self.c.COL_COMPANY_LEI].isnull()].drop_duplicates(subset=self.c.COL_COMPANY_LEI, keep='first'), df[df[self.c.COL_COMPANY_LEI].isnull()]])
         df = pd.concat([df[~df[self.c.COL_COMPANY_ISIN].isnull()].drop_duplicates(subset=self.c.COL_COMPANY_ISIN, keep='first'), df[df[self.c.COL_COMPANY_ISIN].isnull()]])
