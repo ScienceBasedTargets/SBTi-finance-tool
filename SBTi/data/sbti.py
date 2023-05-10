@@ -35,9 +35,9 @@ class SBTi:
         If Action = Target then only keep the rows where Target = Near-term.
         Validate ISIN and LEI.
         """
-        # Regex patterns for ISIN and LEI
+        # Regex patterns for ISIN and LEI. May be used at a later stage.
         isin_regex = r'^[A-Z]{2}[A-Z0-9]{9}[0-9]$'
-        lei_regex = r'^[0-9A-Z]{18}[0-9]{2}$'
+        lei_regex = r'^[0-9A-Z]{18}[0-9]{2}$' # A very simple regex for LEI. Not perfect but should be good enough.
 
         # Create a new dataframe with only the columns "Action" and "Target"
         targets = targets[[self.c.COL_COMPANY_NAME, self.c.COL_COMPANY_ISIN, self.c.COL_COMPANY_LEI, self.c.COL_ACTION, self.c.COL_TARGET]]
