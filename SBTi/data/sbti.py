@@ -31,43 +31,48 @@ class SBTi:
     
     def filter_cta_file(self, targets):
         """
-        Filter the CTA file to create a datafram that has on row per company with the columns "Action" and "Target"
+        Filter the CTA file to create a datafram that has on row per company 
+        with the columns "Action" and "Target".
         If Action = Target then only keep the rows where Target = Near-term.
-        Validate ISIN and LEI.
         """
-        # Regex patterns for ISIN and LEI. May be used at a later stage.
-        isin_regex = r'^[A-Z]{2}[A-Z0-9]{9}[0-9]$'
-        lei_regex = r'^[0-9A-Z]{18}[0-9]{2}$' # A very simple regex for LEI. Not perfect but should be good enough.
 
         # Create a new dataframe with only the columns "Action" and "Target"
-        targets = targets[[self.c.COL_COMPANY_NAME, self.c.COL_COMPANY_ISIN, self.c.COL_COMPANY_LEI, self.c.COL_ACTION, self.c.COL_TARGET]]
-        #
+        # and the columns that are needed for identifying the company
+        targets = targets[
+            [
+                self.c.COL_COMPANY_NAME, 
+                self.c.COL_COMPANY_ISIN, 
+                self.c.COL_COMPANY_LEI, 
+                self.c.COL_ACTION, 
+                self.c.COL_TARGET
+            ]
+        ]
+        
         # Keep rows where Action = Target and Target = Near-term 
-        df = targets[(targets[self.c.COL_ACTION] == self.c.VALUE_ACTION_TARGET) & (targets[self.c.COL_TARGET] == self.c.VALUE_TARGET_SET)]
-        # Drop duplicates in the dataframe by waterfall. Do company name last due to risk of misspelled names
-        df = pd.concat([df[~df[self.c.COL_COMPANY_LEI].isnull()].drop_duplicates(subset=self.c.COL_COMPANY_LEI, keep='first'), df[df[self.c.COL_COMPANY_LEI].isnull()]])
-        df = pd.concat([df[~df[self.c.COL_COMPANY_ISIN].isnull()].drop_duplicates(subset=self.c.COL_COMPANY_ISIN, keep='first'), df[df[self.c.COL_COMPANY_ISIN].isnull()]])
-        df.drop_duplicates(subset=self.c.COL_COMPANY_NAME, inplace=True)
+        df_nt_targets = targets[
+            (targets[self.c.COL_ACTION] == self.c.VALUE_ACTION_TARGET) & 
+            (targets[self.c.COL_TARGET] == self.c.VALUE_TARGET_SET)]
+        
+        # Drop duplicates in the dataframe by waterfall. 
+        # Do company name last due to risk of misspelled names
+        # First drop duplicates on LEI, then on ISIN, then on company name
+        df_nt_targets = pd.concat([
+            df_nt_targets[~df_nt_targets[self.c.COL_COMPANY_LEI].isnull()].drop_duplicates(
+                subset=self.c.COL_COMPANY_LEI, keep='first'
+            ), 
+            df_nt_targets[df_nt_targets[self.c.COL_COMPANY_LEI].isnull()]
+        ])
+        
+        df_nt_targets = pd.concat([
+            df_nt_targets[~df_nt_targets[self.c.COL_COMPANY_ISIN].isnull()].drop_duplicates(
+                subset=self.c.COL_COMPANY_ISIN, keep='first'
+            ),
+            df_nt_targets[df_nt_targets[self.c.COL_COMPANY_ISIN].isnull()]
+        ])
 
-        """
-        Code to validate the ISIN and LEI. This is not needed for the regular users.
-        #validate ISIN
-        ISIN_check = df[self.c.COL_COMPANY_ISIN].str.match(isin_regex)
-        ISIN_check = ISIN_check.fillna(True)
-        invalid_ISIN = df.loc[~ISIN_check, self.c.COL_COMPANY_NAME]
-        for co in invalid_ISIN:
-            print('invalid ISIN in CTA file: ', co)
-
-        #validate LEI
-        LEI_check =  df[self.c.COL_COMPANY_LEI].str.match(lei_regex)
-        LEI_check = LEI_check.fillna(True)
-        invalid_LEI = df.loc[~LEI_check, self.c.COL_COMPANY_NAME]
-        for co in invalid_LEI:
-            print('invalid LEI in CTA file: ', co)
-            # Filter based on "Target" column
-        """
+        df_nt_targets.drop_duplicates(subset=self.c.COL_COMPANY_NAME, inplace=True)
   
-        return df
+        return df_nt_targets
     
     def get_sbti_targets(
         self, companies: List[IDataProviderCompany], id_map: dict
