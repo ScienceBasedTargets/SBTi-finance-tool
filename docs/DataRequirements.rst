@@ -33,7 +33,7 @@ This can be any identifier the user wants to deploy, if the same
 identifier is used in all files. The ISIN codes are required to
 determine the SBTi status of the companies to calculate the Portfolio
 Coverage.
-See :download:`portfolio data template <PortfolioTemplate.xlsx>` for an example portfolio file.
+See :download:`portfolio data template <PortfolioTemplate.csv>` for an example portfolio file.
 
 For additional analyses, you can supplement this data with additional
 fields, which are available for import. For example, you can add the
