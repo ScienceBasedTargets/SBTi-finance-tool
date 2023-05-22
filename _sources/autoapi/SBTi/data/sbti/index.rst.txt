@@ -21,6 +21,13 @@ Classes
 
    Data provider skeleton for SBTi. This class only provides the sbti_validated field for existing companies.
 
+   .. py:method:: filter_cta_file(self, targets)
+
+      Filter the CTA file to create a datafram that has on row per company 
+      with the columns "Action" and "Target".
+      If Action = Target then only keep the rows where Target = Near-term.
+
+
    .. py:method:: get_sbti_targets(self, companies: List[SBTi.interfaces.IDataProviderCompany], id_map: dict) -> List[SBTi.interfaces.IDataProviderCompany]
 
       Check for each company if they have an SBTi validated target, first using the company LEI, 

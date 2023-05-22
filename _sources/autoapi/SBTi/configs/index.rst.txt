@@ -427,7 +427,7 @@ Classes
       
 
    .. py:attribute:: CTA_FILE_URL
-      :annotation: = https://sciencebasedtargets.org/download/excel
+      :annotation: = https://sciencebasedtargets.org/download/target-dashboard
 
       
 
@@ -446,13 +446,18 @@ Classes
 
       
 
-   .. py:attribute:: VALUE_TARGET_COMMITTED
-      :annotation: = Committed
+   .. py:attribute:: VALUE_TARGET_SET
+      :annotation: = Near-term
 
       
 
-   .. py:attribute:: VALUE_TARGET_SET
-      :annotation: = Targets Set
+   .. py:attribute:: VALUE_ACTION_COMMITTED
+      :annotation: = Commitment
+
+      
+
+   .. py:attribute:: VALUE_ACTION_TARGET
+      :annotation: = Target
 
       
 
@@ -476,8 +481,13 @@ Classes
 
       
 
-   .. py:attribute:: COL_TARGET_STATUS
-      :annotation: = Near term - Target Status
+   .. py:attribute:: COL_ACTION
+      :annotation: = Action
+
+      
+
+   .. py:attribute:: COL_TARGET
+      :annotation: = Target
 
       
 
