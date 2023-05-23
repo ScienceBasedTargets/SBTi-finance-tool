@@ -36,7 +36,7 @@ To do this, run the following command::
     cd examples conda env create -f environment.yml activate sbti_getting_started jupyter notebook
 
 A tab should now open in your web browser. If you are using a virtual environment, you can install the required packages using the requirements.txt file in the examples directory. 
-Make sure that your Python version is at least 3.7.
+Make sure that your Python version is at least 3.9.
 
 Python code
 ---------------------
@@ -46,7 +46,7 @@ If you are starting from scratch, you can install the latest version of the pack
 
 Or you can install the latest stable release from PyPi
 
-    pip install sbti
+    pip install sbti-finance-tool
 
 The `API reference <https://ofbdabv.github.io/SBTi/autoapi/index.html>`_ should provide a clear overview of the module's API and its usage.
 
