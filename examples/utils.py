@@ -118,11 +118,19 @@ def anonymize(portfolio, provider):
             index + 1)
         provider.data['target_data'].loc[provider.data['target_data']['company_name'] == company_name, 'company_name'] = 'Company' + str(
             index + 1)
+    """
     for index, company_name in enumerate(provider.data['fundamental_data']['company_name'].unique()):
         if company_name not in portfolio['company_name'].unique():
             provider.data['fundamental_data'].loc[provider.data['fundamental_data']['company_name'] == company_name, 'company_id'] = '_' + str(index + 1)
             provider.data['fundamental_data'].loc[provider.data['fundamental_data']['company_name'] == company_name, 'company_name'] = 'Company_' + str(
                 index + 1)
+    """
+    portfolio_companies = portfolio['company_name'].unique()
+
+    for index, company_name in enumerate(provider.data['fundamental_data']['company_name'].unique()):
+        if company_name not in portfolio_companies:
+            provider.data['fundamental_data'] = provider.data['fundamental_data'].loc[provider.data['fundamental_data']['company_name'] != company_name]
+            provider.data['target_data'] = provider.data['target_data'].loc[provider.data['target_data']['company_name'] != company_name]
     return portfolio, provider
 
 
