@@ -108,6 +108,7 @@ def anonymize(portfolio, provider):
     for index, company_name in enumerate(portfolio_companies):
         portfolio.loc[portfolio['company_name'] == company_name, 'company_id'] = 'C' + str(index + 1)
         portfolio.loc[portfolio['company_name'] == company_name, 'company_isin'] = 'C' + str(index + 1)
+        portfolio.loc[portfolio['company_name'] == company_name, 'company_lei'] = 'L' + str(index + 1)
         provider.data['fundamental_data'].loc[provider.data['fundamental_data']['company_name'] == company_name, 'company_id'] = 'C' + str(index + 1)
         provider.data['fundamental_data'].loc[provider.data['fundamental_data']['company_name'] == company_name, 'company_isic'] = 'C' + str(index + 1)
         provider.data['target_data'].loc[provider.data['target_data']['company_name'] == company_name, 'company_id'] = 'C' + str(index + 1)
