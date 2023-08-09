@@ -106,7 +106,7 @@ class SBTi:
         
         # Keep rows where Action = Target and Target = Near-term 
         df_nt_targets = targets[
-            (targets[self.c.COL_ACTION] == self.c.VALUE_ACTION_TARGET)]
+            (targets[self.c.COL_TARGET] == self.c.VALUE_ACTION_TARGET)]
         
         # Drop duplicates in the dataframe by waterfall. 
         # Do company name last due to risk of misspelled names
