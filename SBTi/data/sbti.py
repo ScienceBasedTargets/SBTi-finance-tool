@@ -1,5 +1,6 @@
 from typing import List, Type
 import requests
+import json
 import pandas as pd
 import warnings
 
@@ -17,6 +18,7 @@ class SBTi:
         self, config: Type[PortfolioCoverageTVPConfig] = PortfolioCoverageTVPConfig
     ):
         self.c = config
+        """
         # Fetch CTA file from SBTi website
         resp = requests.get(self.c.CTA_FILE_URL)
         # Write CTA file to disk
@@ -27,31 +29,84 @@ class SBTi:
         # Suppress warning about openpyxl - check if this is still needed in the released version.
         warnings.filterwarnings('ignore', category=UserWarning, module='openpyxl')
         self.targets = pd.read_excel(self.c.FILE_TARGETS)
+        """
         
+        # Initialize variables for pagination
+        data_to_extract = []
+        page = 1
+        # Set confirmation of download to False
+        self.download_confirmation = False
+        # Fetch JSON data from SBTi website
+        while True:
+            # Construct the URL for the current page, set the number of companies per page to 15000
+            # to minimize the number of pages
+            page_url = f"{self.c.JSON_URL}?page={page}&per_page=15000"
+
+            # Fetch the JSON data for the current page
+            response = requests.get(page_url)
+
+            # Check if the request was successful
+            if response.status_code == 200:
+                # Set confirmation of download to True
+                self.download_confirmation = True
+                # Parse the JSON data
+                json_data = response.json()
+
+                # Extract relevant fields from the current page
+                # Using the same fields as in the CTA file
+                # This may need to be updated in the future
+                companies = json_data.get('companies', [])
+                for company in companies:
+                    data_to_extract.append({
+                        'id': company['id'],
+                        'Company Name': company['company'],
+                        #'ISIN': company['isin'],
+                        #'LEI': company['lei'],
+                        #'Action': company['action'],
+                        'NT_Target': company['near_term_status'],
+                        # Add more fields here as needed
+                    })
+
+                # Check if there are more pages
+                if not json_data['has_next']:
+                    break
+                
+                page = json_data['next_page']
+                self.download_confirmation = False
+
+            else:
+                print("Failed to fetch JSON data, using CTA file instead.")
+                self.targets = pd.read_excel(self.c.FILE_TARGETS)
+                break
+
+        # Create a Pandas DataFrame from all extracted data
+        self.targets = pd.DataFrame(data_to_extract)
     
     def filter_cta_file(self, targets):
         """
-        Filter the CTA file to create a datafram that has on row per company 
+        Filter the CTA file to create a dataframe that has on row per company 
         with the columns "Action" and "Target".
         If Action = Target then only keep the rows where Target = Near-term.
         """
 
         # Create a new dataframe with only the columns "Action" and "Target"
         # and the columns that are needed for identifying the company
-        targets = targets[
-            [
-                self.c.COL_COMPANY_NAME, 
-                self.c.COL_COMPANY_ISIN, 
-                self.c.COL_COMPANY_LEI, 
-                self.c.COL_ACTION, 
-                self.c.COL_TARGET
+        # Note: not needed if the CTA file was downloaded from the SBTi website
+        if not self.download_confirmation:
+            targets = targets[
+                [
+                    self.c.COL_COMPANY_NAME, 
+                    #self.c.COL_COMPANY_ISIN, 
+                    #self.c.COL_COMPANY_LEI, 
+                    #self.c.COL_ACTION, 
+                    self.c.COL_TARGET
+                ]
             ]
-        ]
+       
         
         # Keep rows where Action = Target and Target = Near-term 
         df_nt_targets = targets[
-            (targets[self.c.COL_ACTION] == self.c.VALUE_ACTION_TARGET) & 
-            (targets[self.c.COL_TARGET] == self.c.VALUE_TARGET_SET)]
+            (targets[self.c.COL_ACTION] == self.c.VALUE_ACTION_TARGET)]
         
         # Drop duplicates in the dataframe by waterfall. 
         # Do company name last due to risk of misspelled names

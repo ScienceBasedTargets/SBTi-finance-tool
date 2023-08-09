@@ -186,3 +186,18 @@ def get_contributions_per_group(aggregations, analysis_parameters, group):
     contributions = contributions[columns]
     contributions.drop(columns=['contribution'], inplace=True)
     return contributions
+
+def generate_output(a_portfolio: pd.DataFrame, dp_temps: pd.DataFrame) -> pd.DataFrame:
+    """
+    Generates an output dataframe from the aggregated portfolio and the datapoints temperature scores.
+    We take a_portfolio and add the data from the column temperature_score from dp_temps using company_id, time_frame and scope as keys.
+    :param a_portfolio: aggregated portfolio """
+    a_portfolio = a_portfolio.copy()
+    dp_temps = dp_temps.copy()
+    dp_temps = dp_temps.rename(columns={'temperature_score': 'dp_temperature_score'})
+    dp_temps = dp_temps[['company_id', 'time_frame', 'scope', 'dp_temperature_score']]
+    a_portfolio = a_portfolio.merge(dp_temps, on=['company_id', 'time_frame', 'scope'], how='left')
+    return a_portfolio
+
+
+    

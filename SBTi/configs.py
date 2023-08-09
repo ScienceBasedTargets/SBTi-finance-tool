@@ -159,16 +159,17 @@ class PortfolioCoverageTVPConfig(PortfolioAggregationConfig):
     FILE_TARGETS = os.path.join(
         os.path.dirname(os.path.realpath(__file__)),
         "inputs",
-        "current-Companies-Taking-Action.xlsx",
+        "target-dashboard.xlsx",
     )
     # Temporary URL until the SBTi website is updated
     CTA_FILE_URL = "https://sciencebasedtargets.org/download/target-dashboard"
+    JSON_URL = "https://sbtisdev.online/api/dashboard/companies/list/pagination"
     OUTPUT_TARGET_STATUS = "sbti_target_status"
     OUTPUT_WEIGHTED_TARGET_STATUS = "weighted_sbti_target_status"
     VALUE_TARGET_NO = "No target"
     VALUE_TARGET_SET = "Near-term"
     VALUE_ACTION_COMMITTED = "Commitment"
-    VALUE_ACTION_TARGET = "Target"
+    VALUE_ACTION_TARGET = "Targets set"
 
     TARGET_SCORE_MAP = {
         VALUE_TARGET_NO: 0,
@@ -181,4 +182,4 @@ class PortfolioCoverageTVPConfig(PortfolioAggregationConfig):
     COL_COMPANY_ISIN = "ISIN"
     COL_COMPANY_LEI = "LEI"
     COL_ACTION = "Action"
-    COL_TARGET = "Target"
+    COL_TARGET = "NT_Target"
