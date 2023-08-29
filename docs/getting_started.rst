@@ -26,6 +26,10 @@ methodology <https://sciencebasedtargets.org/wp-content/uploads/2020/09/Temperat
     - 4b `Aggregation of ready made scores from data providers  <https://colab.research.google.com/github/ScienceBasedTargets/SBTi-finance-tool/blob/main/examples/4b_portfolio_agg_readymade_TS.ipynb>`__
 5. `Reporting <https://colab.research.google.com/github/ScienceBasedTargets/SBTi-finance-tool/blob/main/examples/5_reporting.ipynb>`__
 
+We have also added a simplied notebook for calculations of Portfolio Coverage using only a portfolio file:
+`Simplified PC <https://colab.research.google.com/github/ScienceBasedTargets/SBTi-finance-tool/blob/main/examples/Simple_portfolio_coverage.ipynb>`__
+
+
 
 Jupyter Notebooks
 -----------------
