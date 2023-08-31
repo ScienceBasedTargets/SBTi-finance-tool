@@ -19,12 +19,17 @@ class SBTi:
         self.c = config
         # Fetch CTA file from SBTi website
         resp = requests.get(self.c.CTA_FILE_URL)
-        # Write CTA file to disk
-        with open(self.c.FILE_TARGETS, 'wb') as output:
-            output.write(resp.content)
-            print(f'Status code from fetching the CTA file: {resp.status_code}, 200 = OK')
-        # Read CTA file into pandas dataframe
-        # Suppress warning about openpyxl - check if this is still needed in the released version.
+        # If status code == 200 then Write CTA file to disk
+        if resp.status_code == 200:
+            with open(self.c.FILE_TARGETS, 'wb') as output:
+                output.write(resp.content)
+                print(f'Status code from fetching the CTA file: {resp.status_code}, 200 = OK')
+                # Read CTA file into pandas dataframe
+                # Suppress warning about openpyxl - check if this is still needed in the released version.
+        else:
+            print('Could not fetch the CTA file from the SBTi website')
+            print('Will read older file from this package version')
+            
         warnings.filterwarnings('ignore', category=UserWarning, module='openpyxl')
         self.targets = pd.read_excel(self.c.FILE_TARGETS)
         
