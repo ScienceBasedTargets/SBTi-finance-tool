@@ -17,26 +17,33 @@ class SBTi:
         self, config: Type[PortfolioCoverageTVPConfig] = PortfolioCoverageTVPConfig
     ):
         self.c = config
-        # Fetch CTA file from SBTi website
-        resp = requests.get(self.c.CTA_FILE_URL)
-        # If status code == 200 then Write CTA file to disk
-        if resp.status_code == 200:
-            with open(self.c.FILE_TARGETS, 'wb') as output:
-                output.write(resp.content)
-                print(f'Status code from fetching the CTA file: {resp.status_code}, 200 = OK')
-                # Read CTA file into pandas dataframe
-                # Suppress warning about openpyxl - check if this is still needed in the released version.
-        else:
-            print('Could not fetch the CTA file from the SBTi website')
-            print('Will read older file from this package version')
-            
+
+        fallback_err_log_statement = 'Will read older file from this package version'
+        try:
+            # Fetch CTA file from SBTi website
+            resp = requests.get(self.c.CTA_FILE_URL)
+
+            # If status code == 200 then write CTA file to disk
+            if resp.ok:
+                with open(self.c.FILE_TARGETS, 'wb') as output:
+                    output.write(resp.content)
+                    print(f'Status code from fetching the CTA file: {resp.status_code}, 200 = OK')
+            else:
+                print(f'Non-200 status code when fetching the CTA file from the SBTi website: {resp.status_code}')
+                print(fallback_err_log_statement)
+
+        except requests.exceptions.RequestException as e:
+            print(f'Exception when fetching the CTA file from the SBTi website: {e}')
+            print(fallback_err_log_statement)
+
+        # Read CTA file into pandas dataframe
+        # Suppress warning about openpyxl - check if this is still needed in the released version.
         warnings.filterwarnings('ignore', category=UserWarning, module='openpyxl')
         self.targets = pd.read_excel(self.c.FILE_TARGETS)
-        
-    
+
     def filter_cta_file(self, targets):
         """
-        Filter the CTA file to create a datafram that has on row per company 
+        Filter the CTA file to create a dataframe that has one row per company
         with the columns "Action" and "Target".
         If Action = Target then only keep the rows where Target = Near-term.
         """
