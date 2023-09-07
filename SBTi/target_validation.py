@@ -1,10 +1,10 @@
 import datetime
 import itertools
+import logging
 
 import pandas as pd
 from typing import Type, List, Tuple, Optional
 from SBTi.configs import PortfolioAggregationConfig
-import logging
 
 from SBTi.interfaces import (
     IDataProviderTarget,
@@ -12,6 +12,8 @@ from SBTi.interfaces import (
     EScope,
     ETimeFrames,
 )
+
+logger = logging.getLogger(__name__)
 
 
 class TargetProtocol:
@@ -41,6 +43,7 @@ class TargetProtocol:
         :param companies: A list of companies
         :return: A data frame that combines the processed data
         """
+        logger.info(f"started processing {len(targets)=} and {len(companies)=}")
         # Create multiindex on company, timeframe and scope for performance later on
         targets = self.prepare_targets(targets)
         self.target_data = pd.DataFrame.from_records([c.dict() for c in targets])
@@ -57,11 +60,13 @@ class TargetProtocol:
 
         self.company_data = pd.DataFrame.from_records([c.dict() for c in companies])
         self.group_targets()
-        return pd.merge(
+        out = pd.merge(
             left=self.data, right=self.company_data, how="outer", on=["company_id"]
         )
+        logger.info(f"completed processing {out.shape=}")
+        return out
 
-    def validate(self, target: IDataProviderTarget) -> bool:
+    def _validate(self, target: IDataProviderTarget) -> bool:
         """
         Validate a target, meaning it should:
 
@@ -78,7 +83,7 @@ class TargetProtocol:
             and target.intensity_metric is not None
             and target.intensity_metric.lower() != "other"
         )
-        # The target should not have achieved it's reduction yet.
+        # The target should not have achieved its reduction yet.
         target_process = (
             pd.isnull(target.achieved_reduction)
             or target.achieved_reduction is None
@@ -107,10 +112,18 @@ class TargetProtocol:
             and not pd.isnull(target.base_year_ghg_s1)
             and not pd.isnull(target.base_year_ghg_s2)
         )
-        return target_type and target_process and target_end_year and target_current and s1 and s2
+        return (
+            target_type
+            and target_process
+            and target_end_year
+            and target_current
+            and s1
+            and s2
+        )
 
+    @staticmethod
     def _split_s1s2s3(
-        self, target: IDataProviderTarget
+        target: IDataProviderTarget,
     ) -> Tuple[IDataProviderTarget, Optional[IDataProviderTarget]]:
         """
         If there is a s1s2s3 scope, split it into two targets with s1s2 and s3
@@ -146,7 +159,8 @@ class TargetProtocol:
 
     def _combine_s1_s2(self, target: IDataProviderTarget):
         """
-        Check if there is an S2 target that matches this target exactly (if this is a S1 target) and combine them into one target.
+        Check if there is an S2 target that matches this target exactly (if this is a S1 target) and combine them into
+        one target.
 
         :param target: The input target
         :return: The combined target (or the original if no combining was required)
@@ -188,16 +202,24 @@ class TargetProtocol:
                 target.scope = EScope.S1S2
                 # We don't need to delete the S2 target as it'll be definition have a lower coverage than the combined
                 # target, therefore it won't be picked for our 9-box grid
+
+                # join the target_ids lists
+                target.target_ids = target.target_ids + s2.target_ids
         return target
 
-    def _convert_s1_s2(self, target: IDataProviderTarget):
+    @staticmethod
+    def _convert_s1_s2_into_combined(
+        target: IDataProviderTarget,
+    ) -> IDataProviderTarget:
         """
         Convert a S1 or S2 target into a S1+S2 target.
+
+        TODO - what is the incidence of targets where base_year_ghg_s2==0
 
         :param target: The input target
         :return: The converted target (or the original if no conversion was required)
         """
-        # In both cases the base_year_ghg s1 + s2 should not be zero
+        # In both cases the base_year_ghg s1 + s2 should not be zero, else would get ZeroDivisionError
         if target.base_year_ghg_s1 + target.base_year_ghg_s2 != 0:
             if target.scope == EScope.S1:
                 coverage = (
@@ -219,7 +241,10 @@ class TargetProtocol:
                 target.scope = EScope.S1S2
         return target
 
-    def _boundary_coverage(self, target: IDataProviderTarget) -> IDataProviderTarget:
+    @staticmethod
+    def _scale_reduction_ambition_by_boundary_coverage(
+        target: IDataProviderTarget,
+    ) -> IDataProviderTarget:
         """
         Test on boundary coverage:
 
@@ -229,7 +254,7 @@ class TargetProtocol:
         Option 2: weighted coverage
         Thresholds are still 95% and 67%, target is always valid. Below threshold ambition is scaled.*
         New target ambition = input target ambition * coverage
-        *either here or in tem score module
+        *either here or in temperature score module
 
         Option 3: default coverage
         Target is always valid, % uncovered is given default score in temperature score module.
@@ -249,9 +274,13 @@ class TargetProtocol:
                 )
         return target
 
-    def _time_frame(self, target: IDataProviderTarget) -> IDataProviderTarget:
+    @staticmethod
+    def _assign_time_frame(target: IDataProviderTarget) -> IDataProviderTarget:
         """
-        Time frame is forward looking: target year - current year. Less than 5y = short, between 5 and 15 is mid, 15 to 30 is long
+        Time frame is forward-looking: target year - current year.
+            Less than 5y is short,
+            between 5 and 15 is mid,
+            15 to 30 is long
 
         :param target: The input target
         :return: The original target with the time_frame field filled out (if so required)
@@ -267,21 +296,23 @@ class TargetProtocol:
 
         return target
 
-    def _prepare_target(self, target: IDataProviderTarget):
+    def prepare_targets(self, targets: List[IDataProviderTarget]):
         """
-        Prepare a target for usage later on in the process.
+        logic
+            - drop invalid targets
+            - identifying the pure-S2 targets for later use
+            - splitting s1s2s3 into s1s2 and s3
+            - combining s1 and s2
+            - assign target.reduction_ambition by considering target's boundary coverage
 
-        :param target:
+        :param targets:
         :return:
         """
-        target = self._combine_s1_s2(target)
-        target = self._convert_s1_s2(target)
-        target = self._boundary_coverage(target)
-        target = self._time_frame(target)
-        return target
+        target_input_count = len(targets)
+        targets = list(filter(self._validate, targets))
+        logger.info(f"dropped {(target_input_count - len(targets))=:,} invalid targets")
 
-    def prepare_targets(self, targets: List[IDataProviderTarget]):
-        targets = list(filter(self.validate, targets))
+        # TODO - what about targets with "0" coverage or "0" base_year_ghg_s2 - breaks the 'combine' logic
         self.s2_targets = list(
             filter(
                 lambda target: target.scope == EScope.S2
@@ -302,9 +333,12 @@ class TargetProtocol:
         # instead of all running each target through all four APIs.
         # This means that we don't have to call _prepare_target.
         targets = [self._combine_s1_s2(target) for target in targets]
-        targets = [self._convert_s1_s2(target) for target in targets]
-        targets = [self._boundary_coverage(target) for target in targets]
-        targets = [self._time_frame(target) for target in targets]
+        targets = [self._convert_s1_s2_into_combined(target) for target in targets]
+        targets = [
+            self._scale_reduction_ambition_by_boundary_coverage(target)
+            for target in targets
+        ]
+        targets = [self._assign_time_frame(target) for target in targets]
 
         return targets
 
@@ -313,8 +347,8 @@ class TargetProtocol:
         Find the target that corresponds to a given row. If there are multiple targets available, filter them.
 
         :param row: The row from the data set that should be looked for
-        :param target_columns: The columns that need to be returned
-        :return: returns records from the input data, which contains company and target information, that meet specific criteria. For example, record of greatest emissions_in_scope
+        :param target_columns: The columns to return
+        :return: records from the input data, which contains company and target information, that meet specific criteria. For example, record of greatest emissions_in_scope
         """
 
         # Find all targets that correspond to the given row
@@ -334,7 +368,8 @@ class TargetProtocol:
                     coverage_column = self.c.COLS.COVERAGE_S3
                 else:
                     coverage_column = self.c.COLS.COVERAGE_S1
-                # In case more than one target is available; we prefer targets with higher coverage, later end year, and target type 'absolute'
+                # In case more than one target is available; we prefer targets with higher coverage,
+                # later end year, and target type 'absolute'
                 return target_data.sort_values(
                     by=[
                         coverage_column,
@@ -351,7 +386,7 @@ class TargetProtocol:
     def group_targets(self):
         """
         Group the targets and create the 9-box grid (short, mid, long * s1s2, s3, s1s2s3).
-        Group valid targets by category & filter multiple targets#
+        Group valid targets by category & filter multiple targets
         Input: a list of valid targets for each company:
         For each company:
 
