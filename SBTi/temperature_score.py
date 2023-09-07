@@ -440,7 +440,7 @@ class TemperatureScore(PortfolioAggregation):
         :return: The extended data frame
         """
         # IDataProvider provides this optional field as an empty list by default
-        # but if call TemperatureScore class with DataFrame directly then it will not be present
+        # but if call TemperatureScore class with DataFrame directly then it may not be present
         if self.c.COLS.TARGET_IDS not in data.columns:
             data[self.c.COLS.TARGET_IDS] = [[] for _ in range(len(data))]
 
