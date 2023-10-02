@@ -13,7 +13,7 @@ based on the ambition and coverage of the relevant targets. For more
 information, refer to the methodology `here <https://sciencebasedtargets.org/resources/files/Financial-Sector-Science-Based-Targets-Guidance-Pilot-Version.pdf>`__\ .
 If you are interested in knowing more about which scenarios are used 
 in a specific model scenario data set, please see this file
-:download:`here <DataProviderTemplate.xlsx>`, which contains details 
+`here <DataProviderTemplate.xlsx>`, which contains details 
 on the scenarios used in models 4 (the standard regression model set) 
 and 104.
 
