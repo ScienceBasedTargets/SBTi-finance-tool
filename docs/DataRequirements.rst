@@ -108,6 +108,10 @@ each target, information on scope(s), level of coverage, level of
 reduction ambition, and begin and end year of the target must be
 included in the file.
 
+There is also the option to include a target ID for each target. This
+allows to see which targets are included in the calculation of the
+temperature score and which are not. 
+
 The temperature score is calculated for Scopes 1 + 2 and 3. In order to
 convert targets that only cover scope 1 or scope 2, additional
 information is required on GHG emissions per scope at the base year for
