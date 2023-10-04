@@ -374,6 +374,12 @@
 <td><p>Optional. If not specified,   assumed   below 1</p></td>
 <td></td>
 </tr>
+<tr class="row-even"><td><p>target_ids</p></td>
+<td><p>An optional identifier for the target</p></td>
+<td><p>An identifier that allows the user to see what targets are used as input to a specific temperture score. Is provided by some data providers.</p></td>
+<td><p>Optional. If not specified,   assumed  empty</p></td>
+<td></td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -484,94 +490,99 @@
 </tr>
 <tr class="row-odd"><td><p>LONG: targets between 15 and   30 years.</p></td>
 </tr>
-<tr class="row-even"><td><p>ghg_s1s2</p></td>
+<tr class="row-even"><td><p>target_ids</p></td>
+<td><p>list of target ids</p></td>
+<td><p>A list showing the IDs of the targets that have been used in calculating this temperature score. If IDs are not used the field will return empty.</p></td>
+<td><p>Target data</p></td>
+</tr>
+<tr class="row-odd"><td><p>ghg_s1s2</p></td>
 <td><p>tCO2e</p></td>
 <td><p>Total GHG emissions for scope 1 + 2 for the company.  Used to combine temperature scores for   scope 1 + 2 and scope 3 to temperature score for scope 1 + 2 + 3. Also used   in combination with ghg_s3 in most aggregation methods (except WATS)</p></td>
 <td><p>Fundamental data</p></td>
 </tr>
-<tr class="row-odd"><td><p>ghg_s3</p></td>
+<tr class="row-even"><td><p>ghg_s3</p></td>
 <td><p>tCO2e</p></td>
 <td><p>Total GHG emissions for scope 3 for the company.  Used to combine temperature scores for   scope 1 + 2 and scope 3 to temperature score for scope 1 + 2 + 3. Also used   in combination with ghg_s3 in all aggregation methods, except WATS.</p></td>
 <td><p>Fundamental data</p></td>
 </tr>
-<tr class="row-even"><td><p>sbti_validated</p></td>
+<tr class="row-odd"><td><p>sbti_validated</p></td>
 <td><p>FALSE or TRUE</p></td>
 <td><p>Returns true if the company has a SBTi-approved target.</p></td>
 <td><p>SBTi data or fundamental data</p></td>
 </tr>
-<tr class="row-odd"><td><p>Investment_value</p></td>
+<tr class="row-even"><td><p>Investment_value</p></td>
 <td><p>Monetary value</p></td>
 <td><p>The monetary value invested in the company.</p></td>
 <td><p>Portfolio data</p></td>
 </tr>
-<tr class="row-even"><td><p>engagement_target</p></td>
+<tr class="row-odd"><td><p>engagement_target</p></td>
 <td><p>TRUE, FALSE or   empty</p></td>
 <td><p>Used for engagement analysis. When set to TRUE for a company   it is possible to analyze what it would do for your portfolio temperature   score if this company would set a (well below) 2 degrees target.</p></td>
 <td><p>Portfolio data</p></td>
 </tr>
-<tr class="row-odd"><td><p>sr15</p></td>
+<tr class="row-even"><td><p>sr15</p></td>
 <td><p>text</p></td>
 <td><p>The regression model used. This is determined based on the   target type, ISIC, intensity_metric and scope. See [link   to methodology doc, updated mapping section] for   more detail</p></td>
 <td><p>Output from the tool</p></td>
 </tr>
-<tr class="row-even"><td rowspan="2"><p>Annual_reduction</p></td>
+<tr class="row-odd"><td rowspan="2"><p>Annual_reduction</p></td>
 <td rowspan="2"><p>Number in decimals, between 0 and 1</p></td>
 <td><p>The annual reduction based on the reduction_ambition and the   length of the target. Calculated as</p></td>
 <td rowspan="2"><p>Output from the tool</p></td>
 </tr>
-<tr class="row-odd"><td></td>
+<tr class="row-even"><td></td>
 </tr>
-<tr class="row-even"><td rowspan="4"><p>slope</p></td>
+<tr class="row-odd"><td rowspan="4"><p>slope</p></td>
 <td rowspan="4"><p>Slope5, slope15, slope30</p></td>
 <td><p>Used in determining the regression model to use to calculate   the temperature score for a specific target based on its  time frame.</p></td>
 <td rowspan="4"><p>Output from the tool</p></td>
 </tr>
-<tr class="row-odd"><td><p>Short-term targets: slope5</p></td>
+<tr class="row-even"><td><p>Short-term targets: slope5</p></td>
 </tr>
-<tr class="row-even"><td><p>Mid-term targets: slope15</p></td>
+<tr class="row-odd"><td><p>Mid-term targets: slope15</p></td>
 </tr>
-<tr class="row-odd"><td><p>Long-term targets: slope30</p></td>
+<tr class="row-even"><td><p>Long-term targets: slope30</p></td>
 </tr>
-<tr class="row-even"><td><p>samplesize</p></td>
+<tr class="row-odd"><td><p>samplesize</p></td>
 <td><p>Number</p></td>
 <td><p>The   sample size used in the regression model. For model 4 this is 128. Not used   in calculations. See <a class="reference external" href="https://github.com/CDPworldwide/TROPICS-regression/">https://github.com/CDPworldwide/TROPICS-regression/</a> for   more detail about the regressions.</p></td>
 <td><p>Regression model</p></td>
 </tr>
-<tr class="row-odd"><td><p>model</p></td>
+<tr class="row-even"><td><p>model</p></td>
 <td><p>Integer</p></td>
 <td><p>The   regression model used. This is model 4 by default. See   <a class="reference external" href="https://github.com/CDPworldwide/TROPICS-regression/">https://github.com/CDPworldwide/TROPICS-regression/</a> for more detail about the   regressions.</p></td>
 <td><p>Regression model</p></td>
 </tr>
-<tr class="row-even"><td rowspan="3"><p>variable</p></td>
+<tr class="row-odd"><td rowspan="3"><p>variable</p></td>
 <td rowspan="3"><p>text</p></td>
 <td><p>The regression scenario used to determine the temperature   score of a target, for example</p></td>
 <td rowspan="3"><p>Regression model</p></td>
 </tr>
-<tr class="row-odd"><td><p>Emissions|Kyoto Gases</p></td>
+<tr class="row-even"><td><p>Emissions|Kyoto Gases</p></td>
 </tr>
-<tr class="row-even"><td></td>
+<tr class="row-odd"><td></td>
 </tr>
-<tr class="row-odd"><td><p>param</p></td>
+<tr class="row-even"><td><p>param</p></td>
 <td><p>Number in decimals, between 0 and 1</p></td>
 <td><p>The temperature score (TS) is calculated using linear regressions.</p></td>
 <td><p>Regression model</p></td>
 </tr>
-<tr class="row-even"><td><p>intercept</p></td>
+<tr class="row-odd"><td><p>intercept</p></td>
 <td><p>Number in decimals, between 0 and 1</p></td>
 <td><p>The temperature score (TS) is calculated using linear regressions.</p></td>
 <td><p>Regression model</p></td>
 </tr>
-<tr class="row-odd"><td><p>r2</p></td>
+<tr class="row-even"><td><p>r2</p></td>
 <td><p>Number in decimals, between 0 and 1</p></td>
 <td><p>r2 represents the fit of the regression model on the data used to   create the regressions. Not used in calculations.</p></td>
 <td><p>Regression model</p></td>
 </tr>
-<tr class="row-even"><td><p>temperature_score</p></td>
+<tr class="row-odd"><td><p>temperature_score</p></td>
 <td><p>Number</p></td>
 <td><p>The temperature score calculated for the combination of   company, scope and time frame</p></td>
 <td><p>Output from tool</p></td>
 </tr>
-<tr class="row-odd"><td><p>temperature_results</p></td>
+<tr class="row-even"><td><p>temperature_results</p></td>
 <td><p>Number in decimals, between 0 and 1</p></td>
 <td><p>Represents the part of the score that is calculated using a   valid target as defined by the target validation protocol vs. the part using   the default score. For more detail, see [link to Chapter   2 of Methodology document]</p></td>
 <td></td>
