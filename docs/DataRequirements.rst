@@ -50,7 +50,7 @@ portfolio. We split this data in three categories: financial data,
 emissions, and target data.
 
 All three categories are available for import via a single Excel file.
-Here is a template :download:`here <DataProviderTemplate.xlsx>` .
+Here is a template :download:`here <DataProviderTemplate.xlsx>`.
 
 .. note :: Please note that the tool requires the data in a specific format. For more detail, see the data provider template and the Data Legends for the required data formats and expect values.
 
