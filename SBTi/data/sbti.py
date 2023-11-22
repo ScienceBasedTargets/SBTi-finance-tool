@@ -65,7 +65,7 @@ class SBTi:
     
     def filter_cta_file(self, targets):
         """
-        Filter the CTA file to create a datafram that has on row per company 
+        Filter the CTA file to create a dataframe that has one row per company
         with the columns "Action" and "Target".
         If Action = Target then only keep the rows where Target = Near-term.
         """

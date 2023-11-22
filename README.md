@@ -66,7 +66,7 @@ pip install -e .
 For installing the latest stable release in PyPi run:
 
 ```bash
-pip install sbti
+pip install sbti-finance-tool
 ```
 
 ## Development
