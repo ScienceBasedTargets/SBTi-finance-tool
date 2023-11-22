@@ -26,11 +26,12 @@ class SBTi:
 
     def _download_cta_file(self):
         file_exists = os.path.isfile(self.c.FILE_TARGETS)
+        
         if file_exists and self.c.SKIP_CTA_FILE_IF_EXISTS:
             print(f'CTA file already exists in {self.c.FILE_TARGETS}, skipping download')
             return
-
-        self._fetch_and_save_cta_file()
+        else:
+            self._fetch_and_save_cta_file()
 
     def _fetch_and_save_cta_file(self):
         try:
@@ -56,8 +57,10 @@ class SBTi:
 
         # Read CTA file into pandas dataframe
         # Suppress warning about openpyxl - check if this is still needed in the released version.
-        warnings.filterwarnings('ignore', category=UserWarning, module='openpyxl')
-        self.targets = pd.read_excel(self.c.FILE_TARGETS)
+        warnings.filterwarnings('ignore', category=UserWarning, module='openpyxl') 
+
+        path = os.path.realpath(self.c.FILE_TARGETS)
+        self.targets = pd.read_excel(path)
         
     
     def filter_cta_file(self, targets):
