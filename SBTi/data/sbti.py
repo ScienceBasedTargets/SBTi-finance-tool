@@ -13,29 +13,47 @@ class SBTi:
     Data provider skeleton for SBTi. This class only provides the sbti_validated field for existing companies.
     """
 
+    def handle_cta_file(self):
+        if self.c.USE_LOCAL_CTA:
+            self._use_local_cta_file()
+        else:
+            self._download_cta_file()
+
+    def _use_local_cta_file(self):
+        if self.c.FILE_TARGETS_CUSTOM_PATH is None:
+            raise ValueError('Please set FILE_TARGETS_CUSTOM_PATH to the path of the CTA file')
+        self.c.FILE_TARGETS = self.c.FILE_TARGETS_CUSTOM_PATH
+
+    def _download_cta_file(self):
+        file_exists = os.path.isfile(self.c.FILE_TARGETS)
+        if file_exists and self.c.SKIP_CTA_FILE_IF_EXISTS:
+            print(f'CTA file already exists in {self.c.FILE_TARGETS}, skipping download')
+            return
+
+        self._fetch_and_save_cta_file()
+
+    def _fetch_and_save_cta_file(self):
+        try:
+            # read from the remote CTA file url
+            response = requests.get(self.c.CTA_FILE_URL)
+
+            # raise if the status code is not 200
+            response.raise_for_status()
+
+            with open(self.c.FILE_TARGETS, 'wb') as output:
+                output.write(response.content)
+                print(f'Status code from fetching the CTA file: {response.status_code}, 200 = OK')
+        except requests.HTTPError as err:
+            print(f'Error fetching the CTA file: {err}')
+
     def __init__(
         self, config: Type[PortfolioCoverageTVPConfig] = PortfolioCoverageTVPConfig
     ):
         self.c = config
 
-        # In case users wants to use a custom path for the CTA file instead of downloading it always
-        if self.c.USE_LOCAL_CTA:
-            # This will allow us to use a custom file path for the CTA file
-            if self.c.FILE_TARGETS_CUSTOM_PATH is None:
-                print(f'Please set FILE_TARGETS_CUSTOM_PATH to the path of the CTA file')
-                raise
-            else:
-                self.c.FILE_TARGETS = self.c.FILE_TARGETS_CUSTOM_PATH
-        
-        if not self.c.USE_LOCAL_CTA:
-            # Fetch from the SBTi website
-            resp = requests.get(self.c.CTA_FILE_URL)
+        # strategy to handle the CTA file (this will produce a file inside self.c.FILE_TARGETS)
+        self.handle_cta_file()
 
-            # Write CTA file to disk
-            with open(self.c.FILE_TARGETS, 'wb') as output:
-                output.write(resp.content)
-                print(f'Status code from fetching the CTA file: {resp.status_code}, 200 = OK')
-        
         # Read CTA file into pandas dataframe
         # Suppress warning about openpyxl - check if this is still needed in the released version.
         warnings.filterwarnings('ignore', category=UserWarning, module='openpyxl')

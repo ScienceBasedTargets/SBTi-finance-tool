@@ -165,6 +165,7 @@ class PortfolioCoverageTVPConfig(PortfolioAggregationConfig):
     # path to the local file in FILE_TARGETS_CUSTOM_PATH
     FILE_TARGETS_CUSTOM_PATH = None
     USE_LOCAL_CTA = False
+    SKIP_CTA_FILE_IF_EXISTS = False
     # Temporary URL until the SBTi website is updated
     CTA_FILE_URL = "https://sciencebasedtargets.org/download/target-dashboard"
     USE_CUSTOM_FILE_TARGETS_PATH = False
