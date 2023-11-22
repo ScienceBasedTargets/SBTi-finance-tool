@@ -2,7 +2,7 @@ from typing import List, Type
 import requests
 import pandas as pd
 import warnings
-
+import os
 
 from SBTi.configs import PortfolioCoverageTVPConfig
 from SBTi.interfaces import IDataProviderCompany
@@ -17,12 +17,25 @@ class SBTi:
         self, config: Type[PortfolioCoverageTVPConfig] = PortfolioCoverageTVPConfig
     ):
         self.c = config
-        # Fetch CTA file from SBTi website
-        resp = requests.get(self.c.CTA_FILE_URL)
-        # Write CTA file to disk
-        with open(self.c.FILE_TARGETS, 'wb') as output:
-            output.write(resp.content)
-            print(f'Status code from fetching the CTA file: {resp.status_code}, 200 = OK')
+
+        # In case users wants to use a custom path for the CTA file instead of downloading it always
+        if self.c.USE_LOCAL_CTA:
+            # This will allow us to use a custom file path for the CTA file
+            if self.c.FILE_TARGETS_CUSTOM_PATH is None:
+                print(f'Please set FILE_TARGETS_CUSTOM_PATH to the path of the CTA file')
+                raise
+            else:
+                self.c.FILE_TARGETS = self.c.FILE_TARGETS_CUSTOM_PATH
+        
+        if not self.c.USE_LOCAL_CTA:
+            # Fetch from the SBTi website
+            resp = requests.get(self.c.CTA_FILE_URL)
+
+            # Write CTA file to disk
+            with open(self.c.FILE_TARGETS, 'wb') as output:
+                output.write(resp.content)
+                print(f'Status code from fetching the CTA file: {resp.status_code}, 200 = OK')
+        
         # Read CTA file into pandas dataframe
         # Suppress warning about openpyxl - check if this is still needed in the released version.
         warnings.filterwarnings('ignore', category=UserWarning, module='openpyxl')

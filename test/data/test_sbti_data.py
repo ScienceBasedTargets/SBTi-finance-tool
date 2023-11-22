@@ -1,7 +1,8 @@
 import SBTi.data
 from SBTi import utils
 from SBTi.data.excel import ExcelProvider 
-from SBTi.data.sbti import SBTi  
+from SBTi.data.sbti import SBTi 
+from SBTi.configs import PortfolioCoverageTVPConfig
 
 import os
 import unittest
@@ -39,6 +40,35 @@ class TestSBTiData(unittest.TestCase):
             )
         )]
 
+    def test_sbti_data_without_cta_files(self) -> None:
+        """
+        Test whether data is retrieved as expected from the SBTi wbesite.
+        Also test that ISIN and LEI data are treated correctly in _make_id_map.
+        """
+        PortfolioCoverageTVPConfig.USE_LOCAL_CTA = True
+        PortfolioCoverageTVPConfig.FILE_TARGETS_CUSTOM_PATH = os.path.join(
+            os.path.dirname(os.path.realpath(__file__)),
+            "../",
+            "inputs",
+            "data_test_local_CTA.xlsx",
+        )
+
+        for portfolio in self.portfolios:
+            # Read portfolio from csv file into dataframe
+            portfolio = pd.read_csv(portfolio)
+            # Convert dataframe to list of portfolio company objects
+            portfolio = utils.dataframe_to_portfolio(portfolio)
+            df_portfolio = pd.DataFrame.from_records(
+                utils._flatten_user_fields(c) for c in portfolio)
+            company_data = utils.get_company_data(self.provider, df_portfolio["company_id"].tolist())
+            target_data = utils.get_targets(self.provider, df_portfolio["company_id"].tolist())
+            
+            # Get SBTi data
+            company_data = SBTi().get_sbti_targets(company_data, utils._make_id_map(df_portfolio))
+
+            # Check that the data is as expected
+            self.assertEqual(len(company_data), 3)
+
     def test_sbti_data(self) -> None:
         """
         Test whether data is retrieved as expected from the SBTi wbesite.
@@ -56,7 +86,6 @@ class TestSBTiData(unittest.TestCase):
             
             company_data = SBTi().get_sbti_targets(company_data, utils._make_id_map(df_portfolio))
             # Get SBTi data
-            
 
             # Check that the data is as expected
             self.assertEqual(len(company_data), 3)
