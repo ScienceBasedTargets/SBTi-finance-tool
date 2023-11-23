@@ -13,6 +13,12 @@ class SBTi:
     Data provider skeleton for SBTi. This class only provides the sbti_validated field for existing companies.
     """
 
+    def _check_if_cta_file_exists(self):
+        """
+        Check if the CTA file exists in the local file system
+        """
+        return os.path.isfile(self.c.FILE_TARGETS)
+
     def handle_cta_file(self):
         if self.c.USE_LOCAL_CTA:
             self._use_local_cta_file()
@@ -21,14 +27,22 @@ class SBTi:
 
     def _use_local_cta_file(self):
         if self.c.FILE_TARGETS_CUSTOM_PATH is None:
-            raise ValueError('Please set FILE_TARGETS_CUSTOM_PATH to the path of the CTA file')
+            raise ValueError('Please set FILE_TARGETS_CUSTOM_PATH to the path of the CTA file.')
         self.c.FILE_TARGETS = self.c.FILE_TARGETS_CUSTOM_PATH
 
+        # check that file is not that a week old
+        if  self._check_if_cta_file_exists():
+            file_age = os.path.getmtime(self.c.FILE_TARGETS)
+            week_in_seconds = 7 * 24 * 60 * 60 # frequency of CTA file updates
+
+            if file_age < pd.Timestamp.now().timestamp() - week_in_seconds: 
+                print(f'CTA file is older than a week, if you wanna keep your file up-to-date please update the file at {self.c.FILE_TARGETS}.')
+        else:
+            raise ValueError('CTA file does not exist')
+
     def _download_cta_file(self):
-        file_exists = os.path.isfile(self.c.FILE_TARGETS)
-        
-        if file_exists and self.c.SKIP_CTA_FILE_IF_EXISTS:
-            print(f'CTA file already exists in {self.c.FILE_TARGETS}, skipping download')
+        if self._check_if_cta_file_exists() and self.c.SKIP_CTA_FILE_IF_EXISTS:
+            print(f'CTA file already exists in {self.c.FILE_TARGETS}, skipping download.')
             return
         else:
             self._fetch_and_save_cta_file()
