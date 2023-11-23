@@ -2,7 +2,7 @@ from typing import List, Type
 import requests
 import pandas as pd
 import warnings
-
+import os
 
 from SBTi.configs import PortfolioCoverageTVPConfig
 from SBTi.interfaces import IDataProviderCompany
@@ -13,34 +13,70 @@ class SBTi:
     Data provider skeleton for SBTi. This class only provides the sbti_validated field for existing companies.
     """
 
+    def _check_if_cta_file_exists(self):
+        """
+        Check if the CTA file exists in the local file system
+        """
+        return os.path.isfile(self.c.FILE_TARGETS)
+
+    def handle_cta_file(self):
+        if self.c.USE_LOCAL_CTA:
+            self._use_local_cta_file()
+        else:
+            self._download_cta_file()
+
+    def _use_local_cta_file(self):
+        if self.c.FILE_TARGETS_CUSTOM_PATH is None:
+            raise ValueError('Please set FILE_TARGETS_CUSTOM_PATH to the path of the CTA file.')
+        self.c.FILE_TARGETS = self.c.FILE_TARGETS_CUSTOM_PATH
+
+        # check that file is not that a week old
+        if  self._check_if_cta_file_exists():
+            file_age = os.path.getmtime(self.c.FILE_TARGETS)
+            week_in_seconds = 7 * 24 * 60 * 60 # frequency of CTA file updates
+
+            if file_age < pd.Timestamp.now().timestamp() - week_in_seconds: 
+                print(f'CTA file is older than a week, if you wanna keep your file up-to-date please update the file at {self.c.FILE_TARGETS}.')
+        else:
+            raise ValueError('CTA file does not exist')
+
+    def _download_cta_file(self):
+        if self._check_if_cta_file_exists() and self.c.SKIP_CTA_FILE_IF_EXISTS:
+            print(f'CTA file already exists in {self.c.FILE_TARGETS}, skipping download.')
+            return
+        else:
+            self._fetch_and_save_cta_file()
+
+    def _fetch_and_save_cta_file(self):
+        try:
+            # read from the remote CTA file url
+            response = requests.get(self.c.CTA_FILE_URL)
+
+            # raise if the status code is not 200
+            response.raise_for_status()
+
+            with open(self.c.FILE_TARGETS, 'wb') as output:
+                output.write(response.content)
+                print(f'Status code from fetching the CTA file: {response.status_code}, 200 = OK')
+        except requests.HTTPError as err:
+            print(f'Error fetching the CTA file: {err}')
+
     def __init__(
         self, config: Type[PortfolioCoverageTVPConfig] = PortfolioCoverageTVPConfig
     ):
         self.c = config
 
-        fallback_err_log_statement = 'Will read older file from this package version'
-        try:
-            # Fetch CTA file from SBTi website
-            resp = requests.get(self.c.CTA_FILE_URL)
-
-            # If status code == 200 then write CTA file to disk
-            if resp.ok:
-                with open(self.c.FILE_TARGETS, 'wb') as output:
-                    output.write(resp.content)
-                    print(f'Status code from fetching the CTA file: {resp.status_code}, 200 = OK')
-            else:
-                print(f'Non-200 status code when fetching the CTA file from the SBTi website: {resp.status_code}')
-                print(fallback_err_log_statement)
-
-        except requests.exceptions.RequestException as e:
-            print(f'Exception when fetching the CTA file from the SBTi website: {e}')
-            print(fallback_err_log_statement)
+        # strategy to handle the CTA file (this will produce a file inside self.c.FILE_TARGETS)
+        self.handle_cta_file()
 
         # Read CTA file into pandas dataframe
         # Suppress warning about openpyxl - check if this is still needed in the released version.
-        warnings.filterwarnings('ignore', category=UserWarning, module='openpyxl')
-        self.targets = pd.read_excel(self.c.FILE_TARGETS)
+        warnings.filterwarnings('ignore', category=UserWarning, module='openpyxl') 
 
+        path = os.path.realpath(self.c.FILE_TARGETS)
+        self.targets = pd.read_excel(path)
+        
+    
     def filter_cta_file(self, targets):
         """
         Filter the CTA file to create a dataframe that has one row per company

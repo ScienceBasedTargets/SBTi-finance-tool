@@ -161,8 +161,14 @@ class PortfolioCoverageTVPConfig(PortfolioAggregationConfig):
         "inputs",
         "current-Companies-Taking-Action.xlsx",
     )
+    # To avoid CTA file being downloaded every time and use a local file instead, set USE_LOCAL_CTA = True and set the
+    # path to the local file in FILE_TARGETS_CUSTOM_PATH
+    FILE_TARGETS_CUSTOM_PATH = None
+    USE_LOCAL_CTA = False
+    SKIP_CTA_FILE_IF_EXISTS = False
     # Temporary URL until the SBTi website is updated
     CTA_FILE_URL = "https://sciencebasedtargets.org/download/target-dashboard"
+    USE_CUSTOM_FILE_TARGETS_PATH = False
     OUTPUT_TARGET_STATUS = "sbti_target_status"
     OUTPUT_WEIGHTED_TARGET_STATUS = "weighted_sbti_target_status"
     VALUE_TARGET_NO = "No target"
