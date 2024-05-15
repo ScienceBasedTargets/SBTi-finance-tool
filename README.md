@@ -1,6 +1,6 @@
 > Visit https://sciencebasedtargets.github.io/SBTi-finance-tool/ for the full documentation
 
-> If you have any additional questions or comments send a mail to: finance@sciencebasedtargets.org
+> If you have any additional questions or comments send a mail to: financialinstitutions@sciencebasedtargets.org
 
 # SBTi Temperature Alignment tool
 
