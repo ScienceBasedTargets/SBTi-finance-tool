@@ -32,7 +32,7 @@ packages = [{ include = "SBTi" }]
 
 [tool.poetry.dependencies]
 python = "^3.9,<4"
-pydantic = "1.10.7"
+pydantic = "1.10.13"
 six = "1.16.0"
 pandas = "1.5.3"
 xlrd = "2.0.1"
