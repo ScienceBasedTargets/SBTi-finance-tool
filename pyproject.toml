@@ -36,7 +36,7 @@ pydantic = "1.10.7"
 six = "1.16.0"
 pandas = "1.5.3"
 xlrd = "2.0.1"
-requests = "2.31.0"
+requests = "2.32.0"
 openpyxl = "3.1.2"
 cleo = "^2.0.1"
 
