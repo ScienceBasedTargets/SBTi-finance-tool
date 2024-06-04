@@ -427,7 +427,7 @@ Classes
       
 
    .. py:attribute:: CTA_FILE_URL
-      :annotation: = https://sciencebasedtargets.org/download/target-dashboard
+      :annotation: = https://cdn.sciencebasedtargets.org/download/target-dashboard
 
       
 
