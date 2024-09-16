@@ -158,7 +158,7 @@ class Scenario:
 
 class TemperatureScore(PortfolioAggregation):
     """
-    This class is provides a temperature score based on the climate goals.
+    This class provides a temperature score based on the climate goals.
 
     :param fallback_score: The temp score if a company is not found
     :param model: The regression model to use
@@ -346,16 +346,22 @@ class TemperatureScore(PortfolioAggregation):
 
     def get_ghc_temperature_score(
         self, row: pd.Series, company_data: pd.DataFrame
-    ) -> Tuple[float, float]:
+    ) -> Tuple[float, float, list]:
         """
-        Get the aggregated temperature score and a temperature result, which indicates how much of the score is based on the default score for a certain company based on the emissions of company.
+        Get the aggregated temperature score and a temperature result, which indicates how much of the score is based on
+        the default score for a certain company based on the emissions of company.
 
         :param company_data: The original data, grouped by company, time frame and scope category
-        :param row: The row to calculate the temperature score for (if the scope of the row isn't s1s2s3, it will return the original score
-        :return: The aggregated temperature score for a company
+        :param row: The row to calculate the temperature score for (if the scope of the row isn't s1s2s3, it will return
+        the original score
+        :return: The aggregated temperature score for a company and any target_ids associated
         """
         if row[self.c.COLS.SCOPE] != EScope.S1S2S3:
-            return row[self.c.COLS.TEMPERATURE_SCORE], row[self.c.TEMPERATURE_RESULTS]
+            return (
+                row[self.c.COLS.TEMPERATURE_SCORE],
+                row[self.c.TEMPERATURE_RESULTS],
+                row[self.c.COLS.TARGET_IDS],
+            )
         s1s2 = company_data.loc[
             (row[self.c.COLS.COMPANY_ID], row[self.c.COLS.TIME_FRAME], EScope.S1S2)
         ]
@@ -363,19 +369,19 @@ class TemperatureScore(PortfolioAggregation):
             (row[self.c.COLS.COMPANY_ID], row[self.c.COLS.TIME_FRAME], EScope.S3)
         ]
 
-        # return default score if ghg scope12 or 3 is empty
-        if pd.isnull(s1s2[self.c.COLS.GHG_SCOPE12]) or pd.isnull(
-            s3[self.c.COLS.GHG_SCOPE3]
-        ):
-            # return (
-            #     TemperatureScoreConfig.FALLBACK_SCORE,
-            #     TemperatureScoreConfig.FALLBACK_SCORE,
-            # )
-            # Bloomberg proposal to return original score (changed 2022-09-01):
-            return row[self.c.COLS.TEMPERATURE_SCORE], row[self.c.TEMPERATURE_RESULTS]
+        # returning different sets of target_ids depending on how GHG temperature score is determined
+        s1s2_targets = s1s2[self.c.COLS.TARGET_IDS]
+        combined_targets = ((s1s2_targets or []) + (s3[self.c.COLS.TARGET_IDS] or [])) or None
+
+        # Bloomberg proposal to return original score (changed 2022-09-01) if ghg scope12 or 3 is empty
+        if pd.isnull(s1s2[self.c.COLS.GHG_SCOPE12]) or pd.isnull(s3[self.c.COLS.GHG_SCOPE3]):
+            return (
+                row[self.c.COLS.TEMPERATURE_SCORE],
+                row[self.c.TEMPERATURE_RESULTS],
+                row[self.c.COLS.TARGET_IDS],
+            )
 
         try:
-            # TODO: what is TEMPERATURE_SCORE and what is TEMPERATURE_RESULTS?
             # If the s3 emissions are less than 40 percent, we'll ignore them altogether, if not, we'll weigh them
             if (
                 s3[self.c.COLS.GHG_SCOPE3]
@@ -385,6 +391,7 @@ class TemperatureScore(PortfolioAggregation):
                 return (
                     s1s2[self.c.COLS.TEMPERATURE_SCORE],
                     s1s2[self.c.TEMPERATURE_RESULTS],
+                    s1s2_targets,
                 )
             else:
                 company_emissions = (
@@ -402,8 +409,11 @@ class TemperatureScore(PortfolioAggregation):
                         + s3[self.c.TEMPERATURE_RESULTS] * s3[self.c.COLS.GHG_SCOPE3]
                     )
                     / company_emissions,
+                    combined_targets,
                 )
 
+        # TODO - this doesn't get triggered if denom is np.float64, instead returns an (inf, inf),
+        #  which 'ruins' the default score return and end up with NULL values where should have defaults
         except ZeroDivisionError:
             raise ValueError("The mean of the S1+S2 plus the S3 emissions is zero")
 
@@ -429,6 +439,11 @@ class TemperatureScore(PortfolioAggregation):
         :param data: The original data set as a pandas data frame
         :return: The extended data frame
         """
+        # IDataProvider provides this optional field as an empty list by default
+        # but if call TemperatureScore class with DataFrame directly then it may not be present
+        if self.c.COLS.TARGET_IDS not in data.columns:
+            data[self.c.COLS.TARGET_IDS] = [[] for _ in range(len(data))]
+
         # If scope S1S2S3 is in the list of scopes to calculate, we need to calculate the other two as well
         scopes = self.scopes.copy()
         if EScope.S1S2S3 in self.scopes and EScope.S1S2 not in self.scopes:
@@ -451,6 +466,7 @@ class TemperatureScore(PortfolioAggregation):
             lambda row: self.get_annual_reduction_rate(row), axis=1
         )
         data = self._merge_regression(data)
+
         # TODO: Move temperature result to cols
         data[self.c.COLS.TEMPERATURE_SCORE], data[self.c.TEMPERATURE_RESULTS] = zip(
             *data.apply(lambda row: self.get_score(row), axis=1)
@@ -476,16 +492,35 @@ class TemperatureScore(PortfolioAggregation):
                     self.c.COLS.GHG_SCOPE12,
                     self.c.COLS.GHG_SCOPE3,
                     self.c.COLS.TEMPERATURE_SCORE,
+                    self.c.COLS.TARGET_IDS,
                     self.c.TEMPERATURE_RESULTS,
                 ]
             ]
             .groupby(
                 [self.c.COLS.COMPANY_ID, self.c.COLS.TIME_FRAME, self.c.COLS.SCOPE]
             )
-            .mean()
+            .agg(
+                # take the mean of numeric columns, list-append self.c.COLS.TARGET_IDS
+                {
+                    self.c.COLS.GHG_SCOPE12: "mean",
+                    self.c.COLS.GHG_SCOPE3: "mean",
+                    self.c.COLS.TEMPERATURE_SCORE: "mean",
+                    self.c.TEMPERATURE_RESULTS: "mean",
+                    self.c.COLS.TARGET_IDS: "sum",
+                }
+            )
         )
 
-        data[self.c.COLS.TEMPERATURE_SCORE], data[self.c.TEMPERATURE_RESULTS] = zip(
+        # sum pandas aggregator returns 0 where all input targets were None
+        company_data.loc[
+            company_data[self.c.COLS.TARGET_IDS] == 0, self.c.COLS.TARGET_IDS
+        ] = None
+
+        (
+            data[self.c.COLS.TEMPERATURE_SCORE],
+            data[self.c.TEMPERATURE_RESULTS],
+            data[self.c.COLS.TARGET_IDS],
+        ) = zip(
             *data.apply(
                 lambda row: self.get_ghc_temperature_score(row, company_data), axis=1
             )
@@ -522,7 +557,7 @@ class TemperatureScore(PortfolioAggregation):
             # self._check_column(data, self.c.COLS.GHG_SCOPE3)
             data = self._calculate_company_score(data)
 
-        # We need to filter the scopes again, because we might have had to add a scope in te preparation step
+        # We need to filter the scopes again, because we might have had to add a scope in the preparation step
         data = data[data[self.c.COLS.SCOPE].isin(self.scopes)]
         data[self.c.COLS.TEMPERATURE_SCORE] = data[self.c.COLS.TEMPERATURE_SCORE].round(
             2
