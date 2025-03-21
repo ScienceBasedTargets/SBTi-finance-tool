@@ -108,6 +108,66 @@ each target, information on scope(s), level of coverage, level of
 reduction ambition, and begin and end year of the target must be
 included in the file.
 
+By-Target Download Format
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+The by-target download provides detailed information about each company's emissions reduction targets. The following fields are available:
+
++--------------------------------+-----------------------------------+------------------+------------------------+
+| Field Name                     | Description                       | Data Type        | Example               |
++================================+===================================+==================+========================+
+| sbti_id                        | SBTi Company Identifier           | String           | SBTi_12345            |
++--------------------------------+-----------------------------------+------------------+------------------------+
+| company_name                   | Full name of the company          | String           | Acme Corporation      |
++--------------------------------+-----------------------------------+------------------+------------------------+
+| isin                           | International Securities          | String           | US0000000000          |
+|                                | Identification Number             |                  |                        |
++--------------------------------+-----------------------------------+------------------+------------------------+
+| lei                            | Legal Entity Identifier           | String           | 549300XXXXXXXXXXXXX   |
++--------------------------------+-----------------------------------+------------------+------------------------+
+| full_target_language           | Full text of the target           | String           | Reduce absolute       |
+|                                |                                   |                  | Scope 1 and 2 GHG     |
+|                                |                                   |                  | emissions 50% by 2030 |
++--------------------------------+-----------------------------------+------------------+------------------------+
+| row_entry_id                   | Unique identifier for the         | String           | TARGET_2023_001       |
+|                                | target entry                      |                  |                        |
++--------------------------------+-----------------------------------+------------------+------------------------+
+| validation_route               | Validation method for the target  | String           | Committed, Near-term, |
+|                                |                                   |                  | Net-zero               |
++--------------------------------+-----------------------------------+------------------+------------------------+
+| action                         | Specific action related to target | String           | Reduce emissions      |
++--------------------------------+-----------------------------------+------------------+------------------------+
+| commitment_type                | Type of commitment                | String           | Absolute,             |
+|                                |                                   |                  | Intensity-based       |
++--------------------------------+-----------------------------------+------------------+------------------------+
+| commitment_deadline            | Deadline for the commitment       | Date             | 2030-12-31            |
++--------------------------------+-----------------------------------+------------------+------------------------+
+| status                         | Current status of the target      | String           | Approved, Committed   |
++--------------------------------+-----------------------------------+------------------+------------------------+
+| target                         | Quantitative target value         | Float            | 50.0                  |
++--------------------------------+-----------------------------------+------------------+------------------------+
+| target_wording                 | Specific wording of the target    | String           | 50% reduction         |
+|                                |                                   |                  | by 2030               |
++--------------------------------+-----------------------------------+------------------+------------------------+
+| scope                          | Emissions scope covered           | String           | Scope 1+2, Scope 3    |
++--------------------------------+-----------------------------------+------------------+------------------------+
+| target_value                   | Numeric value of the target       | Float            | 50.0                  |
++--------------------------------+-----------------------------------+------------------+------------------------+
+| type                           | Target type                       | String           | Absolute, Intensity   |
++--------------------------------+-----------------------------------+------------------+------------------------+
+| sub_type                       | Target sub-classification         | String           | Near-term, Long-term  |
++--------------------------------+-----------------------------------+------------------+------------------------+
+| target_classification_short    | Short classification of target    | String           | 1.5°C, Well-below 2°C |
++--------------------------------+-----------------------------------+------------------+------------------------+
+| base_year                      | Base year for the target          | Integer          | 2020                  |
++--------------------------------+-----------------------------------+------------------+------------------------+
+| target_year                    | Target completion year            | Integer          | 2030                  |
++--------------------------------+-----------------------------------+------------------+------------------------+
+| year_type                      | Type of year used                 | String           | Absolute, Intensity   |
++--------------------------------+-----------------------------------+------------------+------------------------+
+| date_published                 | Date target was published         | Date             | 2023-01-15            |
++--------------------------------+-----------------------------------+------------------+------------------------+
+
 There is also the option to include a target ID for each target. This
 allows to see which targets are included in the calculation of the
 temperature score and which are not. 
@@ -135,5 +195,3 @@ https://sciencebasedtargets.org/companies-taking-action/ and replace the
 Excel file in the tool with the downloaded file. To do this go to
 ..\\SBTi\\inputs directory and replace the
 *current-Companies-Taking-Action-xxx.xslx* file with the newer file.
-
-

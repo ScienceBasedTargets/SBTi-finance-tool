@@ -6,12 +6,12 @@ packages = ["SBTi", "SBTi.data"]
 package_data = {"": ["*"], "SBTi": ["inputs/*"]}
 
 install_requires = [
-    "openpyxl==3.1.2",
-    "pandas==1.5.3",
-    "pydantic==1.10.7",
-    "requests==2.31.0",
-    "six==1.16.0",
-    "xlrd==2.0.1",
+    "openpyxl>=2.5.0",
+    "pandas>=1.0.0",
+    "pydantic>=1.0.0",
+    "requests>=2.0.0",
+    "six>=1.16.0",
+    "xlrd>=2.0.0",
 ]
 
 setup_kwargs = {
@@ -27,7 +27,7 @@ setup_kwargs = {
     "packages": packages,
     "package_data": package_data,
     "install_requires": install_requires,
-    "python_requires": ">=3.7.1,<4",
+    "python_requires": ">=3.7.1",
 }
 
 
