@@ -1,5 +1,9 @@
+import copy
+import datetime
 import unittest
-from unittest.case import SkipTest
+from typing import List
+
+import SBTi
 from SBTi.interfaces import (
     EScope,
     ETimeFrames,
@@ -15,18 +19,14 @@ from SBTi.temperature_score import (
     TemperatureScore,
 )
 from SBTi.portfolio_aggregation import PortfolioAggregationMethod
-import copy
-import SBTi
-from typing import List
 from SBTi.data.data_provider import DataProvider
-from typing import List
-from SBTi.interfaces import IDataProviderCompany, IDataProviderTarget
 
 
 class TestDataProvider(DataProvider):
     def __init__(
         self, targets: List[IDataProviderTarget], companies: List[IDataProviderCompany]
     ):
+        super().__init__()
         self.targets = targets
         self.companies = companies
 
@@ -42,16 +42,22 @@ class TestDataProvider(DataProvider):
 
 class EndToEndTest(unittest.TestCase):
     """
-    This class is containing a set of end to end tests:
+    This class is containing a set of end-to-end tests:
     - basic flow from creating companies/targets up to calculating aggregated values
     - edge cases for scenarios and grouping
     - high load tests (>1000 targets)
-    - testing of all different input values and running thru the whole process (tbd)
+    - testing of all different input values and running through the whole process (tbd)
     """
 
     def setUp(self):
         company_id = "BaseCompany"
         self.BASE_COMP_SCORE = 0.43
+
+        # target end years which align to (short, mid, long) time frames
+        self.short_end_year = datetime.datetime.now().year + 2
+        self.mid_end_year = datetime.datetime.now().year + 5
+        self.long_end_year = datetime.datetime.now().year + 25
+
         self.company_base = IDataProviderCompany(
             company_name=company_id,
             company_id=company_id,
@@ -65,20 +71,7 @@ class EndToEndTest(unittest.TestCase):
             isic="A12",
         )
         # define targets
-        self.target_base = IDataProviderTarget(
-            company_id=company_id,
-            target_type="abs",
-            scope=EScope.S1S2,
-            coverage_s1=0.95,
-            coverage_s2=0.95,
-            coverage_s3=0,
-            reduction_ambition=0.8,
-            base_year=2019,
-            base_year_ghg_s1=100,
-            base_year_ghg_s2=0,
-            base_year_ghg_s3=0,
-            end_year=2030,
-        )
+        self.target_base = self._create_target_with_defaults(company_id)
 
         # pf
         self.pf_base = PortfolioCompany(
@@ -88,17 +81,65 @@ class EndToEndTest(unittest.TestCase):
             company_isin=company_id,
         )
 
+    def _create_target_with_defaults(self, company_id: str, **kwargs) -> IDataProviderTarget:
+        """
+        calls IDataProviderTarget constructor with defaults
+        can override specific params with kwargs
+        """
+        defaults = dict(
+            company_id=company_id,
+            target_type="abs",
+            scope=EScope.S1S2,
+            coverage_s1=0.45,
+            coverage_s2=0.45,
+            coverage_s3=0,
+            reduction_ambition=0.8,
+            base_year=2019,
+            base_year_ghg_s1=100,
+            base_year_ghg_s2=100,
+            base_year_ghg_s3=0,
+            end_year=self.mid_end_year,
+            target_ids="target_base"
+        )
+        defaults.update(kwargs)
+        return IDataProviderTarget(**defaults)
+
     def test_basic(self):
         """
-        This test is just a very basic workflow going thru all calculations up to temp score
+        This test is just a very basic workflow going through all calculations up to temp score
         """
 
         # Setup test provider
         company = copy.deepcopy(self.company_base)
-        target = copy.deepcopy(self.target_base)
+        target = self._create_target_with_defaults(company_id=company.company_id)
         data_provider = TestDataProvider(companies=[company], targets=[target])
 
-        # Calculat4e Temp Scores
+        # Calculate Temp Scores
+        temp_score = TemperatureScore(
+            time_frames=[ETimeFrames.MID, ETimeFrames.SHORT, ETimeFrames.LONG],
+            scopes=[EScope.S1S2],
+            aggregation_method=PortfolioAggregationMethod.WATS,
+        )
+
+        # portfolio data
+        pf_company = copy.deepcopy(self.pf_base)
+        portfolio_data = SBTi.utils.get_data([data_provider], [pf_company])
+
+        # Verify data
+        scores = temp_score.calculate(portfolio_data)
+        self.assertIsNotNone(scores)
+        self.assertEqual(len(scores.index), 3)
+
+    def test_fallback_score(self):
+        """
+        test fallback score assignment
+        """
+        # Setup test provider
+        company = copy.deepcopy(self.company_base)
+        target = self._create_target_with_defaults(company_id=company.company_id)
+        data_provider = TestDataProvider(companies=[company], targets=[target])
+
+        # Calculate Temp Scores
         temp_score = TemperatureScore(
             time_frames=[ETimeFrames.MID, ETimeFrames.SHORT, ETimeFrames.LONG],
             scopes=[EScope.S1S2],
@@ -126,43 +167,48 @@ class EndToEndTest(unittest.TestCase):
         companies, targets, pf_companies = self.create_base_companies(
             ["A", "B", "C", "D"]
         )
-        target = copy.deepcopy(self.target_base)
-        target.company_id = "A"
-        target.coverage_s1 = 0.75
-        target.coverage_s2 = 0.75
-        target.coverage_s3 = 0.75
+        target = self._create_target_with_defaults(
+            company_id="A",
+            coverage_s1=0.75,
+            coverage_s2=0.75,
+            coverage_s3=0.75,
+        )
+
+        targets.append(target)
+        target = self._create_target_with_defaults(
+            company_id="A",
+            coverage_s1=0.99,
+            coverage_s2=0.99,
+            coverage_s3=0.99,
+        )
         targets.append(target)
 
-        target = copy.deepcopy(self.target_base)
-        target.company_id = "A"
-        target.coverage_s1 = 0.99
-        target.coverage_s2 = 0.99
-        target.coverage_s3 = 0.99
+        target = self._create_target_with_defaults(
+            company_id="B",
+            scope=EScope.S3,
+            coverage_s1=0.75,
+            coverage_s2=0.75,
+            coverage_s3=0.49,
+        )
         targets.append(target)
 
-        target = copy.deepcopy(self.target_base)
-        target.company_id = "B"
-        target.scope = EScope.S3
-        target.coverage_s1 = 0.75
-        target.coverage_s2 = 0.75
-        target.coverage_s3 = 0.49
+        target = self._create_target_with_defaults(
+            company_id="B",
+            scope=EScope.S3,
+            coverage_s1=0.99,
+            coverage_s2=0.99,
+            coverage_s3=0.49,
+            end_year=2035,
+        )
         targets.append(target)
 
-        target = copy.deepcopy(self.target_base)
-        target.company_id = "B"
-        target.scope = EScope.S3
-        target.coverage_s1 = 0.99
-        target.coverage_s2 = 0.99
-        target.coverage_s3 = 0.49
-        target.end_year = 2035
-        targets.append(target)
-
-        target = copy.deepcopy(self.target_base)
-        target.company_id = "D"
-        target.coverage_s1 = 0.95
-        target.coverage_s2 = 0.95
-        target.target_type = "int"
-        target.intensity_metric = "Revenue"
+        target = self._create_target_with_defaults(
+            company_id="D",
+            coverage_s1=0.95,
+            coverage_s2=0.95,
+            target_type="int",
+            intensity_metric="Revenue",
+        )
         targets.append(target)
 
         data_provider = TestDataProvider(companies=companies, targets=targets)
@@ -182,6 +228,110 @@ class EndToEndTest(unittest.TestCase):
         self.assertAlmostEqual(
             agg_scores.mid.S1S2.all.score, self.BASE_COMP_SCORE, places=4
         )
+
+    def test_target_ids(self):
+        """
+        test handling of target_ids:
+            - select correct target from multiple candidates
+            - combined (S1 and S2 into S1S2)
+            - split (S1S2S3 into S1S2 and S3)
+            - multiple different targets with the same target_id.
+              possible bc source data don't enforce target uniqueness.
+              Companies can submit targets that map to multiple SBTi targets.
+        """
+        # given
+        companies, targets, pf_companies = self.create_base_companies(
+            ["A", "B", "C", "D"]
+        )
+        should_drop_targets, should_use_targets = [], [*targets]
+
+        # more 'interesting' if Company's ghg3 not all 0 so that company_score S1S2S3 considers combined targets
+        for idx, company in enumerate(companies):
+            new_ghg3 = (idx / len(companies)) * 100
+            company.ghg_s3 = new_ghg3
+
+        target = self._create_target_with_defaults(
+            company_id="A",
+            scope=EScope.S1,
+            end_year=self.mid_end_year,
+            coverage_s1=0.75,
+            target_ids="A_target-1: should be combined with A_target-2",
+        )
+        should_use_targets.append(target)
+        target = self._create_target_with_defaults(
+            company_id="A",
+            scope=EScope.S2,
+            end_year=self.mid_end_year,
+            coverage_s2=0.99,
+            target_ids="A_target-2: should be combined with A_target-1",
+        )
+        should_use_targets.append(target)
+        target = self._create_target_with_defaults(
+            company_id="A",
+            scope=EScope.S2,
+            end_year=self.short_end_year,  # v high coverage but SHORT time frame so should be dropped
+            coverage_s2=1,
+            target_ids=("A_target-3: despite high coverage, should be dropped bc TemperatureScore "
+                        "params don't include SHORT time frame"),
+        )
+        should_drop_targets.append(target)
+        target = self._create_target_with_defaults(
+            company_id="A",
+            scope=EScope.S1S2S3,
+            end_year=self.long_end_year,
+            target_ids="A_target-4: should be split and used for S1S2 and S3 for LONG time frame scores",
+        )
+        should_use_targets.append(target)
+        target = self._create_target_with_defaults(
+            company_id="B",
+            end_year=self.long_end_year - 1,
+            target_ids="B_target-1",
+        )
+        should_drop_targets.append(target)
+        target = self._create_target_with_defaults(
+            company_id="B",
+            end_year=self.long_end_year,  # same as target-1 but later base year so should be selected by sorting
+            target_ids="B_target-2: should be used over target-1 for LONG time frame",
+        )
+        should_use_targets.append(target)
+        target = self._create_target_with_defaults(
+            company_id="D",
+            coverage_s1=1,
+            coverage_s2=1,
+            target_type="int",
+            target_ids="D_target-1: high coverage but should not be used over target_base bc type==intensity",
+        )
+        should_drop_targets.append(target)
+        target = self._create_target_with_defaults(
+            company_id="D",
+            scope=EScope.S3,
+            coverage_s1=0.95,
+            coverage_s2=0.95,
+            target_ids="D_target-2: should be combined with target_base for S1S2S3 scope score",
+        )
+        should_use_targets.append(target)
+
+        # when
+        data_provider = TestDataProvider(companies=companies, targets=[*should_use_targets, *should_drop_targets])
+        # Calculate scores & Aggregated values
+        temp_score = TemperatureScore(
+            time_frames=[
+                ETimeFrames.MID,
+                ETimeFrames.LONG,
+            ],
+            scopes=[EScope.S1S2, EScope.S1S2S3],
+            aggregation_method=PortfolioAggregationMethod.WATS,
+        )
+        portfolio_data = SBTi.utils.get_data([data_provider], pf_companies)
+        scores = temp_score.calculate(portfolio_data)
+
+        # then - assert should_use_targets are contained in scores, should_drop_targets are not
+        actually_used_target_ids = set([target_id for targets in scores["target_ids"].tolist() for target_id in targets or []])
+        should_drop_target_ids = set([target for provider in should_drop_targets for target in provider.target_ids])
+        should_use_target_ids = set([target for provider in should_use_targets for target in provider.target_ids])
+
+        assert not should_use_target_ids.symmetric_difference(actually_used_target_ids)
+        assert not should_drop_target_ids.intersection(actually_used_target_ids)
 
     def test_basic_flow(self):
         """
@@ -209,7 +359,6 @@ class EndToEndTest(unittest.TestCase):
     # Run some regression tests
     # @unittest.skip("only run for longer test runs")
     def test_regression_companies(self):
-
         nr_companies = 1000
 
         # test 10000 companies
@@ -265,7 +414,6 @@ class EndToEndTest(unittest.TestCase):
         pf_companies_all: List[PortfolioCompany] = []
 
         for ind_level in industry_levels:
-
             company_ids_with_level = [
                 f"{ind_level}_{company_id}" for company_id in company_ids
             ]
@@ -299,7 +447,6 @@ class EndToEndTest(unittest.TestCase):
             )
 
     def test_score_cap(self):
-
         companies, targets, pf_companies = self.create_base_companies(["A"])
         data_provider = TestDataProvider(companies=companies, targets=targets)
 
@@ -342,8 +489,7 @@ class EndToEndTest(unittest.TestCase):
                 company_isin=company_id,
             )
 
-            target = copy.deepcopy(self.target_base)
-            target.company_id = company_id
+            target = self._create_target_with_defaults(company_id=company_id)
 
             pf_companies.append(pf_company)
             targets.append(target)
