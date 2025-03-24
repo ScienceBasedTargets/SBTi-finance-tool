@@ -111,13 +111,13 @@
 <td><p></p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#SBTi.interfaces.SortableEnum" title="SBTi.interfaces.SortableEnum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SortableEnum</span></code></a></p></td>
-<td><p>Generic enumeration.</p></td>
+<td><p>Create a collection of name/value pairs.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#SBTi.interfaces.EScope" title="SBTi.interfaces.EScope"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EScope</span></code></a></p></td>
-<td><p>Generic enumeration.</p></td>
+<td><p>Create a collection of name/value pairs.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#SBTi.interfaces.ETimeFrames" title="SBTi.interfaces.ETimeFrames"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ETimeFrames</span></code></a></p></td>
-<td><p>Generic enumeration.</p></td>
+<td><p>Create a collection of name/value pairs.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#SBTi.interfaces.IDataProviderTarget" title="SBTi.interfaces.IDataProviderTarget"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IDataProviderTarget</span></code></a></p></td>
 <td><p></p></td>
@@ -419,10 +419,49 @@
 
 <dl class="py class">
 <dt class="sig sig-object py" id="SBTi.interfaces.SortableEnum">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">SBTi.interfaces.</span></span><span class="sig-name descname"><span class="pre">SortableEnum</span></span><a class="headerlink" href="#SBTi.interfaces.SortableEnum" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">SBTi.interfaces.</span></span><span class="sig-name descname"><span class="pre">SortableEnum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwds</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.interfaces.SortableEnum" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
-<p>Generic enumeration.</p>
-<p>Derive from this class to define new enumerations.</p>
+<p>Create a collection of name/value pairs.</p>
+<p>Example enumeration:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Color</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">RED</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="gp">... </span>    <span class="n">BLUE</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="gp">... </span>    <span class="n">GREEN</span> <span class="o">=</span> <span class="mi">3</span>
+</pre></div>
+</div>
+<p>Access them by:</p>
+<ul class="simple">
+<li><p>attribute access:</p></li>
+</ul>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Color</span><span class="o">.</span><span class="n">RED</span>
+<span class="go">&lt;Color.RED: 1&gt;</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>value lookup:</p></li>
+</ul>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Color</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">&lt;Color.RED: 1&gt;</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>name lookup:</p></li>
+</ul>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Color</span><span class="p">[</span><span class="s1">&#39;RED&#39;</span><span class="p">]</span>
+<span class="go">&lt;Color.RED: 1&gt;</span>
+</pre></div>
+</div>
+<p>Enumerations can be iterated over, and know how many members they have:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">Color</span><span class="p">)</span>
+<span class="go">3</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">Color</span><span class="p">)</span>
+<span class="go">[&lt;Color.RED: 1&gt;, &lt;Color.BLUE: 2&gt;, &lt;Color.GREEN: 3&gt;]</span>
+</pre></div>
+</div>
+<p>Methods can be added to enumerations, and members can have their own
+attributes – see the documentation for details.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="SBTi.interfaces.SortableEnum.__str__">
 <span class="sig-name descname"><span class="pre">__str__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.interfaces.SortableEnum.__str__" title="Permalink to this definition"></a></dt>
@@ -457,10 +496,49 @@
 
 <dl class="py class">
 <dt class="sig sig-object py" id="SBTi.interfaces.EScope">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">SBTi.interfaces.</span></span><span class="sig-name descname"><span class="pre">EScope</span></span><a class="headerlink" href="#SBTi.interfaces.EScope" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">SBTi.interfaces.</span></span><span class="sig-name descname"><span class="pre">EScope</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwds</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.interfaces.EScope" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#SBTi.interfaces.SortableEnum" title="SBTi.interfaces.SortableEnum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SortableEnum</span></code></a></p>
-<p>Generic enumeration.</p>
-<p>Derive from this class to define new enumerations.</p>
+<p>Create a collection of name/value pairs.</p>
+<p>Example enumeration:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Color</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">RED</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="gp">... </span>    <span class="n">BLUE</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="gp">... </span>    <span class="n">GREEN</span> <span class="o">=</span> <span class="mi">3</span>
+</pre></div>
+</div>
+<p>Access them by:</p>
+<ul class="simple">
+<li><p>attribute access:</p></li>
+</ul>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Color</span><span class="o">.</span><span class="n">RED</span>
+<span class="go">&lt;Color.RED: 1&gt;</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>value lookup:</p></li>
+</ul>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Color</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">&lt;Color.RED: 1&gt;</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>name lookup:</p></li>
+</ul>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Color</span><span class="p">[</span><span class="s1">&#39;RED&#39;</span><span class="p">]</span>
+<span class="go">&lt;Color.RED: 1&gt;</span>
+</pre></div>
+</div>
+<p>Enumerations can be iterated over, and know how many members they have:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">Color</span><span class="p">)</span>
+<span class="go">3</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">Color</span><span class="p">)</span>
+<span class="go">[&lt;Color.RED: 1&gt;, &lt;Color.BLUE: 2&gt;, &lt;Color.GREEN: 3&gt;]</span>
+</pre></div>
+</div>
+<p>Methods can be added to enumerations, and members can have their own
+attributes – see the documentation for details.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="SBTi.interfaces.EScope.S1">
 <span class="sig-name descname"><span class="pre">S1</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">S1</span></em><a class="headerlink" href="#SBTi.interfaces.EScope.S1" title="Permalink to this definition"></a></dt>
@@ -501,10 +579,49 @@
 
 <dl class="py class">
 <dt class="sig sig-object py" id="SBTi.interfaces.ETimeFrames">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">SBTi.interfaces.</span></span><span class="sig-name descname"><span class="pre">ETimeFrames</span></span><a class="headerlink" href="#SBTi.interfaces.ETimeFrames" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">SBTi.interfaces.</span></span><span class="sig-name descname"><span class="pre">ETimeFrames</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwds</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.interfaces.ETimeFrames" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#SBTi.interfaces.SortableEnum" title="SBTi.interfaces.SortableEnum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SortableEnum</span></code></a></p>
-<p>Generic enumeration.</p>
-<p>Derive from this class to define new enumerations.</p>
+<p>Create a collection of name/value pairs.</p>
+<p>Example enumeration:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Color</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">RED</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="gp">... </span>    <span class="n">BLUE</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="gp">... </span>    <span class="n">GREEN</span> <span class="o">=</span> <span class="mi">3</span>
+</pre></div>
+</div>
+<p>Access them by:</p>
+<ul class="simple">
+<li><p>attribute access:</p></li>
+</ul>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Color</span><span class="o">.</span><span class="n">RED</span>
+<span class="go">&lt;Color.RED: 1&gt;</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>value lookup:</p></li>
+</ul>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Color</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">&lt;Color.RED: 1&gt;</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>name lookup:</p></li>
+</ul>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Color</span><span class="p">[</span><span class="s1">&#39;RED&#39;</span><span class="p">]</span>
+<span class="go">&lt;Color.RED: 1&gt;</span>
+</pre></div>
+</div>
+<p>Enumerations can be iterated over, and know how many members they have:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">Color</span><span class="p">)</span>
+<span class="go">3</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">Color</span><span class="p">)</span>
+<span class="go">[&lt;Color.RED: 1&gt;, &lt;Color.BLUE: 2&gt;, &lt;Color.GREEN: 3&gt;]</span>
+</pre></div>
+</div>
+<p>Methods can be added to enumerations, and members can have their own
+attributes – see the documentation for details.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="SBTi.interfaces.ETimeFrames.SHORT">
 <span class="sig-name descname"><span class="pre">SHORT</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">short</span></em><a class="headerlink" href="#SBTi.interfaces.ETimeFrames.SHORT" title="Permalink to this definition"></a></dt>

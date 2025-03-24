@@ -20,7 +20,7 @@ Classes
 
 
 
-.. py:class:: ScenarioType
+.. py:class:: ScenarioType(*args, **kwds)
 
    Bases: :py:obj:`enum.Enum`
 
@@ -51,7 +51,7 @@ Classes
 
 
 
-.. py:class:: EngagementType
+.. py:class:: EngagementType(*args, **kwds)
 
    Bases: :py:obj:`enum.Enum`
 

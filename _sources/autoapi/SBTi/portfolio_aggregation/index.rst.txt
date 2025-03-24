@@ -18,7 +18,7 @@ Classes
 
 
 
-.. py:class:: PortfolioAggregationMethod
+.. py:class:: PortfolioAggregationMethod(*args, **kwds)
 
    Bases: :py:obj:`enum.Enum`
 
