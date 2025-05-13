@@ -1,5 +1,6 @@
-requests
-jupyter==1.0.0
-pandas==1.0.3
-openpyxl==2.5.9
-matplotlib==3.2.2
+requests>=2.0.0
+jupyter>=1.0.0
+pandas>=1.0.0,<2.1.0
+openpyxl>=2.5.0,<4.0.0
+matplotlib>=3.0.0,<4.0.0
+numpy>=1.20.0,<2.0.0
