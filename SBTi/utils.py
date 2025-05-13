@@ -281,3 +281,17 @@ def calculate(
         scores = ts.anonymize_data_dump(scores)
 
     return scores, aggregations
+
+def add_target_flag(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Adds a 'has_target' flag based on structured target fields, fallback to full_target_language if no IDs are valid.
+    """
+    has_id = df["isin"].notnull() | df["lei"].notnull()
+
+    structured = df["near_term_status"].isin(["Targets Set", "Committed"]) | \
+                 df["net_zero_status"].isin(["Targets Set", "Committed"])
+
+    text_fallback = df["full_target_language"].notnull()
+
+    df["has_target"] = (has_id & structured) | (~has_id & text_fallback)
+    return df

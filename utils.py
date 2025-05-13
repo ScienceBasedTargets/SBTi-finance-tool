@@ -107,8 +107,8 @@ def anonymize(portfolio, provider):
     portfolio_companies = portfolio['company_name'].unique()
     for index, company_name in enumerate(portfolio_companies):
         portfolio.loc[portfolio['company_name'] == company_name, 'company_id'] = 'C' + str(index + 1)
-        portfolio.loc[portfolio['company_name'] == company_name, 'company_isin'] = 'C' + str(index + 1)
-        portfolio.loc[portfolio['company_name'] == company_name, 'company_lei'] = 'L' + str(index + 1)
+        portfolio.loc[portfolio['company_name'] == company_name, 'isin'] = 'C' + str(index + 1)
+        portfolio.loc[portfolio['company_name'] == company_name, 'lei'] = 'L' + str(index + 1)
         provider.data['fundamental_data'].loc[provider.data['fundamental_data']['company_name'] == company_name, 'company_id'] = 'C' + str(index + 1)
         provider.data['fundamental_data'].loc[provider.data['fundamental_data']['company_name'] == company_name, 'company_isic'] = 'C' + str(index + 1)
         provider.data['target_data'].loc[provider.data['target_data']['company_name'] == company_name, 'company_id'] = 'C' + str(index + 1)
@@ -196,3 +196,17 @@ def get_contributions_per_group(aggregations, analysis_parameters, group):
     contributions = contributions[columns]
     contributions.drop(columns=['contribution'], inplace=True)
     return contributions
+
+def add_target_flag(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Adds a 'has_target' flag based on structured target fields, fallback to full_target_language if no IDs are valid.
+    """
+    has_id = df["isin"].notnull() | df["lei"].notnull()
+
+    structured = df["near_term_status"].isin(["Targets Set", "Committed"]) | \
+                 df["net_zero_status"].isin(["Targets Set", "Committed"])
+
+    text_fallback = df["full_target_language"].notnull()
+
+    df["has_target"] = (has_id & structured) | (~has_id & text_fallback)
+    return df

@@ -10,8 +10,8 @@ from SBTi.interfaces import ETimeFrames, EScope
 class ColumnsConfig:
     # Define a constant for each column used in the
     COMPANY_ID = "company_id"
-    COMPANY_ISIN = "company_isin"
-    COMPANY_LEI = "company_lei"
+    COMPANY_ISIN = "isin"  # Changed from "company_isin"
+    COMPANY_LEI = "lei"    # Changed from "company_lei"
     COMPANY_ISIC = "isic"
     REGRESSION_PARAM = "param"
     REGRESSION_INTERCEPT = "intercept"

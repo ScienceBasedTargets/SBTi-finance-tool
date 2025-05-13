@@ -60,8 +60,8 @@ class ScenarioInterface(BaseModel):
 class PortfolioCompany(BaseModel):
     company_name: str
     company_id: str
-    company_isin: Optional[str]
-    company_lei: Optional[str] = 'nan'
+    isin: Optional[str]           # Changed from company_isin
+    lei: Optional[str] = 'nan'    # Changed from company_lei
     investment_value: float
     engagement_target: Optional[bool] = False
     user_fields: Optional[dict]
