@@ -37,86 +37,131 @@ class SBTi:
             print(fallback_err_log_statement)
 
         # Read CTA file into pandas dataframe
-        # Suppress warning about openpyxl - check if this is still needed in the released version.
         warnings.filterwarnings('ignore', category=UserWarning, module='openpyxl')
         self.targets = pd.read_excel(self.c.FILE_TARGETS)
+        
+        # Store processed targets for efficient lookups
+        self.processed_targets = None
 
     def filter_cta_file(self, targets):
         """
-        Filter the CTA file to create a dataframe that has one row per company
-        with the columns "Action" and "Target".
-        If Action = Target then only keep the rows where Target = Near-term.
+        Process the CTA file to create a comprehensive mapping of companies
+        with their target status, allowing for identification by any available
+        identifier (ISIN, LEI, or company name) with priority: ISIN > LEI > company name.
+       
+        Uses the new CTA file structure from SBTi (2025) where column names are:
+        - company_name: The name of the company
+        - isin: The ISIN identifier
+        - lei: The LEI identifier
+        - near_term_status: The status of near-term targets
+        - net_zero_status: The status of net-zero targets
+       
+        Valid target statuses are "Targets Set" and "Committed".
+        "Commitment Expired" and other statuses are treated as "No target".
+        
+        Returns a filtered dataframe containing only companies with valid targets.
         """
-
-        # Create a new dataframe with only the columns "Action" and "Target"
-        # and the columns that are needed for identifying the company
-        targets = targets[
+        targets_copy = targets.copy()
+       
+        filtered_df = targets_copy[
             [
-                self.c.COL_COMPANY_NAME, 
-                self.c.COL_COMPANY_ISIN, 
-                self.c.COL_COMPANY_LEI, 
-                self.c.COL_ACTION, 
-                self.c.COL_TARGET
+                'company_name',  
+                'isin',          
+                'lei',           
+                'near_term_status',
+                'net_zero_status'
             ]
         ]
+       
+        valid_statuses = ['Targets Set', 'Committed']
+       
+        # Create target status flags based on the near_term_status
+        filtered_df.loc[:, 'has_target'] = filtered_df['near_term_status'].isin(valid_statuses)
+        filtered_df.loc[:, 'target_status'] = filtered_df['near_term_status']
+        filtered_df.loc[~filtered_df['has_target'], 'target_status'] = 'No target'
+        filtered_df.loc[:, 'company_name_lower'] = filtered_df['company_name'].str.lower()
         
-        # Keep rows where Action = Target and Target = Near-term 
-        df_nt_targets = targets[
-            (targets[self.c.COL_ACTION] == self.c.VALUE_ACTION_TARGET) & 
-            (targets[self.c.COL_TARGET] == self.c.VALUE_TARGET_SET)]
+        # Companies identified by ISIN (highest priority)
+        isin_df = filtered_df[~filtered_df['isin'].isnull()].copy()
+        isin_df['identifier_type'] = 'ISIN'
+        isin_df['identifier'] = isin_df['isin']
+       
+        # Companies identified by LEI (second priority)
+        lei_df = filtered_df[~filtered_df['lei'].isnull()].copy()
+        lei_df['identifier_type'] = 'LEI'
+        lei_df['identifier'] = lei_df['lei']
+       
+        # Companies identified by name (lowest priority)
+        name_df = filtered_df.copy()
+        name_df['identifier_type'] = 'NAME'
+        name_df['identifier'] = name_df['company_name_lower']
+       
+        # Combine all lookup dataframes
+        all_lookups = pd.concat([isin_df, lei_df, name_df])
+       
+        # Set priority based on the order: ISIN > LEI > company name
+        priority_order = {'ISIN': 0, 'LEI': 1, 'NAME': 2}
+        all_lookups['priority'] = all_lookups['identifier_type'].map(priority_order)
+       
+        # Sort by priority and keep the highest priority record for each company
+        all_lookups = all_lookups.sort_values('priority')
+        all_lookups = all_lookups.drop_duplicates(subset=['company_name'], keep='first')
+       
+        # Store the processed targets
+        self.processed_targets = all_lookups[['company_name', 'isin', 'lei', 'target_status', 'has_target', 'company_name_lower']]
         
-        # Drop duplicates in the dataframe by waterfall. 
-        # Do company name last due to risk of misspelled names
-        # First drop duplicates on LEI, then on ISIN, then on company name
-        df_nt_targets = pd.concat([
-            df_nt_targets[~df_nt_targets[self.c.COL_COMPANY_LEI].isnull()].drop_duplicates(
-                subset=self.c.COL_COMPANY_LEI, keep='first'
-            ), 
-            df_nt_targets[df_nt_targets[self.c.COL_COMPANY_LEI].isnull()]
-        ])
+        # Filter to only include companies with valid targets
+        df_nt_targets = self.processed_targets[self.processed_targets['has_target']].copy()
         
-        df_nt_targets = pd.concat([
-            df_nt_targets[~df_nt_targets[self.c.COL_COMPANY_ISIN].isnull()].drop_duplicates(
-                subset=self.c.COL_COMPANY_ISIN, keep='first'
-            ),
-            df_nt_targets[df_nt_targets[self.c.COL_COMPANY_ISIN].isnull()]
-        ])
-
-        df_nt_targets.drop_duplicates(subset=self.c.COL_COMPANY_NAME, inplace=True)
-  
+        # Select only the necessary columns for downstream compatibility
+        df_nt_targets = df_nt_targets[['company_name', 'isin', 'lei']]
+        
         return df_nt_targets
     
     def get_sbti_targets(
         self, companies: List[IDataProviderCompany], id_map: dict
     ) -> List[IDataProviderCompany]:
         """
-        Check for each company if they have an SBTi validated target, first using the company LEI, 
-        if available, and then using the ISIN.
-        
-        :param companies: A list of IDataProviderCompany instances
-        :param id_map: A map from company id to a tuple of (ISIN, LEI)
-        :return: A list of IDataProviderCompany instances, supplemented with the SBTi information
+        Check for each company if they have an SBTi validated target using ISIN, LEI, or company name.
+        Prioritization order: ISIN > LEI > company name.
         """
-        # Filter out information about targets
-        self.targets = self.filter_cta_file(self.targets)
-
+        # Process the targets if not already done
+        if self.processed_targets is None:
+            self.filter_cta_file(self.targets)
+        
+        # Extract validated targets for lookup
+        validated_targets = self.processed_targets[self.processed_targets['has_target']]
+        
+        # Create sets for efficient lookups
+        validated_isins = set(validated_targets[~validated_targets['isin'].isnull()]['isin'])
+        validated_leis = set(validated_targets[~validated_targets['lei'].isnull()]['lei'])
+        validated_names = set(validated_targets['company_name_lower'])
+        
+        # Check each company for target validation
         for company in companies:
-            isin, lei = id_map.get(company.company_id)
-            # Check lei and length of lei to avoid zeros 
-            if not lei.lower() == 'nan' and len(lei) > 3:
-                targets = self.targets[
-                    self.targets[self.c.COL_COMPANY_LEI] == lei
-                ]
-            elif not isin.lower() == 'nan':
-                targets = self.targets[
-                    self.targets[self.c.COL_COMPANY_ISIN] == isin
-                ]
-            else:
-                continue
-            if len(targets) > 0:
-                company.sbti_validated = (
-                    self.c.VALUE_TARGET_SET in targets[self.c.COL_TARGET].values
-                )
+            # Default to not validated
+            company.sbti_validated = False
+            
+            # Get company identifiers
+            isin, lei = id_map.get(company.company_id, ('nan', 'nan'))
+            
+            # Check if company has a valid target using any identifier
+            # Priority: ISIN > LEI > company name
+            
+            # Check ISIN (highest priority)
+            if not pd.isnull(isin) and str(isin).lower() != 'nan':
+                if isin in validated_isins:
+                    company.sbti_validated = True
+            
+            # If not validated by ISIN, check LEI
+            if not company.sbti_validated and not pd.isnull(lei) and str(lei).lower() != 'nan' and len(str(lei)) > 3:
+                if lei in validated_leis:
+                    company.sbti_validated = True
+            
+            # If still not validated, check company name
+            if not company.sbti_validated and hasattr(company, 'company_name') and company.company_name:
+                company_name_lower = str(company.company_name).lower()
+                if company_name_lower in validated_names:
+                    company.sbti_validated = True
+        
         return companies
-
-   

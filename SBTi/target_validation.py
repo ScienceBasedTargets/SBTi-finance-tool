@@ -364,6 +364,9 @@ class TargetProtocol:
         -- Target type: Absolute over intensity
         -- If all else is equal: average the ambition of targets
         """
+        # Ensure index is sorted before using loc with a multi-index
+        self.target_data = self.target_data.sort_index()
+
 
         grid_columns = [
             self.c.COLS.COMPANY_ID,

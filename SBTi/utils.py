@@ -281,31 +281,3 @@ def calculate(
         scores = ts.anonymize_data_dump(scores)
 
     return scores, aggregations
-
-def add_target_flag(portfolio):
-    """
-    Adds a 'has_target' column to the portfolio DataFrame.
-
-    Rules:
-    - If company_name, ISIN, or LEI is present → structured target must be 'Targets Set' or 'Committed'
-    - If all three are missing → fallback on full_target_language being present
-    """
-    valid_ids = (
-        portfolio["company_name"].notnull() |
-        portfolio["isin"].notnull() |
-        portfolio["lei"].notnull()
-    )
-
-    structured_target = (
-        portfolio["near_term_status"].isin(["Targets Set", "Committed"]) |
-        portfolio["net_zero_status"].isin(["Targets Set", "Committed"])
-    )
-
-    text_declared_target = portfolio["full_target_language"].notnull()
-
-    portfolio["has_target"] = (
-        (valid_ids & structured_target) |
-        (~valid_ids & text_declared_target)
-    )
-
-    return portfolio
