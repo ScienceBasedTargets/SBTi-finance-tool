@@ -200,13 +200,20 @@ def add_target_flag(portfolio):
     """
     Adds a 'has_target' column to the portfolio DataFrame.
 
-    - If ISIN or LEI is present → structured target must be 'Targets Set' or 'Committed'
-    - If both are missing → fallback on full_target_language being present
+    Rules:
+    - If company_name, ISIN, or LEI is present → structured target must be 'Targets Set' or 'Committed'
+    - If all three are missing → fallback on full_target_language being present
     """
-    valid_ids = portfolio["isin"].notnull() | portfolio["lei"].notnull()
+    valid_ids = (
+        portfolio["company_name"].notnull() |
+        portfolio["isin"].notnull() |
+        portfolio["lei"].notnull()
+    )
 
-    structured_target = portfolio["near_term_status"].isin(["Targets Set", "Committed"]) | \
-                        portfolio["net_zero_status"].isin(["Targets Set", "Committed"])
+    structured_target = (
+        portfolio["near_term_status"].isin(["Targets Set", "Committed"]) |
+        portfolio["net_zero_status"].isin(["Targets Set", "Committed"])
+    )
 
     text_declared_target = portfolio["full_target_language"].notnull()
 

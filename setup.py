@@ -9,13 +9,13 @@ install_requires = [
     "charset-normalizer>=2.0.12,<3",
     "et-xmlfile>=1.1.0,<2",
     "idna>=3.3,<4",
-    "numpy>=1.22,<2",
-    "openpyxl>=3.0.10,<4",
-    "pandas>=1.2,<2.2",
+    "numpy>=1.20.0,<2.0.0",      
+    "openpyxl>=2.5.0,<4.0.0",   
+    "pandas>=1.0.0,<2.1.0",      
     "pydantic>=1.8,<2",
     "python-dateutil>=2.8.2,<3",
     "pytz>=2021.3,<2025.0",
-    "requests>=2.25,<3",
+    "requests>=2.0.0",          
     "six>=1.14,<2",
     "typing-extensions>=4.1.1,<5",
     "urllib3>=1.26.11,<2",
@@ -24,7 +24,7 @@ install_requires = [
 
 setup_kwargs = {
     "name": "sbti-finance-tool",
-    "version": "1.0.10",
+    "version": "1.1.0",
     "description": "Assess the temperature alignment of portfolios and validate targets with the SBTi.",
     "long_description": open("README.md").read() if os.path.exists("README.md") else "",
     "author": "sbti",
@@ -33,7 +33,7 @@ setup_kwargs = {
     "packages": packages,
     "package_data": package_data,
     "install_requires": install_requires,
-    "python_requires": ">=3.7.1,<4",
+    "python_requires": ">=3.7,<4",
 }
 
 setup(**setup_kwargs)

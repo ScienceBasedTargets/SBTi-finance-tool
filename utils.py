@@ -197,16 +197,30 @@ def get_contributions_per_group(aggregations, analysis_parameters, group):
     contributions.drop(columns=['contribution'], inplace=True)
     return contributions
 
-def add_target_flag(df: pd.DataFrame) -> pd.DataFrame:
+def add_target_flag(portfolio):
     """
-    Adds a 'has_target' flag based on structured target fields, fallback to full_target_language if no IDs are valid.
+    Adds a 'has_target' column to the portfolio DataFrame.
+
+    Rules:
+    - If company_name, ISIN, or LEI is present → structured target must be 'Targets Set' or 'Committed'
+    - If all three are missing → fallback on full_target_language being present
     """
-    has_id = df["isin"].notnull() | df["lei"].notnull()
+    valid_ids = (
+        portfolio["company_name"].notnull() |
+        portfolio["isin"].notnull() |
+        portfolio["lei"].notnull()
+    )
 
-    structured = df["near_term_status"].isin(["Targets Set", "Committed"]) | \
-                 df["net_zero_status"].isin(["Targets Set", "Committed"])
+    structured_target = (
+        portfolio["near_term_status"].isin(["Targets Set", "Committed"]) |
+        portfolio["net_zero_status"].isin(["Targets Set", "Committed"])
+    )
 
-    text_fallback = df["full_target_language"].notnull()
+    text_declared_target = portfolio["full_target_language"].notnull()
 
-    df["has_target"] = (has_id & structured) | (~has_id & text_fallback)
-    return df
+    portfolio["has_target"] = (
+        (valid_ids & structured_target) |
+        (~valid_ids & text_declared_target)
+    )
+
+    return portfolio

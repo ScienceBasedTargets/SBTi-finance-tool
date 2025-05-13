@@ -5,9 +5,12 @@ channels:
 dependencies:
   - git>=2.0.0
   - pip>=20.0.0
-  - python>=3.7,<3.10  
+  - python>=3.7,<4
   - jupyter>=1.0.0
   - pip:
       - git+git://github.com/OFBDABV/SBTi
-      - matplotlib==3.2.2
-      - openpyxl==2.5.9
+      - matplotlib>=3.0.0,<4.0.0 # Changed from ==3.2.2
+      - openpyxl>=2.5.0,<4.0.0 # Changed from ==2.5.9
+      - pandas>=1.0.0,<2.1.0 # Added
+      - numpy>=1.20.0,<2.0.0 # Added
+      - requests>=2.0.0 # Added

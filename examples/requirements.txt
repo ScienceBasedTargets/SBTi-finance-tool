@@ -1,15 +1,17 @@
-<<<<<<< Updated upstream
-requests>=2.0.0
-jupyter>=1.0.0
-pandas>=1.0.0,<2.1.0
-openpyxl>=2.5.0,<4.0.0
-matplotlib>=3.0.0,<4.0.0
-numpy>=1.20.0,<2.0.0
-=======
-requests
-jupyter==1.0.0
-pandas==1.0.3
-openpyxl==2.5.9
-matplotlib==3.2.2
-#gitpython==2.1.15  # Optional: if git functionality is needed in Python
->>>>>>> Stashed changes
+certifi>=2021.10.8,<2025.0
+charset-normalizer>=2.0.12,<3
+et-xmlfile>=1.1.0,<2
+idna>=3.3,<4
+numpy>=1.20.0,<2.0.0            
+openpyxl>=2.5.0,<4.0.0         
+pandas>=1.0.0,<2.1.0            
+pydantic>=1.8,<2
+python-dateutil>=2.8.2,<3
+pytz>=2021.3,<2025.0
+requests>=2.0.0                 
+six>=1.14,<2
+typing-extensions>=4.1.1,<5
+urllib3>=1.26.11,<2
+xlrd>=2.0.1,<3
+jupyter>=1.0.0                  
+matplotlib>=3.0.0,<4.0.
