@@ -356,56 +356,60 @@ class TemperatureScore(PortfolioAggregation):
         """
         if row[self.c.COLS.SCOPE] != EScope.S1S2S3:
             return row[self.c.COLS.TEMPERATURE_SCORE], row[self.c.TEMPERATURE_RESULTS]
-        s1s2 = company_data.loc[
-            (row[self.c.COLS.COMPANY_ID], row[self.c.COLS.TIME_FRAME], EScope.S1S2)
-        ]
-        s3 = company_data.loc[
-            (row[self.c.COLS.COMPANY_ID], row[self.c.COLS.TIME_FRAME], EScope.S3)
-        ]
-
-        # return default score if ghg scope12 or 3 is empty
-        if pd.isnull(s1s2[self.c.COLS.GHG_SCOPE12]) or pd.isnull(
-            s3[self.c.COLS.GHG_SCOPE3]
-        ):
-            # return (
-            #     TemperatureScoreConfig.FALLBACK_SCORE,
-            #     TemperatureScoreConfig.FALLBACK_SCORE,
-            # )
-            # Bloomberg proposal to return original score (changed 2022-09-01):
+        
+        company_id = row[self.c.COLS.COMPANY_ID]
+        time_frame = row[self.c.COLS.TIME_FRAME]
+        
+        # Check if both keys exist before trying to access them
+        s1s2_key = (company_id, time_frame, EScope.S1S2)
+        s3_key = (company_id, time_frame, EScope.S3)
+        
+        s1s2_exists = s1s2_key in company_data.index
+        s3_exists = s3_key in company_data.index
+        
+        # Both S1S2 and S3 must exist to calculate combined score
+        if not (s1s2_exists and s3_exists):
+            # If only S1S2 exists, use that score as per methodology
+            if s1s2_exists:
+                s1s2 = company_data.loc[s1s2_key]
+                return s1s2[self.c.COLS.TEMPERATURE_SCORE], s1s2[self.c.TEMPERATURE_RESULTS]
+            # Otherwise return original score
             return row[self.c.COLS.TEMPERATURE_SCORE], row[self.c.TEMPERATURE_RESULTS]
-
+        
+        # Both S1S2 and S3 exist, proceed with original logic
+        s1s2 = company_data.loc[s1s2_key]
+        s3 = company_data.loc[s3_key]
+        
+        # Check if emissions data is missing
+        if pd.isnull(s1s2[self.c.COLS.GHG_SCOPE12]) or pd.isnull(s3[self.c.COLS.GHG_SCOPE3]):
+            return row[self.c.COLS.TEMPERATURE_SCORE], row[self.c.TEMPERATURE_RESULTS]
+        
         try:
-            # TODO: what is TEMPERATURE_SCORE and what is TEMPERATURE_RESULTS?
-            # If the s3 emissions are less than 40 percent, we'll ignore them altogether, if not, we'll weigh them
-            if (
-                s3[self.c.COLS.GHG_SCOPE3]
-                / (s1s2[self.c.COLS.GHG_SCOPE12] + s3[self.c.COLS.GHG_SCOPE3])
-                < 0.4
-            ):
-                return (
-                    s1s2[self.c.COLS.TEMPERATURE_SCORE],
-                    s1s2[self.c.TEMPERATURE_RESULTS],
-                )
-            else:
-                company_emissions = (
-                    s1s2[self.c.COLS.GHG_SCOPE12] + s3[self.c.COLS.GHG_SCOPE3]
-                )
-                return (
-                    (
-                        s1s2[self.c.COLS.TEMPERATURE_SCORE]
-                        * s1s2[self.c.COLS.GHG_SCOPE12]
-                        + s3[self.c.COLS.TEMPERATURE_SCORE] * s3[self.c.COLS.GHG_SCOPE3]
-                    )
-                    / company_emissions,
-                    (
-                        s1s2[self.c.TEMPERATURE_RESULTS] * s1s2[self.c.COLS.GHG_SCOPE12]
-                        + s3[self.c.TEMPERATURE_RESULTS] * s3[self.c.COLS.GHG_SCOPE3]
-                    )
-                    / company_emissions,
-                )
-
+            # Calculate ratio of scope 3 emissions to total emissions
+            s3_ratio = s3[self.c.COLS.GHG_SCOPE3] / (s1s2[self.c.COLS.GHG_SCOPE12] + s3[self.c.COLS.GHG_SCOPE3])
+            
+            # If the s3 emissions are less than 40 percent, use only S1S2 score
+            if s3_ratio < 0.4:
+                return s1s2[self.c.COLS.TEMPERATURE_SCORE], s1s2[self.c.TEMPERATURE_RESULTS]
+            
+            # Otherwise, calculate weighted score
+            company_emissions = s1s2[self.c.COLS.GHG_SCOPE12] + s3[self.c.COLS.GHG_SCOPE3]
+            
+            temp_score = (
+                s1s2[self.c.COLS.TEMPERATURE_SCORE] * s1s2[self.c.COLS.GHG_SCOPE12] + 
+                s3[self.c.COLS.TEMPERATURE_SCORE] * s3[self.c.COLS.GHG_SCOPE3]
+            ) / company_emissions
+            
+            temp_results = (
+                s1s2[self.c.TEMPERATURE_RESULTS] * s1s2[self.c.COLS.GHG_SCOPE12] + 
+                s3[self.c.TEMPERATURE_RESULTS] * s3[self.c.COLS.GHG_SCOPE3]
+            ) / company_emissions
+            
+            return temp_score, temp_results
+            
         except ZeroDivisionError:
-            raise ValueError("The mean of the S1+S2 plus the S3 emissions is zero")
+            # Handle division by zero gracefully
+            return row[self.c.COLS.TEMPERATURE_SCORE], row[self.c.TEMPERATURE_RESULTS]
 
     def get_default_score(self, target: pd.Series) -> int:
         """
