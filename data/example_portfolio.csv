@@ -1,4 +1,4 @@
-company_name,company_id,company_isin,weights,investment_value,engagement_target
+company_name,company_id,isin,weights,investment_value,engagement_target
 Company AG,US0079031078,US0079031078,6.36%,35000000,true
 Company AH,US00724F1012,US00724F1012,1.82%,10000000,
 Company AI,FR0000125338,FR0000125338,1.82%,10000000,
