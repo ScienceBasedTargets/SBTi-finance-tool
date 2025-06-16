@@ -164,24 +164,6 @@ def _make_id_map(df_portfolio: pd.DataFrame) -> dict:
     }
 
 
-# def _make_isin_map(df_portfolio: pd.DataFrame) -> dict:
-#     """
-#     Create a mapping from company_id to ISIN (required for the SBTi matching).
-
-#     :param df_portfolio: The complete portfolio
-#     :return: A mapping from company_id to ISIN
-#     """
-#     return {
-#         company_id: company[ColumnsConfig.COMPANY_ISIN]
-#         for company_id, company in df_portfolio[
-#             [ColumnsConfig.COMPANY_ID, ColumnsConfig.COMPANY_ISIN]
-#         ]
-#         .set_index(ColumnsConfig.COMPANY_ID)
-#         .to_dict(orient="index")
-#         .items()
-#     }
-
-
 def dataframe_to_portfolio(df_portfolio: pd.DataFrame) -> List[PortfolioCompany]:
     """
     Convert a data frame to a list of portfolio company objects.
@@ -199,27 +181,76 @@ def dataframe_to_portfolio(df_portfolio: pd.DataFrame) -> List[PortfolioCompany]
     ]
 
 
+def merge_target_data(
+    provider_targets: List[IDataProviderTarget], 
+    sbti_targets: Dict[str, List[IDataProviderTarget]]
+) -> List[IDataProviderTarget]:
+    """
+    Merge targets from data providers with SBTi targets, preferring SBTi data for validated companies.
+    
+    :param provider_targets: List of targets from data providers
+    :param sbti_targets: Dictionary mapping company_id to list of SBTi targets
+    :return: Merged list of targets
+    """
+    # Create lookup of provider targets by company
+    provider_by_company = {}
+    for target in provider_targets:
+        if target.company_id not in provider_by_company:
+            provider_by_company[target.company_id] = []
+        provider_by_company[target.company_id].append(target)
+    
+    # Replace with SBTi targets where available
+    for company_id, sbti_company_targets in sbti_targets.items():
+        if sbti_company_targets:  # Only replace if we have valid SBTi targets
+            provider_by_company[company_id] = sbti_company_targets
+            logging.getLogger(__name__).info(
+                f"Using {len(sbti_company_targets)} SBTi targets for company {company_id}"
+            )
+    
+    # Flatten back to list
+    merged_targets = []
+    for company_targets in provider_by_company.values():
+        merged_targets.extend(company_targets)
+    
+    return merged_targets
+
+
 def get_data(
     data_providers: List[data.DataProvider], portfolio: List[PortfolioCompany]
 ) -> pd.DataFrame:
     """
     Get the required data from the data provider(s), validate the targets and return a 9-box grid for each company.
+    Enhanced to use SBTi authoritative target data when available.
 
     :param data_providers: A list of DataProvider instances
     :param portfolio: A list of PortfolioCompany models
     :return: A data frame containing the relevant company-target data
     """
+    logger = logging.getLogger(__name__)
+    
     df_portfolio = pd.DataFrame.from_records(
         [_flatten_user_fields(c) for c in portfolio]
     )
     company_data = get_company_data(data_providers, df_portfolio["company_id"].tolist())
     target_data = get_targets(data_providers, df_portfolio["company_id"].tolist())
 
+    # Supplement the company data with the SBTi target status and get detailed targets
+    sbti = SBTi()
+    company_data, sbti_targets = sbti.get_sbti_targets(company_data, _make_id_map(df_portfolio))
+    
+    # Log information about SBTi targets found
+    if sbti_targets:
+        logger.info(f"Found SBTi targets for {len(sbti_targets)} companies")
+        for company_id, targets in sbti_targets.items():
+            logger.info(f"Company {company_id}: {len(targets)} SBTi targets")
+    
+    # Merge SBTi targets with provider targets
+    if sbti_targets:
+        target_data = merge_target_data(target_data, sbti_targets)
+        logger.info(f"Total targets after merging: {len(target_data)}")
+    
     if len(target_data) == 0:
         raise ValueError("No targets found")
-
-    # Supplement the company data with the SBTi target status
-    company_data = SBTi().get_sbti_targets(company_data, _make_id_map(df_portfolio))
 
     # Prepare the data
     portfolio_data = TargetProtocol().process(target_data, company_data)

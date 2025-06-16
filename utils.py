@@ -138,6 +138,8 @@ def anonymize(portfolio, provider):
 def plot_grouped_heatmap(grouped_aggregations, analysis_parameters):
     import matplotlib.pyplot as plt
     import matplotlib
+    import numpy as np
+    import copy
 
     timeframe, scope, grouping = analysis_parameters
     scope = str(scope[0])
@@ -148,24 +150,68 @@ def plot_grouped_heatmap(grouped_aggregations, analysis_parameters):
     combinations = list(aggregations.keys())
 
     groups = {group_1: [], group_2: []}
+    
+    # First, collect all unique values for each group
+    # by examining the grouped data structure
     for combination in combinations:
-        item_group_1, item_group_2 = combination.split('-')
-        if item_group_1 not in groups[group_1]:
-            groups[group_1].append(item_group_1)
-        if item_group_2 not in groups[group_2]:
-            groups[group_2].append(item_group_2)
+        
+        # Try to find the separator position by checking against known group values
+        parts = combination.split('-')
+        
+        # Try different split positions to find the correct one
+        for split_pos in range(1, len(parts)):
+            potential_group1 = '-'.join(parts[:split_pos])
+            potential_group2 = '-'.join(parts[split_pos:])
+            
+            # Check if this split makes sense by verifying consistency
+            # with other combinations (if we already have some groups identified)
+            if len(groups[group_1]) > 0:
+                if potential_group1 in groups[group_1] and potential_group2 not in groups[group_2]:
+                    if potential_group2 not in groups[group_2]:
+                        groups[group_2].append(potential_group2)
+                    break
+            elif len(groups[group_2]) > 0:
+                if potential_group2 in groups[group_2] and potential_group1 not in groups[group_1]:
+                    if potential_group1 not in groups[group_1]:
+                        groups[group_1].append(potential_group1)
+                    break
+            else:
+                # First combination - need to make an educated guess
+                # Assume the split is in the middle if multiple hyphens
+                if split_pos == len(parts) // 2 or split_pos == 1:
+                    if potential_group1 not in groups[group_1]:
+                        groups[group_1].append(potential_group1)
+                    if potential_group2 not in groups[group_2]:
+                        groups[group_2].append(potential_group2)
+                    break
+    
+    # Sort groups for consistent display
     groups[group_1] = sorted(groups[group_1])
     groups[group_2] = sorted(groups[group_2])
 
+    # Create grid for heatmap
     grid = np.zeros((len(groups[group_2]), len(groups[group_1])))
+    
+    # Fill the grid with temperature scores
     for i, item_group_2 in enumerate(groups[group_2]):
         for j, item_group_1 in enumerate(groups[group_1]):
-            key = item_group_1+'-'+item_group_2
-            if key in combinations:
-                grid[i, j] = aggregations[item_group_1+'-'+item_group_2].score
-            else:
+            # Try different key formats to find the right combination
+            possible_keys = [
+                item_group_1 + '-' + item_group_2,
+                item_group_2 + '-' + item_group_1  # In case order is reversed
+            ]
+            
+            key_found = False
+            for key in possible_keys:
+                if key in combinations:
+                    grid[i, j] = aggregations[key].score
+                    key_found = True
+                    break
+            
+            if not key_found:
                 grid[i, j] = np.nan
 
+    # Create the plot
     current_cmap = copy.copy(matplotlib.cm.get_cmap('OrRd'))
     current_cmap.set_bad(color='grey', alpha=0.4)
 
@@ -181,6 +227,15 @@ def plot_grouped_heatmap(grouped_aggregations, analysis_parameters):
         label.set_ha('right')
     fig.colorbar(im, ax=ax)
     ax.set_title("Temperature score per " + group_2 + " per " + group_1)
+
+# Alternative simpler approach - use a different separator in the aggregation
+def create_group_key(group1_value, group2_value):
+    """Create a unique key for group combinations using a separator unlikely to appear in data"""
+    return f"{group1_value}||{group2_value}"
+
+def parse_group_key(key):
+    """Parse a group combination key back into its components"""
+    return key.split('||')
 
 
 def get_contributions_per_group(aggregations, analysis_parameters, group):
