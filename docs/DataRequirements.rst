@@ -182,16 +182,39 @@ currently lacks consensus in reporting method. For the tool, all
 intensity metrics have to be mapped to one of eight categories. Please
 refer to the **[link to guidance]** for more detail on how to do this.
 
+SBTi CTA File Formats
+--------------------
+
+The SBTi data provider now supports three CTA file formats:
+
+1. **Per-Company Format (Default)**
+   - URL: ``https://files.sciencebasedtargets.org/production/files/companies-excel.xlsx``
+   - Structure: One row per company
+   - Key columns: ``company_name``, ``isin``, ``lei``, ``near_term_status``
+   - Best for: Portfolio coverage calculations
+
+2. **Per-Target Format**
+   - URL: ``https://sciencebasedtargets.org/resources/files/targets-excel.xlsx``
+   - Structure: Multiple rows per company (one per target)
+   - Key columns: ``company_name``, ``isin``, ``lei``, ``target_classification_short``, ``scope``
+   - Best for: Detailed target analysis
+
+3. **Legacy Format**
+   - Columns: ``Company Name``, ``ISIN``, ``LEI``, ``Action``, ``Target``
+   - Still supported for backward compatibility
+
+The tool automatically detects the format and converts as needed.
+
 SBTi status
 -----------
 
 The SBTi status of a company indicates whether or not the company has
 set a science based target has been approved by the SBTi. This tool uses
 the Excel file that is generated when pressing the download button
-`here <http://ttps://sciencebasedtargets.org/companies-taking-action/>`__.
-This list is updated weekly, to ensure your list is up to date, the user
+`here <https://files.sciencebasedtargets.org/production/files/companies-excel.xlsx/>`__.
+This list is updated weekly on Thursday, to ensure your list is up to date, the user
 can download the latest list from the SBTi site here:
-https://sciencebasedtargets.org/companies-taking-action/ and replace the
+https://files.sciencebasedtargets.org/production/files/companies-excel.xlsx and replace the
 Excel file in the tool with the downloaded file. To do this go to
 ..\\SBTi\\inputs directory and replace the
 *current-Companies-Taking-Action-xxx.xslx* file with the newer file.
