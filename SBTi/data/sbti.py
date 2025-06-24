@@ -53,7 +53,7 @@ class SBTi:
         # Detect and convert column format if needed
         self.targets = self._ensure_compatible_format(self.targets)
         
-        print(f"📋 CTA format: {getattr(self, 'format_type', 'unknown')} | Companies: {len(self.targets)}")
+        print(f"CTA format: {getattr(self, 'format_type', 'unknown')} | Companies: {len(self.targets)}")
 
     def _detect_format(self, df):
         """
