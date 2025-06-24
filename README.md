@@ -79,6 +79,15 @@ poetry install
 
 This will create a virtual environment inside the project folder under `.venv`.
 
+### SBTi Companies Taking Action (CTA) Data
+
+The tool supports multiple formats of the SBTi CTA file:
+- **Per-company format** (default, recommended): One row per company with aggregated target status
+- **Per-target format**: Multiple rows per company with detailed target information
+- **Legacy format**: Original Title Case column format
+
+The tool automatically detects and handles all formats, defaulting to the per-company format for consistency.
+
 ### Testing
 
 Each class should be unit tested. The unit tests are written using the Nose2 framework.
