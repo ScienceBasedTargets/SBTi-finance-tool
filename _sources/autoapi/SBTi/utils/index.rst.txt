@@ -19,6 +19,7 @@ Functions
    SBTi.utils._flatten_user_fields
    SBTi.utils._make_id_map
    SBTi.utils.dataframe_to_portfolio
+   SBTi.utils.merge_target_data
    SBTi.utils.get_data
    SBTi.utils.calculate
 
@@ -93,9 +94,19 @@ Attributes
    :return: A list of portfolio companies
 
 
+.. py:function:: merge_target_data(provider_targets: List[SBTi.interfaces.IDataProviderTarget], sbti_targets: Dict[str, List[SBTi.interfaces.IDataProviderTarget]]) -> List[SBTi.interfaces.IDataProviderTarget]
+
+   Merge targets from data providers with SBTi targets, preferring SBTi data for validated companies.
+
+   :param provider_targets: List of targets from data providers
+   :param sbti_targets: Dictionary mapping company_id to list of SBTi targets
+   :return: Merged list of targets
+
+
 .. py:function:: get_data(data_providers: List[SBTi.data.DataProvider], portfolio: List[SBTi.interfaces.PortfolioCompany]) -> pandas.DataFrame
 
    Get the required data from the data provider(s), validate the targets and return a 9-box grid for each company.
+   Enhanced to use SBTi authoritative target data when available.
 
    :param data_providers: A list of DataProvider instances
    :param portfolio: A list of PortfolioCompany models

@@ -427,7 +427,17 @@ Classes
       
 
    .. py:attribute:: CTA_FILE_URL
-      :annotation: = https://cdn.sciencebasedtargets.org/download/target-dashboard
+      :annotation: = https://sciencebasedtargets.org/resources/files/companies-excel.xlsx
+
+      
+
+   .. py:attribute:: CTA_FILE_URL_PER_COMPANY
+      :annotation: = https://files.sciencebasedtargets.org/production/files/companies-excel.xlsx
+
+      
+
+   .. py:attribute:: CTA_FILE_URL_PER_TARGET
+      :annotation: = https://sciencebasedtargets.org/resources/files/targets-excel.xlsx
 
       
 
@@ -488,6 +498,11 @@ Classes
 
    .. py:attribute:: COL_TARGET
       :annotation: = Target
+
+      
+
+   .. py:attribute:: COL_DATE_PUBLISHED
+      :annotation: = Date Published
 
       
 

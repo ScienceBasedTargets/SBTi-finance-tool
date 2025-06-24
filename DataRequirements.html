@@ -54,6 +54,7 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#sbti-cta-file-formats">SBTi CTA File Formats</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#sbti-status">SBTi status</a></li>
 </ul>
 </li>
@@ -220,15 +221,35 @@ refer to the <strong>[link to guidance]</strong> for more detail on how to do th
 </section>
 </section>
 </section>
+<section id="sbti-cta-file-formats">
+<h2>SBTi CTA File Formats<a class="headerlink" href="#sbti-cta-file-formats" title="Permalink to this headline"></a></h2>
+<p>The SBTi data provider now supports three CTA file formats:</p>
+<ol class="arabic simple">
+<li><p><strong>Per-Company Format (Default)</strong>
+- URL: <code class="docutils literal notranslate"><span class="pre">https://files.sciencebasedtargets.org/production/files/companies-excel.xlsx</span></code>
+- Structure: One row per company
+- Key columns: <code class="docutils literal notranslate"><span class="pre">company_name</span></code>, <code class="docutils literal notranslate"><span class="pre">isin</span></code>, <code class="docutils literal notranslate"><span class="pre">lei</span></code>, <code class="docutils literal notranslate"><span class="pre">near_term_status</span></code>
+- Best for: Portfolio coverage calculations</p></li>
+<li><p><strong>Per-Target Format</strong>
+- URL: <code class="docutils literal notranslate"><span class="pre">https://sciencebasedtargets.org/resources/files/targets-excel.xlsx</span></code>
+- Structure: Multiple rows per company (one per target)
+- Key columns: <code class="docutils literal notranslate"><span class="pre">company_name</span></code>, <code class="docutils literal notranslate"><span class="pre">isin</span></code>, <code class="docutils literal notranslate"><span class="pre">lei</span></code>, <code class="docutils literal notranslate"><span class="pre">target_classification_short</span></code>, <code class="docutils literal notranslate"><span class="pre">scope</span></code>
+- Best for: Detailed target analysis</p></li>
+<li><p><strong>Legacy Format</strong>
+- Columns: <code class="docutils literal notranslate"><span class="pre">Company</span> <span class="pre">Name</span></code>, <code class="docutils literal notranslate"><span class="pre">ISIN</span></code>, <code class="docutils literal notranslate"><span class="pre">LEI</span></code>, <code class="docutils literal notranslate"><span class="pre">Action</span></code>, <code class="docutils literal notranslate"><span class="pre">Target</span></code>
+- Still supported for backward compatibility</p></li>
+</ol>
+<p>The tool automatically detects the format and converts as needed.</p>
+</section>
 <section id="sbti-status">
 <h2>SBTi status<a class="headerlink" href="#sbti-status" title="Permalink to this headline"></a></h2>
 <p>The SBTi status of a company indicates whether or not the company has
 set a science based target has been approved by the SBTi. This tool uses
 the Excel file that is generated when pressing the download button
-<a class="reference external" href="http://ttps://sciencebasedtargets.org/companies-taking-action/">here</a>.
-This list is updated weekly, to ensure your list is up to date, the user
+<a class="reference external" href="https://files.sciencebasedtargets.org/production/files/companies-excel.xlsx/">here</a>.
+This list is updated weekly on Thursday, to ensure your list is up to date, the user
 can download the latest list from the SBTi site here:
-<a class="reference external" href="https://sciencebasedtargets.org/companies-taking-action/">https://sciencebasedtargets.org/companies-taking-action/</a> and replace the
+<a class="reference external" href="https://files.sciencebasedtargets.org/production/files/companies-excel.xlsx">https://files.sciencebasedtargets.org/production/files/companies-excel.xlsx</a> and replace the
 Excel file in the tool with the downloaded file. To do this go to
 ..\SBTi\inputs directory and replace the
 <em>current-Companies-Taking-Action-xxx.xslx</em> file with the newer file.</p>

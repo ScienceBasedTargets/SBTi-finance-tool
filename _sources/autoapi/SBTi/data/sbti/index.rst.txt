@@ -20,6 +20,22 @@ Classes
 .. py:class:: SBTi(config: Type[SBTi.configs.PortfolioCoverageTVPConfig] = PortfolioCoverageTVPConfig)
 
    Data provider skeleton for SBTi. This class only provides the sbti_validated field for existing companies.
+   Updated to DEFAULT to per-company format for TR Testing consistency.
+   Enhanced to extract detailed target information when available.
+
+   .. py:method:: _detect_format(self, df)
+
+      Detect the format of the CTA file:
+      - 'old': Original format with Title Case columns
+      - 'new_company': New per-company format (one row per company) - PREFERRED
+      - 'new_target': New per-target format (multiple rows per company)
+
+
+   .. py:method:: _ensure_compatible_format(self, df)
+
+      Convert CTA file to the format expected by the configs
+      OPTIMIZED FOR PER-COMPANY FORMAT
+
 
    .. py:method:: filter_cta_file(self, targets)
 
@@ -27,15 +43,38 @@ Classes
       with the columns "Action" and "Target".
       If Action = Target then only keep the rows where Target = Near-term.
 
+      Handles all three formats: old, new per-company, and new per-target.
 
-   .. py:method:: get_sbti_targets(self, companies: List[SBTi.interfaces.IDataProviderCompany], id_map: dict) -> List[SBTi.interfaces.IDataProviderCompany]
 
-      Check for each company if they have an SBTi validated target, first using the company LEI, 
-      if available, and then using the ISIN.
+   .. py:method:: get_company_targets(self, company_name: str = None, isin: str = None, lei: str = None)
+
+      Get all targets for a specific company.
+      Only works with per-target format.
+
+      :param company_name: Company name to search for
+      :param isin: ISIN to search for
+      :param lei: LEI to search for
+      :return: DataFrame with all targets for the company
+
+
+   .. py:method:: get_companies(self, companies: List[SBTi.interfaces.IDataProviderCompany], id_map: Dict[str, Tuple[str, str]]) -> List[SBTi.interfaces.IDataProviderCompany]
+
+      Get company data from SBTi database and add sbti_validated field.
 
       :param companies: A list of IDataProviderCompany instances
       :param id_map: A map from company id to a tuple of (ISIN, LEI)
       :return: A list of IDataProviderCompany instances, supplemented with the SBTi information
+
+
+   .. py:method:: get_sbti_targets(self, companies: List[SBTi.interfaces.IDataProviderCompany], id_map: Dict[str, Tuple[str, str]]) -> Tuple[List[SBTi.interfaces.IDataProviderCompany], Dict[str, List[SBTi.interfaces.IDataProviderTarget]]]
+
+      Enhanced version that returns both validation status AND target details when available.
+
+      :param companies: A list of IDataProviderCompany instances
+      :param id_map: A map from company id to a tuple of (ISIN, LEI)
+      :return: A tuple of:
+          - List of IDataProviderCompany instances, supplemented with the SBTi information
+          - Dictionary mapping company_id to list of IDataProviderTarget instances
 
 
 

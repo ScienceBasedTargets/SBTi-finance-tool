@@ -44,7 +44,8 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Getting Started Using Python</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#google-colab">Google Colab</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#jupyter-notebooks">Jupyter Notebooks</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#python-code">Python code</a><ul class="simple">
+<li class="toctree-l2"><a class="reference internal" href="#python-code">Python code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#using-the-sbti-data-provider">Using the SBTi Data Provider</a><ul class="simple">
 </ul>
 </li>
 </ul>
@@ -140,6 +141,27 @@ Make sure that your Python version is at least 3.9.</p>
 <div><p>pip install sbti-finance-tool</p>
 </div></blockquote>
 <p>The <a class="reference external" href="https://ofbdabv.github.io/SBTi/autoapi/index.html">API reference</a> should provide a clear overview of the module’s API and its usage.</p>
+</section>
+<section id="using-the-sbti-data-provider">
+<h2>Using the SBTi Data Provider<a class="headerlink" href="#using-the-sbti-data-provider" title="Permalink to this headline"></a></h2>
+<p>The SBTi data provider automatically downloads the latest Companies Taking Action data:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">SBTi.data.sbti</span> <span class="kn">import</span> <span class="n">SBTi</span>
+<span class="n">sbti_provider</span> <span class="o">=</span> <span class="n">SBTi</span><span class="p">()</span>
+
+<span class="c1"># The provider will:</span>
+<span class="c1"># 1. Download the latest CTA file (defaulting to per-company format)</span>
+<span class="c1"># 2. Detect the file format automatically</span>
+<span class="c1"># 3. Convert columns for backward compatibility</span>
+<span class="c1"># 4. Filter and deduplicate companies as needed</span>
+</pre></div>
+</div>
+<p>To use a specific CTA format, modify the config before initialization:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">SBTi.configs</span> <span class="kn">import</span> <span class="n">PortfolioCoverageTVPConfig</span>
+<span class="n">config</span> <span class="o">=</span> <span class="n">PortfolioCoverageTVPConfig</span>
+<span class="n">config</span><span class="o">.</span><span class="n">CTA_FILE_URL</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">CTA_FILE_URL_PER_TARGET</span>  <span class="c1"># For detailed targets</span>
+<span class="n">sbti_provider</span> <span class="o">=</span> <span class="n">SBTi</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+</pre></div>
+</div>
 <div class="toctree-wrapper compound">
 </div>
 </section>

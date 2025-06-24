@@ -104,10 +104,13 @@
 <tr class="row-even"><td><p><a class="reference internal" href="#SBTi.utils.dataframe_to_portfolio" title="SBTi.utils.dataframe_to_portfolio"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dataframe_to_portfolio</span></code></a>(df_portfolio: pandas.DataFrame) → List[SBTi.interfaces.PortfolioCompany]</p></td>
 <td><p>Convert a data frame to a list of portfolio company objects.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#SBTi.utils.get_data" title="SBTi.utils.get_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_data</span></code></a>(data_providers: List[SBTi.data.DataProvider], portfolio: List[SBTi.interfaces.PortfolioCompany]) → pandas.DataFrame</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#SBTi.utils.merge_target_data" title="SBTi.utils.merge_target_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">merge_target_data</span></code></a>(provider_targets: List[SBTi.interfaces.IDataProviderTarget], sbti_targets: Dict[str, List[SBTi.interfaces.IDataProviderTarget]]) → List[SBTi.interfaces.IDataProviderTarget]</p></td>
+<td><p>Merge targets from data providers with SBTi targets, preferring SBTi data for validated companies.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#SBTi.utils.get_data" title="SBTi.utils.get_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_data</span></code></a>(data_providers: List[SBTi.data.DataProvider], portfolio: List[SBTi.interfaces.PortfolioCompany]) → pandas.DataFrame</p></td>
 <td><p>Get the required data from the data provider(s), validate the targets and return a 9-box grid for each company.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#SBTi.utils.calculate" title="SBTi.utils.calculate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculate</span></code></a>(portfolio_data: pandas.DataFrame, fallback_score: float, aggregation_method: SBTi.portfolio_aggregation.PortfolioAggregationMethod, grouping: Optional[List[str]], scenario: Optional[SBTi.temperature_score.Scenario], time_frames: List[SBTi.interfaces.ETimeFrames], scopes: List[SBTi.interfaces.EScope], anonymize: bool, aggregate: bool = True) → Tuple[pandas.DataFrame, Optional[SBTi.interfaces.ScoreAggregations]]</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#SBTi.utils.calculate" title="SBTi.utils.calculate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculate</span></code></a>(portfolio_data: pandas.DataFrame, fallback_score: float, aggregation_method: SBTi.portfolio_aggregation.PortfolioAggregationMethod, grouping: Optional[List[str]], scenario: Optional[SBTi.temperature_score.Scenario], time_frames: List[SBTi.interfaces.ETimeFrames], scopes: List[SBTi.interfaces.EScope], anonymize: bool, aggregate: bool = True) → Tuple[pandas.DataFrame, Optional[SBTi.interfaces.ScoreAggregations]]</p></td>
 <td><p>Calculate the different parts of the temperature score (actual scores, aggregations, column distribution).</p></td>
 </tr>
 </tbody>
@@ -228,9 +231,27 @@ data providers left.</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="SBTi.utils.merge_target_data">
+<span class="sig-prename descclassname"><span class="pre">SBTi.utils.</span></span><span class="sig-name descname"><span class="pre">merge_target_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">provider_targets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../interfaces/index.html#SBTi.interfaces.IDataProviderTarget" title="SBTi.interfaces.IDataProviderTarget"><span class="pre">SBTi.interfaces.IDataProviderTarget</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sbti_targets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../interfaces/index.html#SBTi.interfaces.IDataProviderTarget" title="SBTi.interfaces.IDataProviderTarget"><span class="pre">SBTi.interfaces.IDataProviderTarget</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../interfaces/index.html#SBTi.interfaces.IDataProviderTarget" title="SBTi.interfaces.IDataProviderTarget"><span class="pre">SBTi.interfaces.IDataProviderTarget</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#SBTi.utils.merge_target_data" title="Permalink to this definition"></a></dt>
+<dd><p>Merge targets from data providers with SBTi targets, preferring SBTi data for validated companies.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>provider_targets</strong> – List of targets from data providers</p></li>
+<li><p><strong>sbti_targets</strong> – Dictionary mapping company_id to list of SBTi targets</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Merged list of targets</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="SBTi.utils.get_data">
 <span class="sig-prename descclassname"><span class="pre">SBTi.utils.</span></span><span class="sig-name descname"><span class="pre">get_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_providers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../data/index.html#SBTi.data.DataProvider" title="SBTi.data.DataProvider"><span class="pre">SBTi.data.DataProvider</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">portfolio</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../interfaces/index.html#SBTi.interfaces.PortfolioCompany" title="SBTi.interfaces.PortfolioCompany"><span class="pre">SBTi.interfaces.PortfolioCompany</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.DataFrame</span></span></span><a class="headerlink" href="#SBTi.utils.get_data" title="Permalink to this definition"></a></dt>
-<dd><p>Get the required data from the data provider(s), validate the targets and return a 9-box grid for each company.</p>
+<dd><p>Get the required data from the data provider(s), validate the targets and return a 9-box grid for each company.
+Enhanced to use SBTi authoritative target data when available.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
