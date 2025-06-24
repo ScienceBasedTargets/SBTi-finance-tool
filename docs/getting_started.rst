@@ -54,5 +54,29 @@ Or you can install the latest stable release from PyPi
 
 The `API reference <https://ofbdabv.github.io/SBTi/autoapi/index.html>`_ should provide a clear overview of the module's API and its usage.
 
+
+Using the SBTi Data Provider
+---------------------------
+
+The SBTi data provider automatically downloads the latest Companies Taking Action data::
+
+    from SBTi.data.sbti import SBTi
+    sbti_provider = SBTi()
+    
+    # The provider will:
+    # 1. Download the latest CTA file (defaulting to per-company format)
+    # 2. Detect the file format automatically
+    # 3. Convert columns for backward compatibility
+    # 4. Filter and deduplicate companies as needed
+
+To use a specific CTA format, modify the config before initialization::
+
+    from SBTi.configs import PortfolioCoverageTVPConfig
+    config = PortfolioCoverageTVPConfig
+    config.CTA_FILE_URL = config.CTA_FILE_URL_PER_TARGET  # For detailed targets
+    sbti_provider = SBTi(config)
+
 .. toctree::
    :maxdepth: 4
+
+
