@@ -427,7 +427,7 @@ Classes
       
 
    .. py:attribute:: CTA_FILE_URL
-      :annotation: = https://sciencebasedtargets.org/resources/files/companies-excel.xlsx
+      :annotation: = https://files.sciencebasedtargets.org/production/files/companies-excel.xlsx
 
       
 
@@ -437,7 +437,7 @@ Classes
       
 
    .. py:attribute:: CTA_FILE_URL_PER_TARGET
-      :annotation: = https://sciencebasedtargets.org/resources/files/targets-excel.xlsx
+      :annotation: = https://files.sciencebasedtargets.org/production/files/targets-excel.xlsx
 
       
 
