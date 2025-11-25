@@ -34,6 +34,7 @@ packages = [{ include = "SBTi" }]
 python = "^3.9,<4"
 pydantic = "1.10.7"
 six = "1.16.0"
+numpy = ">=1.21.0, <2.0.0"
 pandas = "1.5.3"
 xlrd = "2.0.1"
 requests = "2.31.0"
