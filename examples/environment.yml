@@ -5,6 +5,7 @@ channels:
 dependencies:
   - git>=2.0.0
   - pip>=20.0.0
+  - numpy<2.0.0
   - python>=3.7,<3.10  
   - jupyter>=1.0.0
   - pip:

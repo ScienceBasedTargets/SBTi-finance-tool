@@ -8,6 +8,7 @@ package_data = {"": ["*"], "SBTi": ["inputs/*"]}
 install_requires = [
     "openpyxl>=2.5.0",
     "pandas>=1.0.0",
+    "numpy>=1.20.0,<2.0.0",
     "pydantic>=1.0.0",
     "requests>=2.0.0",
     "six>=1.16.0",
