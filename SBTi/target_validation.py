@@ -330,7 +330,7 @@ class TargetProtocol:
                 # One match with Target data
                 return target_data[target_columns]
             else:
-                if target_data.scope[0] == EScope.S3:
+                if target_data.scope.iloc[0] == EScope.S3:
                     coverage_column = self.c.COLS.COVERAGE_S3
                 else:
                     coverage_column = self.c.COLS.COVERAGE_S1
