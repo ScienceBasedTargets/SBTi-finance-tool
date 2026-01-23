@@ -162,9 +162,9 @@ class PortfolioCoverageTVPConfig(PortfolioAggregationConfig):
         "current-Companies-Taking-Action.xlsx",
     )
     # Temporary URL until the SBTi website is updated
-    CTA_FILE_URL = "https://sciencebasedtargets.org/resources/files/companies-excel.xlsx"  # Default to per-company
+    CTA_FILE_URL = "https://files.sciencebasedtargets.org/production/files/companies-excel.xlsx"  # Default to per-company
     CTA_FILE_URL_PER_COMPANY = "https://files.sciencebasedtargets.org/production/files/companies-excel.xlsx"
-    CTA_FILE_URL_PER_TARGET = "https://sciencebasedtargets.org/resources/files/targets-excel.xlsx"
+    CTA_FILE_URL_PER_TARGET = "https://files.sciencebasedtargets.org/production/files/targets-excel.xlsx"
     OUTPUT_TARGET_STATUS = "sbti_target_status"
     OUTPUT_WEIGHTED_TARGET_STATUS = "weighted_sbti_target_status"
     VALUE_TARGET_NO = "No target"
