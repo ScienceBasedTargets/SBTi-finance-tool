@@ -172,8 +172,11 @@ def dataframe_to_portfolio(df_portfolio: pd.DataFrame) -> List[PortfolioCompany]
     PortfolioCompany model.
     :return: A list of portfolio companies
     """
+    # Fill NaN values and convert to boolean, avoiding FutureWarning
     df_portfolio[ColumnsConfig.ENGAGEMENT_TARGET] = (
-        df_portfolio[ColumnsConfig.ENGAGEMENT_TARGET].fillna(False).astype("bool")
+        df_portfolio[ColumnsConfig.ENGAGEMENT_TARGET]
+        .apply(lambda x: False if pd.isna(x) else x)
+        .astype("bool")
     )
     return [
         PortfolioCompany.parse_obj(company)
