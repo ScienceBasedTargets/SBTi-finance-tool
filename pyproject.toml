@@ -42,7 +42,7 @@ openpyxl = "3.1.2"
 cleo = "^2.0.1"
 
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev.dependencies]
 black = "21.10b0"
 pylint = "^2.10.2"
 ipykernel = "6.5.0"
