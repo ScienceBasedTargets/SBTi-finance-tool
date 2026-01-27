@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "sbti-finance-tool"
-version = "1.1.1"
-description = "This package helps companies and financial institutions to assess the temperature alignment of current targets, commitments, and investment and lending portfolios, and to use this information to develop targets for official validation by the SBTi.'"
+version = "1.1.2"
+description = "This package helps companies and financial institutions to assess the temperature alignment of current targets, commitments, and investment and lending portfolios, and to use this information to develop targets for official validation by the SBTi."
 authors = ["sbti <financialinstitutions@sciencebasedtargets.org>"]
 license = "MIT"
 readme = "README.md"
@@ -31,7 +31,7 @@ packages = [{ include = "SBTi" }]
 
 
 [tool.poetry.dependencies]
-python = "^3.9,<4"
+python = ">=3.7.1,<4"
 pydantic = "1.10.7"
 six = "1.16.0"
 numpy = ">=1.21.0, <2.0.0"

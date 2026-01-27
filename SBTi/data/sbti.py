@@ -17,9 +17,11 @@ class SBTi:
     """
 
     def __init__(
-        self, config: Type[PortfolioCoverageTVPConfig] = PortfolioCoverageTVPConfig
+        self, config: Type[PortfolioCoverageTVPConfig] = PortfolioCoverageTVPConfig,
+        cutoff_date: Optional[datetime.datetime] = None
     ):
         self.c = config
+        self.cutoff_date = cutoff_date
         
         # DEFAULT TO PER-COMPANY FORMAT for consistency with TR Testing baseline
         # Override the config to ensure per-company format is used
@@ -52,7 +54,11 @@ class SBTi:
         
         # Detect and convert column format if needed
         self.targets = self._ensure_compatible_format(self.targets)
-        
+
+        # Apply date filter if cutoff_date is provided
+        if self.cutoff_date is not None:
+            self.targets = self._filter_by_date(self.targets)
+
         print(f"CTA format: {getattr(self, 'format_type', 'unknown')} | Companies: {len(self.targets)}")
 
     def _detect_format(self, df):
@@ -130,8 +136,36 @@ class SBTi:
                 df['Target Year'] = df['target_year']
         else:
             self.format_type = 'old'
-        
+
         return df
+
+    def _filter_by_date(self, df: pd.DataFrame) -> pd.DataFrame:
+        """
+        Filter the CTA file to only include targets published on or before the cutoff date.
+
+        :param df: The dataframe to filter
+        :return: Filtered dataframe with only targets published on or before cutoff_date
+        """
+        if self.cutoff_date is None:
+            return df
+
+        # Check if date column exists
+        if self.c.COL_DATE_PUBLISHED not in df.columns:
+            print(f"Warning: Date column '{self.c.COL_DATE_PUBLISHED}' not found. Skipping date filter.")
+            return df
+
+        original_count = len(df)
+
+        # Convert date column to datetime if not already
+        df[self.c.COL_DATE_PUBLISHED] = pd.to_datetime(df[self.c.COL_DATE_PUBLISHED], errors='coerce')
+
+        # Filter by cutoff date
+        df_filtered = df[df[self.c.COL_DATE_PUBLISHED] <= self.cutoff_date]
+
+        filtered_count = len(df_filtered)
+        print(f"Date filter applied: {filtered_count}/{original_count} targets on or before {self.cutoff_date.strftime('%Y-%m-%d')}")
+
+        return df_filtered
 
     def filter_cta_file(self, targets):
         """
