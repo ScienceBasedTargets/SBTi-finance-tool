@@ -126,8 +126,23 @@ class SBTi:
             # Keep additional columns for potential future use
             if 'sbti_id' in df.columns:
                 df['SBTI_ID'] = df['sbti_id']
+
+            # Handle target classification columns
+            # Company format uses 'near_term_target_classification' instead of 'target_classification_short'
             if 'target_classification_short' in df.columns:
                 df['Target Classification'] = df['target_classification_short']
+            elif 'near_term_target_classification' in df.columns:
+                # Map near-term classification for company format
+                df['Target Classification'] = df['near_term_target_classification']
+                # Keep the original columns for more detailed analysis
+                df['Near Term Classification'] = df['near_term_target_classification']
+
+            # Map additional company-format specific columns
+            if 'long_term_target_classification' in df.columns:
+                df['Long Term Classification'] = df['long_term_target_classification']
+            if 'ba15_status' in df.columns:
+                df['BA15 Status'] = df['ba15_status']
+
             if 'scope' in df.columns:
                 df['Scope'] = df['scope']
             if 'base_year' in df.columns:
