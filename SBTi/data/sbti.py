@@ -149,6 +149,11 @@ class SBTi:
                 df['Base Year'] = df['base_year']
             if 'target_year' in df.columns:
                 df['Target Year'] = df['target_year']
+
+            # Map date_updated to Date Published for cutoff_date filtering
+            # The new company format uses 'date_updated' instead of 'date_published'
+            if 'date_updated' in df.columns and self.c.COL_DATE_PUBLISHED not in df.columns:
+                df[self.c.COL_DATE_PUBLISHED] = df['date_updated']
         else:
             self.format_type = 'old'
 
