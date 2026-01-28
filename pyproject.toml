@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "sbti-finance-tool"
-version = "1.1.2"
-description = "This package helps companies and financial institutions to assess the temperature alignment of current targets, commitments, and investment and lending portfolios, and to use this information to develop targets for official validation by the SBTi.'"
+version = "1.2.1"
+description = "This package helps companies and financial institutions to assess the temperature alignment of current targets, commitments, and investment and lending portfolios, and to use this information to develop targets for official validation by the SBTi."
 authors = ["sbti <financialinstitutions@sciencebasedtargets.org>"]
 license = "MIT"
 readme = "README.md"
@@ -19,7 +19,6 @@ classifiers = [
     "Programming Language :: Python :: 3 :: Only",
     "Topic :: Software Development",
     "Topic :: Scientific/Engineering",
-
 ]
 keywords = ['Climate', 'SBTi', 'Finance']
 packages = [{ include = "SBTi" }]
@@ -31,7 +30,7 @@ packages = [{ include = "SBTi" }]
 
 
 [tool.poetry.dependencies]
-python = "^3.9,<4"
+python = ">=3.7.1,<4"
 pydantic = "1.10.7"
 six = "1.16.0"
 numpy = ">=1.21.0, <2.0.0"
@@ -42,7 +41,7 @@ openpyxl = "3.1.2"
 cleo = "^2.0.1"
 
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev.dependencies]
 black = "21.10b0"
 pylint = "^2.10.2"
 ipykernel = "6.5.0"
@@ -52,3 +51,7 @@ sphinx-rtd-theme = "1.0.0"
 
 [tool.pyright]
 venv = ".venv"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
