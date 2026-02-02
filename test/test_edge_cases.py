@@ -132,6 +132,107 @@ class EdgeCasesTest(unittest.TestCase):
         return companies, targets, pf_companies
 
 
+    def test_target_selection_order_independence(self):
+        """
+        Verify that target selection produces identical temperature scores
+        regardless of input row order when a company has multiple targets
+        for the same scope/timeframe with identical selection criteria.
+        """
+        company_id = "OrderTestCo"
+        company = IDataProviderCompany(
+            company_name=company_id,
+            company_id=company_id,
+            ghg_s1s2=100,
+            ghg_s3=0,
+            company_revenue=100,
+            company_market_cap=100,
+            company_enterprise_value=100,
+            company_total_assets=100,
+            company_cash_equivalents=100,
+            isic="A12",
+        )
+
+        # Target with complete data — can produce a real score
+        target_good = IDataProviderTarget(
+            company_id=company_id,
+            target_type="abs",
+            scope=EScope.S1,
+            coverage_s1=0.95,
+            coverage_s2=0.95,
+            coverage_s3=0,
+            reduction_ambition=0.8,
+            base_year=2019,
+            base_year_ghg_s1=100,
+            base_year_ghg_s2=50,
+            base_year_ghg_s3=0,
+            end_year=2035,
+        )
+
+        # Target with same coverage/end_year/type but missing reduction_ambition
+        # — would produce fallback score if selected
+        target_bad = IDataProviderTarget(
+            company_id=company_id,
+            target_type="abs",
+            scope=EScope.S1,
+            coverage_s1=0.95,
+            coverage_s2=0.95,
+            coverage_s3=0,
+            reduction_ambition=float("nan"),
+            base_year=2019,
+            base_year_ghg_s1=100,
+            base_year_ghg_s2=50,
+            base_year_ghg_s3=0,
+            end_year=2035,
+        )
+
+        pf_company = PortfolioCompany(
+            company_name=company_id,
+            company_id=company_id,
+            investment_value=100,
+            company_isin=company_id,
+        )
+
+        temp_score = TemperatureScore(
+            time_frames=[ETimeFrames.MID],
+            scopes=[EScope.S1S2],
+        )
+
+        # Order 1: good target first
+        provider1 = TestDataProvider(
+            targets=[copy.deepcopy(target_good), copy.deepcopy(target_bad)],
+            companies=[company],
+        )
+        data1 = SBTi.utils.get_data([provider1], [pf_company])
+        scores1 = temp_score.calculate(data1)
+        score1 = scores1[
+            (scores1["scope"] == EScope.S1S2)
+            & (scores1["company_id"] == company_id)
+        ]["temperature_score"].iloc[0]
+
+        # Order 2: bad target first
+        provider2 = TestDataProvider(
+            targets=[copy.deepcopy(target_bad), copy.deepcopy(target_good)],
+            companies=[company],
+        )
+        data2 = SBTi.utils.get_data([provider2], [pf_company])
+        scores2 = temp_score.calculate(data2)
+        score2 = scores2[
+            (scores2["scope"] == EScope.S1S2)
+            & (scores2["company_id"] == company_id)
+        ]["temperature_score"].iloc[0]
+
+        # Both orderings must produce the same score
+        self.assertEqual(
+            score1, score2,
+            f"Score differs by input order: {score1} vs {score2}",
+        )
+        # And it should NOT be the fallback score
+        self.assertNotEqual(
+            score1, 3.2,
+            "Good target should have been selected, not fallback",
+        )
+
+
 if __name__ == "__main__":
     test = EdgeCasesTest()
     test.setUp()
