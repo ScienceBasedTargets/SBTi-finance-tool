@@ -233,6 +233,89 @@ class EdgeCasesTest(unittest.TestCase):
         )
 
 
+    def test_power_sector_intensity_mapping(self):
+        """
+        Verify that Power sector intensity targets use the correct SR15 variable
+        (INT.emCO2EI_elecGen) and produce a valid temperature score.
+
+        The methodology Annex 1 references 'INT.emCO2Elec_elecGen' but the
+        sr15_mapping.xlsx (source of truth for the tool) maps Power to
+        'INT.emCO2EI_elecGen'. Both variables exist in regression_model_summary.xlsx.
+        This test ensures the mapping remains consistent and produces valid scores.
+        """
+        company_id = "PowerCo"
+        company = IDataProviderCompany(
+            company_name=company_id,
+            company_id=company_id,
+            ghg_s1s2=500,
+            ghg_s3=0,
+            company_revenue=1000,
+            company_market_cap=5000,
+            company_enterprise_value=6000,
+            company_total_assets=8000,
+            company_cash_equivalents=200,
+            isic="D35",  # Power generation ISIC code
+        )
+
+        # Intensity target for Power sector
+        target = IDataProviderTarget(
+            company_id=company_id,
+            target_type="int",
+            intensity_metric="Power",
+            scope=EScope.S1S2,
+            coverage_s1=0.95,
+            coverage_s2=0.95,
+            coverage_s3=0,
+            reduction_ambition=0.5,
+            base_year=2019,
+            base_year_ghg_s1=400,
+            base_year_ghg_s2=100,
+            base_year_ghg_s3=0,
+            end_year=2035,
+        )
+
+        pf_company = PortfolioCompany(
+            company_name=company_id,
+            company_id=company_id,
+            investment_value=100,
+            company_isin=company_id,
+        )
+
+        temp_score = TemperatureScore(
+            time_frames=[ETimeFrames.MID],
+            scopes=[EScope.S1S2],
+        )
+
+        provider = TestDataProvider(
+            targets=[target],
+            companies=[company],
+        )
+        data = SBTi.utils.get_data([provider], [pf_company])
+        scores = temp_score.calculate(data)
+
+        row = scores[
+            (scores["scope"] == EScope.S1S2)
+            & (scores["company_id"] == company_id)
+        ].iloc[0]
+
+        # Verify the correct SR15 variable was used
+        self.assertEqual(
+            row["sr15"],
+            "INT.emCO2EI_elecGen",
+            "Power sector intensity target should map to INT.emCO2EI_elecGen",
+        )
+
+        # Verify a valid (non-fallback) temperature score was produced
+        self.assertNotEqual(
+            row["temperature_score"],
+            3.2,
+            "Power sector intensity target should produce a calculated score, not fallback",
+        )
+        # Score should be a reasonable temperature value
+        self.assertGreater(row["temperature_score"], 0.0)
+        self.assertLess(row["temperature_score"], 4.0)
+
+
 if __name__ == "__main__":
     test = EdgeCasesTest()
     test.setUp()

@@ -375,7 +375,7 @@ class TargetProtocol:
 
         For each category: if more than 1 target is available, filter based on the following criteria
         -- Highest boundary coverage
-        -- Latest base year
+        -- Latest end year; then latest base year (when end years tie)
         -- Target type: Absolute over intensity
         -- If all else is equal: prefer the target with complete data for scoring
         """
