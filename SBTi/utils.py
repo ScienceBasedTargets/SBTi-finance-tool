@@ -1,4 +1,5 @@
 import logging
+import datetime
 import pandas as pd
 from typing import List, Optional, Tuple, Type, Dict
 
@@ -219,7 +220,9 @@ def merge_target_data(
 
 
 def get_data(
-    data_providers: List[data.DataProvider], portfolio: List[PortfolioCompany]
+    data_providers: List[data.DataProvider],
+    portfolio: List[PortfolioCompany],
+    cutoff_date: Optional[datetime.datetime] = None
 ) -> pd.DataFrame:
     """
     Get the required data from the data provider(s), validate the targets and return a 9-box grid for each company.
@@ -227,18 +230,30 @@ def get_data(
 
     :param data_providers: A list of DataProvider instances
     :param portfolio: A list of PortfolioCompany models
+    :param cutoff_date: Optional cutoff date for filtering targets. Both SBTi targets (by publication date)
+        and provider targets (by base year) will be filtered to only include targets that existed on or before this date.
     :return: A data frame containing the relevant company-target data
     """
     logger = logging.getLogger(__name__)
-    
+
     df_portfolio = pd.DataFrame.from_records(
         [_flatten_user_fields(c) for c in portfolio]
     )
     company_data = get_company_data(data_providers, df_portfolio["company_id"].tolist())
     target_data = get_targets(data_providers, df_portfolio["company_id"].tolist())
 
+    # Filter provider targets by cutoff date if provided
+    if cutoff_date is not None:
+        original_count = len(target_data)
+        target_data = [
+            t for t in target_data
+            if t.base_year <= cutoff_date.year
+        ]
+        filtered_count = len(target_data)
+        logger.info(f"Provider target date filter: {filtered_count}/{original_count} targets with base_year <= {cutoff_date.year}")
+
     # Supplement the company data with the SBTi target status and get detailed targets
-    sbti = SBTi()
+    sbti = SBTi(cutoff_date=cutoff_date)
     company_data, sbti_targets = sbti.get_sbti_targets(company_data, _make_id_map(df_portfolio))
     
     # Log information about SBTi targets found
@@ -252,22 +267,65 @@ def get_data(
         target_data = merge_target_data(target_data, sbti_targets)
         logger.info(f"Total targets after merging: {len(target_data)}")
     
+    # Log warnings for missing data - companies without data will receive fallback score
     if len(target_data) == 0:
-        raise ValueError("No targets found")
+        logger.warning("No targets found in data providers. All companies will receive fallback score.")
 
-    # Prepare the data
-    portfolio_data = TargetProtocol().process(target_data, company_data)
+    if len(company_data) == 0:
+        logger.warning("No company data found in data providers. All companies will receive fallback score.")
+
+    # Prepare the data - only call process if we have data
+    if len(target_data) > 0 and len(company_data) > 0:
+        portfolio_data = TargetProtocol().process(target_data, company_data)
+    else:
+        # Create empty DataFrame - companies will get fallback score
+        portfolio_data = pd.DataFrame(columns=[ColumnsConfig.COMPANY_ID, ColumnsConfig.COMPANY_NAME])
+
+    # Handle case where some companies have no data - create placeholder rows
+    # so they receive the fallback score during temperature calculation
+    companies_with_data = set(portfolio_data[ColumnsConfig.COMPANY_ID].unique()) if len(portfolio_data) > 0 else set()
+    all_company_ids = set(df_portfolio[ColumnsConfig.COMPANY_ID].tolist())
+    companies_without_data = all_company_ids - companies_with_data
+
+    if companies_without_data:
+        logger.warning(f"{len(companies_without_data)} companies have no target data and will receive fallback score.")
+
+        # Create placeholder rows for companies without data
+        # Include all columns needed by _prepare_data in temperature_score.py
+        # These rows will have null values that trigger the fallback score path
+        placeholder_rows = []
+        for company_id in companies_without_data:
+            company_info = df_portfolio[df_portfolio[ColumnsConfig.COMPANY_ID] == company_id].iloc[0]
+            for scope in [EScope.S1S2, EScope.S3, EScope.S1S2S3]:
+                for time_frame in [ETimeFrames.SHORT, ETimeFrames.MID, ETimeFrames.LONG]:
+                    placeholder_rows.append({
+                        ColumnsConfig.COMPANY_ID: company_id,
+                        ColumnsConfig.COMPANY_NAME: company_info.get('company_name', 'Unknown'),
+                        ColumnsConfig.SCOPE: scope,
+                        ColumnsConfig.TIME_FRAME: time_frame,
+                        # Columns required by _prepare_data (strings required)
+                        ColumnsConfig.TARGET_REFERENCE_NUMBER: 'no_target',
+                        ColumnsConfig.COMPANY_ISIC: company_info.get(ColumnsConfig.COMPANY_ISIC, ''),
+                        ColumnsConfig.COMPANY_LEI: company_info.get(ColumnsConfig.COMPANY_LEI, ''),
+                        # Columns that will be null, triggering fallback score
+                        ColumnsConfig.REDUCTION_AMBITION: None,
+                        ColumnsConfig.BASE_YEAR: None,
+                        ColumnsConfig.END_YEAR: None,
+                        ColumnsConfig.SBTI_VALIDATED: False,
+                        ColumnsConfig.GHG_SCOPE12: None,
+                        ColumnsConfig.GHG_SCOPE3: None,
+                    })
+
+        if placeholder_rows:
+            placeholder_df = pd.DataFrame(placeholder_rows)
+            portfolio_data = pd.concat([portfolio_data, placeholder_df], ignore_index=True)
+
     portfolio_data = pd.merge(
         left=portfolio_data,
         right=df_portfolio.drop("company_name", axis=1),
         how="left",
         on=["company_id"],
     )
-
-    if len(company_data) == 0:
-        raise ValueError(
-            "None of the companies in your portfolio could be found by the data providers"
-        )
 
     return portfolio_data
 

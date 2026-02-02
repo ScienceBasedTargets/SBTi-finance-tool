@@ -17,9 +17,11 @@ class SBTi:
     """
 
     def __init__(
-        self, config: Type[PortfolioCoverageTVPConfig] = PortfolioCoverageTVPConfig
+        self, config: Type[PortfolioCoverageTVPConfig] = PortfolioCoverageTVPConfig,
+        cutoff_date: Optional[datetime.datetime] = None
     ):
         self.c = config
+        self.cutoff_date = cutoff_date
         
         # DEFAULT TO PER-COMPANY FORMAT for consistency with TR Testing baseline
         # Override the config to ensure per-company format is used
@@ -52,7 +54,11 @@ class SBTi:
         
         # Detect and convert column format if needed
         self.targets = self._ensure_compatible_format(self.targets)
-        
+
+        # Apply date filter if cutoff_date is provided
+        if self.cutoff_date is not None:
+            self.targets = self._filter_by_date(self.targets)
+
         print(f"CTA format: {getattr(self, 'format_type', 'unknown')} | Companies: {len(self.targets)}")
 
     def _detect_format(self, df):
@@ -120,18 +126,66 @@ class SBTi:
             # Keep additional columns for potential future use
             if 'sbti_id' in df.columns:
                 df['SBTI_ID'] = df['sbti_id']
+
+            # Handle target classification columns
+            # Company format uses 'near_term_target_classification' instead of 'target_classification_short'
             if 'target_classification_short' in df.columns:
                 df['Target Classification'] = df['target_classification_short']
+            elif 'near_term_target_classification' in df.columns:
+                # Map near-term classification for company format
+                df['Target Classification'] = df['near_term_target_classification']
+                # Keep the original columns for more detailed analysis
+                df['Near Term Classification'] = df['near_term_target_classification']
+
+            # Map additional company-format specific columns
+            if 'long_term_target_classification' in df.columns:
+                df['Long Term Classification'] = df['long_term_target_classification']
+            if 'ba15_status' in df.columns:
+                df['BA15 Status'] = df['ba15_status']
+
             if 'scope' in df.columns:
                 df['Scope'] = df['scope']
             if 'base_year' in df.columns:
                 df['Base Year'] = df['base_year']
             if 'target_year' in df.columns:
                 df['Target Year'] = df['target_year']
+
+            # Map date_updated to Date Published for cutoff_date filtering
+            # The new company format uses 'date_updated' instead of 'date_published'
+            if 'date_updated' in df.columns and self.c.COL_DATE_PUBLISHED not in df.columns:
+                df[self.c.COL_DATE_PUBLISHED] = df['date_updated']
         else:
             self.format_type = 'old'
-        
+
         return df
+
+    def _filter_by_date(self, df: pd.DataFrame) -> pd.DataFrame:
+        """
+        Filter the CTA file to only include targets published on or before the cutoff date.
+
+        :param df: The dataframe to filter
+        :return: Filtered dataframe with only targets published on or before cutoff_date
+        """
+        if self.cutoff_date is None:
+            return df
+
+        # Check if date column exists
+        if self.c.COL_DATE_PUBLISHED not in df.columns:
+            print(f"Warning: Date column '{self.c.COL_DATE_PUBLISHED}' not found. Skipping date filter.")
+            return df
+
+        original_count = len(df)
+
+        # Convert date column to datetime if not already
+        df[self.c.COL_DATE_PUBLISHED] = pd.to_datetime(df[self.c.COL_DATE_PUBLISHED], errors='coerce')
+
+        # Filter by cutoff date
+        df_filtered = df[df[self.c.COL_DATE_PUBLISHED] <= self.cutoff_date]
+
+        filtered_count = len(df_filtered)
+        print(f"Date filter applied: {filtered_count}/{original_count} targets on or before {self.cutoff_date.strftime('%Y-%m-%d')}")
+
+        return df_filtered
 
     def filter_cta_file(self, targets):
         """

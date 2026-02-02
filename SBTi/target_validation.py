@@ -163,7 +163,10 @@ class TargetProtocol:
                 and t.intensity_metric == target.intensity_metric
             ]
             if len(matches) > 0:
-                matches.sort(key=lambda t: t.coverage_s2, reverse=True)
+                matches.sort(
+                    key=lambda t: (t.coverage_s2, t.base_year),
+                    reverse=True,
+                )
                 s2 = matches[0]
                 combined_coverage = (
                     target.coverage_s1 * target.base_year_ghg_s1
@@ -334,15 +337,27 @@ class TargetProtocol:
                     coverage_column = self.c.COLS.COVERAGE_S3
                 else:
                     coverage_column = self.c.COLS.COVERAGE_S1
-                # In case more than one target is available; we prefer targets with higher coverage, later end year, and target type 'absolute'
+                # Methodology Section 2.2 step 4: highest boundary coverage,
+                # latest end year, later base year (when end years tie),
+                # absolute over intensity. _has_complete_data as final
+                # deterministic tiebreaker for fully-tied targets.
+                target_data['_has_complete_data'] = (
+                    target_data[self.c.COLS.REDUCTION_AMBITION].notna()
+                    & target_data[self.c.COLS.BASE_YEAR].notna()
+                    & target_data[self.c.COLS.END_YEAR].notna()
+                    & (target_data[self.c.COLS.END_YEAR] > target_data[self.c.COLS.BASE_YEAR])
+                ).astype(int)
+
                 return target_data.sort_values(
                     by=[
                         coverage_column,
                         self.c.COLS.END_YEAR,
+                        self.c.COLS.BASE_YEAR,
                         self.c.COLS.TARGET_REFERENCE_NUMBER,
+                        '_has_complete_data',
                     ],
                     axis=0,
-                    ascending=[False, False, True],
+                    ascending=[False, False, False, True, False],
                 ).iloc[0][target_columns]
         except KeyError:
             # No target found
@@ -360,9 +375,9 @@ class TargetProtocol:
 
         For each category: if more than 1 target is available, filter based on the following criteria
         -- Highest boundary coverage
-        -- Latest base year
+        -- Latest end year; then latest base year (when end years tie)
         -- Target type: Absolute over intensity
-        -- If all else is equal: average the ambition of targets
+        -- If all else is equal: prefer the target with complete data for scoring
         """
 
         grid_columns = [
