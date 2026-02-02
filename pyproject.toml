@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "sbti-finance-tool"
-version = "1.2.1"
+version = "1.2.2"
 description = "This package helps companies and financial institutions to assess the temperature alignment of current targets, commitments, and investment and lending portfolios, and to use this information to develop targets for official validation by the SBTi."
 authors = ["sbti <financialinstitutions@sciencebasedtargets.org>"]
 readme = "README.md"
@@ -52,6 +52,7 @@ sphinx-rtd-theme = "1.0.0"
 venv = ".venv"
 
 [project]
+name = "sbti-finance-tool"
 license = "MIT"
 license-files = ["LICENSE"]
 
