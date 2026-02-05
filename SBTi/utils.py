@@ -230,8 +230,12 @@ def get_data(
 
     :param data_providers: A list of DataProvider instances
     :param portfolio: A list of PortfolioCompany models
-    :param cutoff_date: Optional cutoff date for filtering targets. Both SBTi targets (by publication date)
-        and provider targets (by base year) will be filtered to only include targets that existed on or before this date.
+    :param cutoff_date: Optional cutoff date for filtering and evaluating targets. When provided:
+        - SBTi targets are filtered by publication date (<= cutoff_date)
+        - Provider targets are filtered by base year (<= cutoff_date.year)
+        - Target validation checks end year against cutoff_date instead of today
+        - Time-frame classification (short/mid/long) is calculated relative to cutoff_date
+        When None, all targets are included and validation uses today's date.
     :return: A data frame containing the relevant company-target data
     """
     logger = logging.getLogger(__name__)
@@ -276,7 +280,7 @@ def get_data(
 
     # Prepare the data - only call process if we have data
     if len(target_data) > 0 and len(company_data) > 0:
-        portfolio_data = TargetProtocol().process(target_data, company_data)
+        portfolio_data = TargetProtocol(cutoff_date=cutoff_date).process(target_data, company_data)
     else:
         # Create empty DataFrame - companies will get fallback score
         portfolio_data = pd.DataFrame(columns=[ColumnsConfig.COMPANY_ID, ColumnsConfig.COMPANY_NAME])

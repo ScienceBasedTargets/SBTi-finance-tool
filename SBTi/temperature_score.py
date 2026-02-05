@@ -506,8 +506,9 @@ class TemperatureScore(PortfolioAggregation):
         :param data: The data set (or None if the data should be retrieved)
         :param data_providers: A list of DataProvider instances. Optional, only required if data is empty.
         :param portfolio: A list of PortfolioCompany models. Optional, only required if data is empty.
-        :param cutoff_date: Optional cutoff date for filtering targets. Both SBTi targets (by publication date)
-            and provider targets (by base year) will be filtered to only include targets that existed on or before this date.
+        :param cutoff_date: Optional cutoff date for filtering and evaluating targets. When provided:
+            SBTi targets are filtered by publication date, provider targets by base year,
+            and target validation/time-frame classification uses this date instead of today.
         :return: A data frame containing all relevant information for the targets and companies
         """
         if data is None:

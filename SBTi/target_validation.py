@@ -19,13 +19,19 @@ class TargetProtocol:
     This class validates the targets, to make sure that only active, useful targets are considered. It then combines the targets with company-related data into a dataframe where there's one row for each of the nine possible target types (short, mid, long * S1+S2, S3, S1+S2+S3). This class follows the procedures outlined by the target protocol that is a part of the "Temperature Rating Methodology" (2020), which has been created by CDP Worldwide and WWF International.
 
     :param config: A Portfolio aggregation config
+    :param cutoff_date: Optional reference date for target validation and time-frame classification.
+        When provided, targets are validated against this date (e.g. a target's end year must be >= cutoff_date's year)
+        and time frames are calculated relative to it. When None, defaults to datetime.now().
     """
 
     def __init__(
-        self, config: Type[PortfolioAggregationConfig] = PortfolioAggregationConfig
+        self,
+        config: Type[PortfolioAggregationConfig] = PortfolioAggregationConfig,
+        cutoff_date: Optional[datetime.datetime] = None,
     ):
         self.c = config
         self.logger = logging.getLogger(__name__)
+        self.reference_date = cutoff_date if cutoff_date is not None else datetime.datetime.now()
         self.s2_targets: List[IDataProviderTarget] = []
         self.target_data: pd.DataFrame = pd.DataFrame()
         self.company_data: pd.DataFrame = pd.DataFrame()
@@ -94,7 +100,7 @@ class TargetProtocol:
 
         # The end year should be greater than or equal to the current year
         # Added in update Oct 22
-        target_current = target.end_year >= datetime.datetime.now().year
+        target_current = target.end_year >= self.reference_date.year
 
         # Delete all S1 or S2 targets we can't combine
         s1 = target.scope != EScope.S1 or (
@@ -259,8 +265,7 @@ class TargetProtocol:
         :param target: The input target
         :return: The original target with the time_frame field filled out (if so required)
         """
-        now = datetime.datetime.now()
-        time_frame = target.end_year - now.year
+        time_frame = target.end_year - self.reference_date.year
         if time_frame <= 4:
             target.time_frame = ETimeFrames.SHORT
         elif time_frame <= 15:
