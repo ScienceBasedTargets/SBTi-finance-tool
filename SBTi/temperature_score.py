@@ -507,7 +507,7 @@ class TemperatureScore(PortfolioAggregation):
         :param data_providers: A list of DataProvider instances. Optional, only required if data is empty.
         :param portfolio: A list of PortfolioCompany models. Optional, only required if data is empty.
         :param reporting_date: Optional reporting date for target validation and time-frame classification.
-            Per the SBTi Temperature Rating Methodology (Section 2.1.4), time frames are "forward looking"
+            Per the CDP/WWF V1 Temperature Rating Methodology (Section 2.1.4), time frames are "forward looking"
             relative to the reporting year. When None, defaults to today's date.
         :return: A data frame containing all relevant information for the targets and companies
         """
