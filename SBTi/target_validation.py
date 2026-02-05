@@ -20,7 +20,7 @@ class TargetProtocol:
 
     :param config: A Portfolio aggregation config
     :param reporting_date: Optional reporting date for target validation and time-frame classification.
-        Per the SBTi Temperature Rating Methodology (Section 2.1.4), time frames are "forward looking"
+        Per the CDP/WWF V1 Temperature Rating Methodology (Section 2.1.4), time frames are "forward looking"
         relative to the reporting year. When provided, targets are validated against this date
         (e.g. a target's end year must be >= reporting_date's year) and time-frame buckets
         (short/mid/long) are calculated relative to it. When None, defaults to datetime.now().
