@@ -103,13 +103,19 @@ Attributes
    :return: Merged list of targets
 
 
-.. py:function:: get_data(data_providers: List[SBTi.data.DataProvider], portfolio: List[SBTi.interfaces.PortfolioCompany]) -> pandas.DataFrame
+.. py:function:: get_data(data_providers: List[SBTi.data.DataProvider], portfolio: List[SBTi.interfaces.PortfolioCompany], reporting_date: Optional[datetime.datetime] = None) -> pandas.DataFrame
 
    Get the required data from the data provider(s), validate the targets and return a 9-box grid for each company.
    Enhanced to use SBTi authoritative target data when available.
 
    :param data_providers: A list of DataProvider instances
    :param portfolio: A list of PortfolioCompany models
+   :param reporting_date: Optional reporting date for target validation and time-frame classification.
+       Per the CDP/WWF V1 Temperature Rating Methodology (Section 2.1.4), time frames are "forward looking"
+       relative to the reporting year. When provided:
+       - Target validation checks end year against reporting_date instead of today
+       - Time-frame classification (short/mid/long) is calculated relative to reporting_date
+       When None, defaults to today's date.
    :return: A data frame containing the relevant company-target data
 
 

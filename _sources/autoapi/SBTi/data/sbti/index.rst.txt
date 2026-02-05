@@ -17,7 +17,7 @@ Classes
 
 
 
-.. py:class:: SBTi(config: Type[SBTi.configs.PortfolioCoverageTVPConfig] = PortfolioCoverageTVPConfig)
+.. py:class:: SBTi(config: Type[SBTi.configs.PortfolioCoverageTVPConfig] = PortfolioCoverageTVPConfig, cutoff_date: Optional[datetime.datetime] = None)
 
    Data provider skeleton for SBTi. This class only provides the sbti_validated field for existing companies.
    Updated to DEFAULT to per-company format for TR Testing consistency.
@@ -35,6 +35,14 @@ Classes
 
       Convert CTA file to the format expected by the configs
       OPTIMIZED FOR PER-COMPANY FORMAT
+
+
+   .. py:method:: _filter_by_date(self, df: pandas.DataFrame) -> pandas.DataFrame
+
+      Filter the CTA file to only include targets published on or before the cutoff date.
+
+      :param df: The dataframe to filter
+      :return: Filtered dataframe with only targets published on or before cutoff_date
 
 
    .. py:method:: filter_cta_file(self, targets)

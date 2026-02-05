@@ -213,7 +213,7 @@ Classes
       :return: The data frame, with an updated s1s2s3 temperature score
 
 
-   .. py:method:: calculate(self, data: Optional[pandas.DataFrame] = None, data_providers: Optional[List[TemperatureScore.calculate.data]] = None, portfolio: Optional[List[SBTi.interfaces.PortfolioCompany]] = None)
+   .. py:method:: calculate(self, data: Optional[pandas.DataFrame] = None, data_providers: Optional[List[TemperatureScore.calculate.data]] = None, portfolio: Optional[List[SBTi.interfaces.PortfolioCompany]] = None, reporting_date: Optional[datetime.datetime] = None)
 
       Calculate the temperature for a dataframe of company data. The columns in the data frame should be a combination
       of IDataProviderTarget and IDataProviderCompany.
@@ -221,6 +221,9 @@ Classes
       :param data: The data set (or None if the data should be retrieved)
       :param data_providers: A list of DataProvider instances. Optional, only required if data is empty.
       :param portfolio: A list of PortfolioCompany models. Optional, only required if data is empty.
+      :param reporting_date: Optional reporting date for target validation and time-frame classification.
+          Per the CDP/WWF V1 Temperature Rating Methodology (Section 2.1.4), time frames are "forward looking"
+          relative to the reporting year. When None, defaults to today's date.
       :return: A data frame containing all relevant information for the targets and companies
 
 

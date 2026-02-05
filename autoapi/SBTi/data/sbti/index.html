@@ -93,7 +93,7 @@
 </table>
 <dl class="py class">
 <dt class="sig sig-object py" id="SBTi.data.sbti.SBTi">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">SBTi.data.sbti.</span></span><span class="sig-name descname"><span class="pre">SBTi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../../configs/index.html#SBTi.configs.PortfolioCoverageTVPConfig" title="SBTi.configs.PortfolioCoverageTVPConfig"><span class="pre">SBTi.configs.PortfolioCoverageTVPConfig</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">PortfolioCoverageTVPConfig</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.data.sbti.SBTi" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">SBTi.data.sbti.</span></span><span class="sig-name descname"><span class="pre">SBTi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../../configs/index.html#SBTi.configs.PortfolioCoverageTVPConfig" title="SBTi.configs.PortfolioCoverageTVPConfig"><span class="pre">SBTi.configs.PortfolioCoverageTVPConfig</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">PortfolioCoverageTVPConfig</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cutoff_date</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">datetime.datetime</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.data.sbti.SBTi" title="Permalink to this definition"></a></dt>
 <dd><p>Data provider skeleton for SBTi. This class only provides the sbti_validated field for existing companies.
 Updated to DEFAULT to per-company format for TR Testing consistency.
 Enhanced to extract detailed target information when available.</p>
@@ -111,6 +111,20 @@ Enhanced to extract detailed target information when available.</p>
 <span class="sig-name descname"><span class="pre">_ensure_compatible_format</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.data.sbti.SBTi._ensure_compatible_format" title="Permalink to this definition"></a></dt>
 <dd><p>Convert CTA file to the format expected by the configs
 OPTIMIZED FOR PER-COMPANY FORMAT</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SBTi.data.sbti.SBTi._filter_by_date">
+<span class="sig-name descname"><span class="pre">_filter_by_date</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.DataFrame</span></span></span><a class="headerlink" href="#SBTi.data.sbti.SBTi._filter_by_date" title="Permalink to this definition"></a></dt>
+<dd><p>Filter the CTA file to only include targets published on or before the cutoff date.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>df</strong> – The dataframe to filter</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Filtered dataframe with only targets published on or before cutoff_date</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">

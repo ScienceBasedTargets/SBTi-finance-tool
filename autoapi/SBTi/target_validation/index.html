@@ -93,11 +93,18 @@
 </table>
 <dl class="py class">
 <dt class="sig sig-object py" id="SBTi.target_validation.TargetProtocol">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">SBTi.target_validation.</span></span><span class="sig-name descname"><span class="pre">TargetProtocol</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../configs/index.html#SBTi.configs.PortfolioAggregationConfig" title="SBTi.configs.PortfolioAggregationConfig"><span class="pre">SBTi.configs.PortfolioAggregationConfig</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">PortfolioAggregationConfig</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.target_validation.TargetProtocol" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">SBTi.target_validation.</span></span><span class="sig-name descname"><span class="pre">TargetProtocol</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../configs/index.html#SBTi.configs.PortfolioAggregationConfig" title="SBTi.configs.PortfolioAggregationConfig"><span class="pre">SBTi.configs.PortfolioAggregationConfig</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">PortfolioAggregationConfig</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reporting_date</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">datetime.datetime</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.target_validation.TargetProtocol" title="Permalink to this definition"></a></dt>
 <dd><p>This class validates the targets, to make sure that only active, useful targets are considered. It then combines the targets with company-related data into a dataframe where there’s one row for each of the nine possible target types (short, mid, long * S1+S2, S3, S1+S2+S3). This class follows the procedures outlined by the target protocol that is a part of the “Temperature Rating Methodology” (2020), which has been created by CDP Worldwide and WWF International.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>config</strong> – A Portfolio aggregation config</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>config</strong> – A Portfolio aggregation config</p></li>
+<li><p><strong>reporting_date</strong> – Optional reporting date for target validation and time-frame classification.
+Per the CDP/WWF V1 Temperature Rating Methodology (Section 2.1.4), time frames are “forward looking”
+relative to the reporting year. When provided, targets are validated against this date
+(e.g. a target’s end year must be &gt;= reporting_date’s year) and time-frame buckets
+(short/mid/long) are calculated relative to it. When None, defaults to datetime.now().</p></li>
+</ul>
 </dd>
 </dl>
 <dl class="py method">
@@ -259,9 +266,9 @@ For each company:</p>
 into 6 categories.</p>
 <p>For each category: if more than 1 target is available, filter based on the following criteria
 – Highest boundary coverage
-– Latest base year
+– Latest end year; then latest base year (when end years tie)
 – Target type: Absolute over intensity
-– If all else is equal: average the ambition of targets</p>
+– If all else is equal: prefer the target with complete data for scoring</p>
 </dd></dl>
 
 </dd></dl>

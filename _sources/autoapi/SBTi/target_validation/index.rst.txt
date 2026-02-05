@@ -17,11 +17,16 @@ Classes
 
 
 
-.. py:class:: TargetProtocol(config: Type[SBTi.configs.PortfolioAggregationConfig] = PortfolioAggregationConfig)
+.. py:class:: TargetProtocol(config: Type[SBTi.configs.PortfolioAggregationConfig] = PortfolioAggregationConfig, reporting_date: Optional[datetime.datetime] = None)
 
    This class validates the targets, to make sure that only active, useful targets are considered. It then combines the targets with company-related data into a dataframe where there's one row for each of the nine possible target types (short, mid, long * S1+S2, S3, S1+S2+S3). This class follows the procedures outlined by the target protocol that is a part of the "Temperature Rating Methodology" (2020), which has been created by CDP Worldwide and WWF International.
 
    :param config: A Portfolio aggregation config
+   :param reporting_date: Optional reporting date for target validation and time-frame classification.
+       Per the CDP/WWF V1 Temperature Rating Methodology (Section 2.1.4), time frames are "forward looking"
+       relative to the reporting year. When provided, targets are validated against this date
+       (e.g. a target's end year must be >= reporting_date's year) and time-frame buckets
+       (short/mid/long) are calculated relative to it. When None, defaults to datetime.now().
 
    .. py:method:: process(self, targets: List[SBTi.interfaces.IDataProviderTarget], companies: List[SBTi.interfaces.IDataProviderCompany]) -> pandas.DataFrame
 
@@ -127,9 +132,9 @@ Classes
 
       For each category: if more than 1 target is available, filter based on the following criteria
       -- Highest boundary coverage
-      -- Latest base year
+      -- Latest end year; then latest base year (when end years tie)
       -- Target type: Absolute over intensity
-      -- If all else is equal: average the ambition of targets
+      -- If all else is equal: prefer the target with complete data for scoring
 
 
 
