@@ -19,19 +19,21 @@ class TargetProtocol:
     This class validates the targets, to make sure that only active, useful targets are considered. It then combines the targets with company-related data into a dataframe where there's one row for each of the nine possible target types (short, mid, long * S1+S2, S3, S1+S2+S3). This class follows the procedures outlined by the target protocol that is a part of the "Temperature Rating Methodology" (2020), which has been created by CDP Worldwide and WWF International.
 
     :param config: A Portfolio aggregation config
-    :param cutoff_date: Optional reference date for target validation and time-frame classification.
-        When provided, targets are validated against this date (e.g. a target's end year must be >= cutoff_date's year)
-        and time frames are calculated relative to it. When None, defaults to datetime.now().
+    :param reporting_date: Optional reporting date for target validation and time-frame classification.
+        Per the SBTi Temperature Rating Methodology (Section 2.1.4), time frames are "forward looking"
+        relative to the reporting year. When provided, targets are validated against this date
+        (e.g. a target's end year must be >= reporting_date's year) and time-frame buckets
+        (short/mid/long) are calculated relative to it. When None, defaults to datetime.now().
     """
 
     def __init__(
         self,
         config: Type[PortfolioAggregationConfig] = PortfolioAggregationConfig,
-        cutoff_date: Optional[datetime.datetime] = None,
+        reporting_date: Optional[datetime.datetime] = None,
     ):
         self.c = config
         self.logger = logging.getLogger(__name__)
-        self.reference_date = cutoff_date if cutoff_date is not None else datetime.datetime.now()
+        self.reference_date = reporting_date if reporting_date is not None else datetime.datetime.now()
         self.s2_targets: List[IDataProviderTarget] = []
         self.target_data: pd.DataFrame = pd.DataFrame()
         self.company_data: pd.DataFrame = pd.DataFrame()
