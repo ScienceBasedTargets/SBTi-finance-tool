@@ -231,7 +231,7 @@ def get_data(
     :param data_providers: A list of DataProvider instances
     :param portfolio: A list of PortfolioCompany models
     :param reporting_date: Optional reporting date for target validation and time-frame classification.
-        Per the SBTi Temperature Rating Methodology (Section 2.1.4), time frames are "forward looking"
+        Per the CDP/WWF V1 Temperature Rating Methodology (Section 2.1.4), time frames are "forward looking"
         relative to the reporting year. When provided:
         - Target validation checks end year against reporting_date instead of today
         - Time-frame classification (short/mid/long) is calculated relative to reporting_date
