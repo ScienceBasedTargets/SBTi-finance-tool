@@ -497,7 +497,7 @@ class TemperatureScore(PortfolioAggregation):
         data: Optional[pd.DataFrame] = None,
         data_providers: Optional[List[data.DataProvider]] = None,
         portfolio: Optional[List[PortfolioCompany]] = None,
-        cutoff_date: Optional[datetime.datetime] = None,
+        reporting_date: Optional[datetime.datetime] = None,
     ):
         """
         Calculate the temperature for a dataframe of company data. The columns in the data frame should be a combination
@@ -506,13 +506,14 @@ class TemperatureScore(PortfolioAggregation):
         :param data: The data set (or None if the data should be retrieved)
         :param data_providers: A list of DataProvider instances. Optional, only required if data is empty.
         :param portfolio: A list of PortfolioCompany models. Optional, only required if data is empty.
-        :param cutoff_date: Optional cutoff date for filtering targets. Both SBTi targets (by publication date)
-            and provider targets (by base year) will be filtered to only include targets that existed on or before this date.
+        :param reporting_date: Optional reporting date for target validation and time-frame classification.
+            Per the CDP/WWF V1 Temperature Rating Methodology (Section 2.1.4), time frames are "forward looking"
+            relative to the reporting year. When None, defaults to today's date.
         :return: A data frame containing all relevant information for the targets and companies
         """
         if data is None:
             if data_providers is not None and portfolio is not None:
-                data = utils.get_data(data_providers, portfolio, cutoff_date=cutoff_date)
+                data = utils.get_data(data_providers, portfolio, reporting_date=reporting_date)
             else:
                 raise ValueError(
                     "You need to pass and either a data set or a list of data providers and companies"

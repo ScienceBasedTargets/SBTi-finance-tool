@@ -222,7 +222,7 @@ def merge_target_data(
 def get_data(
     data_providers: List[data.DataProvider],
     portfolio: List[PortfolioCompany],
-    cutoff_date: Optional[datetime.datetime] = None
+    reporting_date: Optional[datetime.datetime] = None,
 ) -> pd.DataFrame:
     """
     Get the required data from the data provider(s), validate the targets and return a 9-box grid for each company.
@@ -230,8 +230,12 @@ def get_data(
 
     :param data_providers: A list of DataProvider instances
     :param portfolio: A list of PortfolioCompany models
-    :param cutoff_date: Optional cutoff date for filtering targets. Both SBTi targets (by publication date)
-        and provider targets (by base year) will be filtered to only include targets that existed on or before this date.
+    :param reporting_date: Optional reporting date for target validation and time-frame classification.
+        Per the CDP/WWF V1 Temperature Rating Methodology (Section 2.1.4), time frames are "forward looking"
+        relative to the reporting year. When provided:
+        - Target validation checks end year against reporting_date instead of today
+        - Time-frame classification (short/mid/long) is calculated relative to reporting_date
+        When None, defaults to today's date.
     :return: A data frame containing the relevant company-target data
     """
     logger = logging.getLogger(__name__)
@@ -242,18 +246,8 @@ def get_data(
     company_data = get_company_data(data_providers, df_portfolio["company_id"].tolist())
     target_data = get_targets(data_providers, df_portfolio["company_id"].tolist())
 
-    # Filter provider targets by cutoff date if provided
-    if cutoff_date is not None:
-        original_count = len(target_data)
-        target_data = [
-            t for t in target_data
-            if t.base_year <= cutoff_date.year
-        ]
-        filtered_count = len(target_data)
-        logger.info(f"Provider target date filter: {filtered_count}/{original_count} targets with base_year <= {cutoff_date.year}")
-
     # Supplement the company data with the SBTi target status and get detailed targets
-    sbti = SBTi(cutoff_date=cutoff_date)
+    sbti = SBTi()
     company_data, sbti_targets = sbti.get_sbti_targets(company_data, _make_id_map(df_portfolio))
     
     # Log information about SBTi targets found
@@ -276,7 +270,7 @@ def get_data(
 
     # Prepare the data - only call process if we have data
     if len(target_data) > 0 and len(company_data) > 0:
-        portfolio_data = TargetProtocol().process(target_data, company_data)
+        portfolio_data = TargetProtocol(reporting_date=reporting_date).process(target_data, company_data)
     else:
         # Create empty DataFrame - companies will get fallback score
         portfolio_data = pd.DataFrame(columns=[ColumnsConfig.COMPANY_ID, ColumnsConfig.COMPANY_NAME])
