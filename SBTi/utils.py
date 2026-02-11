@@ -173,6 +173,9 @@ def dataframe_to_portfolio(df_portfolio: pd.DataFrame) -> List[PortfolioCompany]
     PortfolioCompany model.
     :return: A list of portfolio companies
     """
+    # Ensure the engagement_target column exists (default to False if missing)
+    if ColumnsConfig.ENGAGEMENT_TARGET not in df_portfolio.columns:
+        df_portfolio[ColumnsConfig.ENGAGEMENT_TARGET] = False
     # Fill NaN values and convert to boolean, avoiding FutureWarning
     df_portfolio[ColumnsConfig.ENGAGEMENT_TARGET] = (
         df_portfolio[ColumnsConfig.ENGAGEMENT_TARGET]
