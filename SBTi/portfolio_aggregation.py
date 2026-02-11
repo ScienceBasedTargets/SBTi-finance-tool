@@ -105,14 +105,13 @@ class PortfolioAggregation(ABC):
         """
         if portfolio_aggregation_method == PortfolioAggregationMethod.WATS:
             total_investment_weight = data[self.c.COLS.INVESTMENT_VALUE].sum()
-            try:
-                return data.apply(
-                    lambda row: (row[self.c.COLS.INVESTMENT_VALUE] * row[input_column])
-                    / total_investment_weight,
-                    axis=1,
-                )
-            except ZeroDivisionError:
+            if total_investment_weight == 0:
                 raise ValueError("The portfolio weight is not allowed to be zero")
+            return data.apply(
+                lambda row: (row[self.c.COLS.INVESTMENT_VALUE] * row[input_column])
+                / total_investment_weight,
+                axis=1,
+            )
 
         # Total emissions weighted temperature score (TETS)
         elif portfolio_aggregation_method == PortfolioAggregationMethod.TETS:
@@ -130,17 +129,16 @@ class PortfolioAggregation(ABC):
             emissions = (use_S1S2 * data[self.c.COLS.GHG_SCOPE12]).sum() + (
                 use_S3 * data[self.c.COLS.GHG_SCOPE3]
             ).sum()
-            try:
-                return (
-                    (
-                        use_S1S2 * data[self.c.COLS.GHG_SCOPE12]
-                        + use_S3 * data[self.c.COLS.GHG_SCOPE3]
-                    )
-                    / emissions
-                    * data[input_column]
-                )
-            except ZeroDivisionError:
+            if emissions == 0:
                 raise ValueError("The total emissions should be higher than zero")
+            return (
+                (
+                    use_S1S2 * data[self.c.COLS.GHG_SCOPE12]
+                    + use_S3 * data[self.c.COLS.GHG_SCOPE3]
+                )
+                / emissions
+                * data[input_column]
+            )
 
         elif PortfolioAggregationMethod.is_emissions_based(
             portfolio_aggregation_method
@@ -159,41 +157,39 @@ class PortfolioAggregation(ABC):
             )
 
             # Calculate the total owned emissions of all companies
-            try:
-                self._check_column(data, self.c.COLS.INVESTMENT_VALUE)
-                self._check_column(data, value_column)
-                use_S1S2 = (data[self.c.COLS.SCOPE] == EScope.S1S2) | (
-                    data[self.c.COLS.SCOPE] == EScope.S1S2S3
-                )
-                use_S3 = (data[self.c.COLS.SCOPE] == EScope.S3) | (
-                    data[self.c.COLS.SCOPE] == EScope.S1S2S3
-                )
-                if use_S1S2.any():
-                    self._check_column(data, self.c.COLS.GHG_SCOPE12)
-                if use_S3.any():
-                    self._check_column(data, self.c.COLS.GHG_SCOPE3)
-                data[self.c.COLS.OWNED_EMISSIONS] = (
-                    data[self.c.COLS.INVESTMENT_VALUE] / data[value_column]
-                ) * (
-                    use_S1S2 * data[self.c.COLS.GHG_SCOPE12]
-                    + use_S3 * data[self.c.COLS.GHG_SCOPE3]
-                )
-            except ZeroDivisionError:
+            self._check_column(data, self.c.COLS.INVESTMENT_VALUE)
+            self._check_column(data, value_column)
+            use_S1S2 = (data[self.c.COLS.SCOPE] == EScope.S1S2) | (
+                data[self.c.COLS.SCOPE] == EScope.S1S2S3
+            )
+            use_S3 = (data[self.c.COLS.SCOPE] == EScope.S3) | (
+                data[self.c.COLS.SCOPE] == EScope.S1S2S3
+            )
+            if use_S1S2.any():
+                self._check_column(data, self.c.COLS.GHG_SCOPE12)
+            if use_S3.any():
+                self._check_column(data, self.c.COLS.GHG_SCOPE3)
+            if (data[value_column] == 0).any():
                 raise ValueError(
                     "To calculate the aggregation, the {} column may not be zero".format(
                         value_column
                     )
                 )
+            data[self.c.COLS.OWNED_EMISSIONS] = (
+                data[self.c.COLS.INVESTMENT_VALUE] / data[value_column]
+            ) * (
+                use_S1S2 * data[self.c.COLS.GHG_SCOPE12]
+                + use_S3 * data[self.c.COLS.GHG_SCOPE3]
+            )
             owned_emissions = data[self.c.COLS.OWNED_EMISSIONS].sum()
 
-            try:
-                # Calculate the MOTS value per company
-                return data.apply(
-                    lambda row: (row[self.c.COLS.OWNED_EMISSIONS] / owned_emissions)
-                    * row[input_column],
-                    axis=1,
-                )
-            except ZeroDivisionError:
+            if owned_emissions == 0:
                 raise ValueError("The total owned emissions can not be zero")
+            # Calculate the MOTS value per company
+            return data.apply(
+                lambda row: (row[self.c.COLS.OWNED_EMISSIONS] / owned_emissions)
+                * row[input_column],
+                axis=1,
+            )
         else:
             raise ValueError("The specified portfolio aggregation method is invalid")
