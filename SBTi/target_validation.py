@@ -176,21 +176,27 @@ class TargetProtocol:
                     reverse=True,
                 )
                 s2 = matches[0]
+                ghg_sum = target.base_year_ghg_s1 + s2.base_year_ghg_s2
+                if ghg_sum == 0:
+                    # Can't combine targets if total base year GHG is zero
+                    return target
                 combined_coverage = (
                     target.coverage_s1 * target.base_year_ghg_s1
                     + s2.coverage_s2 * s2.base_year_ghg_s2
-                ) / (target.base_year_ghg_s1 + s2.base_year_ghg_s2)
-                target.reduction_ambition = (
-                    (
-                        target.reduction_ambition
-                        * target.coverage_s1
-                        * target.base_year_ghg_s1
-                        + s2.reduction_ambition * s2.coverage_s2 * s2.base_year_ghg_s2
-                    )
-                ) / (
+                ) / ghg_sum
+                weighted_coverage = (
                     target.coverage_s1 * target.base_year_ghg_s1
                     + s2.coverage_s2 * s2.base_year_ghg_s2
                 )
+                if weighted_coverage == 0:
+                    # Can't weight reduction ambition if weighted coverage is zero
+                    return target
+                target.reduction_ambition = (
+                    target.reduction_ambition
+                    * target.coverage_s1
+                    * target.base_year_ghg_s1
+                    + s2.reduction_ambition * s2.coverage_s2 * s2.base_year_ghg_s2
+                ) / weighted_coverage
 
                 target.coverage_s1 = combined_coverage
                 target.coverage_s2 = combined_coverage

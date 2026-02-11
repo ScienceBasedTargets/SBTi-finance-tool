@@ -289,7 +289,11 @@ def get_data(
         # These rows will have null values that trigger the fallback score path
         placeholder_rows = []
         for company_id in companies_without_data:
-            company_info = df_portfolio[df_portfolio[ColumnsConfig.COMPANY_ID] == company_id].iloc[0]
+            filtered = df_portfolio[df_portfolio[ColumnsConfig.COMPANY_ID] == company_id]
+            if filtered.empty:
+                logger.warning(f"Company {company_id} not found in portfolio, skipping placeholder.")
+                continue
+            company_info = filtered.iloc[0]
             for scope in [EScope.S1S2, EScope.S3, EScope.S1S2S3]:
                 for time_frame in [ETimeFrames.SHORT, ETimeFrames.MID, ETimeFrames.LONG]:
                     placeholder_rows.append({
