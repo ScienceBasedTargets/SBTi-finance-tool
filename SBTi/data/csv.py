@@ -45,7 +45,7 @@ class CSVProvider(DataProvider):
         model_targets: List[IDataProviderTarget] = []
         for target in targets:
             try:
-                model_targets.append(IDataProviderTarget.parse_obj(target))
+                model_targets.append(IDataProviderTarget.model_validate(target))
             except ValidationError as e:
                 logger.warning(
                     "(one of) the target(s) of company %s is invalid and will be skipped"
@@ -64,7 +64,7 @@ class CSVProvider(DataProvider):
         """
         companies = self.data.to_dict(orient="records")
         model_companies: List[IDataProviderCompany] = [
-            IDataProviderCompany.parse_obj(company) for company in companies
+            IDataProviderCompany.model_validate(company) for company in companies
         ]
         model_companies = [
             target for target in model_companies if target.company_id in company_ids

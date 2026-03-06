@@ -2,6 +2,8 @@
 Data Requirements
 ********************
 
+.. note:: These data requirements apply to **Version 1.0** of the CDP/WWF Temperature Rating Methodology as implemented in this tool.
+
 To calculate your temperature score and portfolio coverage, the tool
 requires several types of data.
 

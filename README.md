@@ -4,6 +4,8 @@
 
 # SBTi Temperature Alignment tool
 
+> **Note:** This tool implements [**Version 1.0**](https://sciencebasedtargets.org/wp-content/uploads/2020/09/Temperature-Rating-Methodology-V1.pdf) of the CDP/WWF Temperature Rating Methodology, for setting and reporting on SBTi Financial Institutions Near-Term Targets. For Version 1.5 of the methodology, please refer to the [CDP-WWF Temperature Scoring Methodology](https://www.cdp.net/en/data-licenses/net-zero-alignment-dataset/the-cdp-wwf-temperature-scoring-methodology).
+
 This package helps companies and financial institutions to assess the temperature alignment of current
 targets, commitments, and investment and lending portfolios, and to use this information to develop
 targets for official validation by the SBTi.

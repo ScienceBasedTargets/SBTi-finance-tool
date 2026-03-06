@@ -1,6 +1,8 @@
 Functional Overview
 ================================================================
 
+.. note:: This tool implements `Version 1.0 <https://sciencebasedtargets.org/wp-content/uploads/2020/09/Temperature-Rating-Methodology-V1.pdf>`__ of the CDP/WWF Temperature Rating Methodology, for setting and reporting on SBTi Financial Institutions Near-Term Targets. For Version 1.5 of the methodology, please refer to the `CDP-WWF Temperature Scoring Methodology <https://www.cdp.net/en/data-licenses/net-zero-alignment-dataset/the-cdp-wwf-temperature-scoring-methodology>`__.
+
 Temperature Score
 -----------------
 

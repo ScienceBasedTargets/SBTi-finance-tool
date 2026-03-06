@@ -139,7 +139,7 @@ def _flatten_user_fields(record: PortfolioCompany):
     :param record: The record to flatten
     :return:
     """
-    record_dict = record.dict(exclude_none=True)
+    record_dict = record.model_dump(exclude_none=True)
     if record.user_fields is not None:
         for key, value in record_dict["user_fields"].items():
             record_dict[key] = value
@@ -173,6 +173,9 @@ def dataframe_to_portfolio(df_portfolio: pd.DataFrame) -> List[PortfolioCompany]
     PortfolioCompany model.
     :return: A list of portfolio companies
     """
+    # Ensure the engagement_target column exists (default to False if missing)
+    if ColumnsConfig.ENGAGEMENT_TARGET not in df_portfolio.columns:
+        df_portfolio[ColumnsConfig.ENGAGEMENT_TARGET] = False
     # Fill NaN values and convert to boolean, avoiding FutureWarning
     df_portfolio[ColumnsConfig.ENGAGEMENT_TARGET] = (
         df_portfolio[ColumnsConfig.ENGAGEMENT_TARGET]
@@ -180,7 +183,7 @@ def dataframe_to_portfolio(df_portfolio: pd.DataFrame) -> List[PortfolioCompany]
         .astype("bool")
     )
     return [
-        PortfolioCompany.parse_obj(company)
+        PortfolioCompany.model_validate(company)
         for company in df_portfolio.to_dict(orient="records")
     ]
 

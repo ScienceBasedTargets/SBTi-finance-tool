@@ -5,7 +5,7 @@ import random
 
 
 def print_aggregations(aggregations):
-    aggregations = aggregations.dict()
+    aggregations = aggregations.model_dump()
     print("{:<10s} {:<10s} {}".format('Timeframe', 'Scope', 'Temp score'))
     for time_frame, time_frame_values in aggregations.items():
         if time_frame_values:
@@ -15,7 +15,7 @@ def print_aggregations(aggregations):
 
 
 def print_percentage_default_scores(aggregations):
-    aggregations = aggregations.dict()
+    aggregations = aggregations.model_dump()
     print("{:<10s} {:<10s} {}".format('Timeframe', 'Scope', '% Default score'))
     for time_frame, time_frame_values in aggregations.items():
         if time_frame_values:
@@ -33,7 +33,7 @@ def print_scenario_gain(actual_aggregations, scenario_aggregations):
 
 
 def print_grouped_scores(aggregations):
-    aggregations = aggregations.dict()
+    aggregations = aggregations.model_dump()
     for time_frame, time_frame_values in aggregations.items():
         if time_frame_values:
             for scope, scope_values in time_frame_values.items():
@@ -242,12 +242,12 @@ def get_contributions_per_group(aggregations, analysis_parameters, group):
     timeframe, scope, grouping = analysis_parameters
     scope = str(scope[0])
     timeframe = str(timeframe[0]).lower()
-    aggregations = aggregations.dict()
+    aggregations = aggregations.model_dump()
 
     contributions = aggregations[timeframe][scope]['grouped'][group]['contributions']
     contributions = pd.DataFrame(contributions)
     columns = ['group'] + contributions.columns.tolist()
     contributions['group'] = group
     contributions = contributions[columns]
-    contributions.drop(columns=['contribution'], inplace=True)
+    contributions = contributions.drop(columns=['contribution'])
     return contributions

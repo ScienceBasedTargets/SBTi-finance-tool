@@ -222,8 +222,10 @@ class TemperatureScore(PortfolioAggregation):
             )
         else:
             # Only first 3 characters of ISIC code are relevant for the absolute mappings
+            isic = target[self.c.COLS.COMPANY_ISIC]
+            isic_prefix = isic[:3] if isinstance(isic, str) else "other"
             return self.c.ABSOLUTE_MAPPINGS.get(
-                (target[self.c.COLS.COMPANY_ISIC][:3], target[self.c.COLS.SCOPE]),
+                (isic_prefix, target[self.c.COLS.SCOPE]),
                 self.c.ABSOLUTE_MAPPINGS.get(("other", target[self.c.COLS.SCOPE])),
             )
 
@@ -443,7 +445,7 @@ class TemperatureScore(PortfolioAggregation):
 
         data[self.c.COLS.TARGET_REFERENCE_NUMBER] = data[
             self.c.COLS.TARGET_REFERENCE_NUMBER
-        ].replace({np.nan: self.c.VALUE_TARGET_REFERENCE_ABSOLUTE})
+        ].fillna(self.c.VALUE_TARGET_REFERENCE_ABSOLUTE)
         data[self.c.COLS.SR15] = data.apply(
             lambda row: self.get_target_mapping(row), axis=1
         )
@@ -560,7 +562,7 @@ class TemperatureScore(PortfolioAggregation):
                 score=weighted_scores.sum(),
                 proportion=len(weighted_scores) / (total_companies / 100.0),
                 contributions=[
-                    AggregationContribution.parse_obj(contribution)
+                    AggregationContribution.model_validate(contribution)
                     for contribution in contributions
                 ],
             ),
@@ -701,8 +703,8 @@ class TemperatureScore(PortfolioAggregation):
         :param scores: The data set with the temperature scores
         :return: The input data frame, anonymized
         """
-        scores.drop(
-            columns=[self.c.COLS.COMPANY_ID, self.c.COLS.COMPANY_ISIN], inplace=True
+        scores = scores.drop(
+            columns=[self.c.COLS.COMPANY_ID, self.c.COLS.COMPANY_ISIN]
         )
         for index, company_name in enumerate(scores[self.c.COLS.COMPANY_NAME].unique()):
             scores.loc[
