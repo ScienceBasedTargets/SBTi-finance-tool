@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "sbti-finance-tool"
 version = "1.2.5"
-description = "This package implements Version 1.0 of the CDP/WWF Temperature Rating Methodology, helping companies and financial institutions to assess the temperature alignment of current targets, commitments, and investment and lending portfolios, and to use this information to develop targets for official validation by the SBTi."
+description = "This package implements V1 of the CDP/WWF Temperature Rating Methodology and calculates portfolio coverage for SBTi near-term targets. The portfolio coverage notebook can also be used for climate alignment assessment under the FINZ Standard."
 authors = ["sbti <financialinstitutions@sciencebasedtargets.org>"]
 readme = "README.md"
 classifiers = [
