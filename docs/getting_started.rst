@@ -6,7 +6,7 @@ You can install it easily through PIP. There are a couple ways to get started us
 The easiest option is to run our getting started notebook on `Google Colab <https://colab.research.google.com/>`__.
 Alternatively, you can also run the `notebooks <https://github.com/ScienceBasedTargets/SBTi-finance-tool/tree/master/examples>`__ locally or start from scratch using the API reference.
 
-.. note:: This page focuses on the Python module. The getting started documentation for the REST API can be found on its `dedicated page <https://ofbdabv.github.io/SBTi/rest_api.html>`__. For a distinction between the different parts of the project, have a look at `the homepage <https://ofbdabv.github.io/SBTi/index.html>`__.
+.. note:: This page focuses on the Python module. The getting started documentation for the REST API can be found on its `dedicated page <rest_api.html>`__.
 
 Google Colab
 -------------
@@ -52,7 +52,7 @@ Or you can install the latest stable release from PyPi
 
     pip install sbti-finance-tool
 
-The `API reference <https://ofbdabv.github.io/SBTi/autoapi/index.html>`_ should provide a clear overview of the module's API and its usage.
+The API reference in the ``SBTi`` package source should provide a clear overview of the module's API and its usage.
 
 
 Using the SBTi Data Provider
