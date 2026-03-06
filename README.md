@@ -4,44 +4,18 @@
 
 # SBTi Temperature Alignment tool
 
+> **Note:** This tool implements [**Version 1.0**](https://sciencebasedtargets.org/wp-content/uploads/2020/09/Temperature-Rating-Methodology-V1.pdf) of the CDP/WWF Temperature Rating Methodology, for setting and reporting on SBTi Financial Institutions Near-Term Targets. For Version 1.5 of the methodology, please refer to the [CDP-WWF Temperature Scoring Methodology](https://www.cdp.net/en/data-licenses/net-zero-alignment-dataset/the-cdp-wwf-temperature-scoring-methodology).
+
 This package helps companies and financial institutions to assess the temperature alignment of current
 targets, commitments, and investment and lending portfolios, and to use this information to develop
 targets for official validation by the SBTi.
 
-This tool can be used either as a standalone Python package, a REST API or as a simple webapp which provides a simple skin on the API.
-So, the SBTi toolkit caters for three types of usage:
+This tool can be used as a standalone Python package or as a containerised REST API.
 
-- Users can integrate the Python package in their codebase
-- The tool can be included as a Microservice (containerised REST API) in any IT infrastructure (in the cloud or on premise)
-- As an webapp, exposing the functionality with a simple user interface.
+- **Python package**: Integrate directly into your codebase or run via Jupyter notebooks
+- **REST API**: Deploy as a microservice using the [SBTi Finance Tool API](https://github.com/ScienceBasedTargets/SBTi-finance-tool-api)
 
-To following diagram provides an overview of the different parts of the toolkit:
-
-    +-------------------------------------------------+
-    |   UI     : Simple user interface on top of API  |
-    |   Install: via dockerhub                        |
-    |            docker.io/sbti/ui:latest             |
-    |                                                 |
-    | +-----------------------------------------+     |
-    | | REST API: Dockerized FastAPI/NGINX      |     |
-    | | Source : github.com/OFBDABV/SBTi_api    |     |
-    | | Install: via source or dockerhub        |     |
-    | |          docker.io/sbti/sbti/api:latest |     |
-    | |                                         |     |
-    | | +---------------------------------+     |     |
-    | | |                                 |     |     |
-    | | |Core   : Python Module           |     |     |
-    | | |Source : github.com/ScienceBasedTargets/     |
-    | | |               SBTi-finance-tool |     |     |
-    | | |Install: via source or PyPi      |     |     |
-    | | |                                 |     |     |
-    | | +---------------------------------+     |     |
-    | +-----------------------------------------+     |
-    +-------------------------------------------------+
-
-As shown above the API is dependent on the Python Repo, in the same way the UI requires the API backend. These dependencies are scripted in the Docker files.
-
-> This repository only contains the Python module. If you'd like to use the REST API, please refer to [this repository](https://github.com/ScienceBasedTargets/SBTi-finance-tool-api) or the same repository on [Dockerhub](https://docker.io/sbti/sbti/api:latest).
+> This repository contains the Python package. For the REST API, see the [API repository](https://github.com/ScienceBasedTargets/SBTi-finance-tool-api).
 
 ## Structure
 
@@ -49,9 +23,8 @@ The folder structure for this project is as follows:
 
     .
     ├── .github                 # Github specific files (Github Actions workflows)
-    ├── app                     # FastAPI app files for the API endpoints
     ├── docs                    # Documentation files (Sphinx)
-    ├── config                  # Config files for the Docker container
+    ├── examples                # Jupyter notebook examples
     ├── SBTi                    # The main Python package for the temperature alignment tool
     └── test                    # Automated unit tests for the SBTi package (Nose2 tests)
 

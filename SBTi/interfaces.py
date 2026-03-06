@@ -2,15 +2,15 @@ from enum import Enum
 from typing import Optional, Dict, List
 
 import pandas as pd
-from pydantic import BaseModel, validator, Field
+from pydantic import BaseModel, field_validator, model_validator, Field
 
 
 class AggregationContribution(BaseModel):
     company_name: str
     company_id: str
     temperature_score: float
-    contribution_relative: Optional[float]
-    contribution: Optional[float]
+    contribution_relative: Optional[float] = None
+    contribution: Optional[float] = None
 
     def __getitem__(self, item):
         return getattr(self, item)
@@ -35,18 +35,18 @@ class ScoreAggregation(BaseModel):
 
 
 class ScoreAggregationScopes(BaseModel):
-    S1S2: Optional[ScoreAggregation]
-    S3: Optional[ScoreAggregation]
-    S1S2S3: Optional[ScoreAggregation]
+    S1S2: Optional[ScoreAggregation] = None
+    S3: Optional[ScoreAggregation] = None
+    S1S2S3: Optional[ScoreAggregation] = None
 
     def __getitem__(self, item):
         return getattr(self, item)
 
 
 class ScoreAggregations(BaseModel):
-    short: Optional[ScoreAggregationScopes]
-    mid: Optional[ScoreAggregationScopes]
-    long: Optional[ScoreAggregationScopes]
+    short: Optional[ScoreAggregationScopes] = None
+    mid: Optional[ScoreAggregationScopes] = None
+    long: Optional[ScoreAggregationScopes] = None
 
     def __getitem__(self, item):
         return getattr(self, item)
@@ -54,44 +54,52 @@ class ScoreAggregations(BaseModel):
 
 class ScenarioInterface(BaseModel):
     number: int
-    engagement_type: Optional[str]
+    engagement_type: Optional[str] = None
 
 
 class PortfolioCompany(BaseModel):
     company_name: str
     company_id: str
-    company_isin: Optional[str]
+    company_isin: Optional[str] = None
     company_lei: Optional[str] = 'nan'
     investment_value: float
     engagement_target: Optional[bool] = False
-    user_fields: Optional[dict]
+    user_fields: Optional[dict] = None
 
 
 class IDataProviderCompany(BaseModel):
     company_name: str
     company_id: str
-    isic: str
-    ghg_s1s2: Optional[float]
-    ghg_s3: Optional[float]
+    isic: Optional[str] = None
+    ghg_s1s2: Optional[float] = None
+    ghg_s3: Optional[float] = None
 
-    country: Optional[str]
-    region: Optional[str]
-    sector: Optional[str]
-    industry_level_1: Optional[str]
-    industry_level_2: Optional[str]
-    industry_level_3: Optional[str]
-    industry_level_4: Optional[str]
+    country: Optional[str] = None
+    region: Optional[str] = None
+    sector: Optional[str] = None
+    industry_level_1: Optional[str] = None
+    industry_level_2: Optional[str] = None
+    industry_level_3: Optional[str] = None
+    industry_level_4: Optional[str] = None
 
-    company_revenue: Optional[float]
-    company_market_cap: Optional[float]
-    company_enterprise_value: Optional[float]
-    company_total_assets: Optional[float]
-    company_cash_equivalents: Optional[float]
+    company_revenue: Optional[float] = None
+    company_market_cap: Optional[float] = None
+    company_enterprise_value: Optional[float] = None
+    company_total_assets: Optional[float] = None
+    company_cash_equivalents: Optional[float] = None
 
     sbti_validated: bool = Field(
         False,
         description='True if the SBTi target status is "Target set", false otherwise',
     )
+
+    @model_validator(mode='before')
+    @classmethod
+    def coerce_nan_to_none(cls, data):
+        if isinstance(data, dict):
+            return {k: None if isinstance(v, float) and pd.isna(v) else v
+                    for k, v in data.items()}
+        return data
 
 
 class SortableEnum(Enum):
@@ -149,7 +157,7 @@ class ETimeFrames(SortableEnum):
 class IDataProviderTarget(BaseModel):
     company_id: str
     target_type: str
-    intensity_metric: Optional[str]
+    intensity_metric: Optional[str] = None
     scope: EScope
     coverage_s1: float
     coverage_s2: float
@@ -159,12 +167,20 @@ class IDataProviderTarget(BaseModel):
     base_year_ghg_s1: float
     base_year_ghg_s2: float
     base_year_ghg_s3: float
-    start_year: Optional[int]
+    start_year: Optional[int] = None
     end_year: int
-    time_frame: Optional[ETimeFrames]
+    time_frame: Optional[ETimeFrames] = None
     achieved_reduction: Optional[float] = 0
 
-    @validator("start_year", pre=True, always=False)
+    @field_validator("intensity_metric", "time_frame", mode="before")
+    @classmethod
+    def coerce_nan_str_to_none(cls, val):
+        if isinstance(val, float) and pd.isna(val):
+            return None
+        return val
+
+    @field_validator("start_year", mode="before")
+    @classmethod
     def validate_e(cls, val):
         if val == "" or val == "nan" or pd.isnull(val):
             return None

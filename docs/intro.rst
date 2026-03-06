@@ -1,6 +1,8 @@
 Introduction to temperature scoring and portfolio coverage methods
 ==================================================================
 
+.. note:: This tool implements `Version 1.0 <https://sciencebasedtargets.org/wp-content/uploads/2020/09/Temperature-Rating-Methodology-V1.pdf>`__ of the CDP/WWF Temperature Rating Methodology, for setting and reporting on SBTi Financial Institutions Near-Term Targets. For Version 1.5 of the methodology, please refer to the `CDP-WWF Temperature Scoring Methodology <https://www.cdp.net/en/data-licenses/net-zero-alignment-dataset/the-cdp-wwf-temperature-scoring-methodology>`__.
+
 Three methods are currently supported by
 the \ `SBTi <https://sciencebasedtargets.org/financial-institutions>`__ for
 setting targets on scope 3 portfolio emissions: the Sectoral
@@ -10,7 +12,7 @@ Temperature Scoring, require assessing the targets disclosed by the
 companies within a financial institution’s portfolio.
 
 Financial institutions may use the portfolio coverage
-and/or \ `temperature scoring
+and/or \ `V1.0 temperature scoring
 methods <https://sciencebasedtargets.org/wp-content/uploads/2020/09/Temperature-Rating-Methodology-V1.pdf>`__ to
 set targets for their corporate instruments, including corporate debt,
 listed equity and bonds, and private equity and debt (See relevant
@@ -60,7 +62,7 @@ and portfolio level, in addition to providing analytics on target
 setting and company emission reduction ambitions. It also gives users
 access to what-if analysis, to aid their decision-making process. The
 code reflects the logical steps that are outlined in the publicly
-available \ `*temperature scoring
+available \ `*V1.0 temperature scoring
 methodology* <https://sciencebasedtargets.org/wp-content/uploads/2020/09/Temperature-Rating-Methodology-V1.pdf>`__,
 developed
 by \ `*CDP* <https://www.cdp.net/>`__ and `*WWF* <https://wwf.panda.org/>`__.
@@ -294,7 +296,7 @@ These are described in the table below.
 
 See `Data Requirements <https://sciencebasedtargets.github.io/SBTi-finance-tool/DataRequirements.html>`__ section for more detailed information.
 
-Also refer to the full methodology for \ `temperature
+Also refer to the full V1.0 methodology for \ `temperature
 scoring <https://sciencebasedtargets.org/wp-content/uploads/2020/09/Temperature-Rating-Methodology-V1.pdf>`__.
 
 Where can I find the data?

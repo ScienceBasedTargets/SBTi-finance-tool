@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "sbti-finance-tool"
-version = "1.2.4.1"
-description = "This package helps companies and financial institutions to assess the temperature alignment of current targets, commitments, and investment and lending portfolios, and to use this information to develop targets for official validation by the SBTi."
+version = "1.2.5"
+description = "This package implements V1 of the CDP/WWF Temperature Rating Methodology and calculates portfolio coverage for SBTi near-term targets. The portfolio coverage notebook can also be used for climate alignment assessment under the FINZ Standard."
 authors = ["sbti <financialinstitutions@sciencebasedtargets.org>"]
 readme = "README.md"
 classifiers = [
@@ -14,7 +14,10 @@ classifiers = [
     "Intended Audience :: Developers",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3 :: Only",
     "Topic :: Software Development",
     "Topic :: Scientific/Engineering",
@@ -30,14 +33,12 @@ packages = [{ include = "SBTi" }]
 
 [tool.poetry.dependencies]
 python = ">=3.9,<4"
-pydantic = "1.10.13"
-six = "1.16.0"
-numpy = ">=1.21.0, <2.0.0"
-pandas = "1.5.3"
-xlrd = "2.0.1"
-requests = "2.32.5"
-openpyxl = "3.1.2"
-cleo = "^2.0.1"
+pydantic = ">=2.0.0,<3.0.0"
+numpy = ">=1.21.0,<3.0.0"
+pandas = ">=1.5.3,<4.0.0"
+xlrd = ">=2.0.0"
+requests = ">=2.0.0"
+openpyxl = ">=3.1.2,<4.0.0"
 
 
 [tool.poetry.group.dev.dependencies]

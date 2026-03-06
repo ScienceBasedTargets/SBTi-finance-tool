@@ -51,7 +51,7 @@ class TargetProtocol:
         """
         # Create multiindex on company, timeframe and scope for performance later on
         targets = self.prepare_targets(targets)
-        self.target_data = pd.DataFrame.from_records([c.dict() for c in targets])
+        self.target_data = pd.DataFrame.from_records([c.model_dump() for c in targets])
 
         # Create an indexed DF for performance purposes
         self.target_data.index = (
@@ -63,7 +63,7 @@ class TargetProtocol:
         )
         self.target_data = self.target_data.sort_index()
 
-        self.company_data = pd.DataFrame.from_records([c.dict() for c in companies])
+        self.company_data = pd.DataFrame.from_records([c.model_dump() for c in companies])
         self.group_targets()
         return pd.merge(
             left=self.data, right=self.company_data, how="outer", on=["company_id"]
