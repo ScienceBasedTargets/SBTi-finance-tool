@@ -233,6 +233,103 @@ class EdgeCasesTest(unittest.TestCase):
         )
 
 
+    def test_target_selection_most_ambitious_tiebreaker(self):
+        """
+        When two targets are identical across every selection criterion
+        (coverage, end_year, base_year, target_type) and both have complete
+        data, but differ only in reduction_ambition, the most ambitious target
+        must be selected — deterministically, regardless of input row order.
+
+        Covers the case where an S1+S2+S3 target is split into an extra S1+S2
+        target that ties an explicit S1+S2 target on all criteria but differs
+        in ambition.
+        """
+        company_id = "AmbitionTieCo"
+        company = IDataProviderCompany(
+            company_name=company_id,
+            company_id=company_id,
+            ghg_s1s2=100,
+            ghg_s3=0,
+            company_revenue=100,
+            company_market_cap=100,
+            company_enterprise_value=100,
+            company_total_assets=100,
+            company_cash_equivalents=100,
+            isic="A12",
+        )
+
+        def make_target(reduction_ambition):
+            return IDataProviderTarget(
+                company_id=company_id,
+                target_type="abs",
+                scope=EScope.S1,
+                coverage_s1=1.0,
+                coverage_s2=1.0,
+                coverage_s3=0,
+                reduction_ambition=reduction_ambition,
+                base_year=2021,
+                base_year_ghg_s1=100,
+                base_year_ghg_s2=50,
+                base_year_ghg_s3=0,
+                # end_year in the MID window under the default reference date so
+                # the target is scored (not classified SHORT / given a fallback).
+                end_year=2035,
+            )
+
+        # Two complete targets, identical except ambition.
+        target_low = make_target(0.30)
+        target_high = make_target(0.70)
+
+        pf_company = PortfolioCompany(
+            company_name=company_id,
+            company_id=company_id,
+            investment_value=100,
+            company_isin=company_id,
+        )
+
+        temp_score = TemperatureScore(
+            time_frames=[ETimeFrames.MID],
+            scopes=[EScope.S1S2],
+        )
+
+        def score_for(targets):
+            provider = TestDataProvider(
+                targets=[copy.deepcopy(t) for t in targets],
+                companies=[company],
+            )
+            data = SBTi.utils.get_data([provider], [pf_company])
+            scores = temp_score.calculate(data)
+            return scores[
+                (scores["scope"] == EScope.S1S2)
+                & (scores["company_id"] == company_id)
+            ]["temperature_score"].iloc[0]
+
+        # Both input orderings must agree.
+        score_low_first = score_for([target_low, target_high])
+        score_high_first = score_for([target_high, target_low])
+        self.assertEqual(
+            score_low_first,
+            score_high_first,
+            f"Score differs by input order: {score_low_first} vs {score_high_first}",
+        )
+
+        # And the deterministic result must be the most-ambitious target's score:
+        # equal to the high-ambition-only run, not the low-ambition-only run.
+        score_high_only = score_for([target_high])
+        score_low_only = score_for([target_low])
+        self.assertNotEqual(
+            score_high_only,
+            score_low_only,
+            "Test setup invalid: the two ambitions should yield different scores",
+        )
+        self.assertEqual(
+            score_low_first,
+            score_high_only,
+            "Most ambitious target should have been selected, "
+            f"but selected score {score_low_first} matches the less ambitious "
+            f"target ({score_low_only}) instead of {score_high_only}",
+        )
+
     def test_power_sector_intensity_mapping(self):
         """
         Verify that Power sector intensity targets use the correct SR15 variable
