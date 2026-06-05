@@ -2,8 +2,10 @@
 #
 # Prerequisites (one-time repo settings, Settings > General and Settings > Branches):
 #   1. Enable "Allow auto-merge".
-#   2. Add a branch protection rule on `main` that requires status checks to pass
-#      (e.g. the ossaudit check). `gh pr merge --auto` only merges after those pass.
+#   2. Add a branch protection rule on `main` that requires status checks to pass.
+#      `gh pr merge --auto` only merges after those pass. NOTE: no workflow
+#      currently runs on pull_request, so add a PR-triggered check (e.g. tests)
+#      before relying on auto-merge as a real gate.
 # Major-version updates are intentionally left for manual review.
 name: Dependabot auto-merge
 
