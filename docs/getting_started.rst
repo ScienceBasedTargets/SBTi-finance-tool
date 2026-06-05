@@ -40,7 +40,7 @@ To do this, run the following command::
     cd examples conda env create -f environment.yml activate sbti_getting_started jupyter notebook
 
 A tab should now open in your web browser. If you are using a virtual environment, you can install the required packages using the requirements.txt file in the examples directory. 
-Make sure that your Python version is at least 3.9.
+Make sure that your Python version is at least 3.10.
 
 Python code
 ---------------------
