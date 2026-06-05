@@ -1,21 +1,22 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Contributing &mdash; SBTi Temperature Alignment tool  documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/doctools.js"></script>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -28,11 +29,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> SBTi Temperature Alignment tool
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            SBTi Temperature Alignment tool
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -42,7 +47,7 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction to temperature scoring and portfolio coverage methods</a></li>
 <li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started Using Python</a></li>
-<li class="toctree-l1"><a class="reference internal" href="rest_api.html">Getting Started Using REST API &amp; UI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rest_api.html">Getting Started Using REST API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="FunctionalOverview.html">Functional Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="DataRequirements.html">Data Requirements</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Legends.html">Data Legends</a></li>
@@ -80,8 +85,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>Contributing</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Contributing</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/contributing.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -92,11 +97,11 @@
            <div itemprop="articleBody">
              
   <section id="contributing">
-<h1>Contributing<a class="headerlink" href="#contributing" title="Permalink to this headline"></a></h1>
+<h1>Contributing<a class="headerlink" href="#contributing" title="Link to this heading"></a></h1>
 <p>Any contribution is highly appreciated. The most common way to contribute to the project is through coding, however contributions to
 the documentation are also very welcome.</p>
 <section id="submitting-a-bug-report-or-a-feature-request">
-<h2>Submitting a bug report or a feature request<a class="headerlink" href="#submitting-a-bug-report-or-a-feature-request" title="Permalink to this headline"></a></h2>
+<h2>Submitting a bug report or a feature request<a class="headerlink" href="#submitting-a-bug-report-or-a-feature-request" title="Link to this heading"></a></h2>
 <p>To keep track of open issues and feature requests, we will use <a class="reference external" href="https://github.com/ScienceBasedTargets/SBTi-finance-tool/issues/">Github’s issue tracker</a>.</p>
 <p>If you encounter any bugs or missing features, please do not hesitate to open a ticket. Before submitting a report, please check that the issue has not already been reported.
 For ease of comprehension, please ensure your report includes the following characteristics:</p>
@@ -106,7 +111,7 @@ For ease of comprehension, please ensure your report includes the following char
 </ul>
 </section>
 <section id="contributing-code">
-<h2>Contributing code<a class="headerlink" href="#contributing-code" title="Permalink to this headline"></a></h2>
+<h2>Contributing code<a class="headerlink" href="#contributing-code" title="Link to this heading"></a></h2>
 <p>Our preferred way for contributing code is to fork the repository, make changes on your personal fork and then create a pull request to merge your changes back into the main repository.
 Before a pull request can be approved it needs to be reviewed by two core contributors, then these automated checks need to be passed (see “Coding Guidelines” section below).</p>
 <div class="admonition note">
@@ -114,7 +119,7 @@ Before a pull request can be approved it needs to be reviewed by two core contri
 <p>Please assign the issue you are working on to yourself so we can avoid duplicate efforts.</p>
 </div>
 <section id="getting-started">
-<h3>Getting started<a class="headerlink" href="#getting-started" title="Permalink to this headline"></a></h3>
+<h3>Getting started<a class="headerlink" href="#getting-started" title="Link to this heading"></a></h3>
 <p>Before getting started it is important to have a clean Python environment. The recommended Python version is 3.6 or higher.
 An anaconda environment file is provided in the root of the project, as is a PIP requirements.txt file.
 The easiest way to work on the Python module is by installing it in development mode. This can be done using the following command:</p>
@@ -125,16 +130,16 @@ The easiest way to work on the Python module is by installing it in development 
 The Jupyter notebooks in the “examples” directory have been setup to use auto-reload. Thus, if you now make any changes to your local code, they will be automatically reflected in the notebook.</p>
 </section>
 <section id="coding-guidelines">
-<h3>Coding guidelines<a class="headerlink" href="#coding-guidelines" title="Permalink to this headline"></a></h3>
+<h3>Coding guidelines<a class="headerlink" href="#coding-guidelines" title="Link to this heading"></a></h3>
 <p>In general the code follows three principals, <a class="reference external" href="https://en.wikipedia.org/wiki/Object-oriented_programming">OOP</a>, <a class="reference external" href="https://www.python.org/dev/peps/pep-0008/">PEP8 (code style)</a> and <a class="reference external" href="https://www.python.org/dev/peps/pep-0484/">PEP 484 (type hinting)</a>.
 In addition, we use Flake8 to lint the code, MyPy to check the type hints and Nose2 to do unit testing. These checks are done automatically when attempting to merge a pull request into master.</p>
 </section>
 </section>
 <section id="releasing">
-<h2>Releasing<a class="headerlink" href="#releasing" title="Permalink to this headline"></a></h2>
+<h2>Releasing<a class="headerlink" href="#releasing" title="Link to this heading"></a></h2>
 <p>To release a new version of the module you need to take two steps, create a new PyPi release and generate the documentation.</p>
 <section id="generate-documentation">
-<h3>Generate documentation<a class="headerlink" href="#generate-documentation" title="Permalink to this headline"></a></h3>
+<h3>Generate documentation<a class="headerlink" href="#generate-documentation" title="Link to this heading"></a></h3>
 <p>To generate the documentation, you should follow these steps in the “SBTi” repository (the one containing the Python module).</p>
 <ol class="arabic simple">
 <li><p><cite>cd docs</cite></p></li>
@@ -147,7 +152,7 @@ In addition, we use Flake8 to lint the code, MyPy to check the type hints and No
 </section>
 </section>
 <section id="code-of-conduct">
-<h2>Code of conduct<a class="headerlink" href="#code-of-conduct" title="Permalink to this headline"></a></h2>
+<h2>Code of conduct<a class="headerlink" href="#code-of-conduct" title="Link to this heading"></a></h2>
 <p>Everyone’s goals here are aligned: to help asset owners and asset managers reduce their impact on climate change.
 The only way we can achieve this goal is by fostering an inclusive and welcome environment. Therefore, this project is governed by a <a class="reference external" href="https://github.com/ScienceBasedTargets/SBTi-finance-tool/blob/master/CODE_OF_CONDUCT.md">code of conduct</a>. By participating, you are expected to uphold this code. If you encounter any violations, please report them.</p>
 <div class="toctree-wrapper compound">

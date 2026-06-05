@@ -1,5 +1,5 @@
-:py:mod:`SBTi.data`
-===================
+SBTi.data
+=========
 
 .. py:module:: SBTi.data
 
@@ -11,27 +11,24 @@
 
 Submodules
 ----------
+
 .. toctree::
-   :titlesonly:
    :maxdepth: 1
 
-   bloomberg/index.rst
-   cdp/index.rst
-   csv/index.rst
-   data_provider/index.rst
-   excel/index.rst
-   iss/index.rst
-   msci/index.rst
-   sbti/index.rst
-   trucost/index.rst
-   urgentem/index.rst
+   /autoapi/SBTi/data/bloomberg/index
+   /autoapi/SBTi/data/cdp/index
+   /autoapi/SBTi/data/csv/index
+   /autoapi/SBTi/data/data_provider/index
+   /autoapi/SBTi/data/excel/index
+   /autoapi/SBTi/data/iss/index
+   /autoapi/SBTi/data/msci/index
+   /autoapi/SBTi/data/sbti/index
+   /autoapi/SBTi/data/trucost/index
+   /autoapi/SBTi/data/urgentem/index
 
-
-Package Contents
-----------------
 
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
@@ -45,16 +42,20 @@ Classes
    SBTi.data.Urgentem
 
 
-
+Package Contents
+----------------
 
 .. py:class:: DataProvider(**kwargs)
 
    Bases: :py:obj:`abc.ABC`
 
+
    General data provider super class.
 
-   .. py:method:: get_targets(self, company_ids: List[str]) -> List[SBTi.interfaces.IDataProviderTarget]
+
+   .. py:method:: get_targets(company_ids: List[str]) -> List[SBTi.interfaces.IDataProviderTarget]
       :abstractmethod:
+
 
       Get all relevant targets for a list of company ids (ISIN). This method should return a list of
       IDataProviderTarget instances.
@@ -63,8 +64,10 @@ Classes
       :return: A list containing the targets
 
 
-   .. py:method:: get_company_data(self, company_ids: List[str]) -> List[SBTi.interfaces.IDataProviderCompany]
+
+   .. py:method:: get_company_data(company_ids: List[str]) -> List[SBTi.interfaces.IDataProviderCompany]
       :abstractmethod:
+
 
       Get all relevant data for a list of company ids (ISIN). This method should return a list of IDataProviderCompany
       instances.
@@ -73,8 +76,10 @@ Classes
       :return: A list containing the company data
 
 
-   .. py:method:: get_sbti_targets(self, companies: list) -> list
+
+   .. py:method:: get_sbti_targets(companies: list) -> list
       :abstractmethod:
+
 
       For each of the companies, get the status of their target (Target set, Committed or No target) as it's known to
       the SBTi.
@@ -89,11 +94,23 @@ Classes
 
    Bases: :py:obj:`SBTi.data.data_provider.DataProvider`
 
+
    Data provider skeleton for CSV files. This class serves primarily for testing purposes only!
 
    :param config: A dictionary containing a "path" field that leads to the path of the CSV file
 
-   .. py:method:: get_targets(self, company_ids: list) -> List[SBTi.interfaces.IDataProviderTarget]
+
+   .. py:attribute:: data
+      :value: None
+
+
+
+   .. py:attribute:: data_targets
+      :value: None
+
+
+
+   .. py:method:: get_targets(company_ids: list) -> List[SBTi.interfaces.IDataProviderTarget]
 
       Get all relevant targets for a list of company ids (ISIN). This method should return a list of
       IDataProviderTarget instances.
@@ -102,7 +119,8 @@ Classes
       :return: A list containing the targets
 
 
-   .. py:method:: _target_df_to_model(self, df_targets)
+
+   .. py:method:: _target_df_to_model(df_targets)
 
       transforms target Dataframe into list of IDataProviderTarget instances
 
@@ -110,7 +128,8 @@ Classes
       :return: A list containing the targets
 
 
-   .. py:method:: get_company_data(self, company_ids: list) -> List[SBTi.interfaces.IDataProviderCompany]
+
+   .. py:method:: get_company_data(company_ids: list) -> List[SBTi.interfaces.IDataProviderCompany]
 
       Get all relevant data for a list of company ids (ISIN). This method should return a list of IDataProviderCompany
       instances.
@@ -119,7 +138,8 @@ Classes
       :return: A list containing the company data
 
 
-   .. py:method:: get_sbti_targets(self, companies: list) -> list
+
+   .. py:method:: get_sbti_targets(companies: list) -> list
 
       For each of the companies, get the status of their target (Target set, Committed or No target) as it's known to
       the SBTi.
@@ -134,11 +154,21 @@ Classes
 
    Bases: :py:obj:`SBTi.data.data_provider.DataProvider`
 
+
    Data provider skeleton for CSV files. This class serves primarily for testing purposes only!
 
    :param config: A dictionary containing a "path" field that leads to the path of the CSV file
 
-   .. py:method:: get_targets(self, company_ids: List[str]) -> List[SBTi.interfaces.IDataProviderTarget]
+
+   .. py:attribute:: data
+      :value: None
+
+
+
+   .. py:attribute:: c
+
+
+   .. py:method:: get_targets(company_ids: List[str]) -> List[SBTi.interfaces.IDataProviderTarget]
 
       Get all relevant targets for a list of company ids (ISIN). This method should return a list of
       IDataProviderTarget instances.
@@ -147,7 +177,8 @@ Classes
       :return: A list containing the targets
 
 
-   .. py:method:: _target_df_to_model(self, df_targets)
+
+   .. py:method:: _target_df_to_model(df_targets)
 
       transforms target Dataframe into list of IDataProviderTarget instances
 
@@ -155,7 +186,8 @@ Classes
       :return: A list containing the targets
 
 
-   .. py:method:: get_company_data(self, company_ids: List[str]) -> List[SBTi.interfaces.IDataProviderCompany]
+
+   .. py:method:: get_company_data(company_ids: List[str]) -> List[SBTi.interfaces.IDataProviderCompany]
 
       Get all relevant data for a list of company ids (ISIN). This method should return a list of IDataProviderCompany
       instances.
@@ -164,8 +196,10 @@ Classes
       :return: A list containing the company data
 
 
-   .. py:method:: get_sbti_targets(self, companies: list) -> list
+
+   .. py:method:: get_sbti_targets(companies: list) -> list
       :abstractmethod:
+
 
       For each of the companies, get the status of their target (Target set, Committed or No target) as it's known to
       the SBTi.
@@ -180,9 +214,11 @@ Classes
 
    Bases: :py:obj:`SBTi.data.data_provider.DataProvider`
 
+
    Data provider skeleton for Bloomberg.
 
-   .. py:method:: _request(self, endpoint: str, data: dict) -> Optional[object]
+
+   .. py:method:: _request(endpoint: str, data: dict) -> Optional[object]
 
       Request data from the server.
       Note: This request does in no way reflect the actual implementation, this is only a stub to show what a
@@ -193,8 +229,10 @@ Classes
       :return: The returned data, None in case of an error.
 
 
-   .. py:method:: get_targets(self, company_ids: List[str]) -> List[SBTi.interfaces.IDataProviderTarget]
+
+   .. py:method:: get_targets(company_ids: List[str]) -> List[SBTi.interfaces.IDataProviderTarget]
       :abstractmethod:
+
 
       Get all relevant targets for a list of company ids (ISIN). This method should return a list of
       IDataProviderTarget instances.
@@ -203,8 +241,10 @@ Classes
       :return: A list containing the targets
 
 
-   .. py:method:: get_company_data(self, company_ids: List[str]) -> List[SBTi.interfaces.IDataProviderCompany]
+
+   .. py:method:: get_company_data(company_ids: List[str]) -> List[SBTi.interfaces.IDataProviderCompany]
       :abstractmethod:
+
 
       Get all relevant data for a list of company ids (ISIN). This method should return a list of IDataProviderCompany
       instances.
@@ -213,8 +253,10 @@ Classes
       :return: A list containing the company data
 
 
-   .. py:method:: get_sbti_targets(self, companies: list) -> list
+
+   .. py:method:: get_sbti_targets(companies: list) -> list
       :abstractmethod:
+
 
       For each of the companies, get the status of their target (Target set, Committed or No target) as it's known to
       the SBTi.
@@ -229,10 +271,13 @@ Classes
 
    Bases: :py:obj:`SBTi.data.data_provider.DataProvider`
 
+
    Data provider skeleton for CDP.
 
-   .. py:method:: get_targets(self, company_ids: List[str]) -> List[SBTi.interfaces.IDataProviderTarget]
+
+   .. py:method:: get_targets(company_ids: List[str]) -> List[SBTi.interfaces.IDataProviderTarget]
       :abstractmethod:
+
 
       Get all relevant targets for a list of company ids (ISIN). This method should return a list of
       IDataProviderTarget instances.
@@ -241,8 +286,10 @@ Classes
       :return: A list containing the targets
 
 
-   .. py:method:: get_company_data(self, company_ids: List[str]) -> List[SBTi.interfaces.IDataProviderCompany]
+
+   .. py:method:: get_company_data(company_ids: List[str]) -> List[SBTi.interfaces.IDataProviderCompany]
       :abstractmethod:
+
 
       Get all relevant data for a list of company ids (ISIN). This method should return a list of IDataProviderCompany
       instances.
@@ -251,8 +298,10 @@ Classes
       :return: A list containing the company data
 
 
-   .. py:method:: get_sbti_targets(self, companies: list) -> list
+
+   .. py:method:: get_sbti_targets(companies: list) -> list
       :abstractmethod:
+
 
       For each of the companies, get the status of their target (Target set, Committed or No target) as it's known to
       the SBTi.
@@ -267,10 +316,13 @@ Classes
 
    Bases: :py:obj:`SBTi.data.data_provider.DataProvider`
 
+
    Data provider skeleton for ISS.
 
-   .. py:method:: get_targets(self, company_ids: List[str]) -> List[SBTi.interfaces.IDataProviderTarget]
+
+   .. py:method:: get_targets(company_ids: List[str]) -> List[SBTi.interfaces.IDataProviderTarget]
       :abstractmethod:
+
 
       Get all relevant targets for a list of company ids (ISIN). This method should return a list of
       IDataProviderTarget instances.
@@ -279,8 +331,10 @@ Classes
       :return: A list containing the targets
 
 
-   .. py:method:: get_company_data(self, company_ids: List[str]) -> List[SBTi.interfaces.IDataProviderCompany]
+
+   .. py:method:: get_company_data(company_ids: List[str]) -> List[SBTi.interfaces.IDataProviderCompany]
       :abstractmethod:
+
 
       Get all relevant data for a list of company ids (ISIN). This method should return a list of IDataProviderCompany
       instances.
@@ -289,8 +343,10 @@ Classes
       :return: A list containing the company data
 
 
-   .. py:method:: get_sbti_targets(self, companies: list) -> list
+
+   .. py:method:: get_sbti_targets(companies: list) -> list
       :abstractmethod:
+
 
       For each of the companies, get the status of their target (Target set, Committed or No target) as it's known to
       the SBTi.
@@ -305,10 +361,13 @@ Classes
 
    Bases: :py:obj:`SBTi.data.data_provider.DataProvider`
 
+
    Data provider skeleton for Trucost.
 
-   .. py:method:: get_targets(self, company_ids: List[str]) -> List[SBTi.interfaces.IDataProviderTarget]
+
+   .. py:method:: get_targets(company_ids: List[str]) -> List[SBTi.interfaces.IDataProviderTarget]
       :abstractmethod:
+
 
       Get all relevant targets for a list of company ids (ISIN). This method should return a list of
       IDataProviderTarget instances.
@@ -317,8 +376,10 @@ Classes
       :return: A list containing the targets
 
 
-   .. py:method:: get_company_data(self, company_ids: List[str]) -> List[SBTi.interfaces.IDataProviderCompany]
+
+   .. py:method:: get_company_data(company_ids: List[str]) -> List[SBTi.interfaces.IDataProviderCompany]
       :abstractmethod:
+
 
       Get all relevant data for a list of company ids (ISIN). This method should return a list of IDataProviderCompany
       instances.
@@ -327,8 +388,10 @@ Classes
       :return: A list containing the company data
 
 
-   .. py:method:: get_sbti_targets(self, companies: list) -> list
+
+   .. py:method:: get_sbti_targets(companies: list) -> list
       :abstractmethod:
+
 
       For each of the companies, get the status of their target (Target set, Committed or No target) as it's known to
       the SBTi.
@@ -343,10 +406,13 @@ Classes
 
    Bases: :py:obj:`SBTi.data.data_provider.DataProvider`
 
+
    Data provider skeleton for Urgentem.
 
-   .. py:method:: get_targets(self, company_ids: List[str]) -> List[SBTi.interfaces.IDataProviderTarget]
+
+   .. py:method:: get_targets(company_ids: List[str]) -> List[SBTi.interfaces.IDataProviderTarget]
       :abstractmethod:
+
 
       Get all relevant targets for a list of company ids (ISIN). This method should return a list of
       IDataProviderTarget instances.
@@ -355,8 +421,10 @@ Classes
       :return: A list containing the targets
 
 
-   .. py:method:: get_company_data(self, company_ids: List[str]) -> List[SBTi.interfaces.IDataProviderCompany]
+
+   .. py:method:: get_company_data(company_ids: List[str]) -> List[SBTi.interfaces.IDataProviderCompany]
       :abstractmethod:
+
 
       Get all relevant data for a list of company ids (ISIN). This method should return a list of IDataProviderCompany
       instances.
@@ -365,8 +433,10 @@ Classes
       :return: A list containing the company data
 
 
-   .. py:method:: get_sbti_targets(self, companies: list) -> list
+
+   .. py:method:: get_sbti_targets(companies: list) -> list
       :abstractmethod:
+
 
       For each of the companies, get the status of their target (Target set, Committed or No target) as it's known to
       the SBTi.

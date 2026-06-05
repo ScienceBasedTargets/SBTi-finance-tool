@@ -1,30 +1,31 @@
-:py:mod:`SBTi.data.trucost`
-===========================
+SBTi.data.trucost
+=================
 
 .. py:module:: SBTi.data.trucost
 
 
-Module Contents
----------------
-
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
    SBTi.data.trucost.Trucost
 
 
-
+Module Contents
+---------------
 
 .. py:class:: Trucost(**kwargs)
 
    Bases: :py:obj:`SBTi.data.data_provider.DataProvider`
 
+
    Data provider skeleton for Trucost.
 
-   .. py:method:: get_targets(self, company_ids: List[str]) -> List[SBTi.interfaces.IDataProviderTarget]
+
+   .. py:method:: get_targets(company_ids: List[str]) -> List[SBTi.interfaces.IDataProviderTarget]
       :abstractmethod:
+
 
       Get all relevant targets for a list of company ids (ISIN). This method should return a list of
       IDataProviderTarget instances.
@@ -33,8 +34,10 @@ Classes
       :return: A list containing the targets
 
 
-   .. py:method:: get_company_data(self, company_ids: List[str]) -> List[SBTi.interfaces.IDataProviderCompany]
+
+   .. py:method:: get_company_data(company_ids: List[str]) -> List[SBTi.interfaces.IDataProviderCompany]
       :abstractmethod:
+
 
       Get all relevant data for a list of company ids (ISIN). This method should return a list of IDataProviderCompany
       instances.
@@ -43,8 +46,10 @@ Classes
       :return: A list containing the company data
 
 
-   .. py:method:: get_sbti_targets(self, companies: list) -> list
+
+   .. py:method:: get_sbti_targets(companies: list) -> list
       :abstractmethod:
+
 
       For each of the companies, get the status of their target (Target set, Committed or No target) as it's known to
       the SBTi.

@@ -1,15 +1,19 @@
-:py:mod:`SBTi.utils`
-====================
+SBTi.utils
+==========
 
 .. py:module:: SBTi.utils
 
 
-Module Contents
----------------
+Attributes
+----------
+
+.. autoapisummary::
+
+   SBTi.utils.DATA_PROVIDER_MAP
 
 
 Functions
-~~~~~~~~~
+---------
 
 .. autoapisummary::
 
@@ -24,19 +28,11 @@ Functions
    SBTi.utils.calculate
 
 
-
-Attributes
-~~~~~~~~~~
-
-.. autoapisummary::
-
-   SBTi.utils.DATA_PROVIDER_MAP
-
+Module Contents
+---------------
 
 .. py:data:: DATA_PROVIDER_MAP
-   :annotation: :Dict[str, Type[SBTi.data.DataProvider]]
-
-   
+   :type:  Dict[str, Type[SBTi.data.DataProvider]]
 
 .. py:function:: get_data_providers(data_providers_configs: List[dict], data_providers_input: List[str]) -> List[SBTi.data.DataProvider]
 

@@ -1,26 +1,27 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Functional Overview &mdash; SBTi Temperature Alignment tool  documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/doctools.js"></script>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Data Requirements" href="DataRequirements.html" />
-    <link rel="prev" title="Getting Started Using REST API &amp; UI" href="rest_api.html" /> 
+    <link rel="prev" title="Getting Started Using REST API" href="rest_api.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -28,11 +29,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> SBTi Temperature Alignment tool
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            SBTi Temperature Alignment tool
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -42,7 +47,7 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction to temperature scoring and portfolio coverage methods</a></li>
 <li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started Using Python</a></li>
-<li class="toctree-l1"><a class="reference internal" href="rest_api.html">Getting Started Using REST API &amp; UI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rest_api.html">Getting Started Using REST API</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Functional Overview</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#temperature-score">Temperature Score</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#time-frames">Time Frames</a></li>
@@ -78,8 +83,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>Functional Overview</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Functional Overview</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/FunctionalOverview.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -90,9 +95,13 @@
            <div itemprop="articleBody">
              
   <section id="functional-overview">
-<h1>Functional Overview<a class="headerlink" href="#functional-overview" title="Permalink to this headline"></a></h1>
+<h1>Functional Overview<a class="headerlink" href="#functional-overview" title="Link to this heading"></a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This tool implements <a class="reference external" href="https://sciencebasedtargets.org/wp-content/uploads/2020/09/Temperature-Rating-Methodology-V1.pdf">Version 1.0</a> of the CDP/WWF Temperature Rating Methodology, for setting and reporting on SBTi Financial Institutions Near-Term Targets. For Version 1.5 of the methodology, please refer to the <a class="reference external" href="https://www.cdp.net/en/data-licenses/net-zero-alignment-dataset/the-cdp-wwf-temperature-scoring-methodology">CDP-WWF Temperature Scoring Methodology</a>.</p>
+</div>
 <section id="temperature-score">
-<h2>Temperature Score<a class="headerlink" href="#temperature-score" title="Permalink to this headline"></a></h2>
+<h2>Temperature Score<a class="headerlink" href="#temperature-score" title="Link to this heading"></a></h2>
 <p>Portfolio temperature scores are calculated through an aggregation of
 all companies’ temperature scores within your portfolio. For each
 company, the score is calculated based on the publicly announced
@@ -106,7 +115,7 @@ in a specific model scenario data set, please see this file
 on the scenarios used in models 4 (the standard regression model set)
 and 104.</p>
 <section id="time-frames">
-<h3>Time Frames<a class="headerlink" href="#time-frames" title="Permalink to this headline"></a></h3>
+<h3>Time Frames<a class="headerlink" href="#time-frames" title="Link to this heading"></a></h3>
 <p>By default, the SBTi temperature scoring tool reports temperature scores
 on the mid-term time frames (i.e. based on emissions reduction targets
 aimed at 5-15 years into the future). However, it is also possible to
@@ -114,13 +123,13 @@ inspect short (less than 5 years) and long-term time frames (15 to 30
 years).</p>
 </section>
 <section id="scopes">
-<h3>Scopes<a class="headerlink" href="#scopes" title="Permalink to this headline"></a></h3>
+<h3>Scopes<a class="headerlink" href="#scopes" title="Link to this heading"></a></h3>
 <p>SBTi temperature scoring tool reports on the scores for Scope 1+2 and
 Scope 1+2+3, however it is also possible to inspect the Scope 3 score
 individually.</p>
 </section>
 <section id="aggregation-methods">
-<h3>Aggregation methods<a class="headerlink" href="#aggregation-methods" title="Permalink to this headline"></a></h3>
+<h3>Aggregation methods<a class="headerlink" href="#aggregation-methods" title="Link to this heading"></a></h3>
 <p>The portfolio temperature score can be calculated using different
 aggregation methods based on emission and financial data of the
 individual companies. The available options are:</p>
@@ -137,7 +146,7 @@ individual companies. The available options are:</p>
 without aggregating to a portfolio score.</p>
 </section>
 <section id="grouping-data">
-<h3>Grouping data<a class="headerlink" href="#grouping-data" title="Permalink to this headline"></a></h3>
+<h3>Grouping data<a class="headerlink" href="#grouping-data" title="Link to this heading"></a></h3>
 <p>This functionality enables the user to analyze (for examples see Jupyter
 notebook
 <a class="reference external" href="https://github.com/ScienceBasedTargets/SBTi-finance-tool/blob/master/examples/1_analysis_example.ipynb">analysis_example</a><strong>)</strong>
@@ -151,7 +160,7 @@ score over (e.g. investments strategies, market cap buckets) via the
 portfolio data.</p>
 </section>
 <section id="choose-fields-to-show">
-<h3>Choose fields to show<a class="headerlink" href="#choose-fields-to-show" title="Permalink to this headline"></a></h3>
+<h3>Choose fields to show<a class="headerlink" href="#choose-fields-to-show" title="Link to this heading"></a></h3>
 <p>By default, the SBTi temperature scoring tool reports Company name,
 Company ID, Scope, Time frame and Temperature score for each individual
 combination. However, using this option allows the user to add
@@ -160,7 +169,7 @@ imported via either the portfolio data or the company data (fundamental
 and target).</p>
 </section>
 <section id="what-if-analyses">
-<h3>What-If Analyses<a class="headerlink" href="#what-if-analyses" title="Permalink to this headline"></a></h3>
+<h3>What-If Analyses<a class="headerlink" href="#what-if-analyses" title="Link to this heading"></a></h3>
 <p>To analyze the effect of engagement on your portfolio temperature score
 it is possible to run “what-if” analyses. In these scenarios, the
 temperature score is recalculated with the presumption that based on
@@ -200,13 +209,13 @@ set WB2C targets.</p></li>
 </section>
 </section>
 <section id="portfolio-coverage">
-<h2>Portfolio coverage<a class="headerlink" href="#portfolio-coverage" title="Permalink to this headline"></a></h2>
+<h2>Portfolio coverage<a class="headerlink" href="#portfolio-coverage" title="Link to this heading"></a></h2>
 <p>The portfolio coverage calculates the percentage of the portfolio that
 is covered by companies with an approved SBTi target. This coverage is
 calculated using one of the aggregation methods above.</p>
 </section>
 <section id="output-options">
-<h2>Output options<a class="headerlink" href="#output-options" title="Permalink to this headline"></a></h2>
+<h2>Output options<a class="headerlink" href="#output-options" title="Link to this heading"></a></h2>
 <p>The temperature score can be requested for all time frames and scope
 combinations on the following levels.</p>
 <ul class="simple">
@@ -251,7 +260,7 @@ submission to the SBTi Target Validation Team for approval.</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="rest_api.html" class="btn btn-neutral float-left" title="Getting Started Using REST API &amp; UI" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="rest_api.html" class="btn btn-neutral float-left" title="Getting Started Using REST API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="DataRequirements.html" class="btn btn-neutral float-right" title="Data Requirements" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

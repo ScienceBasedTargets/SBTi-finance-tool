@@ -1,25 +1,24 @@
-:py:mod:`SBTi.portfolio_coverage_tvp`
-=====================================
+SBTi.portfolio_coverage_tvp
+===========================
 
 .. py:module:: SBTi.portfolio_coverage_tvp
 
 
-Module Contents
----------------
-
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
    SBTi.portfolio_coverage_tvp.PortfolioCoverageTVP
 
 
-
+Module Contents
+---------------
 
 .. py:class:: PortfolioCoverageTVP(config: Type[SBTi.configs.PortfolioCoverageTVPConfig] = PortfolioCoverageTVPConfig)
 
    Bases: :py:obj:`SBTi.portfolio_aggregation.PortfolioAggregation`
+
 
    Lookup the companies in the given portfolio and determine whether they have a SBTi approved target.
 
@@ -27,7 +26,12 @@ Classes
                    if you'd like to overwrite a constant. This can be done by extending the PortfolioCoverageTVPConfig
                    class and overwriting one of the parameters.
 
-   .. py:method:: get_portfolio_coverage(self, company_data: pandas.DataFrame, portfolio_aggregation_method: SBTi.portfolio_aggregation.PortfolioAggregationMethod) -> Optional[float]
+
+   .. py:attribute:: c
+      :type:  Type[SBTi.configs.PortfolioCoverageTVPConfig]
+
+
+   .. py:method:: get_portfolio_coverage(company_data: pandas.DataFrame, portfolio_aggregation_method: SBTi.portfolio_aggregation.PortfolioAggregationMethod) -> Optional[float]
 
       Get the TVP portfolio coverage (i.e. what part of the portfolio has a SBTi validated target).
 

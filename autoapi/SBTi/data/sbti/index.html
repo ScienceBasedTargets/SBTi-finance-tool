@@ -1,21 +1,22 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../../../">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SBTi.data.sbti &mdash; SBTi Temperature Alignment tool  documentation</title>
-      <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="../../../../_static/graphviz.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="../../../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css?v=4ae1632d" />
+
   
-        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
-        <script src="../../../../_static/jquery.js"></script>
-        <script src="../../../../_static/underscore.js"></script>
-        <script src="../../../../_static/doctools.js"></script>
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" /> 
@@ -26,11 +27,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../../../index.html" class="icon icon-home"> SBTi Temperature Alignment tool
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            SBTi Temperature Alignment tool
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -40,7 +45,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../../intro.html">Introduction to temperature scoring and portfolio coverage methods</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../getting_started.html">Getting Started Using Python</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../rest_api.html">Getting Started Using REST API &amp; UI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../rest_api.html">Getting Started Using REST API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../FunctionalOverview.html">Functional Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../DataRequirements.html">Data Requirements</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../Legends.html">Data Legends</a></li>
@@ -63,8 +68,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
-      <li><code class="xref py py-mod docutils literal notranslate"><span class="pre">SBTi.data.sbti</span></code></li>
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">SBTi.data.sbti</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../../../_sources/autoapi/SBTi/data/sbti/index.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -75,31 +80,43 @@
            <div itemprop="articleBody">
              
   <section id="module-SBTi.data.sbti">
-<span id="sbti-data-sbti"></span><h1><a class="reference internal" href="#module-SBTi.data.sbti" title="SBTi.data.sbti"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SBTi.data.sbti</span></code></a><a class="headerlink" href="#module-SBTi.data.sbti" title="Permalink to this headline"></a></h1>
-<section id="module-contents">
-<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline"></a></h2>
+<span id="sbti-data-sbti"></span><h1>SBTi.data.sbti<a class="headerlink" href="#module-SBTi.data.sbti" title="Link to this heading"></a></h1>
 <section id="classes">
-<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this headline"></a></h3>
-<table class="longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
+<h2>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h2>
+<table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#SBTi.data.sbti.SBTi" title="SBTi.data.sbti.SBTi"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SBTi</span></code></a></p></td>
 <td><p>Data provider skeleton for SBTi. This class only provides the sbti_validated field for existing companies.</p></td>
 </tr>
 </tbody>
 </table>
+</section>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="SBTi.data.sbti.SBTi">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">SBTi.data.sbti.</span></span><span class="sig-name descname"><span class="pre">SBTi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../../configs/index.html#SBTi.configs.PortfolioCoverageTVPConfig" title="SBTi.configs.PortfolioCoverageTVPConfig"><span class="pre">SBTi.configs.PortfolioCoverageTVPConfig</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">PortfolioCoverageTVPConfig</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cutoff_date</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">datetime.datetime</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.data.sbti.SBTi" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">SBTi.data.sbti.</span></span><span class="sig-name descname"><span class="pre">SBTi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../../configs/index.html#SBTi.configs.PortfolioCoverageTVPConfig" title="SBTi.configs.PortfolioCoverageTVPConfig"><span class="pre">SBTi.configs.PortfolioCoverageTVPConfig</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">PortfolioCoverageTVPConfig</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cutoff_date</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">datetime.datetime</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.data.sbti.SBTi" title="Link to this definition"></a></dt>
 <dd><p>Data provider skeleton for SBTi. This class only provides the sbti_validated field for existing companies.
 Updated to DEFAULT to per-company format for TR Testing consistency.
 Enhanced to extract detailed target information when available.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SBTi.data.sbti.SBTi.c">
+<span class="sig-name descname"><span class="pre">c</span></span><a class="headerlink" href="#SBTi.data.sbti.SBTi.c" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SBTi.data.sbti.SBTi.cutoff_date">
+<span class="sig-name descname"><span class="pre">cutoff_date</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#SBTi.data.sbti.SBTi.cutoff_date" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SBTi.data.sbti.SBTi.targets">
+<span class="sig-name descname"><span class="pre">targets</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#SBTi.data.sbti.SBTi.targets" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="SBTi.data.sbti.SBTi._detect_format">
-<span class="sig-name descname"><span class="pre">_detect_format</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.data.sbti.SBTi._detect_format" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">_detect_format</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.data.sbti.SBTi._detect_format" title="Link to this definition"></a></dt>
 <dd><p>Detect the format of the CTA file:
 - ‘old’: Original format with Title Case columns
 - ‘new_company’: New per-company format (one row per company) - PREFERRED
@@ -108,20 +125,20 @@ Enhanced to extract detailed target information when available.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="SBTi.data.sbti.SBTi._ensure_compatible_format">
-<span class="sig-name descname"><span class="pre">_ensure_compatible_format</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.data.sbti.SBTi._ensure_compatible_format" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">_ensure_compatible_format</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.data.sbti.SBTi._ensure_compatible_format" title="Link to this definition"></a></dt>
 <dd><p>Convert CTA file to the format expected by the configs
 OPTIMIZED FOR PER-COMPANY FORMAT</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="SBTi.data.sbti.SBTi._filter_by_date">
-<span class="sig-name descname"><span class="pre">_filter_by_date</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.DataFrame</span></span></span><a class="headerlink" href="#SBTi.data.sbti.SBTi._filter_by_date" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">_filter_by_date</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.DataFrame</span></span></span><a class="headerlink" href="#SBTi.data.sbti.SBTi._filter_by_date" title="Link to this definition"></a></dt>
 <dd><p>Filter the CTA file to only include targets published on or before the cutoff date.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>df</strong> – The dataframe to filter</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Filtered dataframe with only targets published on or before cutoff_date</p>
 </dd>
 </dl>
@@ -129,7 +146,7 @@ OPTIMIZED FOR PER-COMPANY FORMAT</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="SBTi.data.sbti.SBTi.filter_cta_file">
-<span class="sig-name descname"><span class="pre">filter_cta_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">targets</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.data.sbti.SBTi.filter_cta_file" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">filter_cta_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">targets</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.data.sbti.SBTi.filter_cta_file" title="Link to this definition"></a></dt>
 <dd><p>Filter the CTA file to create a dataframe that has one row per company
 with the columns “Action” and “Target”.
 If Action = Target then only keep the rows where Target = Near-term.</p>
@@ -138,18 +155,18 @@ If Action = Target then only keep the rows where Target = Near-term.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="SBTi.data.sbti.SBTi.get_company_targets">
-<span class="sig-name descname"><span class="pre">get_company_targets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">company_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">isin</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lei</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.data.sbti.SBTi.get_company_targets" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_company_targets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">company_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">isin</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lei</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.data.sbti.SBTi.get_company_targets" title="Link to this definition"></a></dt>
 <dd><p>Get all targets for a specific company.
 Only works with per-target format.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>company_name</strong> – Company name to search for</p></li>
 <li><p><strong>isin</strong> – ISIN to search for</p></li>
 <li><p><strong>lei</strong> – LEI to search for</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>DataFrame with all targets for the company</p>
 </dd>
 </dl>
@@ -157,16 +174,16 @@ Only works with per-target format.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="SBTi.data.sbti.SBTi.get_companies">
-<span class="sig-name descname"><span class="pre">get_companies</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">companies</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../../interfaces/index.html#SBTi.interfaces.IDataProviderCompany" title="SBTi.interfaces.IDataProviderCompany"><span class="pre">SBTi.interfaces.IDataProviderCompany</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id_map</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../../interfaces/index.html#SBTi.interfaces.IDataProviderCompany" title="SBTi.interfaces.IDataProviderCompany"><span class="pre">SBTi.interfaces.IDataProviderCompany</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#SBTi.data.sbti.SBTi.get_companies" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_companies</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">companies</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../../interfaces/index.html#SBTi.interfaces.IDataProviderCompany" title="SBTi.interfaces.IDataProviderCompany"><span class="pre">SBTi.interfaces.IDataProviderCompany</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id_map</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../../interfaces/index.html#SBTi.interfaces.IDataProviderCompany" title="SBTi.interfaces.IDataProviderCompany"><span class="pre">SBTi.interfaces.IDataProviderCompany</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#SBTi.data.sbti.SBTi.get_companies" title="Link to this definition"></a></dt>
 <dd><p>Get company data from SBTi database and add sbti_validated field.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>companies</strong> – A list of IDataProviderCompany instances</p></li>
 <li><p><strong>id_map</strong> – A map from company id to a tuple of (ISIN, LEI)</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A list of IDataProviderCompany instances, supplemented with the SBTi information</p>
 </dd>
 </dl>
@@ -174,16 +191,16 @@ Only works with per-target format.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="SBTi.data.sbti.SBTi.get_sbti_targets">
-<span class="sig-name descname"><span class="pre">get_sbti_targets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">companies</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../../interfaces/index.html#SBTi.interfaces.IDataProviderCompany" title="SBTi.interfaces.IDataProviderCompany"><span class="pre">SBTi.interfaces.IDataProviderCompany</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id_map</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../../interfaces/index.html#SBTi.interfaces.IDataProviderCompany" title="SBTi.interfaces.IDataProviderCompany"><span class="pre">SBTi.interfaces.IDataProviderCompany</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../../interfaces/index.html#SBTi.interfaces.IDataProviderTarget" title="SBTi.interfaces.IDataProviderTarget"><span class="pre">SBTi.interfaces.IDataProviderTarget</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#SBTi.data.sbti.SBTi.get_sbti_targets" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_sbti_targets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">companies</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../../interfaces/index.html#SBTi.interfaces.IDataProviderCompany" title="SBTi.interfaces.IDataProviderCompany"><span class="pre">SBTi.interfaces.IDataProviderCompany</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id_map</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../../interfaces/index.html#SBTi.interfaces.IDataProviderCompany" title="SBTi.interfaces.IDataProviderCompany"><span class="pre">SBTi.interfaces.IDataProviderCompany</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../../interfaces/index.html#SBTi.interfaces.IDataProviderTarget" title="SBTi.interfaces.IDataProviderTarget"><span class="pre">SBTi.interfaces.IDataProviderTarget</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#SBTi.data.sbti.SBTi.get_sbti_targets" title="Link to this definition"></a></dt>
 <dd><p>Enhanced version that returns both validation status AND target details when available.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>companies</strong> – A list of IDataProviderCompany instances</p></li>
 <li><p><strong>id_map</strong> – A map from company id to a tuple of (ISIN, LEI)</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A tuple of:
 - List of IDataProviderCompany instances, supplemented with the SBTi information
 - Dictionary mapping company_id to list of IDataProviderTarget instances</p>
@@ -193,7 +210,6 @@ Only works with per-target format.</p>
 
 </dd></dl>
 
-</section>
 </section>
 </section>
 

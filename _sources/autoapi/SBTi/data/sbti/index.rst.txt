@@ -1,21 +1,19 @@
-:py:mod:`SBTi.data.sbti`
-========================
+SBTi.data.sbti
+==============
 
 .. py:module:: SBTi.data.sbti
 
 
-Module Contents
----------------
-
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
    SBTi.data.sbti.SBTi
 
 
-
+Module Contents
+---------------
 
 .. py:class:: SBTi(config: Type[SBTi.configs.PortfolioCoverageTVPConfig] = PortfolioCoverageTVPConfig, cutoff_date: Optional[datetime.datetime] = None)
 
@@ -23,7 +21,21 @@ Classes
    Updated to DEFAULT to per-company format for TR Testing consistency.
    Enhanced to extract detailed target information when available.
 
-   .. py:method:: _detect_format(self, df)
+
+   .. py:attribute:: c
+
+
+   .. py:attribute:: cutoff_date
+      :value: None
+
+
+
+   .. py:attribute:: targets
+      :value: None
+
+
+
+   .. py:method:: _detect_format(df)
 
       Detect the format of the CTA file:
       - 'old': Original format with Title Case columns
@@ -31,13 +43,15 @@ Classes
       - 'new_target': New per-target format (multiple rows per company)
 
 
-   .. py:method:: _ensure_compatible_format(self, df)
+
+   .. py:method:: _ensure_compatible_format(df)
 
       Convert CTA file to the format expected by the configs
       OPTIMIZED FOR PER-COMPANY FORMAT
 
 
-   .. py:method:: _filter_by_date(self, df: pandas.DataFrame) -> pandas.DataFrame
+
+   .. py:method:: _filter_by_date(df: pandas.DataFrame) -> pandas.DataFrame
 
       Filter the CTA file to only include targets published on or before the cutoff date.
 
@@ -45,7 +59,8 @@ Classes
       :return: Filtered dataframe with only targets published on or before cutoff_date
 
 
-   .. py:method:: filter_cta_file(self, targets)
+
+   .. py:method:: filter_cta_file(targets)
 
       Filter the CTA file to create a dataframe that has one row per company
       with the columns "Action" and "Target".
@@ -54,7 +69,8 @@ Classes
       Handles all three formats: old, new per-company, and new per-target.
 
 
-   .. py:method:: get_company_targets(self, company_name: str = None, isin: str = None, lei: str = None)
+
+   .. py:method:: get_company_targets(company_name: str = None, isin: str = None, lei: str = None)
 
       Get all targets for a specific company.
       Only works with per-target format.
@@ -65,7 +81,8 @@ Classes
       :return: DataFrame with all targets for the company
 
 
-   .. py:method:: get_companies(self, companies: List[SBTi.interfaces.IDataProviderCompany], id_map: Dict[str, Tuple[str, str]]) -> List[SBTi.interfaces.IDataProviderCompany]
+
+   .. py:method:: get_companies(companies: List[SBTi.interfaces.IDataProviderCompany], id_map: Dict[str, Tuple[str, str]]) -> List[SBTi.interfaces.IDataProviderCompany]
 
       Get company data from SBTi database and add sbti_validated field.
 
@@ -74,7 +91,8 @@ Classes
       :return: A list of IDataProviderCompany instances, supplemented with the SBTi information
 
 
-   .. py:method:: get_sbti_targets(self, companies: List[SBTi.interfaces.IDataProviderCompany], id_map: Dict[str, Tuple[str, str]]) -> Tuple[List[SBTi.interfaces.IDataProviderCompany], Dict[str, List[SBTi.interfaces.IDataProviderTarget]]]
+
+   .. py:method:: get_sbti_targets(companies: List[SBTi.interfaces.IDataProviderCompany], id_map: Dict[str, Tuple[str, str]]) -> Tuple[List[SBTi.interfaces.IDataProviderCompany], Dict[str, List[SBTi.interfaces.IDataProviderTarget]]]
 
       Enhanced version that returns both validation status AND target details when available.
 

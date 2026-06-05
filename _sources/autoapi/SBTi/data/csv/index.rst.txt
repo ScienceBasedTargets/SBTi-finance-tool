@@ -1,31 +1,41 @@
-:py:mod:`SBTi.data.csv`
-=======================
+SBTi.data.csv
+=============
 
 .. py:module:: SBTi.data.csv
 
 
-Module Contents
----------------
-
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
    SBTi.data.csv.CSVProvider
 
 
-
+Module Contents
+---------------
 
 .. py:class:: CSVProvider(path: str, path_targets: str, encoding: str = 'utf-8')
 
    Bases: :py:obj:`SBTi.data.data_provider.DataProvider`
 
+
    Data provider skeleton for CSV files. This class serves primarily for testing purposes only!
 
    :param config: A dictionary containing a "path" field that leads to the path of the CSV file
 
-   .. py:method:: get_targets(self, company_ids: list) -> List[SBTi.interfaces.IDataProviderTarget]
+
+   .. py:attribute:: data
+      :value: None
+
+
+
+   .. py:attribute:: data_targets
+      :value: None
+
+
+
+   .. py:method:: get_targets(company_ids: list) -> List[SBTi.interfaces.IDataProviderTarget]
 
       Get all relevant targets for a list of company ids (ISIN). This method should return a list of
       IDataProviderTarget instances.
@@ -34,7 +44,8 @@ Classes
       :return: A list containing the targets
 
 
-   .. py:method:: _target_df_to_model(self, df_targets)
+
+   .. py:method:: _target_df_to_model(df_targets)
 
       transforms target Dataframe into list of IDataProviderTarget instances
 
@@ -42,7 +53,8 @@ Classes
       :return: A list containing the targets
 
 
-   .. py:method:: get_company_data(self, company_ids: list) -> List[SBTi.interfaces.IDataProviderCompany]
+
+   .. py:method:: get_company_data(company_ids: list) -> List[SBTi.interfaces.IDataProviderCompany]
 
       Get all relevant data for a list of company ids (ISIN). This method should return a list of IDataProviderCompany
       instances.
@@ -51,7 +63,8 @@ Classes
       :return: A list containing the company data
 
 
-   .. py:method:: get_sbti_targets(self, companies: list) -> list
+
+   .. py:method:: get_sbti_targets(companies: list) -> list
 
       For each of the companies, get the status of their target (Target set, Committed or No target) as it's known to
       the SBTi.

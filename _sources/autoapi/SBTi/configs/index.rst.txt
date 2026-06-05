@@ -1,5 +1,5 @@
-:py:mod:`SBTi.configs`
-======================
+SBTi.configs
+============
 
 .. py:module:: SBTi.configs
 
@@ -10,11 +10,8 @@
 
 
 
-Module Contents
----------------
-
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
@@ -24,486 +21,472 @@ Classes
    SBTi.configs.PortfolioCoverageTVPConfig
 
 
-
+Module Contents
+---------------
 
 .. py:class:: ColumnsConfig
 
    .. py:attribute:: COMPANY_ID
-      :annotation: = company_id
+      :value: 'company_id'
 
-      
+
 
    .. py:attribute:: COMPANY_ISIN
-      :annotation: = company_isin
+      :value: 'company_isin'
 
-      
+
 
    .. py:attribute:: COMPANY_LEI
-      :annotation: = company_lei
+      :value: 'company_lei'
 
-      
+
 
    .. py:attribute:: COMPANY_ISIC
-      :annotation: = isic
+      :value: 'isic'
 
-      
+
 
    .. py:attribute:: REGRESSION_PARAM
-      :annotation: = param
+      :value: 'param'
 
-      
+
 
    .. py:attribute:: REGRESSION_INTERCEPT
-      :annotation: = intercept
+      :value: 'intercept'
 
-      
+
 
    .. py:attribute:: MARKET_CAP
-      :annotation: = company_market_cap
+      :value: 'company_market_cap'
 
-      
+
 
    .. py:attribute:: INVESTMENT_VALUE
-      :annotation: = investment_value
+      :value: 'investment_value'
 
-      
+
 
    .. py:attribute:: COMPANY_ENTERPRISE_VALUE
-      :annotation: = company_enterprise_value
+      :value: 'company_enterprise_value'
 
-      
+
 
    .. py:attribute:: COMPANY_EV_PLUS_CASH
-      :annotation: = company_ev_plus_cash
+      :value: 'company_ev_plus_cash'
 
-      
+
 
    .. py:attribute:: COMPANY_TOTAL_ASSETS
-      :annotation: = company_total_assets
+      :value: 'company_total_assets'
 
-      
+
 
    .. py:attribute:: TARGET_REFERENCE_NUMBER
-      :annotation: = target_type
+      :value: 'target_type'
 
-      
+
 
    .. py:attribute:: SCOPE
-      :annotation: = scope
+      :value: 'scope'
 
-      
+
 
    .. py:attribute:: SR15
-      :annotation: = sr15
+      :value: 'sr15'
 
-      
+
 
    .. py:attribute:: REDUCTION_FROM_BASE_YEAR
-      :annotation: = reduction_from_base_year
+      :value: 'reduction_from_base_year'
 
-      
+
 
    .. py:attribute:: START_YEAR
-      :annotation: = start_year
+      :value: 'start_year'
 
-      
+
 
    .. py:attribute:: VARIABLE
-      :annotation: = variable
+      :value: 'variable'
 
-      
+
 
    .. py:attribute:: SLOPE
-      :annotation: = slope
+      :value: 'slope'
 
-      
+
 
    .. py:attribute:: TIME_FRAME
-      :annotation: = time_frame
+      :value: 'time_frame'
 
-      
+
 
    .. py:attribute:: MODEL
-      :annotation: = model
+      :value: 'model'
 
-      
+
 
    .. py:attribute:: ANNUAL_REDUCTION_RATE
-      :annotation: = annual_reduction_rate
+      :value: 'annual_reduction_rate'
 
-      
+
 
    .. py:attribute:: EMISSIONS_IN_SCOPE
-      :annotation: = emissions_in_scope
+      :value: 'emissions_in_scope'
 
-      
+
 
    .. py:attribute:: TEMPERATURE_SCORE
-      :annotation: = temperature_score
+      :value: 'temperature_score'
 
-      
+
 
    .. py:attribute:: COMPANY_NAME
-      :annotation: = company_name
+      :value: 'company_name'
 
-      
+
 
    .. py:attribute:: OWNED_EMISSIONS
-      :annotation: = owned_emissions
+      :value: 'owned_emissions'
 
-      
+
 
    .. py:attribute:: COUNTRY
-      :annotation: = country
+      :value: 'country'
 
-      
+
 
    .. py:attribute:: SECTOR
-      :annotation: = sector
+      :value: 'sector'
 
-      
+
 
    .. py:attribute:: GHG_SCOPE12
-      :annotation: = ghg_s1s2
+      :value: 'ghg_s1s2'
 
-      
+
 
    .. py:attribute:: GHG_SCOPE3
-      :annotation: = ghg_s3
+      :value: 'ghg_s3'
 
-      
+
 
    .. py:attribute:: COMPANY_REVENUE
-      :annotation: = company_revenue
+      :value: 'company_revenue'
 
-      
+
 
    .. py:attribute:: CASH_EQUIVALENTS
-      :annotation: = company_cash_equivalents
+      :value: 'company_cash_equivalents'
 
-      
+
 
    .. py:attribute:: TARGET_CLASSIFICATION
-      :annotation: = target_classification
+      :value: 'target_classification'
 
-      
+
 
    .. py:attribute:: REDUCTION_AMBITION
-      :annotation: = reduction_ambition
+      :value: 'reduction_ambition'
 
-      
+
 
    .. py:attribute:: BASE_YEAR
-      :annotation: = base_year
+      :value: 'base_year'
 
-      
+
 
    .. py:attribute:: END_YEAR
-      :annotation: = end_year
+      :value: 'end_year'
 
-      
+
 
    .. py:attribute:: SBTI_VALIDATED
-      :annotation: = sbti_validated
+      :value: 'sbti_validated'
 
-      
+
 
    .. py:attribute:: ACHIEVED_EMISSIONS
-      :annotation: = achieved_reduction
+      :value: 'achieved_reduction'
 
-      
+
 
    .. py:attribute:: ISIC
-      :annotation: = isic
+      :value: 'isic'
 
-      
+
 
    .. py:attribute:: INDUSTRY_LVL1
-      :annotation: = industry_level_1
+      :value: 'industry_level_1'
 
-      
+
 
    .. py:attribute:: INDUSTRY_LVL2
-      :annotation: = industry_level_2
+      :value: 'industry_level_2'
 
-      
+
 
    .. py:attribute:: INDUSTRY_LVL3
-      :annotation: = industry_level_3
+      :value: 'industry_level_3'
 
-      
+
 
    .. py:attribute:: INDUSTRY_LVL4
-      :annotation: = industry_level_4
+      :value: 'industry_level_4'
 
-      
+
 
    .. py:attribute:: COVERAGE_S1
-      :annotation: = coverage_s1
+      :value: 'coverage_s1'
 
-      
+
 
    .. py:attribute:: COVERAGE_S2
-      :annotation: = coverage_s2
+      :value: 'coverage_s2'
 
-      
+
 
    .. py:attribute:: COVERAGE_S3
-      :annotation: = coverage_s3
+      :value: 'coverage_s3'
 
-      
+
 
    .. py:attribute:: INTENSITY_METRIC
-      :annotation: = intensity_metric
+      :value: 'intensity_metric'
 
-      
+
 
    .. py:attribute:: INTENSITY_METRIC_SR15
-      :annotation: = intensity_metric
+      :value: 'intensity_metric'
 
-      
+
 
    .. py:attribute:: TARGET_TYPE_SR15
-      :annotation: = target_type
+      :value: 'target_type'
 
-      
+
 
    .. py:attribute:: SR15_VARIABLE
-      :annotation: = sr15_variable
+      :value: 'sr15_variable'
 
-      
+
 
    .. py:attribute:: REGRESSION_MODEL
-      :annotation: = Regression_model
+      :value: 'Regression_model'
 
-      
+
 
    .. py:attribute:: BASEYEAR_GHG_S1
-      :annotation: = base_year_ghg_s1
+      :value: 'base_year_ghg_s1'
 
-      
+
 
    .. py:attribute:: BASEYEAR_GHG_S2
-      :annotation: = base_year_ghg_s2
+      :value: 'base_year_ghg_s2'
 
-      
+
 
    .. py:attribute:: BASEYEAR_GHG_S3
-      :annotation: = base_year_ghg_s3
+      :value: 'base_year_ghg_s3'
 
-      
+
 
    .. py:attribute:: REGION
-      :annotation: = region
+      :value: 'region'
 
-      
+
 
    .. py:attribute:: ENGAGEMENT_TARGET
-      :annotation: = engagement_target
+      :value: 'engagement_target'
 
-      
+
 
    .. py:attribute:: PARAM
-      :annotation: = param
+      :value: 'param'
 
-      
+
 
    .. py:attribute:: INTERCEPT
-      :annotation: = intercept
+      :value: 'intercept'
 
-      
+
 
    .. py:attribute:: WEIGHTED_TEMPERATURE_SCORE
-      :annotation: = weighted_temperature_score
+      :value: 'weighted_temperature_score'
 
-      
+
 
    .. py:attribute:: CONTRIBUTION_RELATIVE
-      :annotation: = contribution_relative
+      :value: 'contribution_relative'
 
-      
+
 
    .. py:attribute:: CONTRIBUTION
-      :annotation: = contribution
+      :value: 'contribution'
 
-      
 
 
 .. py:class:: PortfolioAggregationConfig
 
    .. py:attribute:: COLS
-      
-
-      
 
 
 .. py:class:: TemperatureScoreConfig
 
    Bases: :py:obj:`PortfolioAggregationConfig`
 
+
    This factor determines what part of the temperature for a not SBTi-validated company should be the TS and what part
    should be the default score.
    The calculated temperature score should not be lower than the current level of
    global warning which is expressed through the temperature floor constant.
 
-   .. py:attribute:: SBTI_FACTOR
-      :annotation: = 1
 
-      
+   .. py:attribute:: SBTI_FACTOR
+      :value: 1
+
+
 
    .. py:attribute:: FALLBACK_SCORE
-      :annotation: :float = 3.2
+      :type:  float
+      :value: 3.2
 
-      
+
 
    .. py:attribute:: TEMPERATURE_FLOOR
-      :annotation: :float = 0.0
+      :type:  float
+      :value: 0.0
 
-      
+
 
    .. py:attribute:: FILE_SR15_MAPPING
-      
 
-      
 
    .. py:attribute:: FILE_REGRESSION_MODEL_SUMMARY
-      
 
-      
 
    .. py:attribute:: DEFAULT_INDUSTRY
-      :annotation: = Others
+      :value: 'Others'
 
-      
+
 
    .. py:attribute:: VALUE_TARGET_REFERENCE_ABSOLUTE
-      :annotation: = absolute
+      :value: 'absolute'
 
-      
+
 
    .. py:attribute:: VALUE_TARGET_REFERENCE_INTENSITY
-      :annotation: = intensity
+      :value: 'intensity'
 
-      
+
 
    .. py:attribute:: VALUE_TARGET_REFERENCE_INTENSITY_BASE
-      :annotation: = int
+      :value: 'int'
 
-      
+
 
    .. py:attribute:: SLOPE_MAP
-      
 
-      
 
    .. py:attribute:: INTENSITY_MAPPINGS
-      
 
-      
 
    .. py:attribute:: ABSOLUTE_MAPPINGS
-      
 
-      
 
    .. py:attribute:: TEMPERATURE_RESULTS
-      :annotation: = temperature_results
+      :value: 'temperature_results'
 
-      
+
 
    .. py:attribute:: INVESTMENT_VALUE
-      :annotation: = investment_value
+      :value: 'investment_value'
 
-      
 
 
 .. py:class:: PortfolioCoverageTVPConfig
 
    Bases: :py:obj:`PortfolioAggregationConfig`
 
-   .. py:attribute:: FILE_TARGETS
-      
 
-      
+   .. py:attribute:: FILE_TARGETS
+
 
    .. py:attribute:: CTA_FILE_URL
-      :annotation: = https://files.sciencebasedtargets.org/production/files/companies-excel.xlsx
+      :value: 'https://files.sciencebasedtargets.org/production/files/companies-excel.xlsx'
 
-      
+
 
    .. py:attribute:: CTA_FILE_URL_PER_COMPANY
-      :annotation: = https://files.sciencebasedtargets.org/production/files/companies-excel.xlsx
+      :value: 'https://files.sciencebasedtargets.org/production/files/companies-excel.xlsx'
 
-      
+
 
    .. py:attribute:: CTA_FILE_URL_PER_TARGET
-      :annotation: = https://files.sciencebasedtargets.org/production/files/targets-excel.xlsx
+      :value: 'https://files.sciencebasedtargets.org/production/files/targets-excel.xlsx'
 
-      
+
 
    .. py:attribute:: OUTPUT_TARGET_STATUS
-      :annotation: = sbti_target_status
+      :value: 'sbti_target_status'
 
-      
+
 
    .. py:attribute:: OUTPUT_WEIGHTED_TARGET_STATUS
-      :annotation: = weighted_sbti_target_status
+      :value: 'weighted_sbti_target_status'
 
-      
+
 
    .. py:attribute:: VALUE_TARGET_NO
-      :annotation: = No target
+      :value: 'No target'
 
-      
+
 
    .. py:attribute:: VALUE_TARGET_SET
-      :annotation: = Near-term
+      :value: 'Near-term'
 
-      
+
 
    .. py:attribute:: VALUE_ACTION_COMMITTED
-      :annotation: = Commitment
+      :value: 'Commitment'
 
-      
+
 
    .. py:attribute:: VALUE_ACTION_TARGET
-      :annotation: = Target
+      :value: 'Target'
 
-      
+
 
    .. py:attribute:: TARGET_SCORE_MAP
-      
 
-      
 
    .. py:attribute:: COL_COMPANY_NAME
-      :annotation: = Company Name
+      :value: 'Company Name'
 
-      
+
 
    .. py:attribute:: COL_COMPANY_ISIN
-      :annotation: = ISIN
+      :value: 'ISIN'
 
-      
+
 
    .. py:attribute:: COL_COMPANY_LEI
-      :annotation: = LEI
+      :value: 'LEI'
 
-      
+
 
    .. py:attribute:: COL_ACTION
-      :annotation: = Action
+      :value: 'Action'
 
-      
+
 
    .. py:attribute:: COL_TARGET
-      :annotation: = Target
+      :value: 'Target'
 
-      
+
 
    .. py:attribute:: COL_DATE_PUBLISHED
-      :annotation: = Date Published
+      :value: 'Date Published'
 
-      
 
 

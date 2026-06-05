@@ -1,5 +1,5 @@
-:py:mod:`SBTi`
-==============
+SBTi
+====
 
 .. py:module:: SBTi
 
@@ -11,27 +11,19 @@
 
 
 
-Subpackages
------------
-.. toctree::
-   :titlesonly:
-   :maxdepth: 3
-
-   data/index.rst
-
-
 Submodules
 ----------
+
 .. toctree::
-   :titlesonly:
    :maxdepth: 1
 
-   configs/index.rst
-   interfaces/index.rst
-   portfolio_aggregation/index.rst
-   portfolio_coverage_tvp/index.rst
-   target_validation/index.rst
-   temperature_score/index.rst
-   utils/index.rst
+   /autoapi/SBTi/configs/index
+   /autoapi/SBTi/data/index
+   /autoapi/SBTi/interfaces/index
+   /autoapi/SBTi/portfolio_aggregation/index
+   /autoapi/SBTi/portfolio_coverage_tvp/index
+   /autoapi/SBTi/target_validation/index
+   /autoapi/SBTi/temperature_score/index
+   /autoapi/SBTi/utils/index
 
 

@@ -6,7 +6,7 @@ To calculate your temperature score and portfolio coverage, the tool
 requires several types of data.
 
 -  Portfolio data: information on a security level about your
-   investments such as name, identifiers, and investment values.
+   investments such as name, identifiers, and investment values. This is required for Portfolio Coverage as well.
 
 -  Data about the investee companies
 

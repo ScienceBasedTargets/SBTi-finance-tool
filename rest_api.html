@@ -1,21 +1,22 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Getting Started Using REST API &amp; UI &mdash; SBTi Temperature Alignment tool  documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+  <title>Getting Started Using REST API &mdash; SBTi Temperature Alignment tool  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/doctools.js"></script>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -28,11 +29,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> SBTi Temperature Alignment tool
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            SBTi Temperature Alignment tool
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -42,13 +47,9 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction to temperature scoring and portfolio coverage methods</a></li>
 <li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started Using Python</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Getting Started Using REST API &amp; UI</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#locally">Locally</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#amazon-aws">Amazon AWS</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Getting Started Using REST API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#quickstart">Quickstart</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#endpoints">Endpoints</a><ul class="simple">
 </ul>
 </li>
 </ul>
@@ -75,8 +76,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>Getting Started Using REST API &amp; UI</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Getting Started Using REST API</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/rest_api.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -86,125 +87,34 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="getting-started-using-rest-api-ui">
-<h1>Getting Started Using REST API &amp; UI<a class="headerlink" href="#getting-started-using-rest-api-ui" title="Permalink to this headline"></a></h1>
-<p>The provided REST API makes it easy to integrate the SBTi temperature alignment tool as a micro-service in your current IT infrastructure.
-Optionally you can also run the REST API with a small frontend, which makes testing easier.</p>
-<section id="usage">
-<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline"></a></h2>
-<p>The complete REST API reference is available <a class="reference external" href="https://ofbdabv.github.io/SBTi/swagger/index.html">here</a>.</p>
+  <section id="getting-started-using-rest-api">
+<h1>Getting Started Using REST API<a class="headerlink" href="#getting-started-using-rest-api" title="Link to this heading"></a></h1>
+<p>The REST API wraps this Python package, making it easy to integrate the SBTi temperature alignment tool as a microservice.</p>
+<p>For full API documentation, source code, and deployment instructions, see the
+<a class="reference external" href="https://github.com/ScienceBasedTargets/SBTi-finance-tool-api">API repository</a>.</p>
+<section id="quickstart">
+<h2>Quickstart<a class="headerlink" href="#quickstart" title="Link to this heading"></a></h2>
+<p>Clone the API repository and run with Docker:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">ScienceBasedTargets</span><span class="o">/</span><span class="n">SBTi</span><span class="o">-</span><span class="n">finance</span><span class="o">-</span><span class="n">tool</span><span class="o">-</span><span class="n">api</span><span class="o">.</span><span class="n">git</span>
+<span class="n">cd</span> <span class="n">SBTi</span><span class="o">-</span><span class="n">finance</span><span class="o">-</span><span class="n">tool</span><span class="o">-</span><span class="n">api</span>
+<span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="n">up</span> <span class="o">--</span><span class="n">build</span>
+</pre></div>
+</div>
+<p>The API documentation will be available at <a class="reference external" href="http://localhost:8000/docs">http://localhost:8000/docs</a>.</p>
 </section>
-<section id="installation">
-<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline"></a></h2>
-<p>The tool is containerized in a Docker container, which enables easy cloud and on premise deployments.
-We will provide instructions here for installing the REST API either on your local machine or on Amazon AWS.</p>
-<section id="locally">
-<h3>Locally<a class="headerlink" href="#locally" title="Permalink to this headline"></a></h3>
+<section id="endpoints">
+<h2>Endpoints<a class="headerlink" href="#endpoints" title="Link to this heading"></a></h2>
 <ul class="simple">
-<li><p><strong>Step 1</strong>: Install Docker desktop</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/health</span></code> – Health check</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/v1/data-providers</span></code> – List configured data providers</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/v1/temperature/score</span></code> – Calculate temperature scores</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/v1/coverage</span></code> – Calculate portfolio coverage</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/v1/temperature/whatif</span></code> – Run what-if scenario analysis</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/v1/upload/csv</span></code> – Upload CSV portfolio and score</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/v1/upload/excel</span></code> – Upload Excel portfolio and score</p></li>
 </ul>
-<p>For testing locally on your own Windows or Mac PC you first need to have a Docker engine running.
-For Linux users, this is natively available in your OS and you can skip step 1.  Docker provides installation
-instructions for <a class="reference external" href="https://docs.docker.com/docker-for-windows/install/">Windows</a> and
-<a class="reference external" href="https://docs.docker.com/docker-for-mac/install/">Mac</a>. After you have finished these installation guides, continue
-to step 2.</p>
-<ul class="simple">
-<li><p><strong>Step 2</strong>: Download and run the SBTi container.</p></li>
-</ul>
-<p>The project consists of two containers, the <a class="reference external" href="https://hub.docker.com/r/sbti/api">API</a> and the <a class="reference external" href="https://hub.docker.com/r/sbti/ui">UI</a>, both of which are available on Docker Hub.
-You can choose whether you only want to run the API or also the UI. To run them, you need to download a compose file. If you only want to run the API, you need to use <a class="reference external" href="https://raw.githubusercontent.com/ScienceBasedTargets/SBTi-finance-tool-api/master/docker-compose.yml">this file</a>, if you also want the UI, you should use <a class="reference external" href="https://raw.githubusercontent.com/ScienceBasedTargets/SBTi-finance-tool-api/master/docker-compose-ui.yml">this file</a>.</p>
-<p>Now download the file of your choice and store it as <cite>docker-compose.yml</cite> in your home directory.</p>
-<p><em>For Windows users</em></p>
-<ol class="arabic simple">
-<li><p>Open Command Prompt from a Start Menu Search. Select “Run as administrator”.</p></li>
-<li><p>You can open the Command Prompt by clicking Start and then typing “cmd” into the search box.</p></li>
-</ol>
-<a class="reference internal image-reference" href="_images/restapi-deploy-windows-1.png"><img alt="alternate text" class="align-center" src="_images/restapi-deploy-windows-1.png" style="width: 500px;" /></a>
-<ol class="arabic" start="3">
-<li><p>Enter the following command and hit enter:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="n">up</span>
-</pre></div>
-</div>
-</li>
-</ol>
-<a class="reference internal image-reference" href="_images/restapi-deploy-windows-2.png"><img alt="alternate text" class="align-center" src="_images/restapi-deploy-windows-2.png" style="width: 500px;" /></a>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This command assumes that your command prompt is currently in the same directory as the docker-compose.yml file that you downloaded earlier.</p>
-</div>
-<ol class="arabic simple" start="4">
-<li><p>This command starts retrieving the latest version of the tool and will expose it at localhost:5000</p></li>
-<li><p>Open your browser and go to <a class="reference external" href="http://localhost:5000">http://localhost:5000</a> to access the tool. If you are running the UI, the UI will be on <a class="reference external" href="http://localhost:5000">http://localhost:5000</a> and the API on <a class="reference external" href="http://localhost:5001">http://localhost:5001</a></p></li>
-</ol>
-<a class="reference internal image-reference" href="_images/restapi-deploy-windows-3.png"><img alt="alternate text" class="align-center" src="_images/restapi-deploy-windows-3.png" style="width: 500px;" /></a>
-<p><em>For Mac users</em></p>
-<p>One of the quickest and easiest ways to open Terminal on Mac is with Spotlight Search
-1. If you have the Spotlight Search button in your menu bar, click it. Otherwise, you can use the keyboard shortcut Command + Space
-2. Type in “Terminal”
-3. You should see the Terminal application under Top Hit at the top of your results. Double-click it and Terminal will open.</p>
-<a class="reference internal image-reference" href="_images/restapi-deploy-mac-1.jpg"><img alt="alternate text" class="align-center" src="_images/restapi-deploy-mac-1.jpg" style="width: 500px;" /></a>
-<ol class="arabic" start="4">
-<li><p>Enter the following command and hit enter:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="n">up</span>
-</pre></div>
-</div>
-</li>
-</ol>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This command assumes that your command prompt is currently in the same directory as the docker-compose.yml file that you downloaded earlier.</p>
-</div>
-<ol class="arabic simple" start="5">
-<li><p>This command starts retrieving the latest version of the tool and will expose it at <a class="reference external" href="http://localhost:5000">http://localhost:5000</a></p></li>
-<li><p>Open your browser and go to <a class="reference external" href="http://localhost:5000">http://localhost:5000</a> to access the tool. If you are running the UI, the UI will be on <a class="reference external" href="http://localhost:5000">http://localhost:5000</a> and the API on <a class="reference external" href="http://localhost:5001">http://localhost:5001</a></p></li>
-</ol>
-</section>
-<section id="amazon-aws">
-<h3>Amazon AWS<a class="headerlink" href="#amazon-aws" title="Permalink to this headline"></a></h3>
-<p>These instructions assume that you have installed and configured the Amazon <a class="reference external" href="https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html)andthe[ECSCLItools](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ECS_CLI_Configuration.html">AWS CLI tools</a> with an IAM account that has at least write access to ECS and EC2 and the capability of creating AIM roles.</p>
-<ol class="arabic">
-<li><p>Configure the cluster. You can update the region and names as you see fit:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ecs</span><span class="o">-</span><span class="n">cli</span> <span class="n">configure</span> <span class="o">--</span><span class="n">cluster</span> <span class="n">sbti</span><span class="o">-</span><span class="n">ecs</span><span class="o">-</span><span class="n">cluster</span> <span class="o">--</span><span class="n">region</span> <span class="n">eu</span><span class="o">-</span><span class="n">central</span><span class="o">-</span><span class="mi">1</span> <span class="o">--</span><span class="n">config</span><span class="o">-</span><span class="n">name</span> <span class="n">sbti</span><span class="o">-</span><span class="n">ecs</span><span class="o">-</span><span class="n">conf</span> <span class="o">--</span><span class="n">cfn</span><span class="o">-</span><span class="n">stack</span><span class="o">-</span><span class="n">name</span> <span class="n">sbti</span><span class="o">-</span><span class="n">ecs</span><span class="o">-</span><span class="n">stack</span> <span class="o">--</span><span class="n">default</span><span class="o">-</span><span class="n">launch</span><span class="o">-</span><span class="nb">type</span> <span class="n">ec2</span>
-</pre></div>
-</div>
-</li>
-<li><p>Create a new key pair. The result of this command is a key. Store this safely as you can later use it to access your instance through SSH:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">aws</span> <span class="n">ec2</span> <span class="n">create</span><span class="o">-</span><span class="n">key</span><span class="o">-</span><span class="n">pair</span> <span class="o">--</span><span class="n">key</span><span class="o">-</span><span class="n">name</span> <span class="n">sbti</span>
-</pre></div>
-</div>
-</li>
-<li><p>Create the instance that will run the image. Here we used 1 server of type t2.medium. Change this as you see fit:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ecs</span><span class="o">-</span><span class="n">cli</span> <span class="n">up</span> <span class="o">--</span><span class="n">keypair</span> <span class="n">sbti</span> <span class="o">--</span><span class="n">capability</span><span class="o">-</span><span class="n">iam</span> <span class="o">--</span><span class="n">size</span> <span class="mi">1</span> <span class="o">--</span><span class="n">instance</span><span class="o">-</span><span class="nb">type</span> <span class="n">t2</span><span class="o">.</span><span class="n">medium</span> <span class="o">--</span><span class="n">cluster</span><span class="o">-</span><span class="n">config</span> <span class="n">sbti</span><span class="o">-</span><span class="n">ecs</span><span class="o">-</span><span class="n">conf</span>
-</pre></div>
-</div>
-</li>
-<li><p>Update the server and make it run the docker image:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ecs</span><span class="o">-</span><span class="n">cli</span> <span class="n">compose</span> <span class="o">-</span><span class="n">f</span> <span class="n">docker</span><span class="o">-</span><span class="n">compose_aws</span><span class="o">.</span><span class="n">yml</span> <span class="n">up</span> <span class="o">--</span><span class="n">cluster</span><span class="o">-</span><span class="n">config</span> <span class="n">sbti</span><span class="o">-</span><span class="n">ecs</span><span class="o">-</span><span class="n">conf</span>
-</pre></div>
-</div>
-</li>
-<li><p>Now that the instance is running, we cannot access it yet. That is because NGINX only listens to localhost. We need to change this to make sure it is accessible on the WWW.</p></li>
-<li><p>Login to the Amazon AWS console</p></li>
-<li><p>Go to the EC2 service</p></li>
-<li><p>In the instance list find the instance running the Docker image</p></li>
-<li><p>Copy the public IP address of the instance</p></li>
-<li><p>In config/api-nginx.conf update the server name to the public IP.</p></li>
-<li><p>Now we need to rebuild and re-upload the image:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="o">-</span><span class="n">f</span> <span class="n">docker</span><span class="o">-</span><span class="n">compose_aws</span><span class="o">.</span><span class="n">yml</span> <span class="n">build</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">cache</span>
-<span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="o">-</span><span class="n">f</span> <span class="n">docker</span><span class="o">-</span><span class="n">compose_aws</span><span class="o">.</span><span class="n">yml</span> <span class="n">push</span>
-<span class="n">ecs</span><span class="o">-</span><span class="n">cli</span> <span class="n">compose</span> <span class="o">-</span><span class="n">f</span> <span class="n">docker</span><span class="o">-</span><span class="n">compose_aws</span><span class="o">.</span><span class="n">yml</span> <span class="n">up</span> <span class="o">--</span><span class="n">cluster</span><span class="o">-</span><span class="n">config</span> <span class="n">sbti</span><span class="o">-</span><span class="n">ecs</span><span class="o">-</span><span class="n">conf</span> <span class="o">--</span><span class="n">force</span><span class="o">-</span><span class="n">update</span>
-</pre></div>
-</div>
-</li>
-<li><p>You should now be able to access the API.</p></li>
-</ol>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>This will make the API publicly available on the World Wide Web! Please note that this API is not protected in any way. Therefore, it is recommended to run your the data in a private subnet and only access it through there. Alternatively, you can change the security group settings to only allow incoming connections from your local IP or company VPN.</p>
-</div>
 <div class="toctree-wrapper compound">
 </div>
-</section>
 </section>
 </section>
 

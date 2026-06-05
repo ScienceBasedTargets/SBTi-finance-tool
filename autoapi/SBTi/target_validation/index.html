@@ -1,21 +1,22 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SBTi.target_validation &mdash; SBTi Temperature Alignment tool  documentation</title>
-      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="../../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
   
-        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/jquery.js"></script>
-        <script src="../../../_static/underscore.js"></script>
-        <script src="../../../_static/doctools.js"></script>
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -26,11 +27,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../../index.html" class="icon icon-home"> SBTi Temperature Alignment tool
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            SBTi Temperature Alignment tool
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -40,7 +45,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Introduction to temperature scoring and portfolio coverage methods</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started Using Python</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../rest_api.html">Getting Started Using REST API &amp; UI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rest_api.html">Getting Started Using REST API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../FunctionalOverview.html">Functional Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../DataRequirements.html">Data Requirements</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../Legends.html">Data Legends</a></li>
@@ -63,8 +68,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
-      <li><code class="xref py py-mod docutils literal notranslate"><span class="pre">SBTi.target_validation</span></code></li>
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">SBTi.target_validation</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../../_sources/autoapi/SBTi/target_validation/index.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -75,28 +80,25 @@
            <div itemprop="articleBody">
              
   <section id="module-SBTi.target_validation">
-<span id="sbti-target-validation"></span><h1><a class="reference internal" href="#module-SBTi.target_validation" title="SBTi.target_validation"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SBTi.target_validation</span></code></a><a class="headerlink" href="#module-SBTi.target_validation" title="Permalink to this headline"></a></h1>
-<section id="module-contents">
-<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline"></a></h2>
+<span id="sbti-target-validation"></span><h1>SBTi.target_validation<a class="headerlink" href="#module-SBTi.target_validation" title="Link to this heading"></a></h1>
 <section id="classes">
-<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this headline"></a></h3>
-<table class="longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
+<h2>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h2>
+<table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#SBTi.target_validation.TargetProtocol" title="SBTi.target_validation.TargetProtocol"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TargetProtocol</span></code></a></p></td>
 <td><p>This class validates the targets, to make sure that only active, useful targets are considered. It then combines the targets with company-related data into a dataframe where there's one row for each of the nine possible target types (short, mid, long * S1+S2, S3, S1+S2+S3). This class follows the procedures outlined by the target protocol that is a part of the &quot;Temperature Rating Methodology&quot; (2020), which has been created by CDP Worldwide and WWF International.</p></td>
 </tr>
 </tbody>
 </table>
+</section>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="SBTi.target_validation.TargetProtocol">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">SBTi.target_validation.</span></span><span class="sig-name descname"><span class="pre">TargetProtocol</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../configs/index.html#SBTi.configs.PortfolioAggregationConfig" title="SBTi.configs.PortfolioAggregationConfig"><span class="pre">SBTi.configs.PortfolioAggregationConfig</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">PortfolioAggregationConfig</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reporting_date</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">datetime.datetime</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.target_validation.TargetProtocol" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">SBTi.target_validation.</span></span><span class="sig-name descname"><span class="pre">TargetProtocol</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../configs/index.html#SBTi.configs.PortfolioAggregationConfig" title="SBTi.configs.PortfolioAggregationConfig"><span class="pre">SBTi.configs.PortfolioAggregationConfig</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">PortfolioAggregationConfig</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reporting_date</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">datetime.datetime</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.target_validation.TargetProtocol" title="Link to this definition"></a></dt>
 <dd><p>This class validates the targets, to make sure that only active, useful targets are considered. It then combines the targets with company-related data into a dataframe where there’s one row for each of the nine possible target types (short, mid, long * S1+S2, S3, S1+S2+S3). This class follows the procedures outlined by the target protocol that is a part of the “Temperature Rating Methodology” (2020), which has been created by CDP Worldwide and WWF International.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>config</strong> – A Portfolio aggregation config</p></li>
 <li><p><strong>reporting_date</strong> – Optional reporting date for target validation and time-frame classification.
@@ -107,18 +109,53 @@ relative to the reporting year. When provided, targets are validated against thi
 </ul>
 </dd>
 </dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SBTi.target_validation.TargetProtocol.c">
+<span class="sig-name descname"><span class="pre">c</span></span><a class="headerlink" href="#SBTi.target_validation.TargetProtocol.c" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SBTi.target_validation.TargetProtocol.logger">
+<span class="sig-name descname"><span class="pre">logger</span></span><a class="headerlink" href="#SBTi.target_validation.TargetProtocol.logger" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SBTi.target_validation.TargetProtocol.reference_date">
+<span class="sig-name descname"><span class="pre">reference_date</span></span><a class="headerlink" href="#SBTi.target_validation.TargetProtocol.reference_date" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SBTi.target_validation.TargetProtocol.s2_targets">
+<span class="sig-name descname"><span class="pre">s2_targets</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../interfaces/index.html#SBTi.interfaces.IDataProviderTarget" title="SBTi.interfaces.IDataProviderTarget"><span class="pre">SBTi.interfaces.IDataProviderTarget</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[]</span></em><a class="headerlink" href="#SBTi.target_validation.TargetProtocol.s2_targets" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SBTi.target_validation.TargetProtocol.target_data">
+<span class="sig-name descname"><span class="pre">target_data</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pandas.DataFrame</span></em><a class="headerlink" href="#SBTi.target_validation.TargetProtocol.target_data" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SBTi.target_validation.TargetProtocol.company_data">
+<span class="sig-name descname"><span class="pre">company_data</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pandas.DataFrame</span></em><a class="headerlink" href="#SBTi.target_validation.TargetProtocol.company_data" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SBTi.target_validation.TargetProtocol.data">
+<span class="sig-name descname"><span class="pre">data</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pandas.DataFrame</span></em><a class="headerlink" href="#SBTi.target_validation.TargetProtocol.data" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="SBTi.target_validation.TargetProtocol.process">
-<span class="sig-name descname"><span class="pre">process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">targets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../interfaces/index.html#SBTi.interfaces.IDataProviderTarget" title="SBTi.interfaces.IDataProviderTarget"><span class="pre">SBTi.interfaces.IDataProviderTarget</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">companies</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../interfaces/index.html#SBTi.interfaces.IDataProviderCompany" title="SBTi.interfaces.IDataProviderCompany"><span class="pre">SBTi.interfaces.IDataProviderCompany</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.DataFrame</span></span></span><a class="headerlink" href="#SBTi.target_validation.TargetProtocol.process" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">targets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../interfaces/index.html#SBTi.interfaces.IDataProviderTarget" title="SBTi.interfaces.IDataProviderTarget"><span class="pre">SBTi.interfaces.IDataProviderTarget</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">companies</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../interfaces/index.html#SBTi.interfaces.IDataProviderCompany" title="SBTi.interfaces.IDataProviderCompany"><span class="pre">SBTi.interfaces.IDataProviderCompany</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.DataFrame</span></span></span><a class="headerlink" href="#SBTi.target_validation.TargetProtocol.process" title="Link to this definition"></a></dt>
 <dd><p>Process the targets and companies, validate all targets and return a data frame that combines all targets and company data into a 9-box grid.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>targets</strong> – A list of targets</p></li>
 <li><p><strong>companies</strong> – A list of companies</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A data frame that combines the processed data</p>
 </dd>
 </dl>
@@ -126,7 +163,7 @@ relative to the reporting year. When provided, targets are validated against thi
 
 <dl class="py method">
 <dt class="sig sig-object py" id="SBTi.target_validation.TargetProtocol.validate">
-<span class="sig-name descname"><span class="pre">validate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../interfaces/index.html#SBTi.interfaces.IDataProviderTarget" title="SBTi.interfaces.IDataProviderTarget"><span class="pre">SBTi.interfaces.IDataProviderTarget</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#SBTi.target_validation.TargetProtocol.validate" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">validate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../interfaces/index.html#SBTi.interfaces.IDataProviderTarget" title="SBTi.interfaces.IDataProviderTarget"><span class="pre">SBTi.interfaces.IDataProviderTarget</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#SBTi.target_validation.TargetProtocol.validate" title="Link to this definition"></a></dt>
 <dd><p>Validate a target, meaning it should:</p>
 <ul class="simple">
 <li><p>Have a valid type</p></li>
@@ -134,10 +171,10 @@ relative to the reporting year. When provided, targets are validated against thi
 <li><p>A valid end year</p></li>
 </ul>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>target</strong> – The target to validate</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>True if it’s a valid target, false if it isn’t</p>
 </dd>
 </dl>
@@ -145,10 +182,10 @@ relative to the reporting year. When provided, targets are validated against thi
 
 <dl class="py method">
 <dt class="sig sig-object py" id="SBTi.target_validation.TargetProtocol._split_s1s2s3">
-<span class="sig-name descname"><span class="pre">_split_s1s2s3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../interfaces/index.html#SBTi.interfaces.IDataProviderTarget" title="SBTi.interfaces.IDataProviderTarget"><span class="pre">SBTi.interfaces.IDataProviderTarget</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../interfaces/index.html#SBTi.interfaces.IDataProviderTarget" title="SBTi.interfaces.IDataProviderTarget"><span class="pre">SBTi.interfaces.IDataProviderTarget</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../interfaces/index.html#SBTi.interfaces.IDataProviderTarget" title="SBTi.interfaces.IDataProviderTarget"><span class="pre">SBTi.interfaces.IDataProviderTarget</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#SBTi.target_validation.TargetProtocol._split_s1s2s3" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">_split_s1s2s3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../interfaces/index.html#SBTi.interfaces.IDataProviderTarget" title="SBTi.interfaces.IDataProviderTarget"><span class="pre">SBTi.interfaces.IDataProviderTarget</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../interfaces/index.html#SBTi.interfaces.IDataProviderTarget" title="SBTi.interfaces.IDataProviderTarget"><span class="pre">SBTi.interfaces.IDataProviderTarget</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../interfaces/index.html#SBTi.interfaces.IDataProviderTarget" title="SBTi.interfaces.IDataProviderTarget"><span class="pre">SBTi.interfaces.IDataProviderTarget</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#SBTi.target_validation.TargetProtocol._split_s1s2s3" title="Link to this definition"></a></dt>
 <dd><p>If there is a s1s2s3 scope, split it into two targets with s1s2 and s3</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>target</strong> – The input target</p>
 </dd>
 </dl>
@@ -157,13 +194,13 @@ relative to the reporting year. When provided, targets are validated against thi
 
 <dl class="py method">
 <dt class="sig sig-object py" id="SBTi.target_validation.TargetProtocol._combine_s1_s2">
-<span class="sig-name descname"><span class="pre">_combine_s1_s2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../interfaces/index.html#SBTi.interfaces.IDataProviderTarget" title="SBTi.interfaces.IDataProviderTarget"><span class="pre">SBTi.interfaces.IDataProviderTarget</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.target_validation.TargetProtocol._combine_s1_s2" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">_combine_s1_s2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../interfaces/index.html#SBTi.interfaces.IDataProviderTarget" title="SBTi.interfaces.IDataProviderTarget"><span class="pre">SBTi.interfaces.IDataProviderTarget</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.target_validation.TargetProtocol._combine_s1_s2" title="Link to this definition"></a></dt>
 <dd><p>Check if there is an S2 target that matches this target exactly (if this is a S1 target) and combine them into one target.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>target</strong> – The input target</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The combined target (or the original if no combining was required)</p>
 </dd>
 </dl>
@@ -171,13 +208,13 @@ relative to the reporting year. When provided, targets are validated against thi
 
 <dl class="py method">
 <dt class="sig sig-object py" id="SBTi.target_validation.TargetProtocol._convert_s1_s2">
-<span class="sig-name descname"><span class="pre">_convert_s1_s2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../interfaces/index.html#SBTi.interfaces.IDataProviderTarget" title="SBTi.interfaces.IDataProviderTarget"><span class="pre">SBTi.interfaces.IDataProviderTarget</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.target_validation.TargetProtocol._convert_s1_s2" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">_convert_s1_s2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../interfaces/index.html#SBTi.interfaces.IDataProviderTarget" title="SBTi.interfaces.IDataProviderTarget"><span class="pre">SBTi.interfaces.IDataProviderTarget</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.target_validation.TargetProtocol._convert_s1_s2" title="Link to this definition"></a></dt>
 <dd><p>Convert a S1 or S2 target into a S1+S2 target.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>target</strong> – The input target</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The converted target (or the original if no conversion was required)</p>
 </dd>
 </dl>
@@ -185,7 +222,7 @@ relative to the reporting year. When provided, targets are validated against thi
 
 <dl class="py method">
 <dt class="sig sig-object py" id="SBTi.target_validation.TargetProtocol._boundary_coverage">
-<span class="sig-name descname"><span class="pre">_boundary_coverage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../interfaces/index.html#SBTi.interfaces.IDataProviderTarget" title="SBTi.interfaces.IDataProviderTarget"><span class="pre">SBTi.interfaces.IDataProviderTarget</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../interfaces/index.html#SBTi.interfaces.IDataProviderTarget" title="SBTi.interfaces.IDataProviderTarget"><span class="pre">SBTi.interfaces.IDataProviderTarget</span></a></span></span><a class="headerlink" href="#SBTi.target_validation.TargetProtocol._boundary_coverage" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">_boundary_coverage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../interfaces/index.html#SBTi.interfaces.IDataProviderTarget" title="SBTi.interfaces.IDataProviderTarget"><span class="pre">SBTi.interfaces.IDataProviderTarget</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../interfaces/index.html#SBTi.interfaces.IDataProviderTarget" title="SBTi.interfaces.IDataProviderTarget"><span class="pre">SBTi.interfaces.IDataProviderTarget</span></a></span></span><a class="headerlink" href="#SBTi.target_validation.TargetProtocol._boundary_coverage" title="Link to this definition"></a></dt>
 <dd><p>Test on boundary coverage:</p>
 <p>Option 1: minimal coverage threshold
 For S1+S2 targets: coverage% must be at or above 95%, for S3 targets coverage must be above 67%</p>
@@ -196,10 +233,10 @@ New target ambition = input target ambition * coverage
 <p>Option 3: default coverage
 Target is always valid, % uncovered is given default score in temperature score module.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>target</strong> – The input target</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The original target with a weighted reduction ambition, if so required</p>
 </dd>
 </dl>
@@ -207,13 +244,13 @@ Target is always valid, % uncovered is given default score in temperature score 
 
 <dl class="py method">
 <dt class="sig sig-object py" id="SBTi.target_validation.TargetProtocol._time_frame">
-<span class="sig-name descname"><span class="pre">_time_frame</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../interfaces/index.html#SBTi.interfaces.IDataProviderTarget" title="SBTi.interfaces.IDataProviderTarget"><span class="pre">SBTi.interfaces.IDataProviderTarget</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../interfaces/index.html#SBTi.interfaces.IDataProviderTarget" title="SBTi.interfaces.IDataProviderTarget"><span class="pre">SBTi.interfaces.IDataProviderTarget</span></a></span></span><a class="headerlink" href="#SBTi.target_validation.TargetProtocol._time_frame" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">_time_frame</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../interfaces/index.html#SBTi.interfaces.IDataProviderTarget" title="SBTi.interfaces.IDataProviderTarget"><span class="pre">SBTi.interfaces.IDataProviderTarget</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../interfaces/index.html#SBTi.interfaces.IDataProviderTarget" title="SBTi.interfaces.IDataProviderTarget"><span class="pre">SBTi.interfaces.IDataProviderTarget</span></a></span></span><a class="headerlink" href="#SBTi.target_validation.TargetProtocol._time_frame" title="Link to this definition"></a></dt>
 <dd><p>Time frame is forward looking: target year - current year. Less than 5y = short, between 5 and 15 is mid, 15 to 30 is long</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>target</strong> – The input target</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The original target with the time_frame field filled out (if so required)</p>
 </dd>
 </dl>
@@ -221,13 +258,13 @@ Target is always valid, % uncovered is given default score in temperature score 
 
 <dl class="py method">
 <dt class="sig sig-object py" id="SBTi.target_validation.TargetProtocol._prepare_target">
-<span class="sig-name descname"><span class="pre">_prepare_target</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../interfaces/index.html#SBTi.interfaces.IDataProviderTarget" title="SBTi.interfaces.IDataProviderTarget"><span class="pre">SBTi.interfaces.IDataProviderTarget</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.target_validation.TargetProtocol._prepare_target" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">_prepare_target</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../interfaces/index.html#SBTi.interfaces.IDataProviderTarget" title="SBTi.interfaces.IDataProviderTarget"><span class="pre">SBTi.interfaces.IDataProviderTarget</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.target_validation.TargetProtocol._prepare_target" title="Link to this definition"></a></dt>
 <dd><p>Prepare a target for usage later on in the process.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>target</strong> – </p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>target</strong></p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p></p>
 </dd>
 </dl>
@@ -235,21 +272,21 @@ Target is always valid, % uncovered is given default score in temperature score 
 
 <dl class="py method">
 <dt class="sig sig-object py" id="SBTi.target_validation.TargetProtocol.prepare_targets">
-<span class="sig-name descname"><span class="pre">prepare_targets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">targets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../interfaces/index.html#SBTi.interfaces.IDataProviderTarget" title="SBTi.interfaces.IDataProviderTarget"><span class="pre">SBTi.interfaces.IDataProviderTarget</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.target_validation.TargetProtocol.prepare_targets" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">prepare_targets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">targets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../interfaces/index.html#SBTi.interfaces.IDataProviderTarget" title="SBTi.interfaces.IDataProviderTarget"><span class="pre">SBTi.interfaces.IDataProviderTarget</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.target_validation.TargetProtocol.prepare_targets" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="SBTi.target_validation.TargetProtocol._find_target">
-<span class="sig-name descname"><span class="pre">_find_target</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">row</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.Series</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_columns</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.Series</span></span></span><a class="headerlink" href="#SBTi.target_validation.TargetProtocol._find_target" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">_find_target</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.Series</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_columns</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.Series</span></span></span><a class="headerlink" href="#SBTi.target_validation.TargetProtocol._find_target" title="Link to this definition"></a></dt>
 <dd><p>Find the target that corresponds to a given row. If there are multiple targets available, filter them.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>row</strong> – The row from the data set that should be looked for</p></li>
 <li><p><strong>target_columns</strong> – The columns that need to be returned</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>returns records from the input data, which contains company and target information, that meet specific criteria. For example, record of greatest emissions_in_scope</p>
 </dd>
 </dl>
@@ -257,7 +294,7 @@ Target is always valid, % uncovered is given default score in temperature score 
 
 <dl class="py method">
 <dt class="sig sig-object py" id="SBTi.target_validation.TargetProtocol.group_targets">
-<span class="sig-name descname"><span class="pre">group_targets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.target_validation.TargetProtocol.group_targets" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">group_targets</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SBTi.target_validation.TargetProtocol.group_targets" title="Link to this definition"></a></dt>
 <dd><p>Group the targets and create the 9-box grid (short, mid, long * s1s2, s3, s1s2s3).
 Group valid targets by category &amp; filter multiple targets#
 Input: a list of valid targets for each company:
@@ -268,12 +305,12 @@ into 6 categories.</p>
 – Highest boundary coverage
 – Latest end year; then latest base year (when end years tie)
 – Target type: Absolute over intensity
-– If all else is equal: prefer the target with complete data for scoring</p>
+– If all else is equal: prefer the target with complete data for scoring
+– Final tiebreaker: the most ambitious target (highest reduction_ambition)</p>
 </dd></dl>
 
 </dd></dl>
 
-</section>
 </section>
 </section>
 

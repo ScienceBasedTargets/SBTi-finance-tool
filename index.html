@@ -1,21 +1,22 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SBTi-Finance Tool for Temperature Scoring &amp; Portfolio Coverage &mdash; SBTi Temperature Alignment tool  documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/doctools.js"></script>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -27,11 +28,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="#" class="icon icon-home"> SBTi Temperature Alignment tool
+
+          
+          
+          <a href="#" class="icon icon-home">
+            SBTi Temperature Alignment tool
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -41,7 +46,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction to temperature scoring and portfolio coverage methods</a></li>
 <li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started Using Python</a></li>
-<li class="toctree-l1"><a class="reference internal" href="rest_api.html">Getting Started Using REST API &amp; UI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rest_api.html">Getting Started Using REST API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="FunctionalOverview.html">Functional Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="DataRequirements.html">Data Requirements</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Legends.html">Data Legends</a></li>
@@ -64,8 +69,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="#" class="icon icon-home"></a> &raquo;</li>
-      <li>SBTi-Finance Tool for Temperature Scoring &amp; Portfolio Coverage</li>
+      <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">SBTi-Finance Tool for Temperature Scoring &amp; Portfolio Coverage</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -76,11 +81,15 @@
            <div itemprop="articleBody">
              
   <section id="sbti-finance-tool-for-temperature-scoring-portfolio-coverage">
-<h1>SBTi-Finance Tool for Temperature Scoring &amp; Portfolio Coverage<a class="headerlink" href="#sbti-finance-tool-for-temperature-scoring-portfolio-coverage" title="Permalink to this headline"></a></h1>
+<h1>SBTi-Finance Tool for Temperature Scoring &amp; Portfolio Coverage<a class="headerlink" href="#sbti-finance-tool-for-temperature-scoring-portfolio-coverage" title="Link to this heading"></a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This tool implements <a class="reference external" href="https://sciencebasedtargets.org/wp-content/uploads/2020/09/Temperature-Rating-Methodology-V1.pdf">Version 1.0</a> of the CDP/WWF Temperature Rating Methodology, for setting and reporting on SBTi Financial Institutions Near-Term Targets. For Version 1.5 of the methodology, please refer to the <a class="reference external" href="https://www.cdp.net/en/data-licenses/net-zero-alignment-dataset/the-cdp-wwf-temperature-scoring-methodology">CDP-WWF Temperature Scoring Methodology</a>.</p>
+</div>
 <p><em>Do you want to understand what drives the temperature score of your
 portfolio to make better engagement and investment decisions?</em></p>
 <p><a class="reference internal" href="_images/image1.png"><img alt="image1" src="_images/image1.png" style="width: 6.47222in; height: 4.97682in;" /></a></p>
-<p>Based on the temperature scoring method, developed by CDP and WWF, this
+<p>Based on Version 1.0 of the temperature scoring method, developed by CDP and WWF, this
 tool helps companies and financial institutions to assess the
 temperature alignment of current emission reduction targets,
 commitments, and investment and lending portfolios. They can for
@@ -93,80 +102,20 @@ the tool is for, the types of outputs it delivers, what data is
 required, how it works, and where you can find more information and
 documentation to start using the tool.</p>
 <section id="an-introduction-to-the-technical-documentation">
-<h2>An introduction to the technical documentation<a class="headerlink" href="#an-introduction-to-the-technical-documentation" title="Permalink to this headline"></a></h2>
+<h2>An introduction to the technical documentation<a class="headerlink" href="#an-introduction-to-the-technical-documentation" title="Link to this heading"></a></h2>
 <p>The SBTi-Finance tool has been built as an open-source, data-agnostic
 tool and works with input data from any data provider and in many
 different IT infrastructures.</p>
-<p>As such, the SBTi-Finance Tool for Temperature Scoring &amp; Portfolio
-Coverage can be used in several ways, depending on the specific
-preferences of the user.</p>
-<table class="docutils align-default">
-<colgroup>
-<col style="width: 100%" />
-</colgroup>
-<tbody>
-<tr class="row-odd"><td><p><strong>Quickstart</strong></p>
-<p>If you prefer to get up and running quickly, we’ve got a no-code and a Python option:</p>
+</section>
+<section id="quickstart">
+<h2>Quickstart<a class="headerlink" href="#quickstart" title="Link to this heading"></a></h2>
 <ul class="simple">
-<li><p><strong>No-code</strong>: Run the project locally as a <a class="reference external" href="https://sciencebasedtargets.github.io/SBTi-finance-Tool/rest_api.html#locally">web application using Docker</a></p></li>
-<li><p><strong>Python</strong>: Run a Jupyter notebook, without any installation in <a class="reference external" href="https://sciencebasedtargets.github.io/SBTi-finance-tool/getting_started.html#google-colab">Google Colab</a> or <a class="reference external" href="https://sciencebasedtargets.github.io/SBTi-finance-tool/getting_started.html#jupyter-notebooks">locally</a>.</p></li>
+<li><p><strong>Python package</strong>: Install via <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">sbti-finance-tool</span></code> and integrate directly into your codebase. See the <a class="reference external" href="getting_started.html">Getting Started Using Python</a> section.</p></li>
+<li><p><strong>Jupyter notebooks</strong>: Run the <a class="reference external" href="https://github.com/ScienceBasedTargets/SBTi-finance-tool/tree/main/examples">example notebooks</a> on Google Colab or locally. Start with the <a class="reference external" href="https://colab.research.google.com/github/ScienceBasedTargets/SBTi-finance-tool/blob/main/examples/1_analysis_example.ipynb">Analysis example</a>.</p></li>
+<li><p><strong>REST API</strong>: Deploy the tool as a containerized microservice. See the <a class="reference external" href="rest_api.html">Getting Started Using REST API</a> section.</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
-<p>If you are unsure whether the tool will be useful for your application
-and workflow, or you would first like to run some examples to get a
-better idea of how the tool works and what types of outputs it
-generates, the <a class="reference external" href="https://colab.research.google.com/github/sciencebasedtargets/SBTi-finance-tool/blob/master/examples/1_analysis_example.ipynb">Analysis notebook (with abbreviated methodology)</a>
-offers a quick and no-code opportunity for such testing. The notebook
-combines text and code to provide a testing environment for your
-research, to give you an understanding for how the tool can help you
-analyze companies’ and portfolios’ temperature scores, to aid your
-engagement and investment decisions.</p>
-<p>The notebook is loaded with example data, but you can also use your own
-data. For your first test, you can simply run the code cells one by one
-in the current sequence, to get an understanding of how it works. If you
-are not familiar with Notebooks, please refer to <a class="reference external" href="https://colab.research.google.com/notebooks/basic_features_overview.ipynb">this
-introduction</a>.</p>
-<p>The following diagram provides an overview of the different parts of the
-full toolkit and their dependencies:</p>
-<p><a class="reference internal" href="_images/image2.png"><img alt="image2" src="_images/image2.png" style="width: 3.71642in; height: 3.58652in;" /></a></p>
-<p>As shown above, the Python code forms the core codebase of the
-SBTi-Finance tool. It is recommended to use the Python package if the
-user would like to integrate the tool in their own codebase. In turn,
-the second option is running the tool via the API if the user’s
-preference is to include the tool as a Microservice in their existing IT
-infrastructure in the cloud or on premise. The development project also
-included the creation of a simple user interface (UI), which can be used
-for easier user interaction in combination with the API.</p>
-<p>The SBTi tool enables three main ways of installing and/or running the
-tool:</p>
-<ol class="arabic simple">
-<li><p>Users can integrate the <strong>Python package</strong> in their codebase. For
-more detailed and up-to-date information on how to run the tool via
-the Python package, please consult the ‘Getting Started Using Python’
-section.</p></li>
-<li><p>The tool can be included as a Microservice (<strong>containerized REST
-API</strong>) in any IT infrastructure (in the cloud or on premise). For
-more detailed and up-to-date information on how to run the tool via
-the API, please consult the ‘Getting Started Using REST API’ section.
-Optionally, the API can be run with a frontend (UI). This simple user
-interface makes testing by non-technical users easier. For more
-detailed and up-to-date information on how to use the UI as a
-frontend to the API, please consult the ‘Getting Started Using REST
-API’ section.</p></li>
-<li><p>During the development of this tool, we have worked with several data
-and service providers to the financial and ESG markets, some who have
-or are in the process of implementing the tool and methodology into
-their commercial solutions. These providers include Bloomberg, CDP,
-ISS, MSCI, Ortec Finance, TruCost and Urgentem. Making use of their
-solutions can for some users be the easiest way to integrate the tool
-into existing infrastructure and workflow, to analyze portfolios’ and
-companies’ temperature scores.</p></li>
-</ol>
 <p>Given the open source nature of the tool, the community is encouraged to
-make contributions (refer to <a class="reference external" href="https://sciencebasedtargets.github.io/SBTi-finance-tool/contributing.html">Contributing</a> section to further develop
+make contributions (refer to the <a class="reference external" href="contributing.html">Contributing</a> section) to further develop
 and/or update the codebase. Contributions can range from submitting a
 bug report, to submitting a new feature request, all the way to further
 enhancing the tool’s functionalities by contributing code.</p>
@@ -192,13 +141,9 @@ enhancing the tool’s functionalities by contributing code.</p>
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="rest_api.html">Getting Started Using REST API &amp; UI</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="rest_api.html#usage">Usage</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rest_api.html#installation">Installation</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="rest_api.html#locally">Locally</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rest_api.html#amazon-aws">Amazon AWS</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="rest_api.html">Getting Started Using REST API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="rest_api.html#quickstart">Quickstart</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rest_api.html#endpoints">Endpoints</a><ul class="simple">
 </ul>
 </li>
 </ul>
@@ -260,24 +205,7 @@ enhancing the tool’s functionalities by contributing code.</p>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="links.html">Project Links</a></li>
 <li class="toctree-l1"><a class="reference internal" href="terms.html">Terms of Use</a></li>
-<li class="toctree-l1"><a class="reference internal" href="autoapi/index.html">API Reference</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="autoapi/SBTi/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SBTi</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="autoapi/SBTi/index.html#subpackages">Subpackages</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="autoapi/SBTi/data/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SBTi.data</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="autoapi/SBTi/index.html#submodules">Submodules</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="autoapi/SBTi/configs/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SBTi.configs</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="autoapi/SBTi/interfaces/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SBTi.interfaces</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="autoapi/SBTi/portfolio_aggregation/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SBTi.portfolio_aggregation</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="autoapi/SBTi/portfolio_coverage_tvp/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SBTi.portfolio_coverage_tvp</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="autoapi/SBTi/target_validation/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SBTi.target_validation</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="autoapi/SBTi/temperature_score/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SBTi.temperature_score</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="autoapi/SBTi/utils/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SBTi.utils</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="autoapi/index.html">API Reference</a><ul class="simple">
 </ul>
 </li>
 </ul>
