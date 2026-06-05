@@ -172,7 +172,13 @@ class TargetProtocol:
             ]
             if len(matches) > 0:
                 matches.sort(
-                    key=lambda t: (t.coverage_s2, t.base_year),
+                    key=lambda t: (
+                        t.coverage_s2,
+                        t.base_year,
+                        t.reduction_ambition
+                        if pd.notnull(t.reduction_ambition)
+                        else float("-inf"),
+                    ),
                     reverse=True,
                 )
                 s2 = matches[0]
@@ -352,8 +358,9 @@ class TargetProtocol:
                     coverage_column = self.c.COLS.COVERAGE_S1
                 # Methodology Section 2.2 step 4: highest boundary coverage,
                 # latest end year, later base year (when end years tie),
-                # absolute over intensity. _has_complete_data as final
-                # deterministic tiebreaker for fully-tied targets.
+                # absolute over intensity. _has_complete_data then most
+                # ambitious (highest reduction_ambition) as deterministic
+                # tiebreakers for otherwise fully-tied targets.
                 target_data['_has_complete_data'] = (
                     target_data[self.c.COLS.REDUCTION_AMBITION].notna()
                     & target_data[self.c.COLS.BASE_YEAR].notna()
@@ -368,9 +375,10 @@ class TargetProtocol:
                         self.c.COLS.BASE_YEAR,
                         self.c.COLS.TARGET_REFERENCE_NUMBER,
                         '_has_complete_data',
+                        self.c.COLS.REDUCTION_AMBITION,
                     ],
                     axis=0,
-                    ascending=[False, False, False, True, False],
+                    ascending=[False, False, False, True, False, False],
                 ).iloc[0][target_columns]
         except KeyError:
             # No target found
@@ -391,6 +399,7 @@ class TargetProtocol:
         -- Latest end year; then latest base year (when end years tie)
         -- Target type: Absolute over intensity
         -- If all else is equal: prefer the target with complete data for scoring
+        -- Final tiebreaker: the most ambitious target (highest reduction_ambition)
         """
 
         grid_columns = [
