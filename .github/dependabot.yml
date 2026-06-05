@@ -1,0 +1,40 @@
+# Dependabot configuration.
+# Groups updates into a single weekly PR per ecosystem so dependency
+# maintenance stays low-noise and easy to review. Patch/minor updates that
+# pass CI can be auto-merged via .github/workflows/dependabot-automerge.yml.
+version: 2
+updates:
+  # Core package: pyproject.toml / poetry.lock / requirements.txt at the root.
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    groups:
+      python-deps:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
+
+  # Example notebooks have their own pinned requirements.
+  - package-ecosystem: "pip"
+    directory: "/examples"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    groups:
+      example-deps:
+        patterns:
+          - "*"
+
+  # Keep GitHub Actions in the CI workflows current.
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    groups:
+      actions:
+        patterns:
+          - "*"
