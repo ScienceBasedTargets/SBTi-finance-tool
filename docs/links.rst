@@ -8,6 +8,7 @@ Project Links
 - `Bug tracker <https://github.com/ScienceBasedTargets/SBTi-finance-tool/issues>`_
 - `Kanban board <https://github.com/ScienceBasedTargets/SBTi-finance-tool/projects/1>`_
 - `PyPi home <https://pypi.org/project/SBTi/>`_
+- :download:`CDP/WWF Temperature Rating Methodology (V1.0, PDF) <Temperature-Rating-Methodology-V1.pdf>`
 - DockerHub:
     - `sbti/ui image <https://hub.docker.com/repository/docker/sbti/ui>`_
     - `sbti/api image <https://hub.docker.com/repository/docker/sbti/api>`_
