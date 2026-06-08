@@ -1,7 +1,7 @@
 Introduction to temperature scoring and portfolio coverage methods
 ==================================================================
 
-.. note:: This tool implements `Version 1.0 <https://sciencebasedtargets.org/wp-content/uploads/2020/09/Temperature-Rating-Methodology-V1.pdf>`__ of the CDP/WWF Temperature Rating Methodology, for setting and reporting on SBTi Financial Institutions Near-Term Targets. For Version 1.5 of the methodology, please refer to the `CDP-WWF Temperature Scoring Methodology <https://www.cdp.net/en/data-licenses/net-zero-alignment-dataset/the-cdp-wwf-temperature-scoring-methodology>`__.
+.. note:: This tool implements `Version 1.0 <https://sciencebasedtargets.org/wp-content/uploads/2020/09/Temperature-Rating-Methodology-V1.pdf>`__ (:download:`PDF <Temperature-Rating-Methodology-V1.pdf>`) of the CDP/WWF Temperature Rating Methodology, for setting and reporting on SBTi Financial Institutions Near-Term Targets. For Version 1.5 of the methodology, please refer to the `CDP-WWF Temperature Scoring Methodology <https://www.cdp.net/en/data-licenses/net-zero-alignment-dataset/the-cdp-wwf-temperature-scoring-methodology>`__.
 
 Three methods are currently supported by
 the \ `SBTi <https://sciencebasedtargets.org/financial-institutions>`__ for
